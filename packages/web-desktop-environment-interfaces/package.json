@@ -1,0 +1,12 @@
+{
+  "name": "web-desktop-environment-interfaces",
+  "version": "1.0.0",
+  "main": "lib/index.ts",
+  "types": "lib",
+  "author": "shmuelhizmi",
+  "license": "none",
+  "private": true,
+  "dependencies": {
+    "@mcesystems/reflow": "^4.3.4"
+  }
+}

@@ -3,11 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fluentui/react": "^7.121.9",
+    "@material-ui/styles": "^4.10.0",
+    "@mcesystems/reflow": "^4.3.4",
+    "@mcesystems/reflow-react-display-layer": "^4.3.4",
+    "@uifabric/react-cards": "^0.109.109",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "uws": "10.148.1"
   },
   "devDependencies": {
-    "workbox-webpack-plugin": "4.3.1",
+    "web-desktop-environment-interfaces": "1.0.0",
+    "@babel/core": "7.9.0",
+    "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -15,8 +23,6 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@babel/core": "7.9.0",
-    "@svgr/webpack": "4.3.3",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "babel-eslint": "10.1.0",
@@ -66,7 +72,8 @@
     "url-loader": "2.3.0",
     "webpack": "4.42.0",
     "webpack-dev-server": "3.10.3",
-    "webpack-manifest-plugin": "2.2.0"
+    "webpack-manifest-plugin": "2.2.0",
+    "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
     "start": "node scripts/start.js",

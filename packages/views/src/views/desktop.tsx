@@ -24,9 +24,9 @@ class Desktop extends ReflowReactComponent<DesktopInterface, WithStyles<typeof s
 		return (
 			<div className={classes.root} style={{ background }}>
 				{
-                    openApps.map((app) => <div ref={(div) => div && reflowConnectionManager.connect(app.port, div) } />)
+                    openApps.map((app, i) => <div key={i} ref={(div) => div && reflowConnectionManager.connect(app.port, div) } />)
                 }
-                <Button onClick={() => event("launchApp", { flow: "any", params: {} })}>create window</Button>
+                <Button onClick={() => event("launchApp", { flow: "terminal", params: {} })}>create terminal window</Button>
 			</div>
 		);
 	}

@@ -1,16 +1,21 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from '@web-desktop-environment/interfaces'
-import { apps } from "..";
+import { App } from '../apps'
 
-export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
+interface WindowInput { app: App; appParams: any; }
+
+export default <Flow<ViewInterfacesType, WindowInput>>(async ({ view, views, flow, input: { app, appParams } }) => {
 	// Using the view() function to display the MyView component, at layer 0 of this flow
 	const window = view(0, views.window, {
-        icon: {icon: "Calculator", type: "fluentui"},
-        title: "Calculator",
-        window: {
-            width: 650,
-            height: 500,
-        }
-	});
+        icon: app.icon,
+        title: app.name,
+        window: app.window,
+    });
+    const runningApp = flow(app.flow, appParams, window);
+    window.then(() => {
+        runningApp.cancel();
+    })
+    await runningApp;
+    window.done({});
     await window;
 });

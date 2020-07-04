@@ -42,12 +42,19 @@ const styles = (theme: Theme) =>
         background: "#ff001c",
       },
     },
+    barButtonCollaps: {
+      background: "#21b62f",
+      "&:hover": {
+        background: "#21c62f",
+      },
+    },
   });
 
 interface WindowState {
   size: { height: number; width: number };
   zIndex: number;
   canDrag: boolean;
+  collaps: boolean;
 }
 
 const defualtWindowSize = { height: 600, width: 700 };
@@ -68,6 +75,7 @@ class Window extends ReflowReactComponent<
       },
       zIndex: 2,
       canDrag: false,
+      collaps: false,
     };
     this.domContainer = document.createElement("div");
     document.getElementById("app")?.appendChild(this.domContainer);
@@ -80,8 +88,8 @@ class Window extends ReflowReactComponent<
   }
 
   render() {
-    const { size, canDrag, zIndex } = this.state;
-    const { event, children, classes, done } = this.props;
+    const { size, canDrag, zIndex, collaps } = this.state;
+    const { children, classes, done } = this.props;
     return ReactDOM.createPortal(
       <Dragable
         disabled={!canDrag}
@@ -117,20 +125,22 @@ class Window extends ReflowReactComponent<
               />
               <div
                 className={classes.barButton}
-                style={{ background: "#ffd951" }}
+                style={{ background: "#af9941" }}
               />
               <div
-                className={classes.barButton}
-                style={{ background: "#21c62f" }}
+                onClick={() => this.setState({ collaps: !collaps })}
+                className={`${classes.barButton} ${classes.barButtonCollaps}`}
               />
             </div>
           </div>
-          <div
-            className={classes.body}
-            style={{ ...this.props.window, ...size }}
-          >
-            {children}
-          </div>
+          {!collaps && (
+            <div
+              className={classes.body}
+              style={{ ...this.props.window, ...size }}
+            >
+              {children}
+            </div>
+          )}
         </div>
       </Dragable>,
       this.domContainer

@@ -13,9 +13,11 @@
     "typescript": "3.4.3",
     "ts-node": "8.10.2",
     "nodemon": "2.0.4",
-    "@types/node": "12.12.2"
+    "@types/node": "12.12.2",
+    "@types/socket.io": "1.4.33"
   },
   "dependencies": {
-    "@mcesystems/reflow": "^4.3.4"
+    "@mcesystems/reflow": "^4.3.4",
+    "socket.io": "2.3.0"
   }
 }

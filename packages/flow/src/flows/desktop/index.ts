@@ -1,8 +1,8 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { apps } from "..";
+import { apps } from "../apps";
 import { createReflow } from "../..";
-import { portIsAvilable } from "../shared/utils/checkPort";
+import { portManager } from "../shared/utils/checkPort";
 import window from "./window";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 
@@ -20,26 +20,22 @@ export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
   });
 
   let appIndex = 0;
-  let appStartingPort = 8010;
   desktop.on("launchApp", async (app) => {
-    // need to update to a app finder
+    appIndex++;
+
+    const handler = apps[app.flow];
+  
     const newOpenApp: OpenApp = {
-      icon: { type: "fluentui", icon: "Calculator" },
-      name: "Calculator",
-      port: appStartingPort + appIndex,
+      icon: handler.icon,
+      name: handler.name,
+      port: await portManager.getPort(),
       id: appIndex,
     };
 
-    // check port avilablility
-    let portAvilable = false;
-    while (!portAvilable) {
-      portAvilable = await portIsAvilable(appStartingPort + appIndex);
-      if (!portAvilable) appIndex++;
-    }
+    createReflow(newOpenApp.port).start(window, {
+      app: handler,
+      appParams: {}
 
-    createReflow(appStartingPort + appIndex).start(window, {
-      flow: app.flow,
-      flowParams: app.params,
     }).then(() => {
       openApps = openApps.filter((app) => app.id !== newOpenApp.id)
       desktop.update({ openApps });

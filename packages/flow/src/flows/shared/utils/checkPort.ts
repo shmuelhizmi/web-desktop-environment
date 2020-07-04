@@ -1,3 +1,21 @@
+
+class PortManager {
+  currentPort: number;
+  constructor(startingPort: number) {
+    this.currentPort = startingPort;
+  }
+  getPort = async () => {
+    let isPortIsAvilable = false;
+    while(!isPortIsAvilable) {
+      this.currentPort++;
+      isPortIsAvilable = await portIsAvilable(this.currentPort);
+    }
+    return this.currentPort;
+  }
+}
+
+export const portManager = new PortManager(9200);
+
 export const portIsAvilable = (port: number): Promise<boolean> => {
   return new Promise((resolve) => {
     const net = require("net");

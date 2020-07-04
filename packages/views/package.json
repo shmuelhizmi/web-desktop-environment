@@ -13,9 +13,12 @@
     "react-dom": "^16.13.0",
     "react-draggable": "4.4.3",
     "@web-desktop-environment/interfaces": "1.0.0",
-    "uws": "10.148.1"
+    "uws": "10.148.1",
+    "socket.io-client": "2.3.0",
+    "xterm": "4.7.0"
   },
   "devDependencies": {
+    "@types/socket.io-client": "1.4.32",
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",

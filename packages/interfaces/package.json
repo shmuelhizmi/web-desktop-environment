@@ -1,5 +1,5 @@
 {
-  "name": "web-desktop-environment-interfaces",
+  "name": "@web-desktop-environment/interfaces",
   "version": "1.0.0",
   "main": "lib/index.ts",
   "types": "lib",

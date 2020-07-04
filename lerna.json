@@ -1,6 +1,8 @@
 {
   "packages": [
-    "packages/*"
+    "packages/interfaces",
+    "packages/flow",
+    "packages/views"
   ],
-  "version": "0.0.0"
+  "version": "1.0.0"
 }

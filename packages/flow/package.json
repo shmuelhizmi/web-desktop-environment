@@ -1,5 +1,5 @@
 {
-  "name": "web-desktop-environment-flow",
+  "name": "@web-desktop-environment/flow",
   "version": "1.0.0",
   "main": "src/index.ts",
   "author": "shmuelhizmi",
@@ -9,10 +9,11 @@
     "start": "nodemon ."
   },
   "devDependencies": {
-    "web-desktop-environment-interfaces": "1.0.0",
+    "@web-desktop-environment/interfaces": "1.0.0",
     "typescript": "3.4.3",
     "ts-node": "8.10.2",
-    "nodemon": "2.0.4"
+    "nodemon": "2.0.4",
+    "@types/node": "12.12.2"
   },
   "dependencies": {
     "@mcesystems/reflow": "^4.3.4"

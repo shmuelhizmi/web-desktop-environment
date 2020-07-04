@@ -1,8 +1,10 @@
-import DesktopInterface from "web-desktop-environment-interfaces/lib/views/Desktop";
+import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "../theme";
+import { reflowConnectionManager } from "..";
+import { Button } from "@fluentui/react";
 
 const styles = (theme: Theme) => createStyles({ 
     root: {
@@ -18,13 +20,16 @@ const styles = (theme: Theme) => createStyles({
 // using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Desktop extends ReflowReactComponent<DesktopInterface, WithStyles<typeof styles>> {
 	render() {
-		const { background, event, children, classes } = this.props;
+		const { background, event, openApps, classes } = this.props;
 		return (
 			<div className={classes.root} style={{ background }}>
-				
+				{
+                    openApps.map((app) => <div ref={(div) => div && reflowConnectionManager.connect(app.port, div) } />)
+                }
+                <Button onClick={() => event("launchApp", { flow: "any", params: {} })}>create window</Button>
 			</div>
 		);
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(Desktop);
+export default withStyles(styles)(Desktop);

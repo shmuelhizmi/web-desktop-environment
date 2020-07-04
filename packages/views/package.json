@@ -16,7 +16,8 @@
     "uws": "10.148.1",
     "socket.io-client": "2.3.0",
     "xterm": "4.7.0",
-    "xterm-addon-fit": "0.4.0"
+    "xterm-addon-fit": "0.4.0",
+    "ts-keycode-enum": "1.0.6"
   },
   "devDependencies": {
     "@types/socket.io-client": "1.4.32",

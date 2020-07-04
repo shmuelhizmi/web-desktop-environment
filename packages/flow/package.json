@@ -14,7 +14,8 @@
     "ts-node": "8.10.2",
     "nodemon": "2.0.4",
     "@types/node": "12.12.2",
-    "@types/socket.io": "1.4.33"
+    "@types/socket.io": "1.4.33",
+    "ts-keycode-enum": "1.0.6"
   },
   "dependencies": {
     "@mcesystems/reflow": "^4.3.4",

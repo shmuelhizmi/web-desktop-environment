@@ -7,6 +7,7 @@ import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
 export interface App<Params = {}> {
     icon: Icon;
     name: string;
+    defaultInput: Params;
     description: string;
     window: Window;
     flow: Flow<ViewInterfacesType, Params>;

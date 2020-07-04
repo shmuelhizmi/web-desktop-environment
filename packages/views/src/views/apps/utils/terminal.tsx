@@ -6,7 +6,8 @@ import { Theme } from "../../../theme";
 import io from "socket.io-client";
 import { reflowConnectionManager } from "../../..";
 import { Terminal as XTerm } from "xterm";
-import { FitAddon } from 'xterm-addon-fit';
+import { FitAddon } from "xterm-addon-fit";
+import { Key } from "ts-keycode-enum";
 import "xterm/css/xterm.css";
 
 const styles = (theme: Theme) =>
@@ -39,32 +40,45 @@ class Terminal extends ReflowReactComponent<
     this.term.loadAddon(this.termFit);
     this.socket.on("out", (data: any) => this.term.write(data));
     this.inputBuffer = "";
-    this.term.onKey(({ key, domEvent }) => this.onKeyDown(key, domEvent.keyCode));
+    this.term.onKey(({ key, domEvent }) =>
+      this.onKeyDown(key, domEvent.keyCode)
+    );
   }
 
   onKeyDown = (key: string, keyCode: number) => {
     const deleteKey = "\b \b";
-    if (keyCode === 13) { // send command
-      this.socket.emit("in", this.inputBuffer);
+    if (keyCode === Key.Enter) {
+      // send command
+      this.socket.emit("in", this.inputBuffer + "\n");
       let deleteCount = this.inputBuffer.length;
-      while(deleteCount > 0) {
-        deleteCount --;
+      while (deleteCount > 0) {
+        deleteCount--;
         this.term.write(deleteKey);
       }
       this.inputBuffer = "";
       return;
     }
-    if(keyCode === 8){ // on delete
+    if (keyCode === Key.Backspace) {
+      // on delete
       if (this.inputBuffer.length > 0) {
-        this.inputBuffer = String(this.inputBuffer.slice(0,-1));
-        console.log(this.inputBuffer)
+        this.inputBuffer = String(this.inputBuffer.slice(0, -1));
+        console.log(this.inputBuffer);
         this.term.write(deleteKey);
       }
       return;
     }
-    this.inputBuffer+=key;
+    if (
+      keyCode === Key.UpArrow ||
+      keyCode === Key.DownArrow ||
+      keyCode === Key.RightArrow ||
+      keyCode === Key.LeftArrow
+    ) {
+      this.socket.emit("inkey", keyCode);
+      return;
+    }
+    this.inputBuffer += key;
     this.term.write(key);
-  }
+  };
 
   handleClickOutside() {
     this.setState({ zIndex: 2 });
@@ -72,11 +86,15 @@ class Terminal extends ReflowReactComponent<
 
   render() {
     const { port, classes } = this.props;
-    this.termFit.fit();
     return (
       <div
         className={classes.root}
-        ref={(div) => div && this.term.open(div)}
+        ref={(div) => {
+          if (div) {
+            this.term.open(div);
+            this.termFit.fit();
+          }
+        }}
       ></div>
     );
   }

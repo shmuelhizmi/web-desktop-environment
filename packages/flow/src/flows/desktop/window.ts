@@ -1,5 +1,5 @@
 import { Flow } from "@mcesystems/reflow";
-import { ViewInterfacesType } from '@web-desktop-environment/interfaces'
+import { ViewInterfacesType } from '@web-desktop-environment/interfaces';
 import { App } from '../apps'
 
 interface WindowInput { app: App; appParams: any; }
@@ -11,7 +11,7 @@ export default <Flow<ViewInterfacesType, WindowInput>>(async ({ view, views, flo
         title: app.name,
         window: app.window,
     });
-    const runningApp = flow(app.flow, appParams, window);
+    const runningApp = flow(app.flow, {...app.defaultInput,...appParams}, window);
     window.then(() => {
         runningApp.cancel();
     })

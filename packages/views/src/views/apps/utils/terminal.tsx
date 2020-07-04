@@ -21,6 +21,18 @@ const styles = (theme: Theme) =>
 
 interface TerminalState {}
 
+export const deleteKey = "\b \b";
+
+const createDelete = (length: number) => {
+  let deleteCount = length;
+  let lineReseter = "";
+  while (deleteCount > 0) {
+    deleteCount--;
+    lineReseter += deleteKey;
+  }
+  return lineReseter;
+};
+
 // using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Terminal extends ReflowReactComponent<
   TerminalInterface,
@@ -38,7 +50,16 @@ class Terminal extends ReflowReactComponent<
     this.term = new XTerm();
     this.termFit = new FitAddon();
     this.term.loadAddon(this.termFit);
-    this.socket.on("out", (data: any) => this.term.write(data));
+    this.socket.on("out", (data: string) => {
+      const lines = data.split("\n");
+      lines.forEach((line, index) => {
+        this.term.write(line);
+        if (index !== lines.length - 1) {
+          this.term.write("\n");
+          this.term.write(createDelete(line.length));
+        }
+      });
+    });
     this.inputBuffer = "";
     this.term.onKey(({ key, domEvent }) =>
       this.onKeyDown(key, domEvent.keyCode)
@@ -46,15 +67,12 @@ class Terminal extends ReflowReactComponent<
   }
 
   onKeyDown = (key: string, keyCode: number) => {
-    const deleteKey = "\b \b";
     if (keyCode === Key.Enter) {
       // send command
       this.socket.emit("in", this.inputBuffer + "\n");
-      let deleteCount = this.inputBuffer.length;
-      while (deleteCount > 0) {
-        deleteCount--;
-        this.term.write(deleteKey);
-      }
+      this.term.write(createDelete(this.inputBuffer.length));
+      this.term.write("\n");
+      this.term.write(createDelete(this.term.cols));
       this.inputBuffer = "";
       return;
     }

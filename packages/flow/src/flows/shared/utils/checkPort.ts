@@ -4,13 +4,27 @@ class PortManager {
   constructor(startingPort: number) {
     this.currentPort = startingPort;
   }
-  getPort = async () => {
-    let isPortIsAvilable = false;
-    while(!isPortIsAvilable) {
-      this.currentPort++;
-      isPortIsAvilable = await portIsAvilable(this.currentPort);
+  getPort = async (starting?: number) => {
+    if (starting) {
+      let currentPort = starting;
+      let isPortIsAvilable = false;
+      while(!isPortIsAvilable) {
+        isPortIsAvilable = await portIsAvilable(currentPort);
+        if (!isPortIsAvilable) {
+          currentPort++;
+        }
+      }
+      return currentPort;
+
+    }else {
+      let isPortIsAvilable = false;
+      while(!isPortIsAvilable) {
+        this.currentPort++;
+        isPortIsAvilable = await portIsAvilable(this.currentPort);
+      }
+      return this.currentPort;
+      
     }
-    return this.currentPort;
   }
 }
 

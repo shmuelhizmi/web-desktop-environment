@@ -9,7 +9,6 @@ import { Key } from "ts-keycode-enum";
 import { getOS, OS } from "../../shared/utils/getOS";
 import { platform } from "os";
 
-
 interface TerminalInput {
   process?: string;
 }
@@ -20,24 +19,24 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   event,
   input: { process },
 }) => {
-  const terminal = spawn(process || "bash");
+  const terminal = spawn(process || "bash", ["-i"]);
   const server = http.createServer();
   const socketServer = socket.listen(server);
   let history = "";
   terminal.stdout.on("data", (data) => {
     const out = data.toString();
     socketServer.emit("out", out);
-    history +=out;
+    history += out;
   });
   terminal.stderr.on("data", (data) => {
     const out = data.toString();
     socketServer.emit("out", out);
-    history +=out;
+    history += out;
   });
   terminal.on("exit", (data) => {
     const out = "terminal exit with code - ";
     socketServer.emit("out", out);
-    history+= out;
+    history += out;
   });
   const port = await portManager.getPort();
   server.listen(port);
@@ -49,23 +48,23 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
     client.on("inkey", (keyCode) => {
       switch (keyCode) {
         case Key.Enter: {
-          terminal.stdin.write("\n")
+          terminal.stdin.write("\n");
           break;
         }
         case Key.UpArrow: {
-          terminal.stdin.write("\u001b[A")
+          terminal.stdin.write("\u001b[A");
           break;
         }
         case Key.DownArrow: {
-          terminal.stdin.write("\u001b[B")
+          terminal.stdin.write("\u001b[B");
           break;
         }
         case Key.RightArrow: {
-          terminal.stdin.write("\u001b[C")
+          terminal.stdin.write("\u001b[C");
           break;
         }
         case Key.LeftArrow: {
-          terminal.stdin.write("\u001b[C")
+          terminal.stdin.write("\u001b[C");
           break;
         }
         default: {
@@ -85,24 +84,24 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
 const getDefaultBash = () => {
   const os = getOS();
   if (os === OS.Linux) {
-    return "bash"
+    return "bash";
   }
   if (os === OS.Window) {
-    return "cmd"
+    return "cmd";
   }
   if (os === OS.Mac) {
-    return "bash"
+    return "bash";
   }
   if (os === OS.Other) {
-    return "bash"
+    return "bash";
   }
-}
+};
 
 export const terminal: App<TerminalInput> = {
   name: "Termial",
   description: "a terminal window",
   flow: terminalFlow,
-  defaultInput: { process: getDefaultBash()},
+  defaultInput: { process: getDefaultBash() },
   icon: {
     type: "fluentui",
     icon: "CommandPrompt",

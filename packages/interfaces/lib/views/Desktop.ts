@@ -8,9 +8,16 @@ export interface OpenApp {
   id: number;
 }
 
+export interface App {
+  name: string;
+  flow: string;
+  icon: Icon;
+  description: string;
+}
+
 export interface Input {
   background: string;
-  apps: string[];
+  apps: App[];
   openApps: OpenApp[];
 }
 

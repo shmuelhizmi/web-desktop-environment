@@ -43,6 +43,7 @@ class Terminal extends ReflowReactComponent<
   term: XTerm;
   termFit: FitAddon;
   inputBuffer: string;
+  containerElement?: HTMLElement;
   constructor(props: Terminal["props"]) {
     super(props);
     this.state = {};
@@ -102,15 +103,21 @@ class Terminal extends ReflowReactComponent<
     this.setState({ zIndex: 2 });
   }
 
+  componentDidMount = () => {
+    if (this.containerElement) {
+      this.term.open(this.containerElement);
+      this.termFit.fit();
+    }
+  };
+
   render() {
-    const { port, classes } = this.props;
+    const { classes } = this.props;
     return (
       <div
         className={classes.root}
         ref={(div) => {
           if (div) {
-            this.term.open(div);
-            this.termFit.fit();
+            this.containerElement = div;
           }
         }}
       ></div>

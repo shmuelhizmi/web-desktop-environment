@@ -3,9 +3,11 @@ import ReactDOM from "react-dom";
 import { Transports } from "@mcesystems/reflow";
 import { renderDisplayLayer } from "@mcesystems/reflow-react-display-layer";
 import Login from "./loginScreen/Login";
+import { initializeIcons } from '@uifabric/icons'
 import "./index.css"
 import * as views from "./views";
 
+initializeIcons();
 
 class ReflowConnectionManager {
   host: string;

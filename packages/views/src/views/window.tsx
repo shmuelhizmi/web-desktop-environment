@@ -14,8 +14,11 @@ const styles = (theme: Theme) =>
       boxShadow: "-10px 12px 20px -2px #0007",
     },
     bar: {
-      background: "#dbdddd",
+      background: "rgba(191, 191, 191, 0.6)",
+      backdropFilter: "blur(10px)",
       borderRadius: "7px 7px 0 0",
+      cursor: "move",
+      display: "flex",
     },
     body: {
       background: "#fff",
@@ -29,6 +32,7 @@ const styles = (theme: Theme) =>
       height: 20,
       display: "flex",
       justifyContent: "space-between",
+      zIndex: 2,
     },
     barButton: {
       width: 15,
@@ -37,16 +41,28 @@ const styles = (theme: Theme) =>
       border: "1px solid #0004",
     },
     barButtonExit: {
-      background: "#e7252c",
+      cursor: "pointer",
+      background: "#f7252c88",
       "&:hover": {
-        background: "#ff001c",
+        background: "#f00",
       },
     },
     barButtonCollaps: {
-      background: "#21b62f",
+      cursor: "pointer",
+      background: "#21c62f88",
       "&:hover": {
-        background: "#21c62f",
+        background: "#21e62f",
       },
+    },
+    barTitle: {
+      position: "relative",
+      top: 5,
+      left: -30,
+      width: "100%",
+      textAlign: "center",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
     },
   });
 
@@ -89,11 +105,12 @@ class Window extends ReflowReactComponent<
 
   render() {
     const { size, canDrag, zIndex, collaps } = this.state;
-    const { children, classes, done } = this.props;
+    const { children, classes, done, title } = this.props;
     return ReactDOM.createPortal(
       <Dragable
         disabled={!canDrag}
         onDrag={(e, postion) => {
+          this.setState({ zIndex: 5 });
           if (
             postion.y < 0 ||
             postion.y > window.screen.height - size.height ||
@@ -132,6 +149,7 @@ class Window extends ReflowReactComponent<
                 className={`${classes.barButton} ${classes.barButtonCollaps}`}
               />
             </div>
+            <div className={classes.barTitle}>{title}</div>
           </div>
           {!collaps && (
             <div

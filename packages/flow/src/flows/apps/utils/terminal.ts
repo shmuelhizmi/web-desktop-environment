@@ -7,19 +7,22 @@ import * as http from "http";
 import { spawn } from "child_process";
 import { Key } from "ts-keycode-enum";
 import { getOS, OS } from "../../shared/utils/getOS";
-import { platform } from "os";
+import { tmpdir } from "os";
 
 interface TerminalInput {
   process?: string;
+  args?: string[];
+  location?: string;
+  linesToWriteToProcess?: string[];
 }
 
 const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   view,
   views,
   event,
-  input: { process },
+  input: { process, args, location: cwd, linesToWriteToProcess = [] },
 }) => {
-  const terminal = spawn(process || "bash", ["-i"]);
+  const terminal = spawn(process || "bash", args, { cwd });
   const server = http.createServer();
   const socketServer = socket.listen(server);
   let history = "";
@@ -40,6 +43,9 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   });
   const port = await portManager.getPort();
   server.listen(port);
+  linesToWriteToProcess.forEach((command) =>
+    terminal.stdin.write(command + "\n")
+  );
   socketServer.on("connection", (client) => {
     client.emit("out", history);
     client.on("in", (data) => {
@@ -101,10 +107,35 @@ export const terminal: App<TerminalInput> = {
   name: "Termial",
   description: "a terminal window",
   flow: terminalFlow,
-  defaultInput: { process: getDefaultBash() },
+  defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
   icon: {
     type: "fluentui",
     icon: "CommandPrompt",
+  },
+  window: {
+    height: 400,
+    width: 1000,
+  },
+};
+
+// terminal apps
+
+export const vscodeServerScript: App<TerminalInput> = {
+  name: "VSCode server",
+  description: "run vscode from terminal",
+  flow: terminalFlow,
+  defaultInput: {
+    process: getDefaultBash(),
+    args: ["-i"],
+    location: tmpdir(),
+    linesToWriteToProcess:
+      getOS() !== OS.Window
+        ? ["curl -fsSL https://code-server.dev/install.sh | sh", `export PATH="$HOME/.local/bin:$PATH"`, "code-server"]
+        : ["echo window dose not support vscode server"],
+  },
+  icon: {
+    type: "fluentui",
+    icon: "Code",
   },
   window: {
     height: 400,

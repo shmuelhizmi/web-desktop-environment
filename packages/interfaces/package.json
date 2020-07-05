@@ -8,5 +8,8 @@
   "private": true,
   "dependencies": {
     "@mcesystems/reflow": "^4.3.4"
+  },
+  "devDependencies": {
+	  "typescript": "3.4.3"
   }
 }

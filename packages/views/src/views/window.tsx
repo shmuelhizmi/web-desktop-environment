@@ -6,6 +6,8 @@ import { Theme } from "../theme";
 import ReactDOM from "react-dom";
 import reactClickOutside from "react-click-outside";
 import Dragable from "react-draggable";
+import { Icon } from "@fluentui/react";
+import windowManager from "./../state/WindowManager";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -61,8 +63,13 @@ const styles = (theme: Theme) =>
       textAlign: "center",
       whiteSpace: "nowrap",
       overflow: "hidden",
-	  textOverflow: "ellipsis",
-	  userSelect: "none",
+      textOverflow: "ellipsis",
+      userSelect: "none",
+      color: "#fff",
+    },
+    barTitleIcon: {
+      position: "relative",
+      top: 3,
     },
   });
 
@@ -71,6 +78,7 @@ interface WindowState {
   zIndex: number;
   canDrag: boolean;
   collaps: boolean;
+  position: { x: number; y: number };
 }
 
 const defualtWindowSize = { height: 600, width: 700 };
@@ -82,6 +90,7 @@ class Window extends ReflowReactComponent<
   WindowState
 > {
   domContainer: Element;
+  id: number;
   constructor(props: Window["props"]) {
     super(props);
     this.state = {
@@ -91,10 +100,25 @@ class Window extends ReflowReactComponent<
       },
       zIndex: 2,
       canDrag: false,
-      collaps: false,
+      collaps: props.window.minimized || false,
+      position: props.window.position || {
+        x: window.screen.width / 3,
+        y: window.screen.height / 3,
+      },
     };
     this.domContainer = document.createElement("div");
     document.getElementById("app")?.appendChild(this.domContainer);
+    this.id = windowManager.addWindow(props.name, props.icon, {
+      minimized: props.window.minimized || false,
+    });
+    windowManager.emitter.on(
+      "minimizeWindow",
+      ({ id }) => id === this.id && this.setState({ collaps: true })
+    );
+    windowManager.emitter.on(
+      "maximizeWindow",
+      ({ id }) => id === this.id && this.setState({ collaps: false, zIndex: 5 })
+    );
   }
 
   static windowBarHeight = 25;
@@ -105,20 +129,49 @@ class Window extends ReflowReactComponent<
 
   render() {
     const { size, canDrag, zIndex, collaps } = this.state;
-    const { children, classes, done, title } = this.props;
+    const {
+      children,
+      classes,
+      done,
+      title,
+      icon,
+      event,
+      window: { maxHeight, maxWidth, minHeight, minWidth },
+    } = this.props;
     return ReactDOM.createPortal(
       <Dragable
         disabled={!canDrag}
-        onDrag={(e, postion) => {
+        defaultPosition={this.state.position}
+        onDrag={(e, position) => {
           this.setState({ zIndex: 5 });
           if (
-            postion.y < 0 ||
-            postion.y > window.screen.height - size.height ||
-            postion.x < 0 ||
-            postion.x > window.screen.width - size.width
+            position.y < 0 ||
+            position.y > window.screen.height - size.height ||
+            position.x < 0 ||
+            position.x > window.screen.width - size.width
           ) {
             return false;
           }
+        }}
+        onStop={(e, fullPosition) => {
+          const position = { x: fullPosition.x, y: fullPosition.y };
+          if (position.y < 0) {
+            position.y = 0;
+          }
+          if (position.y > window.screen.height - size.height) {
+            position.y = window.screen.height - size.height;
+          }
+          if (position.x < 0) {
+            position.x = 0;
+          }
+          if (position.x > window.screen.width - size.width) {
+            position.x = window.screen.width - size.width;
+          }
+          this.setState({ position });
+          event("setWindowState", {
+            position,
+            minimized: this.state.collaps,
+          });
         }}
       >
         <div
@@ -138,23 +191,43 @@ class Window extends ReflowReactComponent<
             <div className={classes.barButtonsContainer}>
               <div
                 className={`${classes.barButton} ${classes.barButtonExit}`}
-                onClick={() => done({})}
+                onClick={() => {
+                  done({});
+                  windowManager.closeWindow(this.id);
+                }}
               />
               <div
                 className={classes.barButton}
                 style={{ background: "#af9941" }}
               />
               <div
-                onClick={() => this.setState({ collaps: !collaps })}
+                onClick={() => {
+                  windowManager.updateState(this.id, {
+                    minimized: !this.state.collaps,
+                  });
+                }}
                 className={`${classes.barButton} ${classes.barButtonCollaps}`}
               />
             </div>
-            <div className={classes.barTitle}>{title}</div>
+            <div className={classes.barTitle}>
+              {title} -{" "}
+              {icon.type === "fluentui" ? (
+                <Icon className={classes.barTitleIcon} iconName={icon.icon} />
+              ) : (
+                <img className={classes.barTitleIcon} width={14} height={14} />
+              )}
+            </div>
           </div>
           {!collaps && (
             <div
               className={classes.body}
-              style={{ ...this.props.window, ...size }}
+              style={{
+                maxHeight,
+                maxWidth,
+                minHeight,
+                minWidth,
+                ...size,
+              }}
             >
               {children}
             </div>

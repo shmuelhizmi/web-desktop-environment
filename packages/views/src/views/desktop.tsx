@@ -15,6 +15,7 @@ import {
   ImageFit,
   Icon,
 } from "@fluentui/react";
+import windowManager, { Window } from "./../state/WindowManager";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -30,6 +31,10 @@ const styles = (theme: Theme) =>
       bottom: 15,
       left: 15,
       borderRadius: 5,
+      background: "rgba(0, 120, 212, 0.6)",
+      "&:hover": {
+        background: "rgba(0, 120, 212, 0.8)",
+      },
     },
     startMenu: {
       position: "absolute",
@@ -102,11 +107,33 @@ const styles = (theme: Theme) =>
       color: "#fff",
       fontSize: 25,
     },
+    windowsBar: {
+      position: "absolute",
+      bottom: 25,
+      left: 180,
+      right: 25,
+      borderRadius: 5,
+      height: 55,
+      display: "flex",
+      backdropFilter: "blur(2px)",
+      background: "rgba(191, 191, 191, 0.4)",
+    },
+    windowsBarButton: {
+      fontSize: 50,
+	  padding: 5,
+	  marginRight: 1,
+      cursor: "pointer",
+      background: "rgba(231, 231, 231, 0.4)",
+      "&:hover": {
+        background: "rgba(231, 231, 231, 0.45)",
+      },
+    },
   });
 
 interface DesktopState {
   isStartMenuOpen: boolean;
   startMenuQuery?: string;
+  openWindows: Window[];
 }
 
 // using ReflowReactComponent in this case provides the event() and done() callbacks.
@@ -115,9 +142,21 @@ class Desktop extends ReflowReactComponent<
   WithStyles<typeof styles>,
   DesktopState
 > {
-  state: DesktopState = {
-    isStartMenuOpen: false,
-  };
+  constructor(props: Desktop["props"]) {
+    super(props);
+    this.state = {
+      isStartMenuOpen: false,
+      openWindows: windowManager.windows,
+    };
+    windowManager.emitter.on("addWindow", this.updateWindow);
+    windowManager.emitter.on("closeWindow", this.updateWindow);
+    windowManager.emitter.on("maximizeWindow", this.updateWindow);
+    windowManager.emitter.on("minimizeWindow", this.updateWindow);
+  }
+
+  updateWindow = () =>
+    this.setState({ openWindows: [...windowManager.windows] });
+
   renderAppListCell = (app?: App) => {
     const { classes, event } = this.props;
     return (
@@ -150,7 +189,7 @@ class Desktop extends ReflowReactComponent<
 
   render() {
     const { background, event, openApps, classes, apps } = this.props;
-    const { isStartMenuOpen, startMenuQuery } = this.state;
+    const { isStartMenuOpen, startMenuQuery, openWindows } = this.state;
     return (
       <div className={classes.root} style={{ background }}>
         {openApps.map((app, i) => (
@@ -167,6 +206,30 @@ class Desktop extends ReflowReactComponent<
         >
           Start
         </CompoundButton>
+        <div className={classes.windowsBar}>
+          {openWindows.map((openWindow, index) => (
+            <div
+              key={index}
+              className={classes.windowsBarButton}
+              style={{
+                borderBottom: `${
+                  openWindow.state.minimized ? "#ccc" : "#336cfc"
+                } solid 3px`,
+              }}
+              onClick={() =>
+                windowManager.updateState(openWindow.id, {
+                  minimized: !openWindow.state.minimized,
+                })
+              }
+            >
+              {openWindow.icon.type === "img" ? (
+                <img src={openWindow.icon.icon} width={50} height={50} />
+              ) : (
+                <Icon iconName={openWindow.icon.icon} />
+              )}
+            </div>
+          ))}
+        </div>
         {isStartMenuOpen && (
           <div className={classes.startMenu}>
             <div className={classes.startMenuBody}>

@@ -4,5 +4,7 @@ export interface Window {
     minWidth?: string | number;
     height?:  number;
     maxHeight?: string | number;
-    minHeight?: string | number;
+	minHeight?: string | number;
+	minimized?: boolean;
+	position?: { x: number; y: number };
 }

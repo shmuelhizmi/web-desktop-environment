@@ -321,6 +321,16 @@ module.exports = function(webpackEnv) {
     module: {
       strictExportPresence: true,
       rules: [
+		{
+			test: /\.tsx?$/,
+			exclude: paths.appSrc,
+			use: [{
+				loader: "ts-loader",
+				options: {
+					transpileOnly: true,
+				},
+			}],
+		},
         // Disable require.ensure as it's not a standard language feature.
         { parser: { requireEnsure: false } },
 
@@ -342,7 +352,7 @@ module.exports = function(webpackEnv) {
             },
           ],
           include: paths.appSrc,
-        },
+		},
         {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
@@ -364,7 +374,7 @@ module.exports = function(webpackEnv) {
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               include: paths.appSrc,
-              loader: require.resolve('babel-loader'),
+			  loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'

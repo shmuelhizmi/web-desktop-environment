@@ -4,14 +4,16 @@ import { Window } from "../shared/window";
 
 
 export interface Input {
-    title: string;
+	title: string;
+	name: string;
     icon: Icon;
     window: Window;
 }
 
 export interface Events {
   setWindowState: {
-    minimize?: boolean;
+	minimized?: boolean;
+	position?: { x: number; y: number }
   };
   launchApp: {
     flow: string;

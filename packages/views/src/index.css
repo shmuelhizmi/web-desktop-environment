@@ -6,3 +6,29 @@
     left: 0;
     overflow: hidden;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+	width: 9px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+	background: rgba(191, 191, 191, 0.1);
+	border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: rgba(191, 191, 191, 0.7);
+	backdrop-filter: blur(15px);
+	border: 1px solid #0004;
+	border-radius: 6px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+	background: rgba(191, 191, 191, 0.8);
+    backdrop-filter: blur(18px);
+  }

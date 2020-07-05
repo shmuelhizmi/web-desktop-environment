@@ -4,10 +4,10 @@ import { apps, App } from "..";
 import { portManager } from "../../shared/utils/checkPort";
 import * as socket from "socket.io";
 import * as http from "http";
-import { spawn } from "child_process";
 import { Key } from "ts-keycode-enum";
 import { getOS, OS } from "../../shared/utils/getOS";
 import { tmpdir } from "os";
+import { spawn, IPty } from "node-pty";
 
 interface TerminalInput {
   process?: string;
@@ -22,62 +22,23 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   event,
   input: { process, args, location: cwd, linesToWriteToProcess = [] },
 }) => {
-  const terminal = spawn(process || "bash", args, { cwd });
   const server = http.createServer();
   const socketServer = socket.listen(server);
-  let history = "";
-  terminal.stdout.on("data", (data) => {
-    const out = data.toString();
-    socketServer.emit("out", out);
-    history += out;
-  });
-  terminal.stderr.on("data", (data) => {
-    const out = data.toString();
-    socketServer.emit("out", out);
-    history += out;
-  });
-  terminal.on("exit", (data) => {
-    const out = "terminal exit with code - ";
-    socketServer.emit("out", out);
-    history += out;
-  });
   const port = await portManager.getPort();
   server.listen(port);
-  linesToWriteToProcess.forEach((command) =>
-    terminal.stdin.write(command + "\n")
+  let history = "";
+  const ptyProcces = new PTY(
+    (data) => {
+      history += data;
+      socketServer.emit("output", data);
+    },
+    process,
+    cwd
   );
   socketServer.on("connection", (client) => {
-    client.emit("out", history);
-    client.on("in", (data) => {
-      terminal.stdin.write(data);
-    });
-    client.on("inkey", (keyCode) => {
-      switch (keyCode) {
-        case Key.Enter: {
-          terminal.stdin.write("\n");
-          break;
-        }
-        case Key.UpArrow: {
-          terminal.stdin.write("\u001b[A");
-          break;
-        }
-        case Key.DownArrow: {
-          terminal.stdin.write("\u001b[B");
-          break;
-        }
-        case Key.RightArrow: {
-          terminal.stdin.write("\u001b[C");
-          break;
-        }
-        case Key.LeftArrow: {
-          terminal.stdin.write("\u001b[C");
-          break;
-        }
-        default: {
-          terminal.stdin.write(String.fromCharCode(keyCode));
-          break;
-        }
-      }
+    socketServer.emit("output", history);
+    client.on("input", (data: string) => {
+      ptyProcces.write(data);
     });
   });
   const window = view(0, views.terminal, {
@@ -103,6 +64,8 @@ const getDefaultBash = () => {
   }
 };
 
+// from https://svaddi.dev/how-to-create-web-based-terminals/;
+
 export const terminal: App<TerminalInput> = {
   name: "Termial",
   description: "a terminal window",
@@ -115,32 +78,53 @@ export const terminal: App<TerminalInput> = {
   window: {
     height: 400,
     width: 1000,
+    position: { x: 50, y: 50 },
   },
 };
 
-// terminal apps
+class PTY {
+  shell: string;
+  ptyProcess: IPty;
+  out: (data: string) => void;
+  constructor(out: (data) => void, shell: string, cwd: string) {
+    // Setting default terminals based on user os
+    this.shell = shell;
+    this.ptyProcess = null;
+    this.out = out;
 
-export const vscodeServerScript: App<TerminalInput> = {
-  name: "VSCode server",
-  description: "start a vscode server",
-  flow: terminalFlow,
-  defaultInput: {
-    process: getDefaultBash(),
-    args: ["-i"],
-    location: tmpdir(),
-    linesToWriteToProcess:
-      getOS() !== OS.Window
-        ? ["curl -fsSL https://code-server.dev/install.sh | sh", `export PATH="$HOME/.local/bin:$PATH"`, "code-server"]
-        : ["echo window dose not support vscode server"],
-  },
-  icon: {
-    type: "fluentui",
-    icon: "Code",
-  },
-  window: {
-    height: 400,
-    width: 1000,
-  },
-};
+    // Initialize PTY process.
+    this.startPtyProcess(cwd);
+  }
+
+  /**
+   * Spawn an instance of pty with a selected shell.
+   */
+  startPtyProcess(cwd: string) {
+    this.ptyProcess = spawn(this.shell, [], {
+      name: "xterm-color",
+      cwd, // Which path should terminal start
+    });
+
+    // Add a "data" event listener.
+    this.ptyProcess.on("data", (data) => {
+      // Whenever terminal generates any data, send that output to socket.io client
+      this.sendToClient(data);
+    });
+  }
+
+  /**
+   * Use this function to send in the input to Pseudo Terminal process.
+   * @param {*} data Input from user like a command sent from terminal UI
+   */
+
+  write(data) {
+    this.ptyProcess.write(data);
+  }
+
+  sendToClient(data: string) {
+    // Emit data to socket.io client in an event "output"
+    this.out(data);
+  }
+}
 
 export default terminalFlow;

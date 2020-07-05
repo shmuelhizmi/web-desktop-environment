@@ -1,8 +1,12 @@
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
-import { terminal, vscodeServerScript } from "./utils/terminal";
+import { terminal } from "./utils/terminal";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
+
+interface AppEvents {
+	change_title: string;
+}
 
 export interface App<Params = {}> {
   icon: Icon;
@@ -10,12 +14,11 @@ export interface App<Params = {}> {
   defaultInput: Params;
   description: string;
   window: Window;
-  flow: Flow<ViewInterfacesType, Params>;
+  flow: Flow<ViewInterfacesType, Params, void, {}, {}, AppEvents>;
 }
 
 export const apps: {
   [app: string]: App;
 } = {
   terminal,
-  vscodeServerScript,
 };

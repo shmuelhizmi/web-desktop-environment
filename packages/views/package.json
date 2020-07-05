@@ -18,7 +18,8 @@
     "xterm": "4.7.0",
     "xterm-addon-fit": "0.4.0",
     "ts-keycode-enum": "1.0.6",
-    "@uifabric/icons": "7.3.59"
+	"@uifabric/icons": "7.3.59",
+	"events": "3.1.0"
   },
   "devDependencies": {
     "@types/socket.io-client": "1.4.32",
@@ -36,7 +37,8 @@
     "@typescript-eslint/parser": "^2.34.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "^24.9.0",
-    "babel-loader": "8.1.0",
+	"babel-loader": "8.1.0",
+	"ts-loader": "7.0.5",
     "babel-plugin-named-asset-import": "^0.3.6",
     "babel-preset-react-app": "^9.1.2",
     "camelcase": "^5.3.1",

@@ -56,6 +56,7 @@ const styles = (theme: Theme) =>
     appCell: {
       minHeight: 54,
       padding: 10,
+      marginTop: 15,
       boxSizing: "border-box",
       borderBottom: "1px solid #333",
       display: "flex",
@@ -83,6 +84,23 @@ const styles = (theme: Theme) =>
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
+    },
+    startMenuSearch: {
+      "& .ms-TextField-fieldGroup": {
+        background: "transparent",
+        "& input": {
+          fontSize: 20,
+          fontWeight: 600,
+          color: "#fff",
+        },
+        "& input::placeholder": {
+          fontSize: 20,
+          fontWeight: 600,
+          color: "#fff",
+        },
+      },
+      color: "#fff",
+      fontSize: 25,
     },
   });
 
@@ -153,6 +171,8 @@ class Desktop extends ReflowReactComponent<
           <div className={classes.startMenu}>
             <div className={classes.startMenuBody}>
               <TextField
+                borderless
+                className={classes.startMenuSearch}
                 placeholder="search app"
                 value={startMenuQuery}
                 onChange={(_e, startMenuQuery) =>
@@ -161,7 +181,13 @@ class Desktop extends ReflowReactComponent<
               ></TextField>
               <List
                 className={classes.appList}
-                items={apps}
+                items={apps.filter((app) =>
+                  startMenuQuery
+                    ? app.name.includes(startMenuQuery) ||
+                      app.description.includes(startMenuQuery) ||
+                      app.flow.includes(startMenuQuery)
+                    : true
+                )}
                 onRenderCell={this.renderAppListCell}
               />
             </div>

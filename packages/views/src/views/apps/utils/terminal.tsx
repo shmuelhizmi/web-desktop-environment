@@ -15,7 +15,13 @@ const styles = (theme: Theme) =>
     root: {
       width: "100%",
       height: "100%",
-      border: "none",
+	  border: "none",
+	  borderRadius: "0 0 15px 15px",
+	  background: "rgba(191, 191, 191, 0.4)",
+	  backdropFilter: "blur(15px)",
+	  "& .xterm-viewport": {
+		  background: "#fff0",
+	  }
     },
   });
 
@@ -48,7 +54,12 @@ class Terminal extends ReflowReactComponent<
     super(props);
     this.state = {};
     this.socket = io(`${reflowConnectionManager.host}:${props.port}`);
-    this.term = new XTerm();
+    this.term = new XTerm({
+      theme: {
+        background: "#fff0",
+      },
+	  allowTransparency: true,
+    });
     this.termFit = new FitAddon();
     this.term.loadAddon(this.termFit);
     this.socket.on("out", (data: string) => {

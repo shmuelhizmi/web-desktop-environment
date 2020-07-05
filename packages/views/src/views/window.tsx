@@ -14,14 +14,13 @@ const styles = (theme: Theme) =>
       boxShadow: "-10px 12px 20px -2px #0007",
     },
     bar: {
-      background: "rgba(191, 191, 191, 0.6)",
-      backdropFilter: "blur(10px)",
+      background: "rgba(191, 191, 191, 0.4)",
+      backdropFilter: "blur(15px)",
       borderRadius: "7px 7px 0 0",
       cursor: "move",
       display: "flex",
     },
     body: {
-      background: "#fff",
       borderRadius: "0 0 3px 3px",
     },
     barButtonsContainer: {
@@ -62,7 +61,8 @@ const styles = (theme: Theme) =>
       textAlign: "center",
       whiteSpace: "nowrap",
       overflow: "hidden",
-      textOverflow: "ellipsis",
+	  textOverflow: "ellipsis",
+	  userSelect: "none",
     },
   });
 

@@ -122,7 +122,7 @@ export const terminal: App<TerminalInput> = {
 
 export const vscodeServerScript: App<TerminalInput> = {
   name: "VSCode server",
-  description: "run vscode from terminal",
+  description: "start a vscode server",
   flow: terminalFlow,
   defaultInput: {
     process: getDefaultBash(),

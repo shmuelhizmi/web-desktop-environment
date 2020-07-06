@@ -10,7 +10,7 @@ export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
   // Using the view() function to display the MyView component, at layer 0 of this flow
   let openApps: OpenApp[] = [];
   const desktop = view(0, views.desktop, {
-    background: "linear-gradient(10deg, rgba(25,130,143,1) 0%, rgba(9,121,112,1) 45%, rgba(0,211,255,1) 100%)",
+    background: "url(https://picsum.photos/1920/1080)", //random image
     apps: Object.keys(apps).map((flow) => {
       const { name, description, icon } = apps[flow];
       return {

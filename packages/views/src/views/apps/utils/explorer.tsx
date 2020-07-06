@@ -1,9 +1,11 @@
-import ExplorerInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
+import ExplorerInterface, {
+  File,
+} from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "../../../theme";
-import { Icon } from "@fluentui/react";
+import { Icon, Button } from "@fluentui/react";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -47,11 +49,11 @@ const styles = (theme: Theme) =>
     fileBox: {
       margin: 15,
       boxShadow: "#000000 0px 0px 20px -6px inset",
-	  border: "#666 1px solid",
-	  borderRadius: 7,
+      border: "#666 1px solid",
+      borderRadius: 7,
       width: "100%",
       height: "90%",
-      overflow: "auto",
+      overflowY: "auto",
     },
     fileContainer: {
       display: "grid",
@@ -101,9 +103,53 @@ const styles = (theme: Theme) =>
         backgroundColor: "#0002",
       },
     },
+    confirmDialog: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "100%",
+      height: "100%",
+      flexDirection: "column",
+    },
+    confirmDialogMessage: {
+      maxWidth: "80%",
+      fontFamily: "cursive",
+      textAlign: "center",
+      color: "#fff",
+      fontSize: 25,
+    },
+    confirmDialogButtons: {
+      margin: 20,
+      width: "50%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    confirmDialogButton: {
+      margin: 10,
+      fontSize: 50,
+      width: "fit-content",
+      height: "fit-content",
+      borderRadius: 7,
+      background: "#fff2",
+      "&:hover": {
+        background: "#fff5",
+      },
+    },
+    confirmDialogButtonPrimary: {
+      background: "rgba(0, 120, 212, 0.7)",
+      "&:hover": {
+        background: "rgba(0, 120, 212, 0.9)",
+      },
+    },
   });
 
-interface ExplorerState {}
+interface ExplorerState {
+  fileIsOverFile?: number;
+  confirm?: {
+    message: string;
+    result?: boolean;
+  };
+}
 
 // using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Explorer extends ReflowReactComponent<
@@ -111,6 +157,8 @@ class Explorer extends ReflowReactComponent<
   WithStyles<typeof styles>,
   ExplorerState
 > {
+  dragedFile?: File;
+  dropedFolder?: File;
   constructor(props: Explorer["props"]) {
     super(props);
     this.state = {};
@@ -143,6 +191,7 @@ class Explorer extends ReflowReactComponent<
       currentPath,
       platfromPathSperator,
     } = this.props;
+    const { fileIsOverFile } = this.state;
     return (
       <div className={classes.root}>
         <div className={classes.locationBarContainer}>
@@ -162,30 +211,136 @@ class Explorer extends ReflowReactComponent<
         </div>
         <div className={classes.fileBoxContainer}>
           <div className={classes.fileBox}>
-            <div className={classes.fileContainer}>
-              {files.map((file) => (
-                <div
-                  className={classes.file}
-                  onClick={() =>
-                    file.isFolder &&
-                    event(
-                      "changeCurrentPath",
-                      `${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
-                    )
-                  }
-                >
-                  <div className={classes.fileName}>{file.name}</div>
-                  {file.isFolder ? (
-                    <Icon className={classes.fileIcon} iconName="FolderOpen" />
-                  ) : (
-                    <Icon
-                      className={classes.fileIcon}
-                      iconName="TextDocument"
-                    />
-                  )}
+            {this.state.confirm ? (
+              <div className={classes.confirmDialog}>
+                <div className={classes.confirmDialogMessage}>
+                  {this.state.confirm.message}
                 </div>
-              ))}
-            </div>
+                <div className={classes.confirmDialogButtons}>
+                  <Button
+                    className={classes.confirmDialogButton}
+                    onClick={() =>
+                      this.setState((state) =>
+                        state.confirm?.message
+                          ? {
+                              confirm: {
+                                message: state.confirm.message,
+                                result: false,
+                              },
+                            }
+                          : {}
+                      )
+                    }
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    primary
+                    className={`${classes.confirmDialogButton} ${classes.confirmDialogButtonPrimary}`}
+                    onClick={() =>
+                      this.setState((state) =>
+                        state.confirm?.message
+                          ? {
+                              confirm: {
+                                message: state.confirm.message,
+                                result: true,
+                              },
+                            }
+                          : {}
+                      )
+                    }
+                  >
+                    OK
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className={classes.fileContainer}>
+                {files.map((file, index) => (
+                  <div
+                    className={classes.file}
+                    key={index}
+                    draggable
+                    style={{
+                      backgroundColor:
+                        fileIsOverFile === index ? "#1115" : "#1110",
+                    }}
+                    onDrag={(e) => {
+                      this.dragedFile = file;
+                    }}
+                    onDragEnd={async () => {
+                      if (this.dropedFolder && this.dragedFile) {
+                        const newPath = `${currentPath}${platfromPathSperator}${this.dropedFolder.name}${platfromPathSperator}${this.dragedFile.name}`;
+                        const originalPath = `${currentPath}${platfromPathSperator}${this.dragedFile.name}`;
+                        this.setState({
+                          confirm: {
+                            message: ` do you want to move ${originalPath} to ${newPath}`,
+                          },
+                        });
+                        const result = await new Promise((resolve) => {
+                          const checkForResult = () => {
+                            if (
+                              this.state.confirm &&
+                              this.state.confirm.result !== undefined
+                            ) {
+                              resolve(this.state.confirm.result);
+                              this.setState({ confirm: undefined });
+                            } else {
+                              setTimeout(checkForResult, 5);
+                            }
+                          };
+                          checkForResult();
+                        });
+                        if (result) {
+                          event("move", {
+                            newPath,
+                            originalPath,
+                          });
+                        }
+                      }
+                    }}
+                    onDragOverCapture={(e) => {
+                      if (file.isFolder && this.dragedFile?.name !== file.name) {
+                        console.log("drag start");
+                        this.dropedFolder = file;
+                        this.setState({ fileIsOverFile: index });
+                      }
+                    }}
+                    onDragLeaveCapture={() => {
+                      setTimeout(() => {
+                        if (this.dropedFolder?.name === file.name) {
+                          console.log("drag stop");
+                          this.dropedFolder = undefined;
+                          this.setState({ fileIsOverFile: undefined });
+                        }
+                      }, 50);
+                    }}
+                    onClick={() =>
+                      file.isFolder &&
+                      event(
+                        "changeCurrentPath",
+                        `${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
+                      )
+                    }
+                  >
+                    <div className={classes.fileName}>{file.name}</div>
+                    {file.isFolder ? (
+                      <Icon
+                        className={classes.fileIcon}
+                        iconName={
+                          fileIsOverFile === index ? "FolderOpen" : "Folder"
+                        }
+                      />
+                    ) : (
+                      <Icon
+                        className={classes.fileIcon}
+                        iconName="TextDocument"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

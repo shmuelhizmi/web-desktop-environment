@@ -75,7 +75,6 @@ const styles = (theme: Theme) =>
 
 interface WindowState {
   size: { height: number; width: number };
-  zIndex: number;
   canDrag: boolean;
   collaps: boolean;
   position: { x: number; y: number };
@@ -98,7 +97,6 @@ class Window extends ReflowReactComponent<
         height: props.window.height || defualtWindowSize.height,
         width: props.window.width || defualtWindowSize.width,
       },
-      zIndex: 2,
       canDrag: false,
       collaps: props.window.minimized || false,
       position: props.window.position || {
@@ -108,27 +106,38 @@ class Window extends ReflowReactComponent<
     };
     this.domContainer = document.createElement("div");
     document.getElementById("app")?.appendChild(this.domContainer);
-    this.id = windowManager.addWindow(props.name, props.icon, {
+
+	this.id = windowManager.addWindow(props.name, props.icon, {
       minimized: props.window.minimized || false,
-    });
+	});
+
     windowManager.emitter.on(
       "minimizeWindow",
       ({ id }) => id === this.id && this.setState({ collaps: true })
-    );
-    windowManager.emitter.on(
-      "maximizeWindow",
-      ({ id }) => id === this.id && this.setState({ collaps: false, zIndex: 5 })
-    );
+	);
+
+    windowManager.emitter.on("maximizeWindow", ({ id }) => {
+      if (id === this.id) {
+        this.setState({ collaps: false });
+      }
+      this.moveToTop();
+    });
   }
+
+  moveToTop = () => { // remove and readd window -> move to top in html tree
+   const parent = document.getElementById("app");
+   if (parent) {
+	   if (parent.childNodes[parent.childNodes.length -1] !== this.domContainer) {
+		   parent.removeChild(this.domContainer);
+		   parent.appendChild(this.domContainer);
+	   }
+   }
+  };
 
   static windowBarHeight = 25;
 
-  handleClickOutside() {
-    this.setState({ zIndex: 2 });
-  }
-
   render() {
-    const { size, canDrag, zIndex, collaps } = this.state;
+    const { size, canDrag, collaps } = this.state;
     const {
       children,
       classes,
@@ -139,101 +148,106 @@ class Window extends ReflowReactComponent<
       window: { maxHeight, maxWidth, minHeight, minWidth },
     } = this.props;
     return ReactDOM.createPortal(
-      <Dragable
-        disabled={!canDrag}
-        defaultPosition={this.state.position}
-        onDrag={(e, position) => {
-          this.setState({ zIndex: 5 });
-          if (
-            position.y < 0 ||
-            position.y > window.screen.height - size.height ||
-            position.x < 0 ||
-            position.x > window.screen.width - size.width
-          ) {
-            return false;
-          }
-        }}
-        onStop={(e, fullPosition) => {
-          const position = { x: fullPosition.x, y: fullPosition.y };
-          if (position.y < 0) {
-            position.y = 0;
-          }
-          if (position.y > window.screen.height - size.height) {
-            position.y = window.screen.height - size.height;
-          }
-          if (position.x < 0) {
-            position.x = 0;
-          }
-          if (position.x > window.screen.width - size.width) {
-            position.x = window.screen.width - size.width;
-          }
-          this.setState({ position });
-          event("setWindowState", {
-            position,
-            minimized: this.state.collaps,
-          });
-        }}
-      >
-        <div
-          className={classes.root}
-          onClick={() => this.setState({ zIndex: 5 })}
-          style={{
-            width: size.width,
-            zIndex,
+      <div style={{ zIndex: 2 }}>
+        <Dragable
+          disabled={!canDrag}
+          defaultPosition={this.state.position}
+          onDrag={(e, position) => {
+            this.moveToTop();
+            if (
+              position.y < 0 ||
+              position.y > window.screen.height - size.height ||
+              position.x < 0 ||
+              position.x > window.screen.width - size.width
+            ) {
+              return false;
+            }
+          }}
+          onStop={(e, fullPosition) => {
+            const position = { x: fullPosition.x, y: fullPosition.y };
+            if (position.y < 0) {
+              position.y = 0;
+            }
+            if (position.y > window.screen.height - size.height) {
+              position.y = window.screen.height - size.height;
+            }
+            if (position.x < 0) {
+              position.x = 0;
+            }
+            if (position.x > window.screen.width - size.width) {
+              position.x = window.screen.width - size.width;
+            }
+            this.setState({ position });
+            event("setWindowState", {
+              position,
+              minimized: this.state.collaps,
+            });
           }}
         >
           <div
-            style={{ height: Window.windowBarHeight, width: size.width }}
-            onMouseEnter={() => this.setState({ canDrag: true })}
-            onMouseLeave={() => this.setState({ canDrag: false })}
-            className={classes.bar}
+            className={classes.root}
+            onClick={() => this.moveToTop()}
+            style={{
+              width: size.width,
+            }}
           >
-            <div className={classes.barButtonsContainer}>
-              <div
-                className={`${classes.barButton} ${classes.barButtonExit}`}
-                onClick={() => {
-                  done({});
-                  windowManager.closeWindow(this.id);
-                }}
-              />
-              <div
-                className={classes.barButton}
-                style={{ background: "#af9941" }}
-              />
-              <div
-                onClick={() => {
-                  windowManager.updateState(this.id, {
-                    minimized: !this.state.collaps,
-                  });
-                }}
-                className={`${classes.barButton} ${classes.barButtonCollaps}`}
-              />
-            </div>
-            <div className={classes.barTitle}>
-              {title} -{" "}
-              {icon.type === "fluentui" ? (
-                <Icon className={classes.barTitleIcon} iconName={icon.icon} />
-              ) : (
-                <img className={classes.barTitleIcon} width={14} height={14} />
-              )}
-            </div>
-          </div>
-          {!collaps && (
             <div
-              className={classes.body}
-              style={{
-                maxHeight,
-                maxWidth,
-                minHeight,
-                minWidth,
-                ...size,
-              }}
+              style={{ height: Window.windowBarHeight, width: size.width }}
+              onMouseEnter={() => this.setState({ canDrag: true })}
+              onMouseLeave={() => this.setState({ canDrag: false })}
+              className={classes.bar}
             >
-              {children}
+              <div className={classes.barButtonsContainer}>
+                <div
+                  className={`${classes.barButton} ${classes.barButtonExit}`}
+                  onClick={() => {
+                    done({});
+                    windowManager.closeWindow(this.id);
+                  }}
+                />
+                <div
+                  className={classes.barButton}
+                  style={{ background: "#af9941" }}
+                />
+                <div
+                  onClick={() => {
+                    windowManager.updateState(this.id, {
+                      minimized: !this.state.collaps,
+                    });
+                  }}
+                  className={`${classes.barButton} ${classes.barButtonCollaps}`}
+                />
+              </div>
+              <div className={classes.barTitle}>
+                {title} -{" "}
+                {icon.type === "fluentui" ? (
+                  <Icon className={classes.barTitleIcon} iconName={icon.icon} />
+                ) : (
+                  <img
+                    className={classes.barTitleIcon}
+                    width={14}
+                    height={14}
+                  />
+                )}
+              </div>
             </div>
-          )}
-        </div>
-      </Dragable>,
+            {!collaps && (
+              <div
+                className={classes.body}
+                style={{
+                  maxHeight,
+                  maxWidth,
+                  minHeight,
+                  minWidth,
+                  ...size,
+                }}
+              >
+                {children}
+              </div>
+            )}
+          </div>
+        </Dragable>
+      </div>,
       this.domContainer
     );
   }

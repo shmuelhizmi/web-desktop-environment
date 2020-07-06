@@ -11,6 +11,7 @@
 /* width */
 ::-webkit-scrollbar {
 	width: 9px;
+	height: 5px;
   }
   
   /* Track */
@@ -21,9 +22,9 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: rgba(191, 191, 191, 0.7);
+	background: #00000015;
+	border: #00000035 1px solid;
 	backdrop-filter: blur(15px);
-	border: 1px solid #0004;
 	border-radius: 6px;
   }
   

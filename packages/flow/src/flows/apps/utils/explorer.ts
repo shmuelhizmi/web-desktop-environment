@@ -43,31 +43,45 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
     files: await listFiles(),
   });
 
+  let isUpdatingFiles = false;
+  const updateFiles = async () => {
+	if (!isUpdatingFiles) {
+		isUpdatingFiles = true;
+		explorer.update({ files: await listFiles() });
+		isUpdatingFiles = false;
+	}
+  }
   explorer.on("changeCurrentPath", async (path) => {
     currentPath = path;
     explorer.update({
       currentPath,
       files: await listFiles(),
     });
-  });
-
-  explorer.on("createFolder", async (name) => {
-    await fs.mkdir(join(currentPath, name));
-    explorer.update({ files: await listFiles() });
-  });
-
-  explorer.on("delete", async (name) => {
-    await fs.unlink(join(currentPath, name));
-    explorer.update({ files: await listFiles() });
-  });
-
-  explorer.on("move", async ({ newPath, originalPath }) => {
+  })
+  .on("createFolder", async (name) => {
+	await fs.mkdir(join(currentPath, name));
+	await updateFiles();
+  })
+  .on("delete", async (name) => {
+	  const file = join(currentPath, name);
+	  if ((await fs.stat(file)).isDirectory()) {
+		  await fs.rmdir(join(currentPath, name));
+	  } else {
+		  await fs.unlink(join(currentPath, name));
+	  }
+	  await updateFiles();
+  })
+  .on("move", async ({ newPath, originalPath }) => {
     await moveFile(originalPath, newPath);
-    explorer.update({ files: await listFiles() });
-  });
-  explorer.on("upload", async ({ data, path }) => {
+    await updateFiles();
+  })
+  .on("copy", async ({ newPath, originalPath }) => {
+    await fs.writeFile(newPath, await fs.readFile(originalPath))
+    await updateFiles();
+  })
+  .on("upload", async ({ data, path }) => {
     await fs.writeFile(path, data);
-    explorer.update({ files: await listFiles() });
+    await updateFiles();
   });
   await explorer;
 });

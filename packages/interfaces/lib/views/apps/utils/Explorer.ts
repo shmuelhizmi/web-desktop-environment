@@ -33,6 +33,7 @@ export interface Events {
   upload: Upload;
   createFolder: string; // name
   move: Move;
+  copy: Move;
   delete: string; //name
   requestDownload: string; // name
   changeCurrentPath: string; //path

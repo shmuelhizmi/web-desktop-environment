@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    height: "100%",
+	height: "100%",
+	background: "linear-gradient(45deg, rgba(29,217,105,1) 0%, rgba(0,189,255,1) 100%)",
   },
   card: {
     width: 500,
@@ -23,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 500,
     padding: "70px 60px",
     display: "flex",
-    justifyContent: "space-between"
+	justifyContent: "space-between",
+	backdropFilter: "blur(5px)",
+	userSelect: "none",
   },
 }));
 

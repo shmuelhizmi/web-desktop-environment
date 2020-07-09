@@ -8,7 +8,6 @@ import { Theme } from "../theme";
 import { reflowConnectionManager } from "..";
 import {
   Button,
-  CompoundButton,
   TextField,
   List,
   Image,
@@ -28,17 +27,22 @@ const styles = (theme: Theme) =>
     },
     startBotton: {
       position: "absolute",
-      bottom: 15,
-      left: 15,
-      borderRadius: 5,
-      background: "rgba(0, 120, 212, 0.6)",
+      bottom: 0,
+	  left: 45,
+	  height: 60,
+	  borderRadius: "15px 15px 0 0",
+	  fontSize: 40,
+	  paddingTop: 5,
+	  borderBottom: "none",
+      background: "rgba(0, 120, 212, 0.2)",
       "&:hover": {
-        background: "rgba(0, 120, 212, 0.8)",
-      },
+        background: "rgba(0, 120, 212, 0.4)",
+	  },
+	  zIndex: 2,
     },
     startMenu: {
       position: "absolute",
-      zIndex: 3,
+      zIndex: 2,
       bottom: 105,
       left: 15,
       width: 500,
@@ -48,7 +52,7 @@ const styles = (theme: Theme) =>
       background: "#0003",
       backdropFilter: "blur(10px)",
       border: "solid 1px #fff3",
-      boxShadow: "-5px 6px 10px -1px #0007",
+	  boxShadow: "-5px 6px 10px -1px #0007",
     },
     startMenuBody: {
       width: "100%",
@@ -109,14 +113,18 @@ const styles = (theme: Theme) =>
     },
     windowsBar: {
 		position: "absolute",
-		bottom: 25,
+		bottom: 0,
 		left: 180,
 		right: 25,
-		borderRadius: 5,
+		borderRadius: "15px 15px 0 0",
 		height: 55,
 		display: "flex",
 		backdropFilter: "blur(2px)",
-		background: "rgba(191, 191, 191, 0.4)",
+		background: "#9991",
+		paddingLeft: 10,
+		border: "solid 2px #fff5",
+		borderBottom: "none",
+		zIndex: 2,
     },
     windowsBarButton: {
 		userSelect: "none",
@@ -124,9 +132,8 @@ const styles = (theme: Theme) =>
 		padding: 5,
 		marginRight: 1,
 		cursor: "pointer",
-		background: "rgba(231, 231, 231, 0.4)",
 		"&:hover": {
-			background: "rgba(231, 231, 231, 0.45)",
+			background: "rgba(231, 231, 231, 0.35)",
 		},
     },
 });
@@ -199,14 +206,13 @@ class Desktop extends ReflowReactComponent<
             ref={(div) => div && reflowConnectionManager.connect(app.port, div)}
           />
         ))}
-        <CompoundButton
+        <Button
           primary
-          secondaryText="open start menu"
           className={classes.startBotton}
           onClick={() => this.setState({ isStartMenuOpen: !isStartMenuOpen })}
         >
-          Start
-        </CompoundButton>
+			<Icon iconName="AllApps" />
+        </Button>
         <div className={classes.windowsBar}>
           {openWindows.map((openWindow, index) => (
             <div
@@ -214,8 +220,9 @@ class Desktop extends ReflowReactComponent<
               className={classes.windowsBarButton}
               style={{
                 borderBottom: `${
-                  openWindow.state.minimized ? "#ccc" : "#336cfc"
-                } solid 3px`,
+                  openWindow.state.minimized ? "#fff9" : "#2359ff"
+				} solid 3px`,
+				color: openWindow.state.minimized ? "#fff9" : "#fff"
               }}
               onClick={() =>
                 windowManager.updateState(openWindow.id, {

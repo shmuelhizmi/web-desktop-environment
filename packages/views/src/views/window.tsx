@@ -29,11 +29,10 @@ const styles = (theme: Theme) =>
       position: "relative",
       top: 5,
       left: 5,
-      width: 60,
+      width: 40,
       height: 20,
       display: "flex",
       justifyContent: "space-between",
-      zIndex: 2,
     },
     barButton: {
       width: 15,
@@ -100,8 +99,8 @@ class Window extends ReflowReactComponent<
       canDrag: false,
       collaps: props.window.minimized || false,
       position: props.window.position || {
-        x: window.screen.width / 3,
-        y: window.screen.height / 3,
+        x: window.screen.availWidth / 3,
+        y: window.screen.availHeight / 3,
       },
     };
     this.domContainer = document.createElement("div");
@@ -148,7 +147,7 @@ class Window extends ReflowReactComponent<
       window: { maxHeight, maxWidth, minHeight, minWidth },
     } = this.props;
     return ReactDOM.createPortal(
-      <div style={{ zIndex: 2 }}>
+      <div>
         <Dragable
           disabled={!canDrag}
           defaultPosition={this.state.position}
@@ -156,9 +155,9 @@ class Window extends ReflowReactComponent<
             this.moveToTop();
             if (
               position.y < 0 ||
-              position.y > window.screen.height - size.height ||
-              position.x < 0 ||
-              position.x > window.screen.width - size.width
+              position.y > window.screen.availHeight - size.height ||
+              position.x < 0 - size.width * 0.5 ||
+              position.x > window.screen.availWidth - (size.width * 0.5)
             ) {
               return false;
             }
@@ -168,14 +167,14 @@ class Window extends ReflowReactComponent<
             if (position.y < 0) {
               position.y = 0;
             }
-            if (position.y > window.screen.height - size.height) {
-              position.y = window.screen.height - size.height;
+            if (position.y > window.screen.availHeight - size.height) {
+              position.y = window.screen.availHeight - size.height;
             }
             if (position.x < 0) {
               position.x = 0;
             }
-            if (position.x > window.screen.width - size.width) {
-              position.x = window.screen.width - size.width;
+            if (position.x > window.screen.availWidth - size.width) {
+              position.x = window.screen.availWidth - size.width;
             }
             this.setState({ position });
             event("setWindowState", {
@@ -204,10 +203,6 @@ class Window extends ReflowReactComponent<
                     done({});
                     windowManager.closeWindow(this.id);
                   }}
-                />
-                <div
-                  className={classes.barButton}
-                  style={{ background: "#af9941" }}
                 />
                 <div
                   onClick={() => {

@@ -30,9 +30,9 @@ const styles = (theme: Theme) =>
       borderBottom: "1px solid #333",
       backdropFilter: "blur(20px)",
       marginTop: 10,
-	  height: "100%",
-	  justifyContent: "center",
-	  padding: 4,
+      height: "100%",
+      justifyContent: "center",
+      padding: 4,
       borderRadius: 10,
       display: "flex",
     },
@@ -52,15 +52,15 @@ const styles = (theme: Theme) =>
       "&:hover": {
         backgroundColor: "#0002",
       },
-	},
-	actionButtonDisabled: {
-		cursor: "none",
-		border: "none",
-		backgroundColor: "#0004",
-		"&:hover": {
-		  backgroundColor: "#0004",
-		},
-	},
+    },
+    actionButtonDisabled: {
+      cursor: "default",
+      border: "none",
+      backgroundColor: "#0004",
+      "&:hover": {
+        backgroundColor: "#0004",
+      },
+    },
     locationBarContainer: {
       height: 50,
       width: "100%",
@@ -91,8 +91,8 @@ const styles = (theme: Theme) =>
     },
     fileBox: {
       margin: 15,
-	  boxShadow: "#000000 0px 0px 20px -6px inset",
-	  background: "#eee4",
+      boxShadow: "#000000 0px 0px 20px -6px inset",
+      background: "#eee4",
       border: "#666 1px solid",
       borderRadius: 7,
       width: "100%",
@@ -287,7 +287,11 @@ class Explorer extends ReflowReactComponent<
     });
   };
 
-  getBreadcrumbLocations = (): { path: string; onClick: () => void; onDrop: () => void }[] => {
+  getBreadcrumbLocations = (): {
+    path: string;
+    onClick: () => void;
+    onDrop: () => void;
+  }[] => {
     const { currentPath, platfromPathSperator, event } = this.props;
     let currentLocation = "";
     const pathArray: string[] = [];
@@ -301,12 +305,12 @@ class Explorer extends ReflowReactComponent<
       const pathPartPath = currentLocation;
       return {
         path,
-		onClick: () => {
-			event("changeCurrentPath", pathPartPath);
-			this.setState({ selectedFile: undefined });
-			this.selectedFile = undefined;
-		},
-		onDrop: () => this.onDropPath(pathPartPath),
+        onClick: () => {
+          event("changeCurrentPath", pathPartPath);
+          this.setState({ selectedFile: undefined });
+          this.selectedFile = undefined;
+        },
+        onDrop: () => this.onDropPath(pathPartPath),
       };
     });
   };
@@ -334,7 +338,7 @@ class Explorer extends ReflowReactComponent<
   };
 
   private onDropPath = async (path: string) => {
-	  console.log("drop")
+    console.log("drop");
     const { currentPath, platfromPathSperator, event } = this.props;
     if (this.dragedFile) {
       const newPath = `${path}${platfromPathSperator}${this.dragedFile.name}`;
@@ -384,6 +388,41 @@ class Explorer extends ReflowReactComponent<
     }
   };
 
+  private Past = () => {
+    const { cutPath, copyPath } = this.state;
+    const { event, platfromPathSperator, currentPath } = this.props;
+    if (cutPath || copyPath) {
+      if (this.selectedFile?.isFolder) {
+        if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
+          event("move", {
+            newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${cutPath.name}`,
+            originalPath: cutPath.fullPath,
+          });
+          this.setState({ copyPath: undefined });
+        }
+        if (copyPath && copyPath.fullPath !== this.selectedFile?.fullPath) {
+          event("copy", {
+            newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${copyPath.name}`,
+            originalPath: copyPath.fullPath,
+          });
+        }
+      } else {
+        if (cutPath) {
+          event("move", {
+            newPath: `${currentPath}${platfromPathSperator}${cutPath.name}`,
+            originalPath: cutPath.fullPath,
+          });
+        }
+        if (copyPath) {
+          event("copy", {
+            newPath: `${currentPath}${platfromPathSperator}${copyPath.name}`,
+            originalPath: copyPath.fullPath,
+          });
+        }
+      }
+    }
+  };
+
   render() {
     const {
       classes,
@@ -401,9 +440,9 @@ class Explorer extends ReflowReactComponent<
               {this.getBreadcrumbLocations().map((breadcrumbItem, index) => (
                 <div
                   className={classes.breadcrumbButtonItem}
-				  key={index}
-				  onDrop={breadcrumbItem.onDrop}
-				  onDragOverCapture={(e) => e.preventDefault()}
+                  key={index}
+                  onDrop={breadcrumbItem.onDrop}
+                  onDragOverCapture={(e) => e.preventDefault()}
                   onClick={breadcrumbItem.onClick}
                 >
                   {breadcrumbItem.path}
@@ -420,31 +459,46 @@ class Explorer extends ReflowReactComponent<
             <div className={classes.actionButton} onClick={this.createFolder}>
               Create Folder
             </div>
-            <div className={classes.actionButton} onClick={() => this.selectedFile && this.setState({ copyPath: { fullPath: this.selectedFile.fullPath, name: this.selectedFile.name}, cutPath: undefined })}>
+            <div
+              className={`${classes.actionButton} ${
+                selectedFile === undefined ? classes.actionButtonDisabled : ""
+              }`}
+              onClick={() =>
+                this.selectedFile &&
+                this.setState({
+                  copyPath: {
+                    fullPath: this.selectedFile.fullPath,
+                    name: this.selectedFile.name,
+                  },
+                  cutPath: undefined,
+                })
+              }
+            >
               Copy
             </div>
-            <div className={classes.actionButton} onClick={() => this.selectedFile && this.setState({ cutPath: { fullPath: this.selectedFile.fullPath, name: this.selectedFile.name}, copyPath: undefined })}>
+            <div
+              className={`${classes.actionButton} ${
+                selectedFile === undefined ? classes.actionButtonDisabled : ""
+              }`}
+              onClick={() =>
+                this.selectedFile &&
+                this.setState({
+                  cutPath: {
+                    fullPath: this.selectedFile.fullPath,
+                    name: this.selectedFile.name,
+                  },
+                  copyPath: undefined,
+                })
+              }
+            >
               Cut
             </div>
-            <div className={`${classes.actionButton} ${cutPath || copyPath ? "" : classes.actionButtonDisabled}`} onClick={() => {
-				if (cutPath || copyPath) {
-					if (this.selectedFile?.isFolder) {
-						if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
-							event("move", { newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${cutPath.name}`, originalPath: cutPath.fullPath });
-						}
-						if (copyPath && copyPath.fullPath !== this.selectedFile?.fullPath) {
-							event("copy", { newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${copyPath.name}`, originalPath: copyPath.fullPath });
-						}
-					} else {
-						if (cutPath) {
-							event("move", { newPath: `${currentPath}${platfromPathSperator}${cutPath.name}`, originalPath: cutPath.fullPath });
-						}
-						if (copyPath) {
-							event("copy", { newPath: `${currentPath}${platfromPathSperator}${copyPath.name}`, originalPath: copyPath.fullPath });
-						}
-					}
-				}
-			}}>
+            <div
+              className={`${classes.actionButton} ${
+                cutPath === undefined && copyPath === undefined ? classes.actionButtonDisabled : ""
+              }`}
+              onClick={this.Past}
+            >
               Past
             </div>
           </div>
@@ -569,7 +623,10 @@ class Explorer extends ReflowReactComponent<
                       if (selectedFile !== index) {
                         this.setState({ selectedFile: index });
                       }
-                      this.selectedFile = {...file, fullPath: `${currentPath}${platfromPathSperator}${file.name}`};
+                      this.selectedFile = {
+                        ...file,
+                        fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
+                      };
                     }}
                     onDoubleClick={() =>
                       file.isFolder &&

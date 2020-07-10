@@ -20,6 +20,7 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   view,
   views,
   event,
+  onCanceled,
   input: { process, args, location: cwd, linesToWriteToProcess = [] },
 }) => {
   const server = http.createServer();
@@ -44,7 +45,7 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   const window = view(0, views.terminal, {
     port,
   });
-
+  onCanceled(() => ptyProcces.exitPtyProcess())
   await window;
 });
 
@@ -110,6 +111,10 @@ class PTY {
       // Whenever terminal generates any data, send that output to socket.io client
       this.sendToClient(data);
     });
+  }
+
+  exitPtyProcess() {
+    this.ptyProcess.kill();
   }
 
   /**

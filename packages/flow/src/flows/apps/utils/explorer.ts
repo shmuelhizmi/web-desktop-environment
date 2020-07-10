@@ -5,7 +5,7 @@ import {
   Dowmload,
   File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
-import { promises as fs } from "fs";
+import * as fs from 'fs-extra'
 import { join, sep } from "path";
 import { App } from "..";
 
@@ -22,7 +22,7 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
   let currentPath = startingPath;
   const downloads: Dowmload[] = [];
   const listFiles = async (): Promise<File[]> => {
-    const filesNames = await fs.readdir(currentPath, { encoding: "utf8" });
+    const filesNames = await fs.readdir(currentPath);
     const files = await filesNames.map(
       async (file): Promise<File> => {
         const stat = await fs.stat(join(currentPath, file));
@@ -39,7 +39,7 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
   const explorer = view(0, views.explorer, {
     currentPath,
     downloads,
-    platfromPathSperator: sep,
+    platfromPathSperator: sep as "/" | "\\",
     files: await listFiles(),
   });
 
@@ -64,19 +64,15 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
   })
   .on("delete", async (name) => {
 	  const file = join(currentPath, name);
-	  if ((await fs.stat(file)).isDirectory()) {
-		  await fs.rmdir(join(currentPath, name));
-	  } else {
-		  await fs.unlink(join(currentPath, name));
-	  }
-	  await updateFiles();
+    await fs.remove(file);
+    await updateFiles();
   })
   .on("move", async ({ newPath, originalPath }) => {
-    await moveFile(originalPath, newPath);
+    await fs.move(originalPath, newPath);
     await updateFiles();
   })
   .on("copy", async ({ newPath, originalPath }) => {
-    await fs.writeFile(newPath, await fs.readFile(originalPath))
+    await fs.copy(originalPath, newPath);
     await updateFiles();
   })
   .on("upload", async ({ data, path }) => {
@@ -100,17 +96,4 @@ export const explorer: App<ExplorerInput> = {
     width: 700,
     position: { x: 50, y: 50 },
   },
-};
-
-const moveFile = async (oldPath: string, newPath: string) => {
-  try {
-    await fs.rename(oldPath, newPath);
-  } catch (err) {
-    if (err.code === "EXDEV") {
-      await fs.writeFile(newPath, await fs.readFile(oldPath));
-      await fs.unlink(oldPath);
-    } else {
-      throw err;
-    }
-  }
 };

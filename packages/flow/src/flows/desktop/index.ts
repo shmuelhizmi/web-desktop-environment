@@ -7,7 +7,6 @@ import window from "./window";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 
 export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
-  // Using the view() function to display the MyView component, at layer 0 of this flow
   let openApps: OpenApp[] = [];
   const desktop = view(0, views.desktop, {
     background: "url(https://picsum.photos/1920/1080)", //random image

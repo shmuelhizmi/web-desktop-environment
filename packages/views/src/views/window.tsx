@@ -38,6 +38,7 @@ const styles = (theme: Theme) =>
       width: 15,
       height: 15,
       borderRadius: "50%",
+      zIndex: 2,
       border: "1px solid #0004",
     },
     barButtonExit: {
@@ -155,9 +156,9 @@ class Window extends ReflowReactComponent<
             this.moveToTop();
             if (
               position.y < 0 ||
-              position.y > window.screen.availHeight - size.height ||
+              position.y > window.innerHeight - size.height ||
               position.x < 0 - size.width * 0.5 ||
-              position.x > window.screen.availWidth - (size.width * 0.5)
+              position.x > window.innerWidth - (size.width * 0.5)
             ) {
               return false;
             }
@@ -167,14 +168,14 @@ class Window extends ReflowReactComponent<
             if (position.y < 0) {
               position.y = 0;
             }
-            if (position.y > window.screen.availHeight - size.height) {
-              position.y = window.screen.availHeight - size.height;
+            if (position.y > window.innerHeight - size.height) {
+              position.y = window.innerWidth - size.height;
             }
             if (position.x < 0) {
               position.x = 0;
             }
-            if (position.x > window.screen.availWidth - size.width) {
-              position.x = window.screen.availWidth - size.width;
+            if (position.x > window.innerHeight - size.width) {
+              position.x = window.innerWidth - size.width;
             }
             this.setState({ position });
             event("setWindowState", {
@@ -220,6 +221,7 @@ class Window extends ReflowReactComponent<
                 ) : (
                   <img
                     className={classes.barTitleIcon}
+                    alt="windows icon"
                     width={14}
                     height={14}
                   />

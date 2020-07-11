@@ -2,8 +2,9 @@ import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { apps } from "../apps";
 import { createReflow } from "../..";
-import { portManager } from "../shared/utils/checkPort";
+import { portManager } from "../..";
 import window from "./window";
+import themeProvider from "./../container/themeProvider";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 
 export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
@@ -40,9 +41,12 @@ export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
     };
 
     createReflow(newOpenApp.port)
-      .start(window, {
-        app: handler,
-        appParams: {},
+      .start(themeProvider, {
+        childFlow: window,
+        childInput: {
+          app: handler,
+          appParams: {},
+        },
       })
       .then(() => {
         openApps = openApps.filter((app) => app.id !== newOpenApp.id);

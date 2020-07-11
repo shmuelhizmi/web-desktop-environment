@@ -1,6 +1,11 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "install": "lerna bootstrap",
+    "dev:server": "cd packages/flow && npm start",
+    "dev:web": "cd packages/views && npm start"
+  },
   "devDependencies": {
     "lerna": "^3.22.0"
   }

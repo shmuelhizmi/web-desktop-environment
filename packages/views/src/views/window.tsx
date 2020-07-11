@@ -8,6 +8,7 @@ import reactClickOutside from "react-click-outside";
 import Dragable from "react-draggable";
 import { Icon } from "@fluentui/react";
 import windowManager from "./../state/WindowManager";
+import { windowsBarHeight } from "./desktop";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -82,6 +83,8 @@ interface WindowState {
 
 const defualtWindowSize = { height: 600, width: 700 };
 
+export const windowBarHeight = 25;
+
 // using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Window extends ReflowReactComponent<
   WindowInterface,
@@ -107,14 +110,14 @@ class Window extends ReflowReactComponent<
     this.domContainer = document.createElement("div");
     document.getElementById("app")?.appendChild(this.domContainer);
 
-	this.id = windowManager.addWindow(props.name, props.icon, {
+    this.id = windowManager.addWindow(props.name, props.icon, {
       minimized: props.window.minimized || false,
-	});
+    });
 
     windowManager.emitter.on(
       "minimizeWindow",
       ({ id }) => id === this.id && this.setState({ collaps: true })
-	);
+    );
 
     windowManager.emitter.on("maximizeWindow", ({ id }) => {
       if (id === this.id) {
@@ -124,17 +127,18 @@ class Window extends ReflowReactComponent<
     });
   }
 
-  moveToTop = () => { // remove and readd window -> move to top in html tree
-   const parent = document.getElementById("app");
-   if (parent) {
-	   if (parent.childNodes[parent.childNodes.length -1] !== this.domContainer) {
-		   parent.removeChild(this.domContainer);
-		   parent.appendChild(this.domContainer);
-	   }
-   }
+  moveToTop = () => {
+    // remove and readd window -> move to top in html tree
+    const parent = document.getElementById("app");
+    if (parent) {
+      if (
+        parent.childNodes[parent.childNodes.length - 1] !== this.domContainer
+      ) {
+        parent.removeChild(this.domContainer);
+        parent.appendChild(this.domContainer);
+      }
+    }
   };
-
-  static windowBarHeight = 25;
 
   render() {
     const { size, canDrag, collaps } = this.state;
@@ -156,9 +160,10 @@ class Window extends ReflowReactComponent<
             this.moveToTop();
             if (
               position.y < 0 ||
-              position.y > window.innerHeight - size.height ||
+              position.y >
+                window.innerHeight - windowBarHeight - windowsBarHeight ||
               position.x < 0 - size.width * 0.5 ||
-              position.x > window.innerWidth - (size.width * 0.5)
+              position.x > window.innerWidth - size.width * 0.5
             ) {
               return false;
             }
@@ -168,13 +173,17 @@ class Window extends ReflowReactComponent<
             if (position.y < 0) {
               position.y = 0;
             }
-            if (position.y > window.innerHeight - size.height) {
-              position.y = window.innerWidth - size.height;
+            if (
+              position.y >
+              window.innerHeight - windowBarHeight - windowsBarHeight
+            ) {
+              position.y =
+                window.innerHeight - windowBarHeight - windowsBarHeight;
             }
             if (position.x < 0) {
               position.x = 0;
             }
-            if (position.x > window.innerHeight - size.width) {
+            if (position.x > window.innerWidth - size.width) {
               position.x = window.innerWidth - size.width;
             }
             this.setState({ position });
@@ -192,7 +201,7 @@ class Window extends ReflowReactComponent<
             }}
           >
             <div
-              style={{ height: Window.windowBarHeight, width: size.width }}
+              style={{ height: windowBarHeight, width: size.width }}
               onMouseEnter={() => this.setState({ canDrag: true })}
               onMouseLeave={() => this.setState({ canDrag: false })}
               className={classes.bar}

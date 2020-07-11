@@ -16,6 +16,8 @@ import {
 } from "@fluentui/react";
 import windowManager, { Window } from "./../state/WindowManager";
 
+export const windowsBarHeight = 55;
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -28,17 +30,17 @@ const styles = (theme: Theme) =>
     startBotton: {
       position: "absolute",
       bottom: 0,
-	  left: 45,
-	  height: 60,
-	  borderRadius: "15px 15px 0 0",
-	  fontSize: 40,
-	  paddingTop: 5,
-	  borderBottom: "none",
+      left: 45,
+      height: 60,
+      borderRadius: "15px 15px 0 0",
+      fontSize: 40,
+      paddingTop: 5,
+      borderBottom: "none",
       background: "rgba(0, 120, 212, 0.2)",
       "&:hover": {
         background: "rgba(0, 120, 212, 0.4)",
-	  },
-	  zIndex: 2,
+      },
+      zIndex: 2,
     },
     startMenu: {
       position: "absolute",
@@ -52,7 +54,7 @@ const styles = (theme: Theme) =>
       background: "#0003",
       backdropFilter: "blur(10px)",
       border: "solid 1px #fff3",
-	  boxShadow: "-5px 6px 10px -1px #0007",
+      boxShadow: "-5px 6px 10px -1px #0007",
     },
     startMenuBody: {
       width: "100%",
@@ -80,63 +82,63 @@ const styles = (theme: Theme) =>
       flexShrink: 0,
       width: 50,
       height: 50,
-	  fontSize: 50,
+      fontSize: 50,
     },
     appContent: {
-		textAlign: "left",
-		marginLeft: 10,
-		overflow: "hidden",
-		flexGrow: 1,
+      textAlign: "left",
+      marginLeft: 10,
+      overflow: "hidden",
+      flexGrow: 1,
     },
     appName: {
-		fontSize: "x-large",
-		whiteSpace: "nowrap",
-		overflow: "hidden",
-		textOverflow: "ellipsis",
+      fontSize: "x-large",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
     },
     startMenuSearch: {
-		"& .ms-TextField-fieldGroup": {
-			background: "transparent",
-			"& input": {
-				fontSize: 20,
-				fontWeight: 600,
-				color: "#fff",
-			},
-			"& input::placeholder": {
-				fontSize: 20,
-				fontWeight: 600,
-				color: "#fff",
-			},
-		},
-		color: "#fff",
-		fontSize: 25,
+      "& .ms-TextField-fieldGroup": {
+        background: "transparent",
+        "& input": {
+          fontSize: 20,
+          fontWeight: 600,
+          color: "#fff",
+        },
+        "& input::placeholder": {
+          fontSize: 20,
+          fontWeight: 600,
+          color: "#fff",
+        },
+      },
+      color: "#fff",
+      fontSize: 25,
     },
     windowsBar: {
-		position: "absolute",
-		bottom: 0,
-		left: 180,
-		right: 25,
-		borderRadius: "15px 15px 0 0",
-		height: 55,
-		display: "flex",
-		backdropFilter: "blur(2px)",
-		background: "#9991",
-		paddingLeft: 10,
-		border: "solid 2px #fff5",
-		borderBottom: "none",
-		zIndex: 2,
+      position: "absolute",
+      bottom: 0,
+      left: 180,
+      right: 25,
+      borderRadius: "15px 15px 0 0",
+      height: windowsBarHeight,
+      display: "flex",
+      backdropFilter: "blur(2px)",
+      background: "#9991",
+      paddingLeft: 10,
+      border: "solid 2px #fff5",
+      borderBottom: "none",
+      zIndex: 2,
     },
     windowsBarButton: {
-		userSelect: "none",
-		fontSize: 50,
-		padding: 5,
-		marginRight: 1,
-		cursor: "pointer",
-		"&:hover": {
-			background: "rgba(231, 231, 231, 0.35)",
-		},
+      userSelect: "none",
+      fontSize: 50,
+      padding: 5,
+      marginRight: 1,
+      cursor: "pointer",
+      "&:hover": {
+        background: "rgba(231, 231, 231, 0.35)",
+      },
     },
-});
+  });
 
 interface DesktopState {
   isStartMenuOpen: boolean;
@@ -211,7 +213,7 @@ class Desktop extends ReflowReactComponent<
           className={classes.startBotton}
           onClick={() => this.setState({ isStartMenuOpen: !isStartMenuOpen })}
         >
-			<Icon iconName="AllApps" />
+          <Icon iconName="AllApps" />
         </Button>
         <div className={classes.windowsBar}>
           {openWindows.map((openWindow, index) => (
@@ -221,8 +223,8 @@ class Desktop extends ReflowReactComponent<
               style={{
                 borderBottom: `${
                   openWindow.state.minimized ? "#fff9" : "#2359ff"
-				} solid 3px`,
-				color: openWindow.state.minimized ? "#fff9" : "#fff"
+                } solid 3px`,
+                color: openWindow.state.minimized ? "#fff9" : "#fff",
               }}
               onClick={() =>
                 windowManager.updateState(openWindow.id, {

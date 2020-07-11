@@ -1,34 +1,34 @@
+import { settingManager } from "../../..";
 
-class PortManager {
-  currentPort: number;
-  constructor(startingPort: number) {
-    this.currentPort = startingPort;
+export default class PortManager {
+  private currentPort?: number;
+  constructor() {
+    settingManager.emitter.on(
+      "init",
+      (settings) => (this.currentPort = settings.network.ports.startPort)
+    );
   }
   getPort = async (starting?: number) => {
     if (starting) {
       let currentPort = starting;
       let isPortIsAvilable = false;
-      while(!isPortIsAvilable) {
+      while (!isPortIsAvilable) {
         isPortIsAvilable = await portIsAvilable(currentPort);
         if (!isPortIsAvilable) {
           currentPort++;
         }
       }
       return currentPort;
-
-    }else {
+    } else if (this.currentPort) {
       let isPortIsAvilable = false;
-      while(!isPortIsAvilable) {
+      while (!isPortIsAvilable) {
         this.currentPort++;
         isPortIsAvilable = await portIsAvilable(this.currentPort);
       }
       return this.currentPort;
-      
     }
-  }
+  };
 }
-
-export const portManager = new PortManager(9200);
 
 export const portIsAvilable = (port: number): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -42,8 +42,8 @@ export const portIsAvilable = (port: number): Promise<boolean> => {
     });
 
     server.once("listening", function () {
-        server.close();
-        resolve(true);
+      server.close();
+      resolve(true);
     });
 
     server.listen(port);

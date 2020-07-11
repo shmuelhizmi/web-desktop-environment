@@ -4,9 +4,10 @@ import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { terminal } from "./utils/terminal";
 import { explorer } from "./utils/explorer";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
+import { settings } from "./system/settings";
 
 interface AppEvents {
-	change_title: string;
+  change_title: string;
 }
 
 export interface App<Params = {}> {
@@ -23,4 +24,5 @@ export const apps: {
 } = {
   terminal,
   explorer,
+  settings,
 };

@@ -1,10 +1,9 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { apps, App } from "..";
-import { portManager } from "../../shared/utils/checkPort";
+import { portManager } from "../../..";
 import * as socket from "socket.io";
 import * as http from "http";
-import { Key } from "ts-keycode-enum";
 import { getOS, OS } from "../../shared/utils/getOS";
 import { tmpdir } from "os";
 import { spawn, IPty } from "node-pty";
@@ -45,7 +44,7 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   const window = view(0, views.terminal, {
     port,
   });
-  onCanceled(() => ptyProcces.exitPtyProcess())
+  onCanceled(() => ptyProcces.exitPtyProcess());
   await window;
 });
 

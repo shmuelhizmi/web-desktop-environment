@@ -16,7 +16,7 @@ const styles = (theme: Theme) =>
       height: "100%",
       border: "none",
       borderRadius: "0 0 15px 15px",
-      background: "rgba(191, 191, 191, 0.4)",
+      background: "rgba(191, 191, 191, 0.6)",
       paddingBottom: 15,
       backdropFilter: "blur(15px)",
       "& .xterm-viewport": {
@@ -27,19 +27,6 @@ const styles = (theme: Theme) =>
 
 interface TerminalState {}
 
-export const deleteKey = "\b \b";
-
-const createDelete = (length: number) => {
-  let deleteCount = length;
-  let lineReseter = "";
-  while (deleteCount > 0) {
-    deleteCount--;
-    lineReseter += deleteKey;
-  }
-  return lineReseter;
-};
-
-// using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Terminal extends ReflowReactComponent<
   TerminalInterface,
   WithStyles<typeof styles>,

@@ -1,4 +1,4 @@
-import Events from "events";
+import { EventEmitter as Events } from "events";
 
 export default class Emiiter<EventList> {
   private emitter = new Events();

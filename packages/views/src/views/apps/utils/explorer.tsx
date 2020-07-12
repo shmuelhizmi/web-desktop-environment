@@ -15,6 +15,7 @@ const styles = (theme: Theme) =>
       border: "none",
       borderRadius: "0 0 15px 15px",
       background: "rgba(191, 191, 191, 0.2)",
+      boxShadow: theme.windowShadow,
       paddingBottom: 15,
       backdropFilter: "blur(15px)",
     },
@@ -495,7 +496,9 @@ class Explorer extends ReflowReactComponent<
             </div>
             <div
               className={`${classes.actionButton} ${
-                cutPath === undefined && copyPath === undefined ? classes.actionButtonDisabled : ""
+                cutPath === undefined && copyPath === undefined
+                  ? classes.actionButtonDisabled
+                  : ""
               }`}
               onClick={this.Past}
             >

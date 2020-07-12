@@ -9,6 +9,7 @@ export default class PortManager {
     );
   }
   getPort = async (starting?: number) => {
+    let reachMaxPort = false;
     if (starting) {
       let currentPort = starting;
       let isPortIsAvilable = false;
@@ -16,6 +17,17 @@ export default class PortManager {
         isPortIsAvilable = await portIsAvilable(currentPort);
         if (!isPortIsAvilable) {
           currentPort++;
+          if (
+            !starting &&
+            currentPort >= settingManager.settings.network.ports.endPort
+          ) {
+            if (reachMaxPort) {
+              throw new Error("using all ports");
+            } else {
+              reachMaxPort = true;
+              currentPort = settingManager.settings.network.ports.startPort;
+            }
+          }
         }
       }
       return currentPort;

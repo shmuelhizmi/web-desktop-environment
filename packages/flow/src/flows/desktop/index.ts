@@ -6,11 +6,12 @@ import { portManager } from "../..";
 import window from "./window";
 import themeProvider from "./../container/themeProvider";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import { settingManager } from "./../..";
 
 export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
   let openApps: OpenApp[] = [];
   const desktop = view(0, views.desktop, {
-    background: "url(https://picsum.photos/1920/1080)", //random image
+    background: settingManager.settings.desktop.background, //random image
     apps: Object.keys(apps).map((flow) => {
       const { name, description, icon } = apps[flow];
       return {
@@ -22,6 +23,10 @@ export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
     }),
     openApps,
   });
+
+  settingManager.emitter.on("onNewSettings", (settings) =>
+    desktop.update({ background: settings.desktop.background })
+  );
 
   desktop.on("setBackground", ({ background }) => {
     desktop.update({ background });

@@ -15,6 +15,10 @@ const terminalFlow = <Flow<ViewInterfacesType, SettingsInput>>(async ({
     settings: settingManager.settings,
   });
 
+  settingManager.emitter.on("onNewSettings", (newSettings) =>
+    settings.update({ settings: newSettings })
+  );
+
   const updateSystemInfo = async () => {
     const [cpuInfo, memoryInfo, osInformation, diskInfo] = await Promise.all([
       cpu(),
@@ -39,12 +43,12 @@ const terminalFlow = <Flow<ViewInterfacesType, SettingsInput>>(async ({
           kernel: osInformation.kernel,
         },
         ram: {
-          freeInGabytes: memoryInfo.free / 1073741824, //giga
-          totalInGabytes: memoryInfo.total / 1073741824,
+          free: formatBytes(memoryInfo.available),
+          total: formatBytes(memoryInfo.total),
         },
         disks: diskInfo.map((disk) => ({
           name: disk.name,
-          totalInGabytes: disk.size / 1073741824,
+          total: formatBytes(disk.size),
           vendor: disk.vendor,
         })),
       },
@@ -74,4 +78,16 @@ export const settings: App<SettingsInput> = {
     width: 920,
     position: { x: 50, y: 50 },
   },
+};
+
+const formatBytes = (bytes, decimals = 2) => {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };

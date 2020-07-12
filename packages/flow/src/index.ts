@@ -5,7 +5,7 @@ import {
 } from "@web-desktop-environment/interfaces/lib";
 import desktop from "./flows/desktop";
 import themeProvider from "./flows/container/themeProvider";
-import PortManager from "./flows/shared/utils/checkPort";
+import PortManager from "./flows/shared/utils/portManager";
 import SettingsManager from "./flows/shared/utils/settingsManager";
 
 export const createReflow = (port: number) =>

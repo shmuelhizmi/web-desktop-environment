@@ -14,11 +14,10 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       position: "absolute",
-      boxShadow: "-10px 12px 20px -2px #0007",
     },
     bar: {
-      background: "rgba(191, 191, 191, 0.4)",
-      backdropFilter: "blur(15px)",
+      background: theme.background.main,
+      backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
       borderRadius: "7px 7px 0 0",
       cursor: "move",
       display: "flex",
@@ -44,16 +43,16 @@ const styles = (theme: Theme) =>
     },
     barButtonExit: {
       cursor: "pointer",
-      background: "#f7252c88",
+      background: theme.error.main,
       "&:hover": {
-        background: "#f00",
+        background: theme.error.dark,
       },
     },
     barButtonCollaps: {
       cursor: "pointer",
-      background: "#21c62f88",
+      background: theme.success.main,
       "&:hover": {
-        background: "#21e62f",
+        background: theme.success.dark,
       },
     },
     barTitle: {
@@ -66,7 +65,7 @@ const styles = (theme: Theme) =>
       overflow: "hidden",
       textOverflow: "ellipsis",
       userSelect: "none",
-      color: "#fff",
+      color: theme.background.text,
     },
     barTitleIcon: {
       position: "relative",

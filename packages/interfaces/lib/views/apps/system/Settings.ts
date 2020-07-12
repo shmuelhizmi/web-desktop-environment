@@ -13,13 +13,13 @@ interface SystemInformation {
     physicalCores: number;
   };
   ram: {
-    totalInGabytes: number;
-    freeInGabytes: number;
+    total: string;
+    free: string;
   };
   disks: {
     name: string;
     vendor: string;
-    totalInGabytes: number;
+    total: string;
   }[];
   os: {
     platform: string; // e.g. 'linux' or 'win32'
@@ -40,5 +40,5 @@ export interface Events {
 
 export interface Output {}
 
-export default interface Settings
+export default interface SettingsView
   extends ViewInterface<Input, Events, Output> {}

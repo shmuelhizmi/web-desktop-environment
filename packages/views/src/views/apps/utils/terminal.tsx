@@ -1,7 +1,13 @@
 import TerminalInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Terminal";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
-import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import {
+  withStyles,
+  createStyles,
+  WithStyles,
+  withTheme,
+  WithTheme,
+} from "@material-ui/styles";
 import { Theme } from "../../../theme";
 import io from "socket.io-client";
 import { reflowConnectionManager } from "../../..";
@@ -16,9 +22,10 @@ const styles = (theme: Theme) =>
       height: "100%",
       border: "none",
       borderRadius: "0 0 15px 15px",
-      background: "rgba(191, 191, 191, 0.6)",
+      background: theme.background.main,
       paddingBottom: 15,
       backdropFilter: "blur(15px)",
+      boxShadow: theme.windowShadow,
       "& .xterm-viewport": {
         background: "#fff0",
       },
@@ -29,7 +36,7 @@ interface TerminalState {}
 
 class Terminal extends ReflowReactComponent<
   TerminalInterface,
-  WithStyles<typeof styles>,
+  WithStyles<typeof styles> & WithTheme<Theme>,
   TerminalState
 > {
   socket: SocketIOClient.Socket;
@@ -41,9 +48,7 @@ class Terminal extends ReflowReactComponent<
     this.state = {};
     this.socket = io(`${reflowConnectionManager.host}:${props.port}`);
     this.term = new XTerm({
-      theme: {
-        background: "#fff0",
-      },
+      theme: this.getTermTheme(),
       allowTransparency: true,
     });
     this.termFit = new FitAddon();
@@ -55,6 +60,12 @@ class Terminal extends ReflowReactComponent<
       this.socket.emit("input", data);
     });
   }
+
+  getTermTheme = () => ({
+    background: "#fff0",
+    foreground: this.props.theme.background.text,
+    cursor: this.props.theme.background.text,
+  });
 
   handleClickOutside() {
     this.setState({ zIndex: 2 });
@@ -69,6 +80,7 @@ class Terminal extends ReflowReactComponent<
 
   render() {
     const { classes } = this.props;
+    this.term.setOption("theme", this.getTermTheme());
     return (
       <div
         className={classes.root}
@@ -82,4 +94,4 @@ class Terminal extends ReflowReactComponent<
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Terminal);
+export default withTheme(withStyles(styles, { withTheme: true })(Terminal));

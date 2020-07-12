@@ -1,17 +1,26 @@
-import { useState } from "react";
+import React from "react";
 
-const StateComponent = <State extends object>(props: {
-  state: State;
-  children: (
-    state: State,
-    setState: (newState: Partial<State>) => void
-  ) => JSX.Element;
-}) => {
-  const [state, setState] = useState<State>(props.state);
-  const updateState = (newState: Partial<State>) => {
-    setState({ ...state, ...newState });
+class StateComponent<State extends object> extends React.Component<
+  {
+    defaultState: State;
+    children: (
+      state: State,
+      setState: (state: Partial<State>) => void
+    ) => JSX.Element;
+  },
+  State
+> {
+  realstate = this.props.defaultState;
+  state = this.props.defaultState;
+
+  updateState = (state: Partial<State>) => {
+    this.setState({ ...this.state, ...state });
+    this.realstate = { ...this.realstate, ...state };
   };
-  return props.children(state, updateState);
-};
+
+  render() {
+    return this.props.children(this.realstate, this.updateState);
+  }
+}
 
 export default StateComponent;

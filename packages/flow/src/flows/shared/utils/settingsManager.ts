@@ -5,6 +5,7 @@ import { mergeDeep } from "./mergeObjects";
 import Emitter from "./emitter";
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
+import waitFor from "./waitFor";
 
 interface SettingsEvent {
   onNewSettings: Settings;
@@ -39,7 +40,7 @@ export default class SettingsManager {
   public static defaultSettings: Settings = {
     desktop: {
       theme: "transparent",
-      background: "https://picsum.photos/1920/1080",
+      background: "url(https://picsum.photos/1920/1080)",
     },
     network: {
       ports: {
@@ -72,11 +73,17 @@ export default class SettingsManager {
     this.emitter.call("init", this.settings);
   }
 
+  private isUpdatingSettings = false;
   async setSettings(newSettings: PartialPartial<Settings>) {
     if (this.isInitialized) {
+      if (this.isUpdatingSettings) {
+        await waitFor(() => !this.isUpdatingSettings, 25 * Math.random());
+      }
+      this.isUpdatingSettings = true;
       mergeDeep<Settings>(this._settings, newSettings);
       this.emitter.call("onNewSettings", this.settings);
-      await fs.writeJSON(this.settingsFolderPath, this._settings);
+      await fs.writeJSON(this.settingsFilePath, this._settings);
+      this.isUpdatingSettings = false;
     } else {
       throw new Error(
         "please update settings only after initilazing settings manager"

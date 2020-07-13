@@ -18,9 +18,15 @@ const styles = (theme: Theme) =>
     bar: {
       background: theme.background.main,
       backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
+      border: `1px solid ${theme.windowBorderColor}`,
+      borderBottom: "none",
       borderRadius: "7px 7px 0 0",
       cursor: "move",
       display: "flex",
+    },
+    barCollaps: {
+      borderRadius: "7px 7px 7px 7px",
+      borderBottom: `1px solid ${theme.windowBorderColor}`,
     },
     body: {
       borderRadius: "0 0 3px 3px",
@@ -113,16 +119,18 @@ class Window extends ReflowReactComponent<
       minimized: props.window.minimized || false,
     });
 
-    windowManager.emitter.on(
-      "minimizeWindow",
-      ({ id }) => id === this.id && this.setState({ collaps: true })
-    );
+    windowManager.emitter.on("minimizeWindow", ({ id }) => {
+      if (id === this.id) {
+        this.moveToTop();
+        this.setState({ collaps: true });
+      }
+    });
 
     windowManager.emitter.on("maximizeWindow", ({ id }) => {
       if (id === this.id) {
+        this.moveToTop();
         this.setState({ collaps: false });
       }
-      this.moveToTop();
     });
   }
 
@@ -203,7 +211,9 @@ class Window extends ReflowReactComponent<
               style={{ height: windowBarHeight, width: size.width }}
               onMouseEnter={() => this.setState({ canDrag: true })}
               onMouseLeave={() => this.setState({ canDrag: false })}
-              className={classes.bar}
+              className={`${classes.bar} ${
+                this.state.collaps ? classes.barCollaps : ""
+              }`}
             >
               <div className={classes.barButtonsContainer}>
                 <div

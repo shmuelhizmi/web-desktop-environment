@@ -6,6 +6,7 @@ import Login from "./loginScreen/Login";
 import { initializeIcons } from "@uifabric/icons";
 import "./index.css";
 import * as views from "./views";
+import "typeface-jetbrains-mono";
 
 initializeIcons();
 

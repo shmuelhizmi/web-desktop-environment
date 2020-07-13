@@ -20,12 +20,13 @@ const styles = (theme: Theme) =>
     root: {
       width: "100%",
       height: "100%",
-      border: "none",
+      border: `1px solid ${theme.windowBorderColor}`,
+      borderTop: "none",
       borderRadius: "0 0 15px 15px",
       background: theme.background.main,
       paddingBottom: 15,
       backdropFilter: "blur(15px)",
-      boxShadow: theme.windowShadow,
+      boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
       "& .xterm-viewport": {
         background: "#fff0",
       },

@@ -36,9 +36,14 @@ const styles = (theme: Theme) =>
       fontSize: 40,
       paddingTop: 5,
       borderBottom: "none",
-      background: "rgba(0, 120, 212, 0.2)",
+      background: theme.background.transparentDark || theme.background.dark,
+      color: theme.background.text,
+      backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
+      border: `solid 1px ${theme.background.main}`,
       "&:hover": {
-        background: "rgba(0, 120, 212, 0.4)",
+        color: theme.background.text,
+        border: `solid 1px ${theme.background.main}`,
+        background: theme.background.transparent || theme.background.main,
       },
       zIndex: 2,
     },
@@ -51,9 +56,9 @@ const styles = (theme: Theme) =>
       height: 500,
       padding: 5,
       borderRadius: 10,
-      background: "#0003",
+      background: theme.background.transparent || theme.background.main,
       backdropFilter: "blur(10px)",
-      border: "solid 1px #fff3",
+      border: `solid 1px ${theme.background.transparent}`,
       boxShadow: "-5px 6px 10px -1px #0007",
     },
     startMenuBody: {
@@ -69,14 +74,15 @@ const styles = (theme: Theme) =>
       padding: 10,
       marginTop: 15,
       boxSizing: "border-box",
-      borderBottom: "1px solid #333",
+      borderBottom: `1px solid ${theme.windowBorderColor}`,
       display: "flex",
       borderRadius: 7,
-      color: "#fff",
-      fontFamily: "cursive",
+      color: theme.background.text,
       cursor: "pointer",
-      boxShadow: "-1px 2px 20px 1px #0007",
-      "&:hover": { background: "#1112" },
+      boxShadow: `-1px 2px 20px 2px ${theme.shadowColor}`,
+      "&:hover": {
+        background: theme.background.transparentDark || theme.background.dark,
+      },
     },
     appIcon: {
       flexShrink: 0,
@@ -102,15 +108,15 @@ const styles = (theme: Theme) =>
         "& input": {
           fontSize: 20,
           fontWeight: 600,
-          color: "#fff",
+          color: theme.background.text,
         },
         "& input::placeholder": {
           fontSize: 20,
           fontWeight: 600,
-          color: "#fff",
+          color: theme.background.text,
         },
       },
-      color: "#fff",
+      color: theme.background.text,
       fontSize: 25,
     },
     windowsBar: {
@@ -122,9 +128,11 @@ const styles = (theme: Theme) =>
       height: windowsBarHeight,
       display: "flex",
       backdropFilter: "blur(2px)",
-      background: "#9991",
+      background: theme.background.transparent || theme.background.main,
       paddingLeft: 10,
-      border: "solid 2px #fff5",
+      border: `solid 2px ${
+        theme.background.transparentDark || theme.background.dark
+      }`,
       borderBottom: "none",
       zIndex: 2,
     },
@@ -134,9 +142,18 @@ const styles = (theme: Theme) =>
       padding: 5,
       marginRight: 1,
       cursor: "pointer",
+      color: theme.background.text,
       "&:hover": {
-        background: "rgba(231, 231, 231, 0.35)",
+        background: theme.background.transparentDark || theme.background.dark,
       },
+    },
+    windowsBarButtonOpen: {
+      borderBottom: `${
+        theme.type === "transparent" ? theme.success.main : theme.secondary.main
+      } solid 3px`,
+    },
+    windowsBarButtonCloseMinimized: {
+      borderBottom: `${theme.secondary.dark} solid 3px`,
     },
   });
 
@@ -198,7 +215,7 @@ class Desktop extends ReflowReactComponent<
   };
 
   render() {
-    const { background, event, openApps, classes, apps } = this.props;
+    const { background, openApps, classes, apps } = this.props;
     const { isStartMenuOpen, startMenuQuery, openWindows } = this.state;
     return (
       <div className={classes.root} style={{ background }}>
@@ -219,13 +236,11 @@ class Desktop extends ReflowReactComponent<
           {openWindows.map((openWindow, index) => (
             <div
               key={index}
-              className={classes.windowsBarButton}
-              style={{
-                borderBottom: `${
-                  openWindow.state.minimized ? "#fff9" : "#2359ff"
-                } solid 3px`,
-                color: openWindow.state.minimized ? "#fff9" : "#fff",
-              }}
+              className={`${classes.windowsBarButton} ${
+                openWindow.state.minimized
+                  ? classes.windowsBarButtonCloseMinimized
+                  : classes.windowsBarButtonOpen
+              }`}
               onClick={() =>
                 windowManager.updateState(openWindow.id, {
                   minimized: !openWindow.state.minimized,
@@ -233,7 +248,12 @@ class Desktop extends ReflowReactComponent<
               }
             >
               {openWindow.icon.type === "img" ? (
-                <img src={openWindow.icon.icon} width={50} height={50} />
+                <img
+                  alt={`${openWindow.name} icon`}
+                  src={openWindow.icon.icon}
+                  width={50}
+                  height={50}
+                />
               ) : (
                 <Icon iconName={openWindow.icon.icon} />
               )}

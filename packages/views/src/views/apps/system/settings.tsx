@@ -13,15 +13,18 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       background: theme.background.main,
+      border: `1px solid ${theme.windowBorderColor}`,
       width: "100%",
       height: "calc(100% + 15px)",
       display: "flex",
       borderRadius: "0 0 15px 15px",
-      boxShadow: theme.windowShadow,
+      boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
+      backdropFilter: theme.type === "transparent" ? "blur(3px)" : "none",
     },
     categorySelection: {
       background: theme.background.dark,
-      backdropFilter: theme.type === "transparent" ? "blur(6px)" : "none",
+      borderRight: `solid 1px ${theme.windowBorderColor}`,
+      backdropFilter: theme.type === "transparent" ? "blur(16px)" : "none",
       borderRadius: "0 0 0 15px",
       height: "100%",
       width: 250,
@@ -34,7 +37,7 @@ const styles = (theme: Theme) =>
       cursor: "pointer",
       width: "100%",
       textAlign: "center",
-      borderBottom: `dashed 1px ${theme.primary.dark}`,
+      borderBottom: `solid 1px ${theme.windowBorderColor}`,
       color: theme.secondary.text,
       "&:hover":
         theme.type === "transparent"
@@ -59,6 +62,7 @@ const styles = (theme: Theme) =>
       borderRadius: "0 0 15px 0",
     },
     categoryTitle: {
+      marginTop: 7,
       width: "90%",
       userSelect: "none",
       borderBottom: `solid 2px ${theme.background.transparent}`,
@@ -84,7 +88,7 @@ const styles = (theme: Theme) =>
     },
     settingsBlock: {
       width: "80%",
-      border: `2px solid ${theme.background.transparent}`,
+      border: `1px solid ${theme.windowBorderColor}`,
       background: theme.background.dark,
       padding: 20,
       borderRadius: 9,

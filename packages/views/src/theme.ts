@@ -8,7 +8,8 @@ export interface Theme {
   success: Color;
   warning: Color;
   error: Color;
-  windowShadow: string;
+  shadowColor: string;
+  windowBorderColor: string;
 }
 
 export interface Color {
@@ -24,14 +25,15 @@ export interface Color {
 
 const transparentTheme: Theme = {
   type: "transparent",
-  windowShadow: "-10px 12px 20px -2px #0007",
+  shadowColor: "#0007",
+  windowBorderColor: "#000",
   background: {
-    main: "#BFBFBF67",
+    main: "#BFBFBF57",
     light: "#EFEFEF67",
     dark: "#8F8F8F67",
     transparent: "#BFBFBF37",
     transparentDark: "#BFBFBF44",
-    text: "#000",
+    text: "#fff",
   },
   primary: {
     main: "#fff9",
@@ -45,7 +47,7 @@ const transparentTheme: Theme = {
     main: "#0003",
     light: "#0001",
     dark: "#0004",
-    text: "#000",
+    text: "#fff",
   },
   error: {
     main: "#f7252c88",
@@ -55,6 +57,7 @@ const transparentTheme: Theme = {
   },
   success: {
     main: "#21c62f88",
+    transparent: "#21c62f48",
     dark: "#21c62fb8",
     light: "#21c62fee",
     text: "#fff",
@@ -69,11 +72,13 @@ const transparentTheme: Theme = {
 
 const lightTheme: Theme = {
   type: "light",
-  windowShadow: "-10px 12px 20px -2px #0007",
+  shadowColor: "#0007",
+  windowBorderColor: "#9bb",
   background: {
     main: "#eee",
     light: "#fff",
-    transparent: "#ddd6",
+    transparent: "#ddd9",
+    transparentDark: "#dddb",
     dark: "#5d6373bb",
     text: "#222",
     darkText: "#fff",
@@ -88,6 +93,8 @@ const lightTheme: Theme = {
   },
   secondary: {
     main: "#00dac6",
+    transparent: "#00dac666",
+    transparentDark: "#00878599",
     light: "#40fac699",
     dark: "#008785",
     text: "#222",
@@ -114,7 +121,8 @@ const lightTheme: Theme = {
 
 const darkTheme: Theme = {
   type: "dark",
-  windowShadow: "-10px 12px 20px -2px #0007",
+  shadowColor: "#0007",
+  windowBorderColor: "#000",
   background: {
     main: "#333333",
     light: "#444444",

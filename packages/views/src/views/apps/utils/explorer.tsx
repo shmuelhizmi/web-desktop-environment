@@ -12,89 +12,86 @@ const styles = (theme: Theme) =>
     root: {
       width: "100%",
       height: "100%",
-      border: "none",
       borderRadius: "0 0 15px 15px",
-      background: "rgba(191, 191, 191, 0.2)",
-      boxShadow: theme.windowShadow,
+      background: theme.background.main,
+      border: `1px solid ${theme.windowBorderColor}`,
+      borderTop: "none",
+      boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
       paddingBottom: 15,
-      backdropFilter: "blur(15px)",
+      backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
     },
     actionBarContainer: {
-      height: 49,
-      marginBottom: 10,
       width: "100%",
       justifyContent: "center",
       display: "flex",
     },
     actionBar: {
-      boxShadow: "-1px 2px 20px 1px #0007",
-      borderBottom: "1px solid #333",
-      backdropFilter: "blur(20px)",
-      marginTop: 10,
-      height: "100%",
+      borderBottom: `1px solid ${theme.windowBorderColor}`,
+      backdropFilter: theme.type === "transparent" ? "blur(20px)" : "none",
+      width: "100%",
       justifyContent: "center",
-      padding: 4,
-      borderRadius: 10,
       display: "flex",
     },
     actionButton: {
-      margin: 4,
       padding: 3,
       minWidth: 40,
       textAlign: "center",
       userSelect: "none",
-      fontFamily: "cursive",
-      color: "#fff",
+      color: theme.secondary.text,
       fontSize: 25,
-      borderRadius: 5,
-      border: "1px solid #fff",
+      border: `1px solid ${theme.windowBorderColor}`,
+      borderTop: "none",
+      borderBottom: "none",
       cursor: "pointer",
-      backgroundColor: "#0001",
-      "&:hover": {
-        backgroundColor: "#0002",
-      },
+      "&:hover":
+        theme.type === "transparent"
+          ? {
+              backdropFilter: "blur(3px)",
+            }
+          : {
+              background: theme.secondary.light,
+            },
     },
     actionButtonDisabled: {
       cursor: "default",
-      border: "none",
-      backgroundColor: "#0004",
+      backgroundColor:
+        theme.background.transparentDark || theme.background.dark,
       "&:hover": {
-        backgroundColor: "#0004",
+        backgroundColor:
+          theme.background.transparentDark || theme.background.dark,
       },
     },
     locationBarContainer: {
-      height: 50,
       width: "100%",
       justifyContent: "center",
       display: "flex",
     },
     locationBar: {
-      boxShadow: "-1px 2px 20px 1px #0007",
-      borderBottom: "1px solid #333",
-      backdropFilter: "blur(20px)",
-      marginTop: 10,
-      width: "90%",
+      border: `1px solid ${theme.windowBorderColor}`,
+      borderRight: "none",
+      borderLeft: "none",
+      backdropFilter: theme.type === "transparent" ? "blur(20px)" : "none",
+      width: "100%",
       maxHeight: "100%",
-      borderRadius: 10,
       overflowX: "auto",
     },
     breadcrumbFilesContainer: {
       maxHeight: "100%",
       display: "flex",
-      alignItems: "flex-end",
-      width: "max-content",
+      justifyContent: "center",
+      margin: 4,
     },
     fileBoxContainer: {
-      height: "90%",
+      height: "95%",
       width: "100%",
       display: "flex",
       justifyContent: "center",
     },
     fileBox: {
       margin: 15,
-      boxShadow: "#000000 0px 0px 20px -6px inset",
-      background: "#eee4",
-      border: "#666 1px solid",
+      boxShadow: `${theme.shadowColor} 0px 0px 20px -6px inset`,
+      background: theme.background.transparent || theme.background.main,
+      border: `${theme.windowBorderColor} 1px solid`,
       borderRadius: 7,
       width: "100%",
       height: "90%",
@@ -108,16 +105,23 @@ const styles = (theme: Theme) =>
       gridAutoRows: 100,
     },
     file: {
-      borderBottom: "1px solid #333",
+      borderBottom: `1px solid ${theme.windowBorderColor}`,
       borderRadius: 7,
-      color: "#fff",
-      fontFamily: "cursive",
+      color: theme.secondary.text,
       cursor: "pointer",
-      boxShadow: "-1px 2px 20px 1px #0007",
-      "&:hover": { background: "#1112" },
+      boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+      "&:hover": {
+        background: theme.secondary.dark,
+      },
       height: 90,
       display: "flex",
       flexDirection: "column-reverse",
+    },
+    fileActive: {
+      background: theme.secondary.transparentDark || theme.secondary.dark,
+      "&:hover": {
+        background: theme.secondary.transparentDark || theme.secondary.dark,
+      },
     },
     fileName: {
       whiteSpace: "nowrap",
@@ -141,11 +145,10 @@ const styles = (theme: Theme) =>
       minWidth: 20,
       textAlign: "center",
       userSelect: "none",
-      fontFamily: "cursive",
-      color: "#fff",
+      color: theme.background.text,
       fontSize: 25,
       "&:hover": {
-        backgroundColor: "#0002",
+        background: theme.background.transparentDark || theme.background.dark,
       },
     },
     dialog: {
@@ -158,9 +161,8 @@ const styles = (theme: Theme) =>
     },
     dialogMessage: {
       maxWidth: "80%",
-      fontFamily: "cursive",
       textAlign: "center",
-      color: "#fff",
+      color: theme.background.text,
       fontSize: 25,
     },
     dialogButtons: {
@@ -175,15 +177,15 @@ const styles = (theme: Theme) =>
       width: "fit-content",
       height: "fit-content",
       borderRadius: 7,
-      background: "#fff2",
+      background: theme.primary.main,
       "&:hover": {
-        background: "#fff5",
+        background: theme.primary.dark,
       },
     },
     dialogButtonPrimary: {
-      background: "rgba(0, 120, 212, 0.7)",
+      background: theme.secondary.main,
       "&:hover": {
-        background: "rgba(0, 120, 212, 0.9)",
+        background: theme.secondary.dark,
       },
     },
     dialogInput: {
@@ -191,19 +193,22 @@ const styles = (theme: Theme) =>
       "& .ms-TextField-fieldGroup": {
         background: "transparent",
         border: "none",
-        borderBottom: "1px solid #fff",
+        borderBottom: `1px solid ${theme.background.text}`,
+        "&::after": {
+          border: "none",
+        },
         "& input": {
           fontSize: 20,
           fontWeight: 600,
-          color: "#fff",
+          color: theme.background.text,
         },
         "& input::placeholder": {
           fontSize: 20,
           fontWeight: 600,
-          color: "#fff",
+          color: theme.background.text,
         },
       },
-      color: "#fff",
+      color: theme.background.text,
       fontSize: 25,
     },
   });
@@ -598,17 +603,13 @@ class Explorer extends ReflowReactComponent<
               <div className={classes.fileContainer}>
                 {files.map((file, index) => (
                   <div
-                    className={classes.file}
+                    className={`${classes.file} ${
+                      fileIsOverFile === index || selectedFile === index
+                        ? classes.fileActive
+                        : ""
+                    }`}
                     key={index}
                     draggable
-                    style={
-                      fileIsOverFile === index || selectedFile === index
-                        ? {
-                            backgroundColor: "#1115",
-                            border: "1px solid #fff",
-                          }
-                        : {}
-                    }
                     onDrag={(e) => {
                       this.dragedFile = file;
                     }}

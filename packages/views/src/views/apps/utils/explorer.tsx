@@ -4,10 +4,10 @@ import ExplorerInterface, {
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "../../../theme";
-import Button from "../../../components/button";
-import Icon from "../../../components/icon";
-import TextField from "../../../components/textField";
+import { Theme } from "@root/theme";
+import Button from "@components/button";
+import Icon from "@components/icon";
+import TextField from "@components/textField";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -48,7 +48,8 @@ const styles = (theme: Theme) =>
       "&:hover":
         theme.type === "transparent"
           ? {
-              backdropFilter: "blur(3px)",
+              backdropFilter: "blur(13px)",
+              background: theme.secondary.light,
             }
           : {
               background: theme.secondary.light,
@@ -114,6 +115,7 @@ const styles = (theme: Theme) =>
       boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
       "&:hover": {
         background: theme.secondary.dark,
+        backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
       },
       height: 90,
       display: "flex",
@@ -123,9 +125,10 @@ const styles = (theme: Theme) =>
       background: "transparent !important",
     },
     fileActive: {
-      background: theme.secondary.transparentDark || theme.secondary.dark,
+      background: theme.secondary.transparent || theme.secondary.main,
       "&:hover": {
-        background: theme.secondary.transparentDark || theme.secondary.dark,
+        backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
+        background: theme.secondary.transparent || theme.secondary.main,
       },
     },
     fileName: {
@@ -174,6 +177,7 @@ const styles = (theme: Theme) =>
       border: `solid 1px ${theme.windowBorderColor}`,
       "&:hover": {
         background: theme.primary.main,
+        backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
       },
       paddingRight: 10,
     },
@@ -206,12 +210,14 @@ const styles = (theme: Theme) =>
       background: theme.primary.main,
       "&:hover": {
         background: theme.primary.dark,
+        backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
       },
     },
     dialogButtonPrimary: {
       background: theme.secondary.main,
       "&:hover": {
         background: theme.secondary.dark,
+        backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
       },
     },
     dialogInput: {

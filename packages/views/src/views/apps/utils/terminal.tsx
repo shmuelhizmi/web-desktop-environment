@@ -8,9 +8,9 @@ import {
   withTheme,
   WithTheme,
 } from "@material-ui/styles";
-import { Theme } from "../../../theme";
+import { Theme } from "@root/theme";
 import io from "socket.io-client";
-import { reflowConnectionManager } from "../../..";
+import { reflowConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import "xterm/css/xterm.css";

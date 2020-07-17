@@ -1,5 +1,5 @@
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
-import Emitter from "./Emitter";
+import Emitter from "@state/Emitter";
 
 export interface Window {
   id: number;
@@ -43,15 +43,15 @@ class WindowManager {
   public closeWindow = (id: number) => {
     const windowToClose = this.windows.find((w) => w.id === id);
     if (windowToClose) {
-		this.windows = this.windows.filter((w) => w.id !== id);
-		this.emitter.call("closeWindow", { window: windowToClose });
+      this.windows = this.windows.filter((w) => w.id !== id);
+      this.emitter.call("closeWindow", { window: windowToClose });
     }
   };
 
   public updateState = (id: number, newState: WindowState) => {
-	const currentWindow = this.windows.find((w) => w.id === id);
+    const currentWindow = this.windows.find((w) => w.id === id);
     if (currentWindow) {
-		const { minimized } = currentWindow.state;
+      const { minimized } = currentWindow.state;
       currentWindow.state = newState;
       if (newState.minimized !== minimized) {
         if (newState.minimized) {

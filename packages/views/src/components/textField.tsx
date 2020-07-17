@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { useTheme, makeStyles } from "@material-ui/styles";
-import { Theme, Colors, ColorVariants } from "../theme";
+import { Theme, Colors, ColorVariants } from "@root/theme";
 
 const useStyle = (
   textColor: string,

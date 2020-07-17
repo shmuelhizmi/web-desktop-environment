@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { makeStyles } from "@material-ui/styles";
-import { Theme, ColorVariants } from "../theme";
+import { Theme, ColorVariants } from "@root/theme";
 
 const useStyle = makeStyles((theme: Theme) => ({
   root: {

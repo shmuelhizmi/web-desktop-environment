@@ -6,19 +6,25 @@ export default class Logger {
     this.level = level;
   }
   info = (message: string) => {
-    console.info(
-      `[ ${color.greenBright(`${this.level}`)} ]: ${color.green(message)}`
-    );
+    console.info(`[ ${this.level} ]: ${color.green(message)}`);
   };
   error = (message: string) => {
-    console.error(
-      `[ ${color.redBright(`${this.level}`)} ]: ${color.red(message)}`
-    );
+    console.error(`[ ${this.level} ]: ${color.red(message)}`);
   };
   warn = (message: string) => {
-    console.warn(
-      `[ ${color.yellowBright(`${this.level}`)} ]: ${color.yellow(message)}`
+    console.warn(`[ ${this.level} ]: ${color.yellow(message)}`);
+  };
+  mount = (levelName: string) => {
+    const randomColor = () => {
+      const r = Math.random() * 255;
+      return r - (r % 1);
+    };
+    return new Logger(
+      `${this.level}:${color.bgRgb(
+        randomColor(),
+        randomColor(),
+        randomColor()
+      )(levelName)}`
     );
   };
-  mount = (levelName: string) => new Logger(`${this.level}:${levelName}`);
 }

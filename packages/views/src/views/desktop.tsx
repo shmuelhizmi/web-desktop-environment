@@ -4,11 +4,11 @@ import DesktopInterface, {
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "../theme";
-import { reflowConnectionManager } from "..";
-import TextField from "../components/textField";
-import Icon from "../components/icon";
-import windowManager, { Window } from "./../state/WindowManager";
+import { Theme } from "@root/theme";
+import { reflowConnectionManager } from "@root/index";
+import TextField from "@components/textField";
+import Icon from "@components/icon";
+import windowManager, { Window } from "@state/WindowManager";
 
 export const windowsBarHeight = 55;
 

@@ -24,6 +24,7 @@ export interface Theme {
   success: Color;
   warning: Color;
   error: Color;
+  windowBarColor: string;
   shadowColor: string;
   windowBorderColor: string;
 }
@@ -41,10 +42,11 @@ export interface Color {
 
 const transparentTheme: Theme = {
   type: "transparent",
+  windowBarColor: "#BFBFBF57",
   shadowColor: "#0007",
   windowBorderColor: "#000",
   background: {
-    main: "#BFBFBF57",
+    main: "#BFBFBF27",
     light: "#EFEFEF67",
     dark: "#8F8F8F67",
     transparent: "#BFBFBF37",
@@ -66,7 +68,7 @@ const transparentTheme: Theme = {
     text: "#fff",
   },
   error: {
-    main: "#f7252c88",
+    main: "#db5049ee",
     light: "#ff354c88",
     dark: "#f00",
     text: "#fff",
@@ -88,24 +90,24 @@ const transparentTheme: Theme = {
 
 const lightTheme: Theme = {
   type: "light",
+  windowBarColor: "#fff",
   shadowColor: "#0007",
   windowBorderColor: "#5d6373bb",
   background: {
-    main: "#eee",
+    main: "#f6f8fa",
     light: "#fff",
     transparent: "#fff9",
-    transparentDark: "#5d637399",
-    dark: "#5d6373bb",
+    transparentDark: "#dadbdd99",
+    dark: "#dadbdd",
     text: "#222",
-    darkText: "#fff",
   },
   primary: {
-    main: "#444444",
-    light: "#555555",
-    transparent: "#55555599",
-    dark: "#333333",
-    transparentDark: "#33333388",
-    text: "#fff",
+    main: "#fe8270",
+    light: "#ff9270",
+    transparent: "#fe827079",
+    dark: "#ce7250",
+    transparentDark: "#ce725099",
+    text: "#000",
   },
   secondary: {
     main: "#4585b2",
@@ -116,7 +118,7 @@ const lightTheme: Theme = {
     text: "#222",
   },
   error: {
-    main: "#f7252c88",
+    main: "#db5049ee",
     light: "#ff354c88",
     dark: "#f00",
     text: "#fff",
@@ -139,6 +141,7 @@ const darkTheme: Theme = {
   type: "dark",
   shadowColor: "#0007",
   windowBorderColor: "#000",
+  windowBarColor: "#333333",
   background: {
     main: "#333333",
     light: "#444444",
@@ -149,7 +152,7 @@ const darkTheme: Theme = {
   },
   primary: {
     main: "#eee",
-    transparent: "#e8e8e899",
+    transparent: "#e8e8e869",
     light: "#fff",
     dark: "#bbb",
     transparentDark: "#bebebe99",
@@ -163,7 +166,7 @@ const darkTheme: Theme = {
     text: "#fff",
   },
   error: {
-    main: "#f7252c88",
+    main: "#db5049ee",
     light: "#ff354c88",
     dark: "#f00",
     text: "#fff",

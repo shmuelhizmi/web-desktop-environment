@@ -1,60 +1,36 @@
 import { settingManager } from "../../..";
+import { createServer } from "net";
+import Logger from "../utils/logger";
+import * as getPort from "get-port";
+
+export const timeout = (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time));
 
 export default class PortManager {
-  private currentPort?: number;
-  constructor() {
-    settingManager.emitter.on(
-      "init",
-      (settings) => (this.currentPort = settings.network.ports.startPort)
-    );
+  private logger: Logger;
+  constructor(parentLogger: Logger) {
+    this.logger = parentLogger.mount("port-manager");
   }
-  getPort = async (starting?: number) => {
-    let reachMaxPort = false;
-    if (starting) {
-      let currentPort = starting;
-      let isPortIsAvilable = false;
-      while (!isPortIsAvilable) {
-        isPortIsAvilable = await portIsAvilable(currentPort);
-        if (!isPortIsAvilable) {
-          currentPort++;
-        }
-      }
-      return currentPort;
-    } else if (this.currentPort) {
-      let isPortIsAvilable = false;
-      while (!isPortIsAvilable) {
-        this.currentPort++;
-        isPortIsAvilable = await portIsAvilable(this.currentPort);
-        if (this.currentPort >= settingManager.settings.network.ports.endPort) {
-          if (reachMaxPort) {
-            throw new Error("using all ports");
-          } else {
-            reachMaxPort = true;
-            this.currentPort = settingManager.settings.network.ports.startPort;
-          }
-        }
-      }
-      return this.currentPort;
+  getPort = async (isMainPort?: boolean): Promise<number> => {
+    const {
+      endPort,
+      mainPort,
+      startPort,
+    } = settingManager.settings.network.ports;
+    if (isMainPort) {
+      return getPort({
+        port: getPort.makeRange(mainPort, mainPort + 100),
+      }).then((value) => {
+        this.logger.info(`port ${value} is avilable as main port`);
+        return value;
+      });
+    } else {
+      return getPort({
+        port: getPort.makeRange(startPort, endPort),
+      }).then((value) => {
+        this.logger.info(`port ${value} is avilable as app port`);
+        return value;
+      });
     }
   };
 }
-
-export const portIsAvilable = (port: number): Promise<boolean> => {
-  return new Promise((resolve) => {
-    const net = require("net");
-    const server = net.createServer();
-
-    server.once("error", function (err) {
-      if (err.code === "EADDRINUSE") {
-        resolve(false);
-      }
-    });
-
-    server.once("listening", function () {
-      server.close();
-      resolve(true);
-    });
-
-    server.listen(port);
-  });
-};

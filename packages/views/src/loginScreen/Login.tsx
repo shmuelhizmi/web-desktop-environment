@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/styles";
-import Card from "../components/card";
-import TextField from "../components/textField";
-import Button from "../components/button";
-import { Theme } from "../theme";
+import Card from "@components/card";
+import TextField from "@components/textField";
+import Button from "@components/button";
+import { Theme } from "@root/theme";
 
 interface LoginProps {
   onLogin: (host: string, port: number) => void;

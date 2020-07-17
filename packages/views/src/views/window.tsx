@@ -2,13 +2,12 @@ import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Windo
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "../theme";
+import { Theme } from "@root/theme";
 import ReactDOM from "react-dom";
-import reactClickOutside from "react-click-outside";
 import Dragable from "react-draggable";
-import windowManager from "./../state/WindowManager";
-import { windowsBarHeight } from "./desktop";
-import Icon from "../components/icon";
+import windowManager from "@state/WindowManager";
+import { windowsBarHeight } from "@views/desktop";
+import Icon from "@components/icon";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -16,13 +15,14 @@ const styles = (theme: Theme) =>
       position: "absolute",
     },
     bar: {
-      background: theme.background.main,
+      background: theme.windowBarColor,
       backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
       border: `1px solid ${theme.windowBorderColor}`,
       borderBottom: "none",
       borderRadius: "7px 7px 0 0",
       cursor: "move",
       display: "flex",
+      flexDirection: "row-reverse",
     },
     barCollaps: {
       borderRadius: "7px 7px 7px 7px",
@@ -33,8 +33,8 @@ const styles = (theme: Theme) =>
     },
     barButtonsContainer: {
       position: "relative",
-      top: 5,
-      left: 5,
+      top: 4,
+      right: 5,
       width: 40,
       height: 20,
       display: "flex",
@@ -61,9 +61,13 @@ const styles = (theme: Theme) =>
         background: theme.success.dark,
       },
     },
+    barButtonInactive: {
+      background: theme.primary.transparent,
+    },
     barTitle: {
       position: "relative",
-      left: -30,
+      right: -35,
+      top: 2,
       width: "100%",
       textAlign: "center",
       whiteSpace: "nowrap",
@@ -83,6 +87,7 @@ interface WindowState {
   canDrag: boolean;
   collaps: boolean;
   position: { x: number; y: number };
+  isActive?: boolean;
 }
 
 const defualtWindowSize = { height: 600, width: 700 };
@@ -97,6 +102,7 @@ class Window extends ReflowReactComponent<
 > {
   domContainer: Element;
   id: number;
+  wrapperRef?: HTMLDivElement;
   constructor(props: Window["props"]) {
     super(props);
     this.state = {
@@ -119,21 +125,47 @@ class Window extends ReflowReactComponent<
     });
 
     windowManager.emitter.on("minimizeWindow", ({ id }) => {
+      this.props.event("setWindowState", {
+        minimized: true,
+        position: this.state.position,
+      });
       if (id === this.id) {
         this.moveToTop();
-        this.setState({ collaps: true });
-      }
+        this.setState({ collaps: true, isActive: true });
+      } else this.setState({ isActive: false });
     });
 
     windowManager.emitter.on("maximizeWindow", ({ id }) => {
+      this.props.event("setWindowState", {
+        minimized: false,
+        position: this.state.position,
+      });
       if (id === this.id) {
         this.moveToTop();
-        this.setState({ collaps: false });
+        this.setState({ collaps: false, isActive: true });
+      } else this.setState({ isActive: false });
+    });
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", (e) => {
+      if (this.wrapperRef && e.target) {
+        if (
+          this.wrapperRef &&
+          !this.wrapperRef.contains(e.target as HTMLElement)
+        ) {
+          this.handleClickOutside();
+        }
       }
     });
   }
 
+  handleClickOutside = () => {
+    this.setState({ isActive: false });
+  };
+
   moveToTop = () => {
+    this.setState({ isActive: true });
     // remove and readd window -> move to top in html tree
     const parent = document.getElementById("app");
     if (parent) {
@@ -147,7 +179,7 @@ class Window extends ReflowReactComponent<
   };
 
   render() {
-    const { size, canDrag, collaps } = this.state;
+    const { size, canDrag, collaps, isActive } = this.state;
     const {
       children,
       classes,
@@ -158,7 +190,11 @@ class Window extends ReflowReactComponent<
       window: { maxHeight, maxWidth, minHeight, minWidth },
     } = this.props;
     return ReactDOM.createPortal(
-      <div>
+      <div
+        ref={(element) => {
+          if (element) this.wrapperRef = element;
+        }}
+      >
         <Dragable
           disabled={!canDrag}
           defaultPosition={this.state.position}
@@ -216,19 +252,25 @@ class Window extends ReflowReactComponent<
             >
               <div className={classes.barButtonsContainer}>
                 <div
-                  className={`${classes.barButton} ${classes.barButtonExit}`}
-                  onClick={() => {
-                    done({});
-                    windowManager.closeWindow(this.id);
-                  }}
-                />
-                <div
                   onClick={() => {
                     windowManager.updateState(this.id, {
                       minimized: !this.state.collaps,
                     });
                   }}
-                  className={`${classes.barButton} ${classes.barButtonCollaps}`}
+                  className={`${classes.barButton} ${
+                    isActive
+                      ? classes.barButtonCollaps
+                      : classes.barButtonInactive
+                  }`}
+                />
+                <div
+                  className={`${classes.barButton} ${
+                    isActive ? classes.barButtonExit : classes.barButtonInactive
+                  }`}
+                  onClick={() => {
+                    done({});
+                    windowManager.closeWindow(this.id);
+                  }}
                 />
               </div>
               <div className={classes.barTitle}>
@@ -270,6 +312,4 @@ class Window extends ReflowReactComponent<
   }
 }
 
-export default withStyles(styles, { withTheme: true })(
-  reactClickOutside(Window)
-);
+export default withStyles(styles, { withTheme: true })(Window);

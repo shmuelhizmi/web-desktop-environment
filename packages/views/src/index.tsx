@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Transports } from "@mcesystems/reflow";
 import { renderDisplayLayer } from "@mcesystems/reflow-react-display-layer";
-import Login from "./loginScreen/Login";
-import "./index.css";
-import * as views from "./views";
+import Login from "@root/loginScreen/Login";
+import "@root/index.css";
+import * as views from "@root/views";
 import "typeface-jetbrains-mono";
 import { ThemeProvider } from "@material-ui/styles";
-import { defaultTheme } from "./theme";
+import { defaultTheme } from "@root/theme";
 
 class ReflowConnectionManager {
   host: string;

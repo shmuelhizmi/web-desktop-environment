@@ -6,6 +6,7 @@ import Emitter from "../utils/emitter";
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
 import waitFor from "../utils/waitFor";
+import Logger from "../utils/logger";
 
 interface SettingsEvent {
   onNewSettings: Settings;
@@ -16,6 +17,8 @@ export const settingsFolder = ".web-desktop-environment-config";
 export const settingsFile = "settings.json";
 
 export default class SettingsManager {
+  private logger: Logger;
+
   public settingsFolderPath = join(homedir(), settingsFolder);
   public settingsFilePath = join(this.settingsFolderPath, settingsFile);
 
@@ -33,7 +36,8 @@ export default class SettingsManager {
 
   public emitter = new Emitter<SettingsEvent>();
 
-  constructor(settingsOverride?: Partial<Settings>) {
+  constructor(parentLogger: Logger, settingsOverride?: Partial<Settings>) {
+    this.logger = parentLogger.mount("settings-manager");
     this.settingsOverride = settingsOverride;
   }
 
@@ -70,6 +74,7 @@ export default class SettingsManager {
       this._settings = SettingsManager.defaultSettings;
     }
     this._isInitialized = true;
+    this.logger.info("finish initilazing settings manager");
     this.emitter.call("init", this.settings);
   }
 

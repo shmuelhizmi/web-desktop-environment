@@ -25,6 +25,7 @@
     "systeminformation": "^4.26.9",
     "@web-desktop-environment/interfaces": "1.0.0",
     "@web-desktop-environment/shared": "1.0.0",
-    "chalk": "4.1.0"
+    "chalk": "4.1.0",
+    "get-port": "5.1.1"
   }
 }

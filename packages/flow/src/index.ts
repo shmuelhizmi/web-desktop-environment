@@ -16,22 +16,23 @@ export const createReflow = (port: number) =>
     views: viewInterfaces,
   });
 
-export const settingManager = new SettingsManager();
-
-export const portManager = new PortManager();
-
 export const rootLogger = new Logger("root");
+
+export const settingManager = new SettingsManager(rootLogger);
+
+export const portManager = new PortManager(rootLogger);
 
 export const windowManager = new WindowManager(rootLogger);
 
 settingManager.initalize().then(() => {
   portManager
-    .getPort(settingManager.settings.network.ports.mainPort)
+    .getPort(true)
     .then((port) => {
       const reflow = createReflow(port);
-      console.log(`starting webOS on port ${port}`);
+      rootLogger.info(`starting webOS on port ${port}`);
       reflow.start(themeProvider, { childFlow: desktop }).then(() => {
-        console.log("app exist");
+        rootLogger.warn("app exist");
       });
-    });
+    })
+    .catch((e) => rootLogger.error((e && e.message) || e));
 });

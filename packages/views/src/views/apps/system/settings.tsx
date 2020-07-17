@@ -6,8 +6,8 @@ import {
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "../../../theme";
-import StateComponent from "../../../components/stateComponent";
+import { Theme } from "@root/theme";
+import StateComponent from "@components/stateComponent";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -102,7 +102,7 @@ const styles = (theme: Theme) =>
       color: theme.background.darkText || theme.background.text,
       minHeight: 45,
       marginBottom: 5,
-      borderBottom: `solid 1px ${theme.background.main}`,
+      borderBottom: `solid 1px ${theme.primary.transparent}`,
     },
     settingsPropertyName: {},
     settingsPropertyValue: {

@@ -1,7 +1,7 @@
 import ThemeProviderInterface from "@web-desktop-environment/interfaces/lib/views/ThemeProvider";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
-import { Themes } from "../theme";
+import { Themes } from "@root/theme";
 import { ThemeProvider as TP } from "@material-ui/styles";
 
 // using ReflowReactComponent in this case provides the event() and done() callbacks.

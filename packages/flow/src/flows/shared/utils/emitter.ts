@@ -9,5 +9,11 @@ export default class Emiiter<EventList> {
   public on = <T extends keyof EventList>(
     event: T,
     listener: (data: EventList[T]) => void
-  ) => this.emitter.on(event as string, listener);
+  ) => {
+    const maxListensers = this.emitter.getMaxListeners();
+    if (maxListensers <= this.emitter.listenerCount(event as string)) {
+      this.emitter.setMaxListeners(maxListensers + 10);
+    }
+    this.emitter.on(event as string, listener);
+  };
 }

@@ -6,9 +6,9 @@ import { Theme } from "../theme";
 import ReactDOM from "react-dom";
 import reactClickOutside from "react-click-outside";
 import Dragable from "react-draggable";
-import { Icon } from "@fluentui/react";
 import windowManager from "./../state/WindowManager";
 import { windowsBarHeight } from "./desktop";
+import Icon from "../components/icon";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,7 +63,6 @@ const styles = (theme: Theme) =>
     },
     barTitle: {
       position: "relative",
-      top: 5,
       left: -30,
       width: "100%",
       textAlign: "center",
@@ -234,8 +233,11 @@ class Window extends ReflowReactComponent<
               </div>
               <div className={classes.barTitle}>
                 {title} -{" "}
-                {icon.type === "fluentui" ? (
-                  <Icon className={classes.barTitleIcon} iconName={icon.icon} />
+                {icon.type === "icon" ? (
+                  <Icon
+                    parentClassName={classes.barTitleIcon}
+                    name={icon.icon}
+                  />
                 ) : (
                   <img
                     className={classes.barTitleIcon}

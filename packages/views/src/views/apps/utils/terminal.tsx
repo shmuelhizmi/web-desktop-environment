@@ -82,6 +82,8 @@ class Terminal extends ReflowReactComponent<
   render() {
     const { classes } = this.props;
     this.term.setOption("theme", this.getTermTheme());
+    this.termFit.fit();
+    this.socket.emit("setColumns", this.term.cols);
     return (
       <div
         className={classes.root}

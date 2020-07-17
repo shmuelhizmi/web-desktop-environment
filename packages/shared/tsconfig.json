@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": true
+  },
+  "include": ["lib/**/*"]
+}

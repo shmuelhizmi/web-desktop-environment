@@ -6,14 +6,8 @@ import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "../theme";
 import { reflowConnectionManager } from "..";
-import {
-  Button,
-  TextField,
-  List,
-  Image,
-  ImageFit,
-  Icon,
-} from "@fluentui/react";
+import TextField from "../components/textField";
+import Icon from "../components/icon";
 import windowManager, { Window } from "./../state/WindowManager";
 
 export const windowsBarHeight = 55;
@@ -31,19 +25,23 @@ const styles = (theme: Theme) =>
       position: "absolute",
       bottom: 0,
       left: 45,
-      height: 60,
+      height: windowsBarHeight,
+      cursor: "pointer",
+      width: 80,
       borderRadius: "15px 15px 0 0",
       fontSize: 40,
       paddingTop: 5,
       borderBottom: "none",
-      background: theme.background.transparentDark || theme.background.dark,
+      display: "flex",
+      justifyContent: "center",
       color: theme.background.text,
-      backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
-      border: `solid 1px ${theme.background.main}`,
+      backdropFilter: "blur(15px)",
+      border: `solid 2px ${
+        theme.background.transparentDark || theme.background.dark
+      }`,
+      background: theme.background.main,
       "&:hover": {
-        color: theme.background.text,
-        border: `solid 1px ${theme.background.main}`,
-        background: theme.background.transparent || theme.background.main,
+        background: theme.background.transparent,
       },
       zIndex: 2,
     },
@@ -103,21 +101,7 @@ const styles = (theme: Theme) =>
       textOverflow: "ellipsis",
     },
     startMenuSearch: {
-      "& .ms-TextField-fieldGroup": {
-        background: "transparent",
-        "& input": {
-          fontSize: 20,
-          fontWeight: 600,
-          color: theme.background.text,
-        },
-        "& input::placeholder": {
-          fontSize: 20,
-          fontWeight: 600,
-          color: theme.background.text,
-        },
-      },
-      color: theme.background.text,
-      fontSize: 25,
+      width: "100%",
     },
     windowsBar: {
       position: "absolute",
@@ -184,10 +168,11 @@ class Desktop extends ReflowReactComponent<
   updateWindow = () =>
     this.setState({ openWindows: [...windowManager.windows] });
 
-  renderAppListCell = (app?: App) => {
+  renderAppListCell = (app: App, index: number) => {
     const { classes, event } = this.props;
     return (
       <div
+        key={index}
         className={classes.appCell}
         onClick={() =>
           app && event("launchApp", { flow: app.flow, params: {} })
@@ -196,13 +181,9 @@ class Desktop extends ReflowReactComponent<
         {app && (
           <>
             {app.icon.type === "img" ? (
-              <Image
-                className={classes.appIcon}
-                src={app.icon.icon}
-                imageFit={ImageFit.cover}
-              />
+              <img alt={`${app.name} icon`} src={app.icon.icon} />
             ) : (
-              <Icon className={classes.appIcon} iconName={app.icon.icon}></Icon>
+              <Icon className={classes.appIcon} name={app.icon.icon}></Icon>
             )}
             <div className={classes.appContent}>
               <div className={classes.appName}>{app.name}</div>
@@ -225,13 +206,12 @@ class Desktop extends ReflowReactComponent<
             ref={(div) => div && reflowConnectionManager.connect(app.port, div)}
           />
         ))}
-        <Button
-          primary
+        <div
           className={classes.startBotton}
           onClick={() => this.setState({ isStartMenuOpen: !isStartMenuOpen })}
         >
-          <Icon iconName="AllApps" />
-        </Button>
+          <Icon width={40} height={40} name="FiList" />
+        </div>
         <div className={classes.windowsBar}>
           {openWindows.map((openWindow, index) => (
             <div
@@ -255,7 +235,7 @@ class Desktop extends ReflowReactComponent<
                   height={50}
                 />
               ) : (
-                <Icon iconName={openWindow.icon.icon} />
+                <Icon name={openWindow.icon.icon} />
               )}
             </div>
           ))}
@@ -264,25 +244,21 @@ class Desktop extends ReflowReactComponent<
           <div className={classes.startMenu}>
             <div className={classes.startMenuBody}>
               <TextField
-                borderless
                 className={classes.startMenuSearch}
+                borderBottom={false}
                 placeholder="search app"
                 value={startMenuQuery}
-                onChange={(_e, startMenuQuery) =>
-                  this.setState({ startMenuQuery })
-                }
+                onChange={(startMenuQuery) => this.setState({ startMenuQuery })}
               ></TextField>
-              <List
-                className={classes.appList}
-                items={apps.filter((app) =>
+              {apps
+                .filter((app) =>
                   startMenuQuery
                     ? app.name.includes(startMenuQuery) ||
                       app.description.includes(startMenuQuery) ||
                       app.flow.includes(startMenuQuery)
                     : true
-                )}
-                onRenderCell={this.renderAppListCell}
-              />
+                )
+                .map((app, index) => this.renderAppListCell(app, index))}
             </div>
           </div>
         )}

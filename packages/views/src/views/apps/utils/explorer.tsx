@@ -5,7 +5,9 @@ import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "../../../theme";
-import { Icon, Button, TextField } from "@fluentui/react";
+import Button from "../../../components/button";
+import Icon from "../../../components/icon";
+import TextField from "../../../components/textField";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -117,6 +119,9 @@ const styles = (theme: Theme) =>
       display: "flex",
       flexDirection: "column-reverse",
     },
+    transparent: {
+      background: "transparent !important",
+    },
     fileActive: {
       background: theme.secondary.transparentDark || theme.secondary.dark,
       "&:hover": {
@@ -145,11 +150,32 @@ const styles = (theme: Theme) =>
       minWidth: 20,
       textAlign: "center",
       userSelect: "none",
-      color: theme.background.text,
+      color: theme.primary.text,
       fontSize: 25,
+      background: theme.primary.transparent,
+      border: `solid 1px transparent`,
+      maxWidth: 380,
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
       "&:hover": {
-        background: theme.background.transparentDark || theme.background.dark,
+        background: theme.primary.main,
       },
+      cursor: "pointer",
+    },
+    breadcrumbButtonItemFirst: {
+      borderRadius: "8px 0 0 8px",
+      paddingLeft: 10,
+    },
+    breadcrumbButtonItemLast: {
+      cursor: "auto",
+      borderRadius: "0 8px 8px 0",
+      background: theme.primary.main,
+      border: `solid 1px ${theme.windowBorderColor}`,
+      "&:hover": {
+        background: theme.primary.main,
+      },
+      paddingRight: 10,
     },
     dialog: {
       display: "flex",
@@ -190,24 +216,6 @@ const styles = (theme: Theme) =>
     },
     dialogInput: {
       margin: 10,
-      "& .ms-TextField-fieldGroup": {
-        background: "transparent",
-        border: "none",
-        borderBottom: `1px solid ${theme.background.text}`,
-        "&::after": {
-          border: "none",
-        },
-        "& input": {
-          fontSize: 20,
-          fontWeight: 600,
-          color: theme.background.text,
-        },
-        "& input::placeholder": {
-          fontSize: 20,
-          fontWeight: 600,
-          color: theme.background.text,
-        },
-      },
       color: theme.background.text,
       fontSize: 25,
     },
@@ -216,6 +224,7 @@ const styles = (theme: Theme) =>
 interface ExplorerState {
   fileIsOverFile?: number;
   selectedFile?: number;
+  dragedFile?: File;
   copyPath?: { fullPath: string; name: string };
   cutPath?: { fullPath: string; name: string };
   confirm?: {
@@ -235,7 +244,6 @@ class Explorer extends ReflowReactComponent<
   WithStyles<typeof styles>,
   ExplorerState
 > {
-  dragedFile?: File;
   selectedFile?: File & { fullPath: string };
   constructor(props: Explorer["props"]) {
     super(props);
@@ -293,11 +301,7 @@ class Explorer extends ReflowReactComponent<
     });
   };
 
-  getBreadcrumbLocations = (): {
-    path: string;
-    onClick: () => void;
-    onDrop: () => void;
-  }[] => {
+  getBreadcrumbLocations = (maxLength: number) => {
     const { currentPath, platfromPathSperator, event } = this.props;
     let currentLocation = "";
     const pathArray: string[] = [];
@@ -306,11 +310,13 @@ class Explorer extends ReflowReactComponent<
       .filter((path) => path)
       .forEach((path) => pathArray.push(`${path}${platfromPathSperator}`));
     pathArray.unshift(platfromPathSperator);
-    return pathArray.map((path, i) => {
+    const result = pathArray.map((path, i) => {
       currentLocation += path;
       const pathPartPath = currentLocation;
       return {
         path,
+        isFirst: i === 0,
+        isLast: i === pathArray.length - 1,
         onClick: () => {
           event("changeCurrentPath", pathPartPath);
           this.setState({ selectedFile: undefined });
@@ -319,20 +325,30 @@ class Explorer extends ReflowReactComponent<
         onDrop: () => this.onDropPath(pathPartPath),
       };
     });
+    while (result.length > maxLength) {
+      result.shift();
+      result[0].isFirst = true;
+    }
+    return result;
   };
 
   private onDrop = async (target: File) => {
     const { currentPath, platfromPathSperator, event } = this.props;
-    if (this.dragedFile && this.dragedFile !== target && target.isFolder) {
-      const newPath = `${currentPath}${platfromPathSperator}${target.name}${platfromPathSperator}${this.dragedFile.name}`;
-      const originalPath = `${currentPath}${platfromPathSperator}${this.dragedFile.name}`;
+    this.setState({ dragedFile: undefined });
+    if (
+      this.state.dragedFile &&
+      this.state.dragedFile !== target &&
+      target.isFolder
+    ) {
+      const newPath = `${currentPath}${platfromPathSperator}${target.name}${platfromPathSperator}${this.state.dragedFile.name}`;
+      const originalPath = `${currentPath}${platfromPathSperator}${this.state.dragedFile.name}`;
       this.setState({
         fileIsOverFile: undefined,
         selectedFile: undefined,
       });
       if (
         await this.confirm(
-          ` do you want to move ${this.dragedFile.name} to ${newPath}`
+          ` do you want to move ${this.state.dragedFile.name} to ${newPath}`
         )
       ) {
         event("move", {
@@ -346,16 +362,16 @@ class Explorer extends ReflowReactComponent<
   private onDropPath = async (path: string) => {
     console.log("drop");
     const { currentPath, platfromPathSperator, event } = this.props;
-    if (this.dragedFile) {
-      const newPath = `${path}${platfromPathSperator}${this.dragedFile.name}`;
-      const originalPath = `${currentPath}${platfromPathSperator}${this.dragedFile.name}`;
+    if (this.state.dragedFile) {
+      const newPath = `${path}${platfromPathSperator}${this.state.dragedFile.name}`;
+      const originalPath = `${currentPath}${platfromPathSperator}${this.state.dragedFile.name}`;
       this.setState({
         fileIsOverFile: undefined,
         selectedFile: undefined,
       });
       if (
         await this.confirm(
-          ` do you want to move ${this.dragedFile.name} to ${newPath}`
+          ` do you want to move ${this.state.dragedFile.name} to ${newPath}`
         )
       ) {
         event("move", {
@@ -369,7 +385,7 @@ class Explorer extends ReflowReactComponent<
   private onFileDragOver = (file: File, index: number) => {
     if (
       file.isFolder &&
-      this.dragedFile?.name !== file.name &&
+      this.state.dragedFile?.name !== file.name &&
       this.state.fileIsOverFile !== index
     ) {
       this.setState({ fileIsOverFile: index });
@@ -443,9 +459,17 @@ class Explorer extends ReflowReactComponent<
         <div className={classes.locationBarContainer}>
           <div className={classes.locationBar}>
             <div className={classes.breadcrumbFilesContainer}>
-              {this.getBreadcrumbLocations().map((breadcrumbItem, index) => (
+              {this.getBreadcrumbLocations(6).map((breadcrumbItem, index) => (
                 <div
-                  className={classes.breadcrumbButtonItem}
+                  className={`${classes.breadcrumbButtonItem} ${
+                    breadcrumbItem.isFirst
+                      ? classes.breadcrumbButtonItemFirst
+                      : ""
+                  } ${
+                    breadcrumbItem.isLast
+                      ? classes.breadcrumbButtonItemLast
+                      : ""
+                  }`}
                   key={index}
                   onDrop={breadcrumbItem.onDrop}
                   onDragOverCapture={(e) => e.preventDefault()}
@@ -520,7 +544,7 @@ class Explorer extends ReflowReactComponent<
                 </div>
                 <TextField
                   value={this.state.prompt.value}
-                  onChange={(_e, newValue) =>
+                  onChange={(newValue) =>
                     this.state.prompt &&
                     this.setState({
                       prompt: { ...this.state.prompt, value: newValue || "" },
@@ -541,7 +565,7 @@ class Explorer extends ReflowReactComponent<
                     Cancel
                   </Button>
                   <Button
-                    primary
+                    color="secondary"
                     className={`${classes.dialogButton} ${classes.dialogButtonPrimary}`}
                     onClick={() =>
                       this.state.prompt &&
@@ -579,7 +603,7 @@ class Explorer extends ReflowReactComponent<
                     Cancel
                   </Button>
                   <Button
-                    primary
+                    color="secondary"
                     className={`${classes.dialogButton} ${classes.dialogButtonPrimary}`}
                     onClick={() =>
                       this.setState((state) =>
@@ -607,11 +631,13 @@ class Explorer extends ReflowReactComponent<
                       fileIsOverFile === index || selectedFile === index
                         ? classes.fileActive
                         : ""
+                    } ${
+                      this.state.dragedFile === file ? classes.transparent : ""
                     }`}
                     key={index}
                     draggable
-                    onDrag={(e) => {
-                      this.dragedFile = file;
+                    onDrag={() => {
+                      this.setState({ dragedFile: file });
                     }}
                     onDrop={() => this.onDrop(file)}
                     onDragOverCapture={(e) => {
@@ -644,15 +670,14 @@ class Explorer extends ReflowReactComponent<
                     {file.isFolder ? (
                       <Icon
                         className={classes.fileIcon}
-                        iconName={
-                          fileIsOverFile === index ? "FolderOpen" : "Folder"
+                        name={
+                          fileIsOverFile === index
+                            ? "FcOpenedFolder"
+                            : "FcFolder"
                         }
                       />
                     ) : (
-                      <Icon
-                        className={classes.fileIcon}
-                        iconName="TextDocument"
-                      />
+                      <Icon className={classes.fileIcon} name="FcDocument" />
                     )}
                   </div>
                 ))}

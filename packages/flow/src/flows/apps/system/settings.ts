@@ -6,18 +6,19 @@ import { cpu, mem, osInfo, diskLayout } from "systeminformation";
 
 interface SettingsInput {}
 
-const terminalFlow = <Flow<ViewInterfacesType, SettingsInput>>(async ({
+const terminalFlow = <App<SettingsInput>["flow"]>(async ({
   view,
   views,
-  input: {},
+  input: { parentLogger },
 }) => {
+  const logger = parentLogger.mount("settings-app");
   const settings = view(0, views.settings, {
     settings: settingManager.settings,
   });
 
-  settingManager.emitter.on("onNewSettings", (newSettings) =>
-    settings.update({ settings: newSettings })
-  );
+  settingManager.emitter.on("onNewSettings", (newSettings) => {
+    settings.update({ settings: newSettings });
+  });
 
   const updateSystemInfo = async () => {
     const [cpuInfo, memoryInfo, osInformation, diskInfo] = await Promise.all([
@@ -26,38 +27,41 @@ const terminalFlow = <Flow<ViewInterfacesType, SettingsInput>>(async ({
       osInfo(),
       diskLayout(),
     ]);
-    settings.update({
-      systemInfo: {
-        cpu: {
-          cores: cpuInfo.cores,
-          brandName: cpuInfo.brand,
-          manufacturer: cpuInfo.manufacturer,
-          physicalCores: cpuInfo.physicalCores,
-          speed: cpuInfo.speed,
-          speedMax: cpuInfo.speedmax,
-          speedMin: cpuInfo.speedmin,
-        },
-        os: {
-          hostname: osInformation.hostname,
-          platform: osInformation.platform,
-          kernel: osInformation.kernel,
-        },
-        ram: {
-          free: formatBytes(memoryInfo.available),
-          total: formatBytes(memoryInfo.total),
-        },
-        disks: diskInfo.map((disk) => ({
-          name: disk.name,
-          total: formatBytes(disk.size),
-          vendor: disk.vendor,
-        })),
+    const systemInfo = {
+      cpu: {
+        cores: cpuInfo.cores,
+        brandName: cpuInfo.brand,
+        manufacturer: cpuInfo.manufacturer,
+        physicalCores: cpuInfo.physicalCores,
+        speed: cpuInfo.speed,
+        speedMax: cpuInfo.speedmax,
+        speedMin: cpuInfo.speedmin,
       },
+      os: {
+        hostname: osInformation.hostname,
+        platform: osInformation.platform,
+        kernel: osInformation.kernel,
+      },
+      ram: {
+        free: formatBytes(memoryInfo.available),
+        total: formatBytes(memoryInfo.total),
+      },
+      disks: diskInfo.map((disk) => ({
+        name: disk.name,
+        total: formatBytes(disk.size),
+        vendor: disk.vendor,
+      })),
+    };
+    logger.info("fetch system info");
+    settings.update({
+      systemInfo,
     });
   };
 
-  settings.on("setSettings", (newSettings) =>
-    settingManager.setSettings(newSettings)
-  );
+  settings.on("setSettings", (newSettings) => {
+    logger.info("settings update");
+    settingManager.setSettings(newSettings);
+  });
   settings.on("reload", updateSystemInfo);
   await updateSystemInfo();
 
@@ -70,8 +74,8 @@ export const settings: App<SettingsInput> = {
   flow: terminalFlow,
   defaultInput: {},
   icon: {
-    type: "fluentui",
-    icon: "Settings",
+    type: "icon",
+    icon: "IoMdSettings",
   },
   window: {
     height: 600,

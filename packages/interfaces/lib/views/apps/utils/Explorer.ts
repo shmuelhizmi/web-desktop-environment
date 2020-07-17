@@ -17,7 +17,7 @@ export interface Move {
   newPath: string;
 }
 
-export interface Dowmload {
+export interface Download {
   file: string;
   downloadLink: string;
 }
@@ -26,7 +26,7 @@ export interface Input {
   currentPath: string;
   platfromPathSperator: "/" | "\\";
   files: File[];
-  downloads: Dowmload[];
+  downloads: Download[];
 }
 
 export interface Events {

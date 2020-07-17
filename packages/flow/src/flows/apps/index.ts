@@ -5,6 +5,7 @@ import { terminal } from "./utils/terminal";
 import { explorer } from "./utils/explorer";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
 import { settings } from "./system/settings";
+import Logger from "../shared/utils/logger";
 
 interface AppEvents {
   change_title: string;
@@ -16,7 +17,14 @@ export interface App<Params = {}> {
   defaultInput: Params;
   description: string;
   window: Window;
-  flow: Flow<ViewInterfacesType, Params, void, {}, {}, AppEvents>;
+  flow: Flow<
+    ViewInterfacesType,
+    Params & { parentLogger: Logger },
+    void,
+    {},
+    {},
+    AppEvents
+  >;
 }
 
 export const apps: {

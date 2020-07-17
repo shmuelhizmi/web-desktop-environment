@@ -1,9 +1,19 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { settingManager } from "../..";
+import Emiiter from "../shared/utils/emitter";
+
+export type CancelEmitterEvent = {
+  cancel: void;
+};
+
+type CancelEmitter = Emiiter<CancelEmitterEvent>;
 
 export default <
-  Flow<ViewInterfacesType, { childFlow: Flow<any>; childInput?: any }>
+  Flow<
+    ViewInterfacesType,
+    { childFlow: Flow<any>; childInput?: any; cancelEmitter: CancelEmitter }
+  >
 >(async ({
   view,
   views,

@@ -22,16 +22,12 @@ export interface Input {
 }
 
 export interface Events {
-  setBackground: {
-    background: string;
-  };
   launchApp: {
     flow: string;
     params: any;
   };
 }
 
-export interface Output {
-}
+export interface Output {}
 
 export default interface Desktop extends ViewInterface<Input, Events, Output> {}

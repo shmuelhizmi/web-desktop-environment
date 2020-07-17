@@ -12,15 +12,13 @@ interface TerminalInput {
   process?: string;
   args?: string[];
   location?: string;
-  linesToWriteToProcess?: string[];
 }
 
 const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
   view,
   views,
-  event,
   onCanceled,
-  input: { process, args, location: cwd, linesToWriteToProcess = [] },
+  input: { process, args, location: cwd },
 }) => {
   const server = http.createServer();
   const socketServer = socket.listen(server);
@@ -33,12 +31,18 @@ const terminalFlow = <Flow<ViewInterfacesType, TerminalInput>>(async ({
       socketServer.emit("output", data);
     },
     process,
-    cwd
+    cwd,
+    args
   );
   socketServer.on("connection", (client) => {
     socketServer.emit("output", history);
     client.on("input", (data: string) => {
       ptyProcces.write(data);
+    });
+
+    client.on("setColumns", (columns: number) => {
+      // fit columns to window size
+      ptyProcces.setCols(columns);
     });
   });
   const window = view(0, views.terminal, {
@@ -72,8 +76,8 @@ export const terminal: App<TerminalInput> = {
   flow: terminalFlow,
   defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
   icon: {
-    type: "fluentui",
-    icon: "CommandPrompt",
+    type: "icon",
+    icon: "DiTerminal",
   },
   window: {
     height: 400,
@@ -86,21 +90,24 @@ class PTY {
   shell: string;
   ptyProcess: IPty;
   out: (data: string) => void;
-  constructor(out: (data) => void, shell: string, cwd: string) {
+  constructor(out: (data) => void, shell: string, cwd: string, args: string[]) {
     // Setting default terminals based on user os
     this.shell = shell;
     this.ptyProcess = null;
     this.out = out;
 
     // Initialize PTY process.
-    this.startPtyProcess(cwd);
+    this.startPtyProcess(cwd, args);
   }
 
+  setCols = (columns: number) => {
+    this.ptyProcess.resize(columns, this.ptyProcess.rows);
+  };
   /**
    * Spawn an instance of pty with a selected shell.
    */
-  startPtyProcess(cwd: string) {
-    this.ptyProcess = spawn(this.shell, [], {
+  startPtyProcess(cwd: string, args: string[]) {
+    this.ptyProcess = spawn(this.shell, args, {
       name: "xterm-color",
       cwd, // Which path should terminal start
     });

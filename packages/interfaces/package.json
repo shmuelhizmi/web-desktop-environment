@@ -10,6 +10,7 @@
     "@mcesystems/reflow": "^4.3.4"
   },
   "devDependencies": {
-	  "typescript": "3.4.3"
+    "typescript": "^3.9.7",
+    "react-icons": "3.10.0"
   }
 }

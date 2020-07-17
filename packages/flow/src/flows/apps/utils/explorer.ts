@@ -2,7 +2,7 @@ import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { homedir } from "os";
 import {
-  Dowmload,
+  Download,
   File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
@@ -20,7 +20,7 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
   input: { path: startingPath = homedir() },
 }) => {
   let currentPath = startingPath;
-  const downloads: Dowmload[] = [];
+  const downloads: Download[] = [];
   const listFiles = async (): Promise<File[]> => {
     const filesNames = await fs.readdir(currentPath);
     const files = await filesNames.map(
@@ -93,8 +93,8 @@ export const explorer: App<ExplorerInput> = {
   flow: terminalFlow,
   defaultInput: {},
   icon: {
-    type: "fluentui",
-    icon: "FolderOpen",
+    type: "icon",
+    icon: "BsFillFolderFill",
   },
   window: {
     height: 600,

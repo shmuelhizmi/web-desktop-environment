@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@fluentui/react": "^7.121.9",
     "@material-ui/styles": "^4.10.0",
     "@mcesystems/reflow": "^4.3.4",
     "@mcesystems/reflow-react-display-layer": "^4.3.4",
-    "@uifabric/icons": "7.3.59",
-    "@uifabric/react-cards": "^0.109.109",
     "@web-desktop-environment/interfaces": "1.0.0",
+    "react-icons": "3.10.0",
     "events": "3.1.0",
     "react": "^16.13.0",
     "react-click-outside": "^3.0.1",
@@ -19,7 +17,8 @@
     "typeface-jetbrains-mono": "^2.0.0",
     "uws": "10.148.1",
     "xterm": "4.7.0",
-    "xterm-addon-fit": "0.4.0"
+    "xterm-addon-fit": "0.4.0",
+    "@web-desktop-environment/shared": "1.0.0"
   },
   "devDependencies": {
     "@types/socket.io-client": "1.4.32",
@@ -79,7 +78,7 @@
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.5",
     "ts-pnp": "1.1.6",
-    "typescript": "~3.7.2",
+    "typescript": "^3.9.7",
     "url-loader": "2.3.0",
     "webpack": "4.42.0",
     "webpack-dev-server": "3.10.3",

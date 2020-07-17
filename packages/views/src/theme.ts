@@ -1,5 +1,21 @@
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
+export type ColorVariants =
+  | "main"
+  | "dark"
+  | "light"
+  | "transparent"
+  | "transparentDark"
+  | "transparentLight";
+
+export type Colors =
+  | "background"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "error";
+
 export interface Theme {
   type: ThemeType;
   background: Color;
@@ -44,9 +60,9 @@ const transparentTheme: Theme = {
     text: "#000",
   },
   secondary: {
-    main: "#0003",
-    light: "#0001",
-    dark: "#0004",
+    main: "#0004",
+    light: "#0003",
+    dark: "#0005",
     text: "#fff",
   },
   error: {
@@ -73,30 +89,30 @@ const transparentTheme: Theme = {
 const lightTheme: Theme = {
   type: "light",
   shadowColor: "#0007",
-  windowBorderColor: "#9bb",
+  windowBorderColor: "#5d6373bb",
   background: {
     main: "#eee",
     light: "#fff",
-    transparent: "#ddd9",
-    transparentDark: "#dddb",
+    transparent: "#fff9",
+    transparentDark: "#5d637399",
     dark: "#5d6373bb",
     text: "#222",
     darkText: "#fff",
   },
   primary: {
-    main: "#eaeaeaee",
-    light: "#fafaeaee",
-    transparent: "#eaeaea77",
-    transparentDark: "#eaeaea55",
-    dark: "#e5e5e5",
-    text: "#000",
+    main: "#444444",
+    light: "#555555",
+    transparent: "#55555599",
+    dark: "#333333",
+    transparentDark: "#33333388",
+    text: "#fff",
   },
   secondary: {
-    main: "#00dac6",
-    transparent: "#00dac666",
-    transparentDark: "#00878599",
-    light: "#40fac699",
-    dark: "#008785",
+    main: "#4585b2",
+    transparent: "#4585b288",
+    transparentDark: "#35759299",
+    light: "#abcbe2",
+    dark: "#357592",
     text: "#222",
   },
   error: {
@@ -126,15 +142,17 @@ const darkTheme: Theme = {
   background: {
     main: "#333333",
     light: "#444444",
-    transparent: "#4b4b4b",
+    transparent: "#373737e9",
     dark: "#242424",
+    transparentDark: "#24242499",
     text: "#d9d9da",
   },
   primary: {
     main: "#eee",
-    transparent: "#fff3",
+    transparent: "#e8e8e899",
     light: "#fff",
     dark: "#bbb",
+    transparentDark: "#bebebe99",
     text: "#000",
   },
   secondary: {
@@ -163,6 +181,8 @@ const darkTheme: Theme = {
     text: "#fff",
   },
 };
+
+export const defaultTheme = darkTheme;
 
 export const Themes = {
   dark: darkTheme,

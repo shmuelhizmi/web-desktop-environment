@@ -3,12 +3,11 @@ import ReactDOM from "react-dom";
 import { Transports } from "@mcesystems/reflow";
 import { renderDisplayLayer } from "@mcesystems/reflow-react-display-layer";
 import Login from "./loginScreen/Login";
-import { initializeIcons } from "@uifabric/icons";
 import "./index.css";
 import * as views from "./views";
 import "typeface-jetbrains-mono";
-
-initializeIcons();
+import { ThemeProvider } from "@material-ui/styles";
+import { defaultTheme } from "./theme";
 
 class ReflowConnectionManager {
   host: string;
@@ -37,7 +36,9 @@ export const connectToServer = (host: string, port: number) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login onLogin={connectToServer} />
+    <ThemeProvider theme={defaultTheme}>
+      <Login onLogin={connectToServer} />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

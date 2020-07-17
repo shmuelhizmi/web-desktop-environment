@@ -17,17 +17,6 @@ export default class PortManager {
         isPortIsAvilable = await portIsAvilable(currentPort);
         if (!isPortIsAvilable) {
           currentPort++;
-          if (
-            !starting &&
-            currentPort >= settingManager.settings.network.ports.endPort
-          ) {
-            if (reachMaxPort) {
-              throw new Error("using all ports");
-            } else {
-              reachMaxPort = true;
-              currentPort = settingManager.settings.network.ports.startPort;
-            }
-          }
         }
       }
       return currentPort;
@@ -36,6 +25,14 @@ export default class PortManager {
       while (!isPortIsAvilable) {
         this.currentPort++;
         isPortIsAvilable = await portIsAvilable(this.currentPort);
+        if (this.currentPort >= settingManager.settings.network.ports.endPort) {
+          if (reachMaxPort) {
+            throw new Error("using all ports");
+          } else {
+            reachMaxPort = true;
+            this.currentPort = settingManager.settings.network.ports.startPort;
+          }
+        }
       }
       return this.currentPort;
     }

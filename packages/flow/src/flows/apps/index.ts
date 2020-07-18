@@ -1,11 +1,11 @@
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
-import { terminal } from "./utils/terminal";
-import { explorer } from "./utils/explorer";
+import { terminal } from "@apps/utils/terminal";
+import { explorer } from "@apps/utils/explorer";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
-import { settings } from "./system/settings";
-import Logger from "../shared/utils/logger";
+import { settings } from "@apps/system/settings";
+import Logger from "@utils/logger";
 
 interface AppEvents {
   change_title: string;

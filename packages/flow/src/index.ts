@@ -3,12 +3,12 @@ import {
   ViewInterfacesType,
   viewInterfaces,
 } from "@web-desktop-environment/interfaces/lib";
-import desktop from "./flows/desktop";
-import themeProvider from "./flows/container/themeProvider";
-import PortManager from "./flows/shared/managers/portManager";
-import SettingsManager from "./flows/shared/managers/settingsManager";
-import WindowManager from "./flows/shared/managers/windowsManager";
-import Logger from "./flows/shared/utils/logger";
+import desktop from "@desktop/index";
+import themeProvider from "@container/themeProvider";
+import PortManager from "@managers/portManager";
+import SettingsManager from "@managers/settingsManager";
+import WindowManager from "@managers/windowsManager";
+import Logger from "@utils/logger";
 
 export const createReflow = (port: number) =>
   new Reflow<ViewInterfacesType>({

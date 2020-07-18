@@ -1,6 +1,5 @@
-import { settingManager } from "../../..";
-import { createServer } from "net";
-import Logger from "../utils/logger";
+import { settingManager } from "@index";
+import Logger from "@utils/logger";
 import * as getPort from "get-port";
 
 export const timeout = (time: number) =>

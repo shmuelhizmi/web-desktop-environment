@@ -3,7 +3,16 @@
     "sourceMap": true,
     "target": "ES6",
     "module": "commonjs",
-    "declaration": true
+    "declaration": true,
+    "baseUrl": "src",
+    "paths": {
+      "@index": ["index"],
+      "@apps/*": ["flows/apps/*"],
+      "@desktop/*": ["flows/desktop/*"],
+      "@container/*": ["flows/container/*"],
+      "@managers/*": ["flows/shared/managers/*"],
+      "@utils/*": ["flows/shared/utils/*"]
+    }
   },
-  "include": ["lib/**/*"]
+  "include": ["src/**/*"]
 }

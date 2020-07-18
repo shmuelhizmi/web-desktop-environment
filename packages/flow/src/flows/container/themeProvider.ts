@@ -1,7 +1,7 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { settingManager } from "../..";
-import Emiiter from "../shared/utils/emitter";
+import { settingManager } from "@index";
+import Emiiter from "@utils/emitter";
 
 export type CancelEmitterEvent = {
   cancel: void;

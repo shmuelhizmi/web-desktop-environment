@@ -1,7 +1,5 @@
-import { Flow } from "@mcesystems/reflow";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
-import { App } from "..";
-import { settingManager } from "../../..";
+import { App } from "@apps/index";
+import { settingManager } from "@index";
 import { cpu, mem, osInfo, diskLayout } from "systeminformation";
 
 interface SettingsInput {}

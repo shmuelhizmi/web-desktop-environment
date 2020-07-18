@@ -1,12 +1,12 @@
 import { join } from "path";
 import * as fs from "fs-extra";
 import { homedir } from "os";
-import { mergeDeep } from "../utils/mergeObjects";
-import Emitter from "../utils/emitter";
+import { mergeDeep } from "@utils/mergeObjects";
+import Emitter from "@utils/emitter";
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
-import waitFor from "../utils/waitFor";
-import Logger from "../utils/logger";
+import waitFor from "@utils/waitFor";
+import Logger from "@utils/logger";
 
 interface SettingsEvent {
   onNewSettings: Settings;

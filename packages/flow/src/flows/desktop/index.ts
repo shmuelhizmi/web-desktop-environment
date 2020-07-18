@@ -1,7 +1,7 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { apps } from "../apps";
-import { settingManager, rootLogger, windowManager } from "./../..";
+import { apps } from "@apps/index";
+import { settingManager, rootLogger, windowManager } from "@index";
 
 export default <Flow<ViewInterfacesType>>(async ({ view, views }) => {
   const logger = rootLogger.mount("desktop");

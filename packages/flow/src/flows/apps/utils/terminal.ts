@@ -1,10 +1,10 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { apps, App } from "..";
-import { portManager } from "../../..";
+import { App } from "@apps/index";
+import { portManager } from "@index";
 import * as socket from "socket.io";
 import * as http from "http";
-import { getOS, OS } from "../../shared/utils/getOS";
+import { getOS, OS } from "@utils/getOS";
 import { tmpdir } from "os";
 import { spawn, IPty } from "node-pty";
 

@@ -7,7 +7,7 @@ import {
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
 import { join, sep } from "path";
-import { App } from "..";
+import { App } from "@apps/index";
 
 interface ExplorerInput {
   path?: string;

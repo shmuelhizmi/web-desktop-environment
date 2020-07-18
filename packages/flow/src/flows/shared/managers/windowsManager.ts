@@ -1,12 +1,10 @@
-import Emitter from "../utils/emitter";
-import { apps } from "../../apps/index";
-import { createReflow, portManager } from "../../..";
-import themeProvider, {
-  CancelEmitterEvent,
-} from "../../container/themeProvider";
-import Logger from "../utils/logger";
+import Emitter from "@utils/emitter";
+import { apps } from "@apps/index";
+import { createReflow, portManager } from "@index";
+import themeProvider, { CancelEmitterEvent } from "@container/themeProvider";
+import Logger from "@utils/logger";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import window from "../../desktop/window";
+import window from "@desktop/window";
 interface WindowManagerEvents {
   onAppLaunch: OpenApp;
   onAppsUpdate: OpenApp[];

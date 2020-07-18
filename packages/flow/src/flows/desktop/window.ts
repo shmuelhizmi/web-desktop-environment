@@ -1,7 +1,7 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { App } from "../apps";
-import Logger from "../shared/utils/logger";
+import { App } from "@apps/index";
+import Logger from "@utils/logger";
 
 interface WindowInput {
   app: App;

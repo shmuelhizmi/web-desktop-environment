@@ -7,7 +7,7 @@ the twist with this one is that this one visual interface runs on the web (react
 
 ## Use Cases
  - interface for a cloud server (can possibly be used as a replacemnt for control panel)
- - interface for small micro computers
+ - interface for small computers like the Raspberry Pi zero
  - interface for controlling your computer over long distance 
 
 

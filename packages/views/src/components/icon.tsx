@@ -5,19 +5,20 @@ import { IconNames } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import "./icon.css";
 
 const Icon = (
-  props: IconBaseProps & {
-    name: IconNames;
-    parentClassName?: string;
-    parentFill?: boolean;
-  }
+	props: IconBaseProps & {
+		name: IconNames;
+		parentClassName?: string;
+		parentFill?: boolean;
+	}
 ) => {
-  return (
-    <span className={`icon-parent ${props.parentClassName || ""}`}>
-      {React.createElement(
-        require(`react-icons/all`)[props.name] || MdError,
-        props
-      )}
-    </span>
-  );
+	return (
+		<span className={`icon-parent ${props.parentClassName || ""}`}>
+			{React.createElement(
+				// @eslint-disable-no-undef
+				require("react-icons/all")[props.name] || MdError,
+				props
+			)}
+		</span>
+	);
 };
 export default Icon;

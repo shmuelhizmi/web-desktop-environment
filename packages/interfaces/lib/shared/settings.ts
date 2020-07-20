@@ -1,6 +1,6 @@
 export type ThemeType = "transparent" | "dark" | "light";
 
-export interface Settings {
+export interface Settings extends Record<string, unknown>{ //make sure settings is always a valid object
   desktop: {
     background: string;
     theme: ThemeType;

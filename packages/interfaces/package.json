@@ -4,8 +4,8 @@
   "main": "lib/index.ts",
   "types": "lib",
   "author": "shmuelhizmi",
-  "license": "none",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "dependencies": {
     "@mcesystems/reflow": "^4.3.4"
   },

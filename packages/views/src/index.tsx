@@ -10,35 +10,42 @@ import { ThemeProvider } from "@material-ui/styles";
 import { defaultTheme } from "@root/theme";
 
 class ReflowConnectionManager {
-  host: string;
-  constructor(host: string) {
-    this.host = host;
-  }
-  connect = (port: number, mountPoint: Element) => {
-    renderDisplayLayer({
-      element: mountPoint,
-      transport: new Transports.WebSocketsTransport({ port, host: this.host }),
-      views,
-    });
-  };
+	host: string;
+	constructor(host: string) {
+		this.host = host;
+	}
+	connect = (port: number, mountPoint?: Element) => {
+		const transport = new Transports.WebSocketsTransport({
+			port,
+			host: this.host,
+		});
+		if (mountPoint) {
+			renderDisplayLayer({
+				element: mountPoint,
+				transport,
+				views,
+			});
+		}
+		return { transport, views };
+	};
 }
 
 export let reflowConnectionManager: ReflowConnectionManager;
 
 export const connectToServer = (host: string, port: number) => {
-  reflowConnectionManager = new ReflowConnectionManager(host);
+	reflowConnectionManager = new ReflowConnectionManager(host);
 
-  const app = document.getElementById("root");
-  if (app) {
-    reflowConnectionManager.connect(port, app);
-  }
+	const app = document.getElementById("root");
+	if (app) {
+		reflowConnectionManager.connect(port, app);
+	}
 };
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={defaultTheme}>
-      <Login onLogin={connectToServer} />
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+	<React.StrictMode>
+		<ThemeProvider theme={defaultTheme}>
+			<Login onLogin={connectToServer} />
+		</ThemeProvider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );

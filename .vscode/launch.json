@@ -16,11 +16,11 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
 
       "args": ["src/index.ts"],
 
-      "cwd": "${workspaceRoot}/packages/flow/",
+      "cwd": "${workspaceRoot}/packages/flows/",
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**", "node_modules/**"]
     }

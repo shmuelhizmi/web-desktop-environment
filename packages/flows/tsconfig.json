@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "@index": ["index"],
+      "@apps/*": ["flows/apps/*"],
+      "@desktop/*": ["flows/desktop/*"],
+      "@container/*": ["flows/container/*"],
+      "@managers/*": ["flows/shared/managers/*"],
+      "@utils/*": ["flows/shared/utils/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

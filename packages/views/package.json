@@ -1,7 +1,8 @@
 {
   "name": "@web-desktop-environment/views",
   "version": "1.0.0",
-  "private": true,
+  "license": "MIT",
+  "private": false,
   "dependencies": {
     "@material-ui/styles": "^4.10.0",
     "@mcesystems/reflow": "^4.3.4",
@@ -21,7 +22,6 @@
     "@web-desktop-environment/shared": "1.0.0"
   },
   "devDependencies": {
-    "@types/socket.io-client": "1.4.32",
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
@@ -32,12 +32,12 @@
     "@types/react": "^16.9.0",
     "@types/react-click-outside": "^3.0.3",
     "@types/react-dom": "^16.9.0",
+    "@types/socket.io-client": "1.4.32",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "babel-eslint": "10.1.0",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.1.0",
-    "ts-loader": "7.0.5",
     "babel-plugin-named-asset-import": "^0.3.6",
     "babel-preset-react-app": "^9.1.2",
     "camelcase": "^5.3.1",
@@ -45,12 +45,11 @@
     "css-loader": "3.4.2",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
-    "eslint": "^6.6.0",
-    "eslint-config-react-app": "^5.2.1",
-    "eslint-loader": "3.0.3",
-    "eslint-plugin-flowtype": "4.6.0",
-    "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-react-app": "5.2.1",
+    "eslint-loader": "4.0.2",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "4.3.0",
@@ -69,6 +68,7 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
+    "prettier": "^2.0.5",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "resolve": "1.15.0",
@@ -77,6 +77,7 @@
     "semver": "6.3.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.5",
+    "ts-loader": "7.0.5",
     "ts-pnp": "1.1.6",
     "typescript": "^3.9.7",
     "url-loader": "2.3.0",
@@ -88,7 +89,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"

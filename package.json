@@ -3,12 +3,12 @@
   "private": true,
   "scripts": {
     "install": "lerna bootstrap",
-    "dev:server": "cd packages/flow && npm start",
+    "dev:server": "cd packages/flows && npm start",
     "dev:web": "cd packages/views && npm start",
-    "start": "lerna bootstrap && concurrently \"npm run dev:server\" \"npm run dev:web\""
+    "start": "lerna bootstrap && concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "lint": "lerna run lint"
   },
   "devDependencies": {
-    "lerna": "^3.22.0",
-    "concurrently": "5.2.0"
+    "lerna": "^3.22.0"
   }
 }

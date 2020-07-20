@@ -23,6 +23,12 @@ if you have any new feature or existing feature you wnat to create or improve fe
 
 ## Run
 
+**quick run**
+1. `npm i`
+2. `npm start`
+
+## Advanced run
+
 **install packages**
 1. `npm i -g lerna`
 2. `lerna bootstrap`
@@ -32,6 +38,6 @@ if you have any new feature or existing feature you wnat to create or improve fe
 2. `npm start`
 
 
-**run view (web server)**
+**run views (web server)**
 1. `cd packages/views`
 2. `npm start`

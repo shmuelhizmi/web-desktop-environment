@@ -6,13 +6,6 @@ module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
     [
-      "module-alias", [
-        {
-          "http": join(__dirname, "./App"),
-        }
-      ]
-    ]
-    [
       "module-resolver",
       {
         extensions: [

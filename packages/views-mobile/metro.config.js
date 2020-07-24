@@ -5,7 +5,15 @@
  * @format
  */
 
+const {join} = require("path")
+
 module.exports = {
+  resolver: {
+    extraNodeModules: {
+      "http": join(__dirname, "index.js"), // mock reflow server modules
+      "socket.io": join(__dirname, "index.js"), // mock reflow server modules
+    }
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {

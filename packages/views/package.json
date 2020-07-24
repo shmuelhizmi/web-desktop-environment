@@ -19,7 +19,9 @@
     "uws": "10.148.1",
     "xterm": "4.7.0",
     "xterm-addon-fit": "0.4.0",
-    "@web-desktop-environment/shared": "1.0.0"
+    "@web-desktop-environment/shared": "1.0.0",
+    "react-resizable": "1.10.1",
+    "react-resize-detector": "5.0.6"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
@@ -84,7 +86,8 @@
     "webpack": "4.42.0",
     "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "2.2.0",
-    "workbox-webpack-plugin": "4.3.1"
+    "workbox-webpack-plugin": "4.3.1",
+    "@types/react-resize-detector": "2.1.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

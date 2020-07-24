@@ -13,6 +13,7 @@ import io from "socket.io-client";
 import { reflowConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
+import ResizeDetector from "react-resize-detector";
 import "xterm/css/xterm.css";
 
 const styles = (theme: Theme) =>
@@ -22,11 +23,14 @@ const styles = (theme: Theme) =>
 			height: "100%",
 			border: `1px solid ${theme.windowBorderColor}`,
 			borderTop: "none",
-			borderRadius: "0 0 15px 15px",
+			borderRadius: "0 0 9px 9px",
 			background: theme.background.main,
-			paddingBottom: 15,
 			backdropFilter: "blur(15px)",
 			boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
+		},
+		body: {
+			height: "calc(100% - 8px)",
+			width: "100%",
 			"& .xterm-viewport": {
 				background: "#fff0",
 			},
@@ -71,20 +75,28 @@ class Terminal extends ReflowReactComponent<
 		}
 	};
 
+	onResize = () => {
+		this.termFit.fit();
+		this.socket.emit("setColumns", this.term.cols);
+	};
+
 	render() {
 		const { classes } = this.props;
 		this.term.setOption("theme", this.getTermTheme());
-		this.termFit.fit();
-		this.socket.emit("setColumns", this.term.cols);
+		this.onResize();
 		return (
-			<div
-				className={classes.root}
-				ref={(div) => {
-					if (div) {
-						this.containerElement = div;
-					}
-				}}
-			></div>
+			<ResizeDetector onResize={this.onResize}>
+				<div className={classes.root}>
+					<div
+						className={classes.body}
+						ref={(div) => {
+							if (div) {
+								this.containerElement = div;
+							}
+						}}
+					></div>
+				</div>
+			</ResizeDetector>
 		);
 	}
 }

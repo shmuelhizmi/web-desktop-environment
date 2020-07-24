@@ -1,8 +1,7 @@
 import { App } from "@apps/index";
 import { cpu, mem, osInfo, diskLayout } from "systeminformation";
-import { defaultFlowInput } from "@managers/desktopManager";
 
-const terminalFlow = <App<defaultFlowInput>["flow"]>(async ({
+const terminalFlow = <App<{}>["flow"]>(async ({
 	view,
 	views,
 	input: { parentLogger, desktopManager },
@@ -77,6 +76,10 @@ export const settings: App<undefined> = {
 		height: 600,
 		width: 920,
 		position: { x: 50, y: 50 },
+		maxWidth: 1200,
+		maxHeight: 900,
+		minWidth: 500,
+		minHeight: 600,
 	},
 };
 

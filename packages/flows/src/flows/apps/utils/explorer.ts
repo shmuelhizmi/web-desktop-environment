@@ -62,12 +62,11 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 				files: await listFiles(),
 			});
 		})
-		.on("createFolder", async (name) => {
-			await fs.mkdir(join(currentPath, name));
+		.on("createFolder", async (file) => {
+			await fs.mkdir(file);
 			await updateFiles();
 		})
-		.on("delete", async (name) => {
-			const file = join(currentPath, name);
+		.on("delete", async (file) => {
 			await fs.remove(file);
 			await updateFiles();
 		})
@@ -98,6 +97,10 @@ export const explorer: App<ExplorerInput> = {
 	window: {
 		height: 600,
 		width: 720,
-		position: { x: 50, y: 50 },
+		position: { x: 150, y: 150 },
+		maxHeight: 800,
+		maxWidth: 1200,
+		minHeight: 450,
+		minWidth: 600,
 	},
 };

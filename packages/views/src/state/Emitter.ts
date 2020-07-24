@@ -10,4 +10,9 @@ export default class Emiiter<EventList> {
 		event: T,
 		listener: (data: EventList[T]) => void
 	) => this.emitter.on(event as string, listener);
+
+	public removeListener = <T extends keyof EventList>(
+		event: T,
+		listener: (data: EventList[T]) => void
+	) => this.emitter.removeListener(event as string, listener);
 }

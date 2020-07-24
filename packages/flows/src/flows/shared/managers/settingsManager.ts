@@ -5,7 +5,6 @@ import { mergeDeep } from "@utils/mergeObjects";
 import Emitter from "@utils/emitter";
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
-import waitFor from "@utils/waitFor";
 import Logger from "@utils/logger";
 
 interface SettingsEvent {
@@ -78,21 +77,15 @@ export default class SettingsManager {
 		this.emitter.call("init", this.settings);
 	}
 
-	private isUpdatingSettings = false;
 	async setSettings(newSettings: PartialPartial<Settings>) {
 		if (this.isInitialized) {
-			if (this.isUpdatingSettings) {
-				await waitFor(() => !this.isUpdatingSettings, 25 * Math.random());
-			}
-			this.isUpdatingSettings = true;
 			mergeDeep<Settings>(this._settings, newSettings);
 			this.emitter.call("onNewSettings", this.settings);
-			await fs.writeJSON(this.settingsFilePath, this._settings);
-			this.isUpdatingSettings = false;
+			// use sync to avoid tow setSettings call trying to write the file in the same time
+			fs.writeJSONSync(this.settingsFilePath, this._settings);
 		} else {
-			throw new Error(
-				"please update settings only after initilazing settings manager"
-			);
+			await new Promise((res) => this.emitter.on("init", res));
+			this.setSettings(newSettings);
 		}
 	}
 }

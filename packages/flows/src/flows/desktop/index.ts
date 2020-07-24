@@ -1,11 +1,12 @@
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { apps } from "@apps/index";
+import * as apps from "@apps/index";
 import { defaultFlowInput } from "@managers/desktopManager";
 
 export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 	view,
 	views,
+	viewerParameters,
 	input: { desktopManager, parentLogger },
 }) => {
 	const logger = parentLogger.mount("desktop");
@@ -28,9 +29,10 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 		})),
 	});
 
-	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) =>
-		desktop.update({ background: settings.desktop.background })
-	);
+	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
+		desktop.update({ background: settings.desktop.background });
+		viewerParameters({ theme: settings.desktop.theme });
+	});
 
 	desktopManager.windowManager.emitter.on("onAppsUpdate", (openApps) => {
 		desktop.update({

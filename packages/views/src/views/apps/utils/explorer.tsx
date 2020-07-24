@@ -8,18 +8,19 @@ import { Theme } from "@root/theme";
 import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
+import Emiiter from "@state/Emitter";
 
 const styles = (theme: Theme) =>
 	createStyles({
 		root: {
 			width: "100%",
 			height: "100%",
-			borderRadius: "0 0 15px 15px",
+			borderRadius: "0 0 9px 9px",
 			background: theme.background.main,
 			border: `1px solid ${theme.windowBorderColor}`,
 			borderTop: "none",
 			boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
-			paddingBottom: 15,
+			paddingBottom: 2,
 			backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
 		},
 		actionBarContainer: {
@@ -97,13 +98,14 @@ const styles = (theme: Theme) =>
 			border: `${theme.windowBorderColor} 1px solid`,
 			borderRadius: 7,
 			width: "100%",
-			height: "90%",
+			height: "calc(100% - 80px)",
 			overflowY: "auto",
 		},
 		fileContainer: {
 			display: "grid",
-			gridTemplateColumns: "repeat(6,1fr)",
+			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 120px))",
 			margin: 15,
+			justifyContent: "center",
 			gridGap: 10,
 			gridAutoRows: 100,
 		},
@@ -135,7 +137,7 @@ const styles = (theme: Theme) =>
 			whiteSpace: "nowrap",
 			overflow: "hidden",
 			textOverflow: "ellipsis",
-			maxWidth: 100,
+			maxWidth: "100%",
 			textAlign: "center",
 			userSelect: "none",
 		},
@@ -227,24 +229,32 @@ const styles = (theme: Theme) =>
 		},
 	});
 
+interface Confirm {
+	message: string;
+	result?: boolean;
+}
+
+interface Prompt {
+	message: string;
+	value: string;
+	result?: boolean;
+}
+
 interface ExplorerState {
 	fileIsOverFile?: number;
 	selectedFile?: number;
 	dragedFile?: File;
 	copyPath?: { fullPath: string; name: string };
 	cutPath?: { fullPath: string; name: string };
-	confirm?: {
-		message: string;
-		result?: boolean;
-	};
-	prompt?: {
-		message: string;
-		value: string;
-		result?: boolean;
-	};
+	confirm?: Confirm;
+	prompt?: Prompt;
 }
 
-// using ReflowReactComponent in this case provides the event() and done() callbacks.
+interface ExplorerEvents {
+	confirmDone: Confirm;
+	promptDone: Prompt;
+}
+
 class Explorer extends ReflowReactComponent<
 	ExplorerInterface,
 	WithStyles<typeof styles>,
@@ -256,8 +266,10 @@ class Explorer extends ReflowReactComponent<
 		this.state = {};
 	}
 
+	emitter = new Emiiter<ExplorerEvents>();
+
 	confirm = async (message: string) => {
-		return await new Promise((resolve) => {
+		return await new Promise((resolve, reject) => {
 			this.setState(
 				{
 					confirm: {
@@ -265,16 +277,16 @@ class Explorer extends ReflowReactComponent<
 					},
 				},
 				() => {
-					const checkForResult = () => {
-						const { confirm } = this.state;
-						if (confirm && confirm.result !== undefined) {
-							resolve(confirm.result);
+					const confirmDone = (confirm: Confirm) => {
+						if (confirm.result) {
+							resolve({ result: confirm.result });
 							this.setState({ confirm: undefined });
 						} else {
-							setTimeout(checkForResult, 5);
+							reject(new Error("confirm does not have a result."));
 						}
+						this.emitter.removeListener("confirmDone", confirmDone);
 					};
-					checkForResult();
+					this.emitter.on("confirmDone", confirmDone);
 				}
 			);
 		});
@@ -283,7 +295,7 @@ class Explorer extends ReflowReactComponent<
 	prompt = async (
 		message: string
 	): Promise<{ result: boolean; value: string }> => {
-		return await new Promise((resolve) => {
+		return await new Promise((resolve, reject) => {
 			this.setState(
 				{
 					prompt: {
@@ -292,16 +304,16 @@ class Explorer extends ReflowReactComponent<
 					},
 				},
 				() => {
-					const checkForResult = () => {
-						const { prompt } = this.state;
-						if (prompt && prompt.result !== undefined) {
+					const promptFinish = (prompt: Prompt) => {
+						if (prompt.result) {
 							resolve({ result: prompt.result, value: prompt.value });
-							this.setState({ prompt: undefined });
 						} else {
-							setTimeout(checkForResult, 5);
+							reject(new Error("prompt does not have a result."));
 						}
+						this.setState({ prompt: undefined });
+						this.emitter.removeListener("promptDone", promptFinish);
 					};
-					checkForResult();
+					this.emitter.on("promptDone", promptFinish);
 				}
 			);
 		});
@@ -399,20 +411,28 @@ class Explorer extends ReflowReactComponent<
 	};
 
 	deleteSelected = async () => {
+		const { currentPath, platfromPathSperator } = this.props;
 		if (
 			this.selectedFile &&
 			(await this.confirm(
 				`are you sure you want to delete ${this.selectedFile.name}`
 			))
 		) {
-			this.props.event("delete", this.selectedFile.name);
+			this.props.event(
+				"delete",
+				`${currentPath}${platfromPathSperator}${this.selectedFile.name}`
+			);
 		}
 	};
 
 	createFolder = async () => {
 		const promptCreate = await this.prompt("please enter folder name:");
+		const { currentPath, platfromPathSperator } = this.props;
 		if (promptCreate.value) {
-			this.props.event("createFolder", promptCreate.value);
+			this.props.event(
+				"createFolder",
+				`${currentPath}${platfromPathSperator}${promptCreate.value}`
+			);
 		}
 	};
 
@@ -563,9 +583,16 @@ class Explorer extends ReflowReactComponent<
 										className={classes.dialogButton}
 										onClick={() =>
 											this.state.prompt &&
-											this.setState({
-												prompt: { ...this.state.prompt, result: false },
-											})
+											this.setState(
+												{
+													prompt: { ...this.state.prompt, result: false },
+												},
+												() =>
+													this.emitter.call(
+														"promptDone",
+														this.state.prompt as Prompt
+													)
+											)
 										}
 									>
 										Cancel
@@ -575,9 +602,16 @@ class Explorer extends ReflowReactComponent<
 										className={`${classes.dialogButton} ${classes.dialogButtonPrimary}`}
 										onClick={() =>
 											this.state.prompt &&
-											this.setState({
-												prompt: { ...this.state.prompt, result: true },
-											})
+											this.setState(
+												{
+													prompt: { ...this.state.prompt, result: true },
+												},
+												() =>
+													this.emitter.call(
+														"promptDone",
+														this.state.prompt as Prompt
+													)
+											)
 										}
 									>
 										OK
@@ -594,15 +628,21 @@ class Explorer extends ReflowReactComponent<
 									<Button
 										className={classes.dialogButton}
 										onClick={() =>
-											this.setState((state) =>
-												state.confirm?.message
-													? {
-															confirm: {
-																message: state.confirm.message,
-																result: false,
-															},
-													  }
-													: {}
+											this.setState(
+												(state) =>
+													state.confirm?.message
+														? {
+																confirm: {
+																	message: state.confirm.message,
+																	result: false,
+																},
+														  }
+														: {},
+												() =>
+													this.emitter.call(
+														"confirmDone",
+														this.state.confirm as Confirm
+													)
 											)
 										}
 									>
@@ -612,15 +652,21 @@ class Explorer extends ReflowReactComponent<
 										color="secondary"
 										className={`${classes.dialogButton} ${classes.dialogButtonPrimary}`}
 										onClick={() =>
-											this.setState((state) =>
-												state.confirm?.message
-													? {
-															confirm: {
-																message: state.confirm.message,
-																result: true,
-															},
-													  }
-													: {}
+											this.setState(
+												(state) =>
+													state.confirm?.message
+														? {
+																confirm: {
+																	message: state.confirm.message,
+																	result: true,
+																},
+														  }
+														: {},
+												() =>
+													this.emitter.call(
+														"confirmDone",
+														this.state.confirm as Confirm
+													)
 											)
 										}
 									>

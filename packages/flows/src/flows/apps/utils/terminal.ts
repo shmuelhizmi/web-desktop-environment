@@ -86,6 +86,10 @@ export const terminal: App<TerminalInput> = {
 		height: 400,
 		width: 1000,
 		position: { x: 50, y: 50 },
+		maxHeight: 900,
+		maxWidth: 1200,
+		minWidth: 350,
+		minHeight: 200,
 	},
 };
 

@@ -8,6 +8,7 @@
     "baseUrl": "src",
     "paths": {
       "@index": ["index"],
+      "@flows": ["flows/flows"],
       "@apps/*": ["flows/apps/*"],
       "@desktop/*": ["flows/desktop/*"],
       "@container/*": ["flows/container/*"],

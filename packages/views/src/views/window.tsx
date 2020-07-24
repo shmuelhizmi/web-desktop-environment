@@ -8,11 +8,27 @@ import Dragable from "react-draggable";
 import windowManager from "@state/WindowManager";
 import { windowsBarHeight } from "@views/desktop";
 import Icon from "@components/icon";
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import { ResizableBox } from "react-resizable";
+import "react-resizable/css/styles.css";
+
+const defualtWindowSize = {
+	height: 600,
+	width: 700,
+	maxHeight: 700,
+	maxWidth: 1000,
+	minHeight: 300,
+	minWidth: 400,
+};
+
+export const windowBarHeight = 25;
 
 const styles = (theme: Theme) =>
 	createStyles({
 		root: {
 			position: "absolute",
+			padding: 5,
 		},
 		bar: {
 			background: theme.windowBarColor,
@@ -23,6 +39,8 @@ const styles = (theme: Theme) =>
 			cursor: "move",
 			display: "flex",
 			flexDirection: "row-reverse",
+			height: windowBarHeight,
+			width: "100%",
 		},
 		barCollaps: {
 			borderRadius: "7px 7px 7px 7px",
@@ -30,6 +48,8 @@ const styles = (theme: Theme) =>
 		},
 		body: {
 			borderRadius: "0 0 3px 3px",
+			width: "100%",
+			height: `calc(100% - ${windowBarHeight}px)`,
 		},
 		barButtonsContainer: {
 			position: "relative",
@@ -82,19 +102,19 @@ const styles = (theme: Theme) =>
 		},
 	});
 
+type Size = {
+	height: number;
+	width: number;
+};
+
 interface WindowState {
-	size: { height: number; width: number };
+	size: Size;
 	canDrag: boolean;
 	collaps: boolean;
 	position: { x: number; y: number };
 	isActive?: boolean;
 }
 
-const defualtWindowSize = { height: 600, width: 700 };
-
-export const windowBarHeight = 25;
-
-// using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Window extends ReflowReactComponent<
 	WindowInterface,
 	WithStyles<typeof styles>,
@@ -128,6 +148,7 @@ class Window extends ReflowReactComponent<
 			this.props.event("setWindowState", {
 				minimized: true,
 				position: this.state.position,
+				size: this.state.size,
 			});
 			if (id === this.id) {
 				this.moveToTop();
@@ -139,6 +160,7 @@ class Window extends ReflowReactComponent<
 			this.props.event("setWindowState", {
 				minimized: false,
 				position: this.state.position,
+				size: this.state.size,
 			});
 			if (id === this.id) {
 				this.moveToTop();
@@ -187,8 +209,12 @@ class Window extends ReflowReactComponent<
 			title,
 			icon,
 			event,
-			window: { maxHeight, maxWidth, minHeight, minWidth },
+			window: windowSizes,
 		} = this.props;
+		const { maxHeight, maxWidth, minHeight, minWidth } = {
+			...defualtWindowSize,
+			...windowSizes,
+		};
 		return ReactDOM.createPortal(
 			<div
 				ref={(element) => {
@@ -232,78 +258,78 @@ class Window extends ReflowReactComponent<
 						event("setWindowState", {
 							position,
 							minimized: this.state.collaps,
+							size: this.state.size,
 						});
 					}}
 				>
-					<div
-						className={classes.root}
-						onClick={() => this.moveToTop()}
-						style={{
-							width: size.width,
-						}}
-					>
-						<div
-							style={{ height: windowBarHeight, width: size.width }}
-							onMouseEnter={() => this.setState({ canDrag: true })}
-							onMouseLeave={() => this.setState({ canDrag: false })}
-							className={`${classes.bar} ${
-								this.state.collaps ? classes.barCollaps : ""
-							}`}
+					<div className={classes.root} onClick={() => this.moveToTop()}>
+						<ResizableBox
+							width={size.width}
+							height={size.height}
+							onResize={(_e: null, resize: { size: Size }) =>
+								this.setState({ size: resize.size })
+							}
+							onResizeStop={() =>
+								event("setWindowState", {
+									position: this.state.position,
+									minimized: this.state.collaps,
+									size: this.state.size,
+								})
+							}
+							minConstraints={[minWidth, minHeight]}
+							maxConstraints={[maxWidth, maxHeight]}
 						>
-							<div className={classes.barButtonsContainer}>
-								<div
-									onClick={() => {
-										windowManager.updateState(this.id, {
-											minimized: !this.state.collaps,
-										});
-									}}
-									className={`${classes.barButton} ${
-										isActive
-											? classes.barButtonCollaps
-											: classes.barButtonInactive
-									}`}
-								/>
-								<div
-									className={`${classes.barButton} ${
-										isActive ? classes.barButtonExit : classes.barButtonInactive
-									}`}
-									onClick={() => {
-										done({});
-										windowManager.closeWindow(this.id);
-									}}
-								/>
-							</div>
-							<div className={classes.barTitle}>
-								{title} -{" "}
-								{icon.type === "icon" ? (
-									<Icon
-										parentClassName={classes.barTitleIcon}
-										name={icon.icon}
-									/>
-								) : (
-									<img
-										className={classes.barTitleIcon}
-										alt="windows icon"
-										width={14}
-										height={14}
-									/>
-								)}
-							</div>
-						</div>
-						{!collaps && (
 							<div
-								className={classes.body}
-								style={{
-									maxHeight,
-									maxWidth,
-									minHeight,
-									minWidth,
-									...size,
-								}}
+								onMouseEnter={() => this.setState({ canDrag: true })}
+								onMouseLeave={() => this.setState({ canDrag: false })}
+								className={`${classes.bar} ${
+									this.state.collaps ? classes.barCollaps : ""
+								}`}
 							>
-								{children}
+								<div className={classes.barButtonsContainer}>
+									<div
+										onClick={() => {
+											windowManager.updateState(this.id, {
+												minimized: !this.state.collaps,
+											});
+										}}
+										className={`${classes.barButton} ${
+											isActive
+												? classes.barButtonCollaps
+												: classes.barButtonInactive
+										}`}
+									/>
+									<div
+										className={`${classes.barButton} ${
+											isActive
+												? classes.barButtonExit
+												: classes.barButtonInactive
+										}`}
+										onClick={() => {
+											done({});
+											windowManager.closeWindow(this.id);
+										}}
+									/>
+								</div>
+								<div className={classes.barTitle}>
+									{title} -{" "}
+									{icon.type === "icon" ? (
+										<Icon
+											parentClassName={classes.barTitleIcon}
+											name={icon.icon}
+										/>
+									) : (
+										<img
+											className={classes.barTitleIcon}
+											alt="windows icon"
+											width={14}
+											height={14}
+										/>
+									)}
+								</div>
 							</div>
-						)}
+							{!collaps && <div className={classes.body}>{children}</div>}
+						</ResizableBox>
 					</div>
 				</Dragable>
 			</div>,

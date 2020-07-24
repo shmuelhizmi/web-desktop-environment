@@ -31,11 +31,11 @@ export interface Input {
 
 export interface Events {
   upload: Upload;
-  createFolder: string; // name
+  createFolder: string; // path
   move: Move;
   copy: Move;
-  delete: string; //name
-  requestDownload: string; // name
+  delete: string; //path
+  requestDownload: string; // path
   changeCurrentPath: string; //path
 }
 

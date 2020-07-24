@@ -9,11 +9,20 @@ export interface Input {
   window: Window;
 }
 
-export interface Events {
-  setWindowState: {
-    minimized?: boolean;
-    position?: { x: number; y: number };
+export interface LastWindowState {
+  minimized?: boolean;
+  position?: {
+    x: number;
+    y: number;
   };
+  size: {
+    width: number;
+    height: number;
+  };
+}
+
+export interface Events {
+  setWindowState: LastWindowState;
   launchApp: {
     flow: string;
     params: any;

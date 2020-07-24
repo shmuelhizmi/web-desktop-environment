@@ -1,7 +1,6 @@
 import Emitter from "@utils/emitter";
-import { apps } from "@apps/index";
+import * as apps from "@apps/index";
 import { createReflow } from "@index";
-import themeProvider, { CancelEmitterEvent } from "@container/themeProvider";
 import Logger from "@utils/logger";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import window from "@desktop/window";
@@ -34,19 +33,23 @@ export default class WindowManager {
 		const port = await this.desktopManager.portManager.getPort();
 		const id = this.newAppId;
 		this.newAppId++;
-		const cancelEmiiter = new Emitter<CancelEmitterEvent>();
-		createReflow(port)
-			.start(themeProvider, {
-				childFlow: window,
-				cancelEmiiter: cancelEmiiter,
+		const process = createReflow(
+			port,
+			this.desktopManager.settingsManager.settings.desktop.theme
+		);
+
+		process
+			.start(window, {
 				desktopManager: this.desktopManager,
 				parentLogger: this.logger,
-				childInput: {
-					app: handler,
-					appParams: input,
-				},
+				app: handler,
+				appParams: input,
 			})
 			.then(() => {
+				this._runningApps = this._runningApps.filter((app) => app.id !== id);
+				this.emitter.call("onAppsUpdate", this._runningApps);
+			})
+			.catch(() => {
 				this._runningApps = this._runningApps.filter((app) => app.id !== id);
 				this.emitter.call("onAppsUpdate", this._runningApps);
 			});
@@ -55,7 +58,7 @@ export default class WindowManager {
 			id,
 			name: handler.name,
 			port,
-			cancel: () => cancelEmiiter.call("cancel", null),
+			cancel: process.cancel,
 		};
 		this.emitter.call("onAppLaunch", openApp);
 		this._runningApps.push(openApp);

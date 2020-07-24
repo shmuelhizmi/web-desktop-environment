@@ -150,7 +150,6 @@ interface DesktopState {
 	openWindows: Window[];
 }
 
-// using ReflowReactComponent in this case provides the event() and done() callbacks.
 class Desktop extends ReflowReactComponent<
 	DesktopInterface,
 	WithStyles<typeof styles>,

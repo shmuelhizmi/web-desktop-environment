@@ -27,10 +27,4 @@ export interface App<Params> {
 	>;
 }
 
-export const apps: {
-	[app: string]: App<unknown>;
-} = {
-	terminal,
-	explorer,
-	settings,
-};
+export { terminal, explorer, settings };

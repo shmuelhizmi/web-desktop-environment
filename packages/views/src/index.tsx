@@ -6,8 +6,10 @@ import Login from "@root/loginScreen/Login";
 import "@root/index.css";
 import * as views from "@root/views";
 import "typeface-jetbrains-mono";
-import { ThemeProvider } from "@material-ui/styles";
 import { defaultTheme } from "@root/theme";
+import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { ThemeProvider as TP } from "@material-ui/styles";
+import ThemeProvider from "@components/themeProvider";
 
 class ReflowConnectionManager {
 	host: string;
@@ -15,7 +17,9 @@ class ReflowConnectionManager {
 		this.host = host;
 	}
 	connect = (port: number, mountPoint?: Element) => {
-		const transport = new Transports.WebSocketsTransport({
+		const transport = new Transports.WebSocketsTransport<{
+			theme?: ThemeType;
+		}>({
 			port,
 			host: this.host,
 		});
@@ -24,6 +28,7 @@ class ReflowConnectionManager {
 				element: mountPoint,
 				transport,
 				views,
+				wrapper: ThemeProvider,
 			});
 		}
 		return { transport, views };
@@ -43,9 +48,9 @@ export const connectToServer = (host: string, port: number) => {
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ThemeProvider theme={defaultTheme}>
+		<TP theme={defaultTheme}>
 			<Login onLogin={connectToServer} />
-		</ThemeProvider>
+		</TP>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

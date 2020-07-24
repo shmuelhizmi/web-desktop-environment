@@ -4,14 +4,15 @@ import {
 	viewInterfaces,
 } from "@web-desktop-environment/interfaces/lib";
 import desktop from "@desktop/index";
-import themeProvider from "@container/themeProvider";
 import DesktopManager from "@managers/desktopManager";
 import Logger from "@utils/logger";
+import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
-export const createReflow = (port: number) =>
+export const createReflow = (port: number, theme: ThemeType) =>
 	new Reflow<ViewInterfacesType>({
 		transport: new Transports.WebSocketsTransport({ port }),
 		views: viewInterfaces,
+		viewerParameters: { theme },
 	});
 
 const rootLogger = new Logger();
@@ -22,13 +23,15 @@ desktopManager.settingsManager.initalize().then(() => {
 	desktopManager.portManager
 		.getPort(true)
 		.then((port) => {
-			const reflow = createReflow(port);
+			const reflow = createReflow(
+				port,
+				desktopManager.settingsManager.settings.desktop.theme
+			);
 			rootLogger.info(`starting webOS on port ${port}`);
 			reflow
-				.start(themeProvider, {
-					childFlow: desktop,
-					parentLogger: rootLogger,
+				.start(desktop, {
 					desktopManager,
+					parentLogger: rootLogger,
 				})
 				.then(() => {
 					rootLogger.warn("app exist");

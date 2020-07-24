@@ -180,19 +180,15 @@ class Desktop extends ReflowReactComponent<
 					app && event("launchApp", { flow: app.flow, params: {} })
 				}
 			>
-				{app && (
-					<>
-						{app.icon.type === "img" ? (
-							<img alt={`${app.name} icon`} src={app.icon.icon} />
-						) : (
-							<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
-						)}
-						<div className={classes.appContent}>
-							<div className={classes.appName}>{app.name}</div>
-							<div>{app.description}</div>
-						</div>
-					</>
+				{app.icon.type === "img" ? (
+					<img alt={`${app.name} icon`} src={app.icon.icon} />
+				) : (
+					<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
 				)}
+				<div className={classes.appContent}>
+					<div className={classes.appName}>{app.name}</div>
+					<div>{app.description}</div>
+				</div>
 			</div>
 		);
 	};

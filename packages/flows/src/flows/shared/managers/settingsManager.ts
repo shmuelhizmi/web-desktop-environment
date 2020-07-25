@@ -44,6 +44,7 @@ export default class SettingsManager {
 		desktop: {
 			theme: "transparent",
 			background: "url(https://picsum.photos/1920/1080)",
+			nativeBackground: "https://picsum.photos/1080/1920",
 		},
 		network: {
 			ports: {

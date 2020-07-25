@@ -1,12 +1,6 @@
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
-export type ColorVariants =
-	| "main"
-	| "dark"
-	| "light"
-	| "transparent"
-	| "transparentDark"
-	| "transparentLight";
+export type ColorVariants = "main" | "dark" | "light" | "transparent";
 
 export type Colors =
 	| "background"
@@ -31,9 +25,6 @@ export interface Theme {
 
 export interface Color {
 	main: string;
-	transparent?: string;
-	transparentLight?: string;
-	transparentDark?: string;
 	dark: string;
 	light: string;
 	text: string;
@@ -49,16 +40,12 @@ const transparentTheme: Theme = {
 		main: "#BFBFBF27",
 		light: "#EFEFEF67",
 		dark: "#8F8F8F67",
-		transparent: "#BFBFBF37",
-		transparentDark: "#BFBFBF44",
 		text: "#fff",
 	},
 	primary: {
 		main: "#fff9",
 		light: "#fffe",
 		dark: "#eee7",
-		transparent: "#fff2",
-		transparentDark: "#fff4",
 		text: "#000",
 	},
 	secondary: {
@@ -75,7 +62,6 @@ const transparentTheme: Theme = {
 	},
 	success: {
 		main: "#21c62f88",
-		transparent: "#21c62f48",
 		dark: "#21c62fb8",
 		light: "#21c62fee",
 		text: "#fff",
@@ -96,23 +82,17 @@ const lightTheme: Theme = {
 	background: {
 		main: "#f6f8fa",
 		light: "#fff",
-		transparent: "#fff9",
-		transparentDark: "#dadbdd99",
 		dark: "#dadbdd",
 		text: "#222",
 	},
 	primary: {
 		main: "#fe8270",
 		light: "#ff9270",
-		transparent: "#fe827079",
 		dark: "#ce7250",
-		transparentDark: "#ce725099",
 		text: "#000",
 	},
 	secondary: {
 		main: "#4585b2",
-		transparent: "#4585b288",
-		transparentDark: "#35759299",
 		light: "#abcbe2",
 		dark: "#357592",
 		text: "#222",
@@ -140,30 +120,25 @@ const lightTheme: Theme = {
 const darkTheme: Theme = {
 	type: "dark",
 	shadowColor: "#0007",
-	windowBorderColor: "#000",
+	windowBorderColor: "#fff",
 	windowBarColor: "#333333",
 	background: {
-		main: "#333333",
-		light: "#444444",
-		transparent: "#373737e9",
-		dark: "#242424",
-		transparentDark: "#24242499",
+		main: "#121212",
+		light: "#424242",
+		dark: "#010001",
 		text: "#d9d9da",
 	},
 	primary: {
-		main: "#eee",
-		transparent: "#e8e8e869",
-		light: "#fff",
-		dark: "#bbb",
-		transparentDark: "#bebebe99",
-		text: "#000",
+		main: "#5900e3",
+		light: "#ac6bfb",
+		dark: "#240068",
+		text: "#f3e7fd",
 	},
 	secondary: {
-		main: "#315bef",
-		dark: "#214b9f",
-		light: "#416bef",
-		transparent: "#315bef77",
-		text: "#fff",
+		main: "#009591",
+		dark: "#005456",
+		light: "#00c4b4",
+		text: "#c4fff4",
 	},
 	error: {
 		main: "#db5049ee",

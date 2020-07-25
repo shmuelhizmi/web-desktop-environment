@@ -59,7 +59,7 @@ export default class WindowManager {
 			id,
 			name: handler.name,
 			port,
-			cancel: process.cancel,
+			cancel: () => process.cancel(),
 		};
 		this.emitter.call("onAppLaunch", openApp);
 		this._runningApps.push(openApp);
@@ -68,7 +68,7 @@ export default class WindowManager {
 
 	killApp = (id: number) => {
 		this._runningApps.find((app) => app.id === id).cancel();
-		this._runningApps.filter((app) => app.id !== id);
+		this._runningApps = this._runningApps.filter((app) => app.id !== id);
 		this.emitter.call("onAppsUpdate", this._runningApps);
 	};
 }

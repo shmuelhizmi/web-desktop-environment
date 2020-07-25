@@ -19,6 +19,7 @@ export interface App {
 
 export interface Input {
   background: string;
+  nativeBackground: string;
   apps: App[];
   openApps: OpenApp[];
 }
@@ -28,6 +29,7 @@ export interface Events {
     flow: string;
     params: any;
   };
+  closeApp: number; // app id
 }
 
 export interface Output {}

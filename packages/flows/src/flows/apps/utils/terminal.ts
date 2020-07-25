@@ -71,10 +71,8 @@ const getDefaultBash = () => {
 	}
 };
 
-// from https://svaddi.dev/how-to-create-web-based-terminals/;
-
 export const terminal: App<TerminalInput> = {
-	name: "Termial",
+	name: "Terminal",
 	description: "a terminal window",
 	flow: terminalFlow,
 	defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
@@ -97,6 +95,7 @@ export const terminal: App<TerminalInput> = {
 	},
 };
 
+// from https://svaddi.dev/how-to-create-web-based-terminals/;
 class PTY {
 	shell: string;
 	ptyProcess: IPty;

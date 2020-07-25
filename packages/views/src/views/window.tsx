@@ -182,6 +182,10 @@ class Window extends ReflowReactComponent<
 		});
 	}
 
+	componentWillUnmount = () => {
+		windowManager.closeWindow(this.id);
+	};
+
 	handleClickOutside = () => {
 		this.setState({ isActive: false });
 	};

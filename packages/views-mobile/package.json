@@ -1,5 +1,5 @@
 {
-  "name": "viewsmobile",
+  "name": "@web-desktop-environment/views-mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,14 +7,24 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "rm -r node_modules/socket.io"
   },
   "dependencies": {
-    "react": "16.13.1",
-    "react-native": "0.63.0",
     "@mcesystems/reflow": "^4.3.4",
     "@mcesystems/reflow-react-display-layer": "^4.3.4",
-    "@web-desktop-environment/interfaces": "1.0.0"
+    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/native": "^5.7.1",
+    "@react-navigation/stack": "^5.7.1",
+    "@web-desktop-environment/interfaces": "^1.0.0",
+    "react": "^16.13.1",
+    "react-native": "^0.63.0",
+    "react-native-gesture-handler": "^1.7.0",
+    "react-native-linear-gradient": "^2.5.6",
+    "react-native-reanimated": "^1.10.1",
+    "react-native-safe-area-context": "^3.1.1",
+    "react-native-screens": "^2.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

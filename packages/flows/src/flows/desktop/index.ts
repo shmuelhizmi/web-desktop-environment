@@ -13,9 +13,10 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 	const desktop = view(0, views.desktop, {
 		background: desktopManager.settingsManager.settings.desktop.background, //random image
 		apps: Object.keys(apps).map((flow) => {
-			const { name, description, icon } = apps[flow];
+			const { name, description, icon, nativeIcon } = apps[flow];
 			return {
 				name,
+				nativeIcon,
 				description,
 				icon,
 				flow,
@@ -23,6 +24,7 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 		}),
 		openApps: desktopManager.windowManager.runningApps.map((app) => ({
 			icon: app.icon,
+			nativeIcon: app.nativeIcon,
 			id: app.id,
 			name: app.name,
 			port: app.port,
@@ -38,6 +40,7 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 		desktop.update({
 			openApps: openApps.map((app) => ({
 				icon: app.icon,
+				nativeIcon: app.nativeIcon,
 				id: app.id,
 				name: app.name,
 				port: app.port,

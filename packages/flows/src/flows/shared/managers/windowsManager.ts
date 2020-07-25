@@ -55,6 +55,7 @@ export default class WindowManager {
 			});
 		const openApp = {
 			icon: handler.icon,
+			nativeIcon: handler.nativeIcon,
 			id,
 			name: handler.name,
 			port,

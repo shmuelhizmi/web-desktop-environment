@@ -78,6 +78,10 @@ export const terminal: App<TerminalInput> = {
 	description: "a terminal window",
 	flow: terminalFlow,
 	defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
+	nativeIcon: {
+		icon: "console",
+		type: "MaterialCommunityIcons",
+	},
 	icon: {
 		type: "icon",
 		icon: "DiTerminal",

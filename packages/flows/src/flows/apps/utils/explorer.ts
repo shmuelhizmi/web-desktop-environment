@@ -94,6 +94,10 @@ export const explorer: App<ExplorerInput> = {
 		type: "icon",
 		icon: "BsFillFolderFill",
 	},
+	nativeIcon: {
+		icon: "folder-multiple",
+		type: "MaterialCommunityIcons",
+	},
 	window: {
 		height: 600,
 		width: 720,

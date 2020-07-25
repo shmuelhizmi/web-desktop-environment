@@ -1,10 +1,11 @@
 import { ViewInterface } from "@mcesystems/reflow";
-import { Icon } from "../shared/icon";
+import { Icon, NativeIcon } from "../shared/icon";
 
 export interface OpenApp {
   port: number;
   name: string;
   icon: Icon;
+  nativeIcon: NativeIcon;
   id: number;
 }
 
@@ -12,6 +13,7 @@ export interface App {
   name: string;
   flow: string;
   icon: Icon;
+  nativeIcon: NativeIcon;
   description: string;
 }
 

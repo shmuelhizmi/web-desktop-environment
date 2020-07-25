@@ -1,4 +1,7 @@
-import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
+import {
+	Icon,
+	NativeIcon,
+} from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { Flow } from "@mcesystems/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { terminal } from "@apps/utils/terminal";
@@ -13,6 +16,7 @@ interface AppEvents {
 
 export interface App<Params> {
 	icon: Icon;
+	nativeIcon: NativeIcon;
 	name: string;
 	defaultInput: Params;
 	description: string;

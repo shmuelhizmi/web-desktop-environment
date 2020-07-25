@@ -72,6 +72,10 @@ export const settings: App<undefined> = {
 		type: "icon",
 		icon: "IoMdSettings",
 	},
+	nativeIcon: {
+		icon: "ios-settings",
+		type: "Ionicons",
+	},
 	window: {
 		height: 600,
 		width: 920,

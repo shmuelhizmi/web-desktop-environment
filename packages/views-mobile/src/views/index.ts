@@ -7,7 +7,7 @@ import desktop from "@views/desktop";
 // system
 //import settings from "@views/apps/system/settings";
 
-export { 
-	desktop, 
+export {
+	desktop,
 	//window, terminal, explorer, settings
- };
+};

@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "@layoutComponents/Home";
 import AppView from "@layoutComponents/AppView";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Theme } from "@root/theme";
 import { ThemeContext } from "@components/themeProvider";
 import Icon from "@components/icon";
@@ -49,15 +49,19 @@ class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
 	makeStyles = (theme: Theme) =>
 		StyleSheet.create({
 			tabBar: {
-				backgroundColor: theme.background.main,
+				backgroundColor:
+					theme.type === "transparent"
+						? theme.secondary.main
+						: theme.background.main,
 				borderTopColor: theme.windowBorderColor,
-				borderTopWidth: 2,
+				borderTopWidth: 1,
+				elevation: theme.type === "transparent" ? 0 : 4,
 			},
 		});
 
 	render() {
 		const { currentApp } = this.state;
-		const { apps, openApps, background, event } = this.props;
+		const { apps, openApps, nativeBackground: background, event } = this.props;
 		return (
 			<ThemeContext.Consumer>
 				{(theme) => {
@@ -73,13 +77,29 @@ class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
 									this.setState({ currentApp: newCurrentApp }),
 								launchApp: (app) =>
 									event("launchApp", { flow: app.flow, params: {} }),
-								closeApp: (id) => event("closeApp", id),
+								closeApp: (id) => {
+									event("closeApp", id);
+									if (id === currentApp?.id) {
+										this.setState({ currentApp: undefined });
+									}
+								},
 							}}
 						>
 							<NavigationContainer>
 								<this.navigator.Navigator
 									screenOptions={({ route }) => ({
-										tabBarIcon: ({ color, size }) =>
+										tabBarLabel: ({ focused }) => (
+											<Text
+												style={{
+													color: focused
+														? theme.primary.light
+														: theme.background.text,
+												}}
+											>
+												{route.name === "Home" ? "Launcher" : currentApp?.name}
+											</Text>
+										),
+										tabBarIcon: ({ color, size, focused }) =>
 											route.name === "Home" || !currentApp ? (
 												<Icon
 													icon={{
@@ -87,7 +107,11 @@ class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
 														type: "MaterialCommunityIcons",
 													}}
 													size={size}
-													color={color}
+													color={
+														focused
+															? theme.primary.light
+															: theme.background.text
+													}
 												/>
 											) : (
 												<Icon

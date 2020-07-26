@@ -1,22 +1,28 @@
 {
   "name": "@web-desktop-environment/views-mobile",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "npm run remove-node-modules-for-mock && react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "rm -r node_modules/socket.io"
+    "remove-node-modules-for-mock": "rimraf node_modules/socket.io",
+    "postinstall": "npm run remove-node-modules-for-mock"
   },
   "dependencies": {
     "@mcesystems/reflow": "^4.3.4",
     "@mcesystems/reflow-react-display-layer": "^4.3.4",
     "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/blur": "^3.6.0",
+    "@react-native-community/datetimepicker": "^2.6.0",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-navigation/native": "^5.7.1",
+    "@react-native-community/netinfo": "^5.9.5",
+    "@react-native-community/picker": "^1.6.5",
     "@react-navigation/bottom-tabs": "^5.7.1",
+    "@react-navigation/native": "^5.7.1",
+    "@react-navigation/stack": "^5.7.1",
     "@web-desktop-environment/interfaces": "^1.0.0",
     "react": "^16.13.1",
     "react-native": "^0.63.0",
@@ -25,6 +31,7 @@
     "react-native-reanimated": "^1.10.1",
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",
+    "react-native-ui-lib": "5.11.0",
     "react-native-vector-icons": "7.0.0"
   },
   "devDependencies": {
@@ -44,7 +51,8 @@
     "react-test-renderer": "16.13.1",
     "prettier": "^2.0.4",
     "typescript": "^3.8.3",
-    "@types/react-native-vector-icons": "4.6.1"
+    "@types/react-native-vector-icons": "4.6.1",
+    "rimraf": "3.0.2"
   },
   "jest": {
     "preset": "react-native",

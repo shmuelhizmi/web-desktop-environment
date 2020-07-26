@@ -12,6 +12,7 @@ import { DesktopContext } from "@views/desktop";
 import { ThemeContext } from "@components/themeProvider";
 import { Theme } from "@root/theme";
 import Icon from "@components/icon";
+import { Card } from "react-native-ui-lib";
 
 class Home extends React.Component {
 	makeStyles = (theme: Theme) =>
@@ -30,25 +31,26 @@ class Home extends React.Component {
 				textAlign: "center",
 				fontFamily: "sans-serif-medium",
 				width: "100%",
-				color: theme.primary.text,
+				color: theme.background.text,
+				fontWeight: "900",
 			},
 			captionContainer: {
 				width: "100%",
 				backgroundColor: theme.background.light,
 				borderTopRightRadius: 15,
 				borderTopLeftRadius: 15,
-				borderBottomColor: theme.windowBorderColor,
-				borderBottomWidth: 1,
+				borderBottomColor: theme.background.light,
+				borderBottomWidth: 3,
 			},
 			appsCard: {
 				backgroundColor: theme.background.main,
 				width: "90%",
 				height: "80%",
 				margin: 25,
-				borderRadius: 15,
+				borderRadius: 18,
 				alignItems: "center",
-				borderColor: theme.windowBorderColor,
-				borderWidth: 1,
+				borderColor: theme.background.light,
+				borderWidth: 3,
 			},
 			appDrawer: {
 				flex: 1,
@@ -60,18 +62,24 @@ class Home extends React.Component {
 				margin: 5,
 			},
 			appCard: {
-				width: "80%",
+				width: "90%",
 				flexDirection: "row",
 				padding: 3,
-				height: 55,
+				height: 85,
 				paddingHorizontal: 10,
 				margin: 7,
-				marginBottom: 10,
-				borderRadius: 5,
+				marginBottom: 5,
 				alignItems: "center",
 				justifyContent: "space-between",
-				borderColor: theme.secondary.main,
+				backgroundColor: theme.background.light,
+				borderColor: theme.background.text,
 				borderWidth: 2,
+			},
+			appLaunchText: {
+				textAlign: "center",
+				fontWeight: "bold",
+				fontSize: 45,
+				color: theme.background.text,
 			},
 		});
 
@@ -115,7 +123,7 @@ class Home extends React.Component {
 														<Icon
 															size={50}
 															icon={openApp.nativeIcon}
-															color={theme.primary.text}
+															color={theme.background.text}
 														/>
 														<View style={{ flex: 4, margin: 2 }}>
 															<Button
@@ -137,37 +145,34 @@ class Home extends React.Component {
 										</View>
 									</View>
 									<View
-										style={{ flex: 4, width: "100%", alignItems: "center" }}
+										style={{ flex: 3, width: "100%", alignItems: "center" }}
 									>
 										<View style={styles.appsCard}>
 											<View style={styles.captionContainer}>
-												<Text style={styles.caption}>All Apps</Text>
+												<Text style={styles.caption}>Launch App</Text>
 											</View>
 											<ScrollView
 												style={styles.appDrawer}
 												contentContainerStyle={styles.appDrawerContainer}
 											>
 												{apps.map((app, index) => (
-													<TouchableOpacity
+													<Card
 														key={index}
-														style={styles.appCard}
-														delayPressIn={20}
-														activeOpacity={0.9}
+														collapsable
+														containerStyle={styles.appCard}
 														onPress={() => desktop.launchApp(app)}
 													>
 														<Icon
 															size={50}
 															icon={app.nativeIcon}
-															color={theme.primary.text}
+															color={theme.background.text}
 														/>
 														<View style={{ flex: 4, margin: 2 }}>
-															<Button
-																color={theme.secondary.light}
-																onPress={() => desktop.launchApp(app)}
-																title={`launch - ${app.name}`}
-															></Button>
+															<Text style={styles.appLaunchText}>
+																{app.name}
+															</Text>
 														</View>
-													</TouchableOpacity>
+													</Card>
 												))}
 											</ScrollView>
 										</View>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { DesktopContext } from "@views/desktop";
 import { ReflowDisplayLayerElement } from "@mcesystems/reflow-react-display-layer";
 import { reflowConnectionManager } from "@root/App";
 import * as views from "@views/index";
+import ThemeProvider from "@components/themeProvider";
 
 class AppView extends React.Component {
 	render() {
@@ -15,6 +16,7 @@ class AppView extends React.Component {
 							<ReflowDisplayLayerElement
 								{...reflowConnectionManager.connect(currentApp.port)}
 								views={views}
+								wrapper={ThemeProvider}
 							/>
 						)
 					);

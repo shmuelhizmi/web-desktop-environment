@@ -43,14 +43,14 @@ export default class SettingsManager {
 	public static defaultSettings: Settings = {
 		desktop: {
 			theme: "transparent",
-			background: "url(https://picsum.photos/1920/1080)",
-			nativeBackground: "https://picsum.photos/1080/1920",
+			background: "url(https://picsum.photos/id/237/1920/1080)",
+			nativeBackground: "https://picsum.photos/id/237/1080/1920",
 		},
 		network: {
 			ports: {
 				mainPort: 5000,
 				startPort: 9200,
-				endPort: 9200,
+				endPort: 9400,
 			},
 		},
 	};

@@ -49,9 +49,9 @@ const transparentTheme: Theme = {
 		text: "#000",
 	},
 	secondary: {
-		main: "#0004",
-		light: "#0003",
-		dark: "#0005",
+		main: "#111",
+		light: "#252525",
+		dark: "#000",
 		text: "#fff",
 	},
 	error: {
@@ -67,7 +67,7 @@ const transparentTheme: Theme = {
 		text: "#fff",
 	},
 	warning: {
-		main: "#ffd951",
+		main: "#efd951",
 		light: "#ffeb51",
 		dark: "#ae9941",
 		text: "#fff",
@@ -98,8 +98,8 @@ const lightTheme: Theme = {
 		text: "#222",
 	},
 	error: {
-		main: "#db5049ee",
-		light: "#ff354c88",
+		main: "#db5049",
+		light: "#ff354c",
 		dark: "#f00",
 		text: "#fff",
 	},
@@ -110,7 +110,7 @@ const lightTheme: Theme = {
 		text: "#fff",
 	},
 	warning: {
-		main: "#ffd951",
+		main: "#efd951",
 		light: "#ffeb51",
 		dark: "#ae9941",
 		text: "#fff",
@@ -123,15 +123,15 @@ const darkTheme: Theme = {
 	windowBorderColor: "#fff",
 	windowBarColor: "#333333",
 	background: {
-		main: "#121212",
-		light: "#424242",
-		dark: "#010001",
+		main: "#21272b",
+		light: "#31373b",
+		dark: "#11171b",
 		text: "#d9d9da",
 	},
 	primary: {
-		main: "#5900e3",
-		light: "#ac6bfb",
-		dark: "#240068",
+		main: "#315bef",
+		dark: "#214b9f",
+		light: "#416bef",
 		text: "#f3e7fd",
 	},
 	secondary: {
@@ -141,8 +141,8 @@ const darkTheme: Theme = {
 		text: "#c4fff4",
 	},
 	error: {
-		main: "#db5049ee",
-		light: "#ff354c88",
+		main: "#db5049",
+		light: "#ff354c",
 		dark: "#f00",
 		text: "#fff",
 	},
@@ -153,7 +153,7 @@ const darkTheme: Theme = {
 		text: "#fff",
 	},
 	warning: {
-		main: "#ffd951",
+		main: "#efd951",
 		light: "#ffeb51",
 		dark: "#ae9941",
 		text: "#fff",

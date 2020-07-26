@@ -111,7 +111,11 @@ class PTY {
 	}
 
 	setCols = (columns: number) => {
-		this.ptyProcess.resize(columns, this.ptyProcess.rows);
+		try {
+			this.ptyProcess.resize(columns, this.ptyProcess.rows);
+		} catch (e) {
+			/* */
+		}
 	};
 	/**
 	 * Spawn an instance of pty with a selected shell.

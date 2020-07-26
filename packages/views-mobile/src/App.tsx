@@ -89,14 +89,14 @@ const App = () => {
 	const [isConnected, setIsConnected] = useState(false);
 	const [host, setHost] = useState("localhost");
 	const [port, setPort] = useState(5000);
+	const loadLastParams = async () => {
+		const lastParams = await getKey("lastLoginParams");
+		if (lastParams) {
+			setHost(lastParams.host);
+			setPort(lastParams.port);
+		}
+	};
 	useEffect(() => {
-		const loadLastParams = async () => {
-			const lastParams = await getKey("lastLoginParams");
-			if (lastParams) {
-				setHost(lastParams.host);
-				setPort(lastParams.port);
-			}
-		};
 		loadLastParams();
 	}, []);
 	useEffect(() => {

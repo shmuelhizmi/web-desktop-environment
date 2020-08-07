@@ -10,7 +10,7 @@
     "lint": "lerna run lint"
   },
   "devDependencies": {
-    "lerna": "^3.22.0",
+    "lerna": "3.22.1",
     "concurrently": "5.3.0"
   }
 }

@@ -11,22 +11,24 @@ import { Theme, Themes, Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
 import Button from "@components/button";
 import axios from "axios";
-import Color from "color";
+import Color from "@ctrl/tinycolor";
 import { SketchPicker } from "react-color";
 import { invertColor } from "@utils/invertColor";
 
 const makeColor = (baseColor: RGBArray | string): ColorType => {
 	const color =
-		typeof baseColor === "string" ? Color(baseColor) : Color.rgb(baseColor);
+		typeof baseColor === "string"
+			? Color(baseColor)
+			: Color({ r: baseColor[0], g: baseColor[1], b: baseColor[2] });
 	return {
-		main: color.hex(),
-		dark: color.darken(0.25).hex(),
-		light: color.lighten(0.25).hex(),
-		text: Color(invertColor(color.hex())).darken(0.1).hex(),
-		darkText: Color(invertColor(color.hex())).darken(0.4).hex(),
+		main: color.toHex8String(),
+		dark: color.darken(0.25).toHex8String(),
+		light: color.lighten(0.25).toHex8String(),
+		text: Color(invertColor(color.toHexString())).darken(0.3).toHexString(),
+		darkText: Color(invertColor(color.toHexString())).darken(0.5).toHexString(),
 		transparentLight: color.isDark() ? "#fff" : "#444",
-		transparent: color.rgb().hex() + "85",
-		transparentDark: color.rgb().hex() + "99",
+		transparent: color.setAlpha(color.getAlpha() * 0.6).toHex8String(),
+		transparentDark: color.setAlpha(color.getAlpha() * 0.9).toHex8String(),
 	};
 };
 
@@ -244,7 +246,11 @@ class Settings extends ReflowReactComponent<
 						secondary: makeColor(colors[2]),
 						windowBorderColor: makeColor(colors[0]).text,
 						success: makeColor(colors[3]),
-						windowBarColor: Color.rgb(colors[4]).hex(),
+						windowBarColor: Color({
+							r: colors[4][0],
+							g: colors[4][1],
+							b: colors[4][2],
+						}).toHex8String(),
 						error: Themes.transparent.error,
 						warning: Themes.transparent.warning,
 					};
@@ -316,7 +322,7 @@ class Settings extends ReflowReactComponent<
 									<div
 										className={`${classes.settingsPropertyValue} ${classes.settingsPropertyValueCol}`}
 									>
-										<Button onClick={this.generateCustomTheme}>
+										<Button border onClick={this.generateCustomTheme}>
 											Genarate custom theme
 										</Button>
 									</div>
@@ -374,7 +380,9 @@ class Settings extends ReflowReactComponent<
 								error: makeColor(getColor("error")),
 								warning: makeColor(getColor("warning")),
 								windowBarColor: getColor("background"),
-								windowBorderColor: makeColor(getColor("background")).text,
+								windowBorderColor: Color(getColor("background")).isDark()
+									? "#fff"
+									: "#000",
 							};
 							this.props.event("setSettings", fullState.settings);
 							return {}; // no need to rerender
@@ -404,7 +412,9 @@ class Settings extends ReflowReactComponent<
 										(color) => color.name === state.selectedColor
 									);
 									if (originalColor) {
-										originalColor.value = color.hex;
+										originalColor.value =
+											color.hex +
+											Math.round((color.rgb.a || 0) * 255).toString(16);
 									}
 									setState({ colors: state.colors });
 								}}
@@ -414,7 +424,7 @@ class Settings extends ReflowReactComponent<
 									)?.value
 								}
 							></SketchPicker>
-							<Button className={classes.margin} onClick={saveToTheme}>
+							<Button border className={classes.margin} onClick={saveToTheme}>
 								Save custom theme
 							</Button>
 						</>

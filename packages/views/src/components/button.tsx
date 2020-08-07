@@ -13,6 +13,7 @@ const useStyle = (
 			borderRadius: 4,
 			minHeight: 35,
 			minWidth: 80,
+			padding: 4,
 			display: "flex",
 			justifyContent: "center",
 			color: textColor,

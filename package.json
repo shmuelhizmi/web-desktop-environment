@@ -5,10 +5,12 @@
     "install": "lerna bootstrap",
     "dev:server": "cd packages/flows && npm start",
     "dev:web": "cd packages/views && npm start",
-    "start": "lerna bootstrap && concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "start": "lerna bootstrap && npm run dev",
     "lint": "lerna run lint"
   },
   "devDependencies": {
-    "lerna": "^3.22.0"
+    "lerna": "^3.22.0",
+    "concurrently": "5.3.0"
   }
 }

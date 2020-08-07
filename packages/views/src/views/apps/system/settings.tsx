@@ -2,12 +2,33 @@ import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/app
 import {
 	Settings as SettingsConfiguration,
 	ThemeType,
+	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme, Themes, Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
+import Button from "@components/button";
+import axios from "axios";
+import Color from "color";
+import { SketchPicker } from "react-color";
+import { invertColor } from "@utils/invertColor";
+
+const makeColor = (baseColor: RGBArray | string): ColorType => {
+	const color =
+		typeof baseColor === "string" ? Color(baseColor) : Color.rgb(baseColor);
+	return {
+		main: color.hex(),
+		dark: color.darken(0.25).hex(),
+		light: color.lighten(0.25).hex(),
+		text: Color(invertColor(color.hex())).darken(0.1).hex(),
+		darkText: Color(invertColor(color.hex())).darken(0.4).hex(),
+		transparentLight: color.isDark() ? "#fff" : "#444",
+		transparent: color.rgb().hex() + "85",
+		transparentDark: color.rgb().hex() + "99",
+	};
+};
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -86,6 +107,9 @@ const styles = (theme: Theme) =>
 			marginTop: 30,
 			marginBottom: 10,
 		},
+		margin: {
+			margin: 14,
+		},
 		settingsBlock: {
 			width: "80%",
 			border: `1px solid ${theme.windowBorderColor}`,
@@ -104,7 +128,28 @@ const styles = (theme: Theme) =>
 			marginBottom: 5,
 			borderBottom: `solid 1px ${theme.primary.transparent}`,
 		},
+		settingsPropertyCol: {
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "space-between",
+		},
 		settingsPropertyName: {},
+		settingsPropertyNameCol: {
+			fontSize: "1.8vw",
+		},
+		settingsPropertyValueCol: {
+			width: "auto !important",
+			margin: 5,
+			height: "auto",
+			display: "flex",
+			flexDirection: "column",
+			alignItems: "center",
+		},
+		text: {
+			fontSize: 17,
+			color: theme.background.text,
+			margin: 5,
+		},
 		settingsPropertyValue: {
 			wordBreak: "break-all",
 			width: "50%",
@@ -142,6 +187,19 @@ const styles = (theme: Theme) =>
 			fontSize: 12,
 			color: theme.error.main,
 		},
+		colorsTable: {
+			display: "flex",
+			justifyContent: "center",
+		},
+		color: {
+			width: 30,
+			height: 30,
+			margin: 5,
+			borderRadius: "50%",
+			"&:hover": {
+				transform: "scale(1.2)",
+			},
+		},
 	});
 
 type SettingsCategory = "desktop" | "network" | "systemInfo";
@@ -150,6 +208,11 @@ interface SettingsState {
 	selectedCategory: SettingsCategory;
 	settings: SettingsConfiguration;
 }
+
+type ColormindResponse = {
+	result: [RGBArray, RGBArray, RGBArray, RGBArray, RGBArray];
+};
+type RGBArray = [number, number, number];
 
 class Settings extends ReflowReactComponent<
 	SettingsInterface,
@@ -163,6 +226,35 @@ class Settings extends ReflowReactComponent<
 			settings: props.settings,
 		};
 	}
+
+	generateCustomTheme = () => {
+		axios
+			.post<ColormindResponse>(
+				"http://colormind.io/api/",
+				JSON.stringify({ model: "default" })
+			)
+			.then((response) => {
+				const colors = response.data.result;
+				this.setState((state) => {
+					state.settings.desktop.customTheme = {
+						type: "custom",
+						shadowColor: "#000",
+						background: makeColor(colors[0]),
+						primary: makeColor(colors[1]),
+						secondary: makeColor(colors[2]),
+						windowBorderColor: makeColor(colors[0]).text,
+						success: makeColor(colors[3]),
+						windowBarColor: Color.rgb(colors[4]).hex(),
+						error: Themes.transparent.error,
+						warning: Themes.transparent.warning,
+					};
+					this.props.event("setSettings", state.settings);
+					return {
+						settings: state.settings,
+					};
+				});
+			});
+	};
 
 	renderDesktopCategory = () => {
 		const { classes, event } = this.props;
@@ -209,12 +301,126 @@ class Settings extends ReflowReactComponent<
 									<option value="dark">dark</option>
 									<option value="light">light</option>
 									<option value="transparent">transparent</option>
+									<option value="custom">custom</option>
 								</select>
 							</div>
 						</div>
+						{this.state.settings.desktop.theme === "custom" && (
+							<>
+								<div
+									className={`${classes.settingsProperty} ${classes.settingsPropertyCol}`}
+								>
+									<div className={classes.settingsPropertyNameCol}>
+										Custom Theme
+									</div>
+									<div
+										className={`${classes.settingsPropertyValue} ${classes.settingsPropertyValueCol}`}
+									>
+										<Button onClick={this.generateCustomTheme}>
+											Genarate custom theme
+										</Button>
+									</div>
+								</div>
+								<div
+									className={`${classes.settingsPropertyValue} ${classes.settingsPropertyValueCol}`}
+								>
+									{this.renderCreateCustomTheme()}
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
+		);
+	};
+
+	renderCreateCustomTheme = () => {
+		const { classes } = this.props;
+		const { background, primary, secondary, error, success, warning } =
+			this.props.settings.desktop.customTheme || Themes.transparent;
+		return (
+			<StateComponent<{
+				selectedColor: Colors;
+				colors: { name: Colors; value: string }[];
+			}>
+				defaultState={{
+					selectedColor: "background",
+					colors: [
+						{ name: "background", value: background.main },
+						{ name: "primary", value: primary.main },
+						{ name: "secondary", value: secondary.main },
+						{ name: "error", value: error.main },
+						{ name: "success", value: success.main },
+						{ name: "warning", value: warning.main },
+					],
+				}}
+			>
+				{(state, setState) => {
+					const saveToTheme = () => {
+						const getColor = (color: Colors) => {
+							return (
+								state.colors.find((currentColor) => currentColor.name === color)
+									?.value || Themes.transparent[color].main
+							);
+						};
+						this.setState((fullState) => {
+							fullState.settings.desktop.customTheme = {
+								type: "custom",
+								shadowColor: "#000",
+								background: makeColor(getColor("background")),
+								primary: makeColor(getColor("primary")),
+								secondary: makeColor(getColor("secondary")),
+								success: makeColor(getColor("success")),
+								error: makeColor(getColor("error")),
+								warning: makeColor(getColor("warning")),
+								windowBarColor: getColor("background"),
+								windowBorderColor: makeColor(getColor("background")).text,
+							};
+							this.props.event("setSettings", fullState.settings);
+							return {}; // no need to rerender
+						});
+					};
+					return (
+						<>
+							<div className={classes.categorySubtitle}>
+								Create custom theme
+							</div>
+							<div className={classes.colorsTable}>
+								{state.colors.map((color, index) => (
+									<div
+										key={index}
+										className={classes.color}
+										style={{ backgroundColor: color.value }}
+										onClick={() => setState({ selectedColor: color.name })}
+									/>
+								))}
+							</div>
+							<div className={classes.text}>
+								slected color: {state.selectedColor}
+							</div>
+							<SketchPicker
+								onChange={(color) => {
+									const originalColor = state.colors.find(
+										(color) => color.name === state.selectedColor
+									);
+									if (originalColor) {
+										originalColor.value = color.hex;
+									}
+									setState({ colors: state.colors });
+								}}
+								color={
+									state.colors.find(
+										(color) => color.name === state.selectedColor
+									)?.value
+								}
+							></SketchPicker>
+							<Button className={classes.margin} onClick={saveToTheme}>
+								Save custom theme
+							</Button>
+						</>
+					);
+				}}
+			</StateComponent>
 		);
 	};
 

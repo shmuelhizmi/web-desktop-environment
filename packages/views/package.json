@@ -21,10 +21,14 @@
     "xterm-addon-fit": "0.4.0",
     "@web-desktop-environment/shared": "1.0.0",
     "react-resizable": "1.10.1",
-    "react-resize-detector": "5.0.6"
+    "react-resize-detector": "5.0.6",
+    "axios": "0.19.2",
+    "color": "3.1.2",
+    "react-color": "2.18.1"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
+    "@types/color": "3.0.0",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -87,7 +91,9 @@
     "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "4.3.1",
-    "@types/react-resize-detector": "2.1.0"
+    "@types/react-resize-detector": "2.1.0",
+    "@types/react-transition-group": "2.0.9",
+    "@types/react-color": "2.13.5"
   },
   "scripts": {
     "start": "node scripts/start.js",

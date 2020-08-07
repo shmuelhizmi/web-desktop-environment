@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"name": "web-desktop-environment",
+			"path": ".."
+		},
+		{
+			"name": "views",
+			"path": "../packages/views"
+		},
+		{
+			"name": "flows",
+			"path": "../packages/flows"
+		},
+		{
+			"name": ".web-desktop-environment-config",
+			"path": "../../../../.web-desktop-environment-config"
+		},
+		{
+			"name": "reflow",
+			"path": "../../reflow"
+		},
+		{
+			"path": "../packages/views-mobile"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "views/node_modules/typescript/lib"
+	}
+}

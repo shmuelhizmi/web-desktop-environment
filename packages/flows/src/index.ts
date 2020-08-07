@@ -6,13 +6,20 @@ import {
 import desktop from "@desktop/index";
 import DesktopManager from "@managers/desktopManager";
 import Logger from "@utils/logger";
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import {
+	ThemeType,
+	Theme,
+} from "@web-desktop-environment/interfaces/lib/shared/settings";
 
-export const createReflow = (port: number, theme: ThemeType) =>
+export const createReflow = (
+	port: number,
+	theme: ThemeType,
+	customTheme?: Theme
+) =>
 	new Reflow<ViewInterfacesType>({
 		transport: new Transports.WebSocketsTransport({ port }),
 		views: viewInterfaces,
-		viewerParameters: { theme },
+		viewerParameters: { theme, customTheme },
 	});
 
 const rootLogger = new Logger();
@@ -25,7 +32,8 @@ desktopManager.settingsManager.initalize().then(() => {
 		.then((port) => {
 			const reflow = createReflow(
 				port,
-				desktopManager.settingsManager.settings.desktop.theme
+				desktopManager.settingsManager.settings.desktop.theme,
+				desktopManager.settingsManager.settings.desktop.customTheme
 			);
 			rootLogger.info(`starting webOS on port ${port}`);
 			reflow

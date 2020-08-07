@@ -31,4 +31,4 @@ export interface Events {
 
 export interface Output {}
 
-export default interface Desktop extends ViewInterface<Input, Events, Output> {}
+export default interface WindowViewInterface extends ViewInterface<Input, Events, Output> {}

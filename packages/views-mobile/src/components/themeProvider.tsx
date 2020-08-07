@@ -1,13 +1,26 @@
-import { Themes, Theme } from "@root/theme";
+import { Themes } from "@root/theme";
 import React from "react";
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import {
+	ThemeType,
+	Theme,
+} from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 export const ThemeContext = React.createContext<Theme>(Themes.transparent);
 
-class ThemeProvider extends React.Component<{ theme?: ThemeType }> {
+class ThemeProvider extends React.Component<{
+	theme?: ThemeType;
+	customTheme?: Theme;
+}> {
 	render() {
+		const { theme, customTheme } = this.props;
 		return (
-			<ThemeContext.Provider value={Themes[this.props.theme || "transparent"]}>
+			<ThemeContext.Provider
+				value={
+					theme !== "custom"
+						? Themes[theme || "transparent"]
+						: customTheme || Themes.transparent
+				}
+			>
 				{this.props.children}
 			</ThemeContext.Provider>
 		);

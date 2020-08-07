@@ -38,7 +38,10 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 			background: settings.desktop.background,
 			nativeBackground: settings.desktop.nativeBackground,
 		});
-		viewerParameters({ theme: settings.desktop.theme });
+		viewerParameters({
+			theme: settings.desktop.theme,
+			customTheme: settings.desktop.customTheme,
+		});
 	});
 
 	desktopManager.windowManager.emitter.on("onAppsUpdate", (openApps) => {

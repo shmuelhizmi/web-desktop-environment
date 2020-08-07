@@ -35,7 +35,8 @@ export default class WindowManager {
 		this.newAppId++;
 		const process = createReflow(
 			port,
-			this.desktopManager.settingsManager.settings.desktop.theme
+			this.desktopManager.settingsManager.settings.desktop.theme,
+			this.desktopManager.settingsManager.settings.desktop.customTheme
 		);
 
 		process

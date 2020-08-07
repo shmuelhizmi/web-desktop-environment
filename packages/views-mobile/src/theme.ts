@@ -1,4 +1,4 @@
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 export type ColorVariants = "main" | "dark" | "light" | "transparent";
 
@@ -9,27 +9,6 @@ export type Colors =
 	| "success"
 	| "warning"
 	| "error";
-
-export interface Theme {
-	type: ThemeType;
-	background: Color;
-	primary: Color;
-	secondary: Color;
-	success: Color;
-	warning: Color;
-	error: Color;
-	windowBarColor: string;
-	shadowColor: string;
-	windowBorderColor: string;
-}
-
-export interface Color {
-	main: string;
-	dark: string;
-	light: string;
-	text: string;
-	darkText?: string;
-}
 
 const transparentTheme: Theme = {
 	type: "transparent",

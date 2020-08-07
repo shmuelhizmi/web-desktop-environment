@@ -292,6 +292,7 @@ module.exports = function (webpackEnv) {
         .filter((ext) => useTypeScript || !ext.includes("ts")),
       alias: {
         "@components": path.join(paths.appSrc, "components"),
+        "@utils": path.join(paths.appSrc, "utils"),
         "@views": path.join(paths.appSrc, "views"),
         "@state": path.join(paths.appSrc, "state"),
         "@root": paths.appSrc,

@@ -26,7 +26,10 @@ const window: Flow<
 	const logger = parentLogger.mount("window");
 
 	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
-		viewerParameters({ theme: settings.desktop.theme });
+		viewerParameters({
+			theme: settings.desktop.theme,
+			customTheme: settings.desktop.customTheme,
+		});
 	});
 
 	const appWindow = { ...app.window };

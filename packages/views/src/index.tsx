@@ -7,7 +7,10 @@ import "@root/index.css";
 import * as views from "@root/views";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import {
+	ThemeType,
+	Theme,
+} from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ThemeProvider as TP } from "@material-ui/styles";
 import ThemeProvider from "@components/themeProvider";
 
@@ -19,6 +22,7 @@ class ReflowConnectionManager {
 	connect = (port: number, mountPoint?: Element) => {
 		const transport = new Transports.WebSocketsTransport<{
 			theme?: ThemeType;
+			customTheme?: Theme;
 		}>({
 			port,
 			host: this.host,

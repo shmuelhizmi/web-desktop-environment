@@ -278,8 +278,8 @@ class Explorer extends ReflowReactComponent<
 				},
 				() => {
 					const confirmDone = (confirm: Confirm) => {
-						if (confirm.result) {
-							resolve({ result: confirm.result });
+						if (confirm.result !== undefined) {
+							resolve(confirm.result);
 							this.setState({ confirm: undefined });
 						} else {
 							reject(new Error("confirm does not have a result."));

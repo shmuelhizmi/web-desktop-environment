@@ -12,6 +12,8 @@ import { reflowConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
+import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
+import EmptyComponent from "@components/emptyWrapper";
 
 export const windowsBarHeight = 55;
 
@@ -47,6 +49,28 @@ const styles = (theme: Theme) =>
 				background: theme.background.transparent,
 			},
 			zIndex: 2,
+		},
+		"@keyframes slidein": {
+			"0%": {
+				transform: "translateX(-100%)",
+			},
+			"100%": {
+				transform: "translateX(0%)",
+			},
+		},
+		"@keyframes slideout": {
+			"0%": {
+				transform: "translateX(0%)",
+			},
+			"100%": {
+				transform: "translateX(-100%)",
+			},
+		},
+		slidein: {
+			animation: "$slidein 200ms",
+		},
+		slideout: {
+			animation: "$slideout 200ms",
 		},
 		startMenu: {
 			position: "absolute",
@@ -201,6 +225,7 @@ class Desktop extends ReflowReactComponent<
 				{openApps.map((app, i) => (
 					<ReflowDisplayLayerElement
 						key={i}
+						wrapper={EmptyComponent}
 						{...reflowConnectionManager.connect(app.port)}
 					/>
 				))}
@@ -238,28 +263,31 @@ class Desktop extends ReflowReactComponent<
 						</div>
 					))}
 				</div>
-				{isStartMenuOpen && (
-					<div className={classes.startMenu}>
-						<div className={classes.startMenuBody}>
-							<TextField
-								className={classes.startMenuSearch}
-								borderBottom={false}
-								placeholder="search app"
-								value={startMenuQuery}
-								onChange={(startMenuQuery) => this.setState({ startMenuQuery })}
-							></TextField>
-							{apps
-								.filter((app) =>
-									startMenuQuery
-										? app.name.includes(startMenuQuery) ||
-										  app.description.includes(startMenuQuery) ||
-										  app.flow.includes(startMenuQuery)
-										: true
-								)
-								.map((app, index) => this.renderAppListCell(app, index))}
-						</div>
+				<MountUnmoutAnmiation
+					mount={isStartMenuOpen}
+					className={`${classes.startMenu} ${
+						isStartMenuOpen ? classes.slidein : classes.slideout
+					}`}
+				>
+					<div className={classes.startMenuBody}>
+						<TextField
+							className={classes.startMenuSearch}
+							borderBottom={false}
+							placeholder="search app"
+							value={startMenuQuery}
+							onChange={(startMenuQuery) => this.setState({ startMenuQuery })}
+						></TextField>
+						{apps
+							.filter((app) =>
+								startMenuQuery
+									? app.name.includes(startMenuQuery) ||
+									  app.description.includes(startMenuQuery) ||
+									  app.flow.includes(startMenuQuery)
+									: true
+							)
+							.map((app, index) => this.renderAppListCell(app, index))}
 					</div>
-				)}
+				</MountUnmoutAnmiation>
 			</div>
 		);
 	}

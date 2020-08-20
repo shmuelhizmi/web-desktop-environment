@@ -36,16 +36,17 @@ const styles = (theme: Theme) =>
 			display: "flex",
 		},
 		actionButton: {
-			padding: 3,
+			padding: 4,
 			minWidth: 40,
 			textAlign: "center",
 			userSelect: "none",
 			color: theme.secondary.text,
-			fontSize: 25,
-			border: `1px solid ${theme.windowBorderColor}`,
-			borderTop: "none",
-			borderBottom: "none",
+			fontSize: 20,
+			border: `2px solid ${theme.secondary.text}`,
+			borderRadius: 25,
+			margin: 3,
 			cursor: "pointer",
+			transition: "background 100ms",
 			"&:hover":
 				theme.type === "transparent"
 					? {
@@ -58,6 +59,7 @@ const styles = (theme: Theme) =>
 		},
 		actionButtonDisabled: {
 			cursor: "default",
+			border: "none",
 			backgroundColor:
 				theme.background.transparentDark || theme.background.dark,
 			"&:hover": {
@@ -115,6 +117,7 @@ const styles = (theme: Theme) =>
 			color: theme.secondary.text,
 			cursor: "pointer",
 			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+			transition: "background 100ms",
 			"&:hover": {
 				background: theme.secondary.dark,
 				backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
@@ -163,6 +166,7 @@ const styles = (theme: Theme) =>
 			overflow: "hidden",
 			whiteSpace: "nowrap",
 			textOverflow: "ellipsis",
+			transition: "background 100ms",
 			"&:hover": {
 				background: theme.primary.main,
 			},

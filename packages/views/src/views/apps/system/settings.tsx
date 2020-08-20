@@ -198,6 +198,7 @@ const styles = (theme: Theme) =>
 			height: 30,
 			margin: 5,
 			borderRadius: "50%",
+			border: `solid 1px ${theme.windowBorderColor}`,
 			"&:hover": {
 				transform: "scale(1.2)",
 			},

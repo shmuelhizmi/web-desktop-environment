@@ -17,7 +17,9 @@ export const getKey = async <T extends keyof LocalStorageItems>(
 		if (value) {
 			return JSON.parse(value) as LocalStorageItems[T];
 		}
-	} catch (e) {}
+	} catch (e) {
+		return undefined;
+	}
 };
 
 export const setKey = async <T extends keyof LocalStorageItems>(

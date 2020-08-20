@@ -2,7 +2,7 @@ import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/app
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import * as React from "react";
-import { Theme, Colors } from "@root/theme";
+import { Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
 import {
 	StyleSheet,
@@ -327,7 +327,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 					if (!this.props.systemInfo) {
 						return <View style={styles.categoryRoot} />;
 					}
-					const { cpu, disks, os, ram } = this.props.systemInfo;
+					const { cpu, os } = this.props.systemInfo;
 					return (
 						<ImageBackground
 							source={{

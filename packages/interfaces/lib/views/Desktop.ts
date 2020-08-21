@@ -1,4 +1,4 @@
-import { ViewInterface } from "@mcesystems/reflow";
+import { ViewInterface } from "@web-desktop-environment/reflow";
 import { Icon, NativeIcon } from "../shared/icon";
 
 export interface OpenApp {

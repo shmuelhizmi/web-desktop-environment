@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Transports } from "@mcesystems/reflow";
+import { Transports } from "@web-desktop-environment/reflow";
 import {
 	renderDisplayLayer,
 	ReflowDisplayLayerElement,
-} from "@mcesystems/reflow-react-display-layer";
+} from "@web-desktop-environment/reflow-react-display-layer";
 import Login from "@root/loginScreen/Login";
 import "@root/index.css";
 import * as webViews from "@root/views";

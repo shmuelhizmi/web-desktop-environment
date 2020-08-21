@@ -1,4 +1,4 @@
-import { Flow } from "@mcesystems/reflow";
+import { Flow } from "@web-desktop-environment/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import * as apps from "@apps/index";
 import { defaultFlowInput } from "@managers/desktopManager";

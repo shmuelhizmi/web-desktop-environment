@@ -1,4 +1,4 @@
-import { Flow } from "@mcesystems/reflow";
+import { Flow } from "@web-desktop-environment/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@apps/index";
 import Logger from "@utils/logger";

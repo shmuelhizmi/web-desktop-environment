@@ -1,5 +1,5 @@
 import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
 import windowManager from "@state/WindowManager";
 import { ConnectionContext } from "@root/contexts";

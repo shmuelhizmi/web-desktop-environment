@@ -1,4 +1,4 @@
-import { Reflow, Transports } from "@mcesystems/reflow";
+import { Reflow, Transports } from "@web-desktop-environment/reflow";
 import {
 	ViewInterfacesType,
 	viewInterfaces,

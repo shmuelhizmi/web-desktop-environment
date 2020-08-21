@@ -1,4 +1,4 @@
-import { Flow } from "@mcesystems/reflow";
+import { Flow } from "@web-desktop-environment/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { homedir } from "os";
 import {

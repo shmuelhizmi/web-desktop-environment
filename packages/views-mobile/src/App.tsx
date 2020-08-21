@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
-import { Transports } from "@mcesystems/reflow";
-import { ReflowDisplayLayerElement } from "@mcesystems/reflow-react-display-layer";
+import { Transports } from "@web-desktop-environment/reflow";
+import { ReflowDisplayLayerElement } from "@web-desktop-environment/reflow-react-display-layer";
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import * as views from "@views/index";
 import LinearGradient from "react-native-linear-gradient";

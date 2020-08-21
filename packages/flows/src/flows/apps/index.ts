@@ -2,7 +2,7 @@ import {
 	Icon,
 	NativeIcon,
 } from "@web-desktop-environment/interfaces/lib/shared/icon";
-import { Flow } from "@mcesystems/reflow";
+import { Flow } from "@web-desktop-environment/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { terminal } from "@apps/utils/terminal";
 import { explorer } from "@apps/utils/explorer";

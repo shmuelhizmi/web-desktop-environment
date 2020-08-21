@@ -1,6 +1,6 @@
 import React from "react";
 import { DesktopContext } from "@views/desktop";
-import { ReflowDisplayLayerElement } from "@mcesystems/reflow-react-display-layer";
+import { ReflowDisplayLayerElement } from "@web-desktop-environment/reflow-react-display-layer";
 import { reflowConnectionManager } from "@root/App";
 import * as views from "@views/index";
 import ThemeProvider from "@components/themeProvider";

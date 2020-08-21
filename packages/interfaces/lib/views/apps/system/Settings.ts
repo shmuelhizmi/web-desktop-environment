@@ -1,4 +1,4 @@
-import { ViewInterface } from "@mcesystems/reflow";
+import { ViewInterface } from "@web-desktop-environment/reflow";
 import { Settings } from "../../../shared/settings";
 import { PartialPartial } from "../../../shared/types";
 

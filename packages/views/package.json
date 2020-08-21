@@ -5,8 +5,8 @@
   "private": false,
   "dependencies": {
     "@material-ui/styles": "^4.10.0",
-    "@mcesystems/reflow": "^4.3.4",
-    "@mcesystems/reflow-react-display-layer": "^4.3.4",
+    "@web-desktop-environment/reflow": "^4.3.4",
+    "@web-desktop-environment/reflow-react-display-layer": "^4.3.4",
     "@web-desktop-environment/interfaces": "1.0.0",
     "react-icons": "3.11.0",
     "events": "3.1.0",

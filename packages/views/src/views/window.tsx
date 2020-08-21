@@ -125,21 +125,44 @@ class Window extends ReflowReactComponent<
 	wrapperRef?: HTMLDivElement;
 	constructor(props: Window["props"]) {
 		super(props);
+		const size = {
+			height: props.window.height || defualtWindowSize.height,
+			width: props.window.width || defualtWindowSize.width,
+		};
 		this.state = {
-			size: {
-				height: props.window.height || defualtWindowSize.height,
-				width: props.window.width || defualtWindowSize.width,
-			},
+			size,
 			canDrag: false,
 			collaps: props.window.minimized || false,
-			position: props.window.position || {
-				x: window.screen.availWidth / 3,
-				y: window.screen.availHeight / 3,
-			},
+			position: this.getPoition(size),
 		};
+
 		this.domContainer = document.createElement("div");
 		document.getElementById("app")?.appendChild(this.domContainer);
 	}
+
+	getPoition = (size: Size) => {
+		if (this.props.window.position) {
+			const position = { ...this.props.window.position };
+			if (position.x > window.innerWidth - size.width / 2) {
+				position.x = window.innerWidth - size.width;
+			}
+			if (position.x < windowBarHeight) {
+				position.x = windowBarHeight;
+			}
+			if (position.y > window.innerHeight) {
+				position.y = window.innerHeight;
+			}
+			if (position.y < windowBarHeight) {
+				position.y = windowBarHeight;
+			}
+			return position;
+		} else {
+			return {
+				x: window.screen.availWidth / 3,
+				y: window.screen.availHeight / 3,
+			};
+		}
+	};
 
 	componentDidMount() {
 		this.id = windowManager.addWindow(this.props.name, this.props.icon, {

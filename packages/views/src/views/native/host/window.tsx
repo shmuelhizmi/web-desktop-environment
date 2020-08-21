@@ -11,6 +11,7 @@ class Window extends ReflowReactComponent<WindowInterface, {}> {
 	static contextType = ConnectionContext;
 	context!: React.ContextType<typeof ConnectionContext>;
 
+	isUnmounted = false;
 	openWindow = () => {
 		this.window =
 			window.open(
@@ -25,8 +26,10 @@ class Window extends ReflowReactComponent<WindowInterface, {}> {
 			}
 			const closeInterval = setInterval(() => {
 				if (this.window?.closed) {
-					this.props.done({});
-					windowManager.closeWindow(this.id);
+					if (!this.isUnmounted) {
+						this.props.done({});
+						windowManager.closeWindow(this.id);
+					}
 					clearInterval(closeInterval);
 				}
 			}, 250);
@@ -49,10 +52,19 @@ class Window extends ReflowReactComponent<WindowInterface, {}> {
 				}
 			}
 		});
+		windowManager.emitter.on("minimizeWindow", ({ id }) => {
+			if (id === this.id) {
+				if (!this.window) {
+					this.openWindow();
+				}
+				this.window?.blur();
+			}
+		});
 		this.openWindow();
 	};
 
 	componentWillUnmount = () => {
+		this.isUnmounted = true;
 		this.window?.close();
 		windowManager.closeWindow(this.id);
 	};

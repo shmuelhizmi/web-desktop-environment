@@ -7,6 +7,7 @@ export interface Input {
   name: string;
   icon: Icon;
   window: Window;
+  background: string;
 }
 
 export interface LastWindowState {

@@ -1,7 +1,7 @@
 import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
-import * as React from "react";
+import React from "react";
 import { Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
 import {

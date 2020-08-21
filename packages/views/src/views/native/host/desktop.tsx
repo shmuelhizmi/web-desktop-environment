@@ -1,0 +1,207 @@
+import DesktopInterface, {
+	App,
+} from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import {
+	ReflowReactComponent,
+	ReflowDisplayLayerElement,
+} from "@mcesystems/reflow-react-display-layer";
+import React from "react";
+import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import { Theme } from "@root/theme";
+import { reflowConnectionManager } from "@root/index";
+import TextField from "@components/textField";
+import Icon from "@components/icon";
+import windowManager, { Window } from "@state/WindowManager";
+import EmptyComponent from "@components/emptyWrapper";
+import { Icon as IconType } from "@web-desktop-environment/interfaces/lib/shared/icon";
+
+export const ConnectionContext = React.createContext<
+	{ port: number; host: string } | undefined
+>(undefined);
+
+const styles = (theme: Theme) =>
+	createStyles({
+		root: {
+			position: "absolute",
+			top: 0,
+			bottom: 0,
+			right: 0,
+			left: 0,
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		appContainer: {
+			background: theme.background.transparent,
+			borderRadius: 10,
+			boxShadow: "-5px 6px 10px -1px #0007",
+			padding: 10,
+			width: "90%",
+			height: "90%",
+		},
+		appFilter: {
+			height: 55,
+		},
+		appGrid: {
+			display: "grid",
+			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 120px))",
+			margin: 15,
+			justifyContent: "center",
+			gridGap: 10,
+			gridAutoRows: 100,
+		},
+		app: {
+			borderBottom: `1px solid ${theme.windowBorderColor}`,
+			borderRadius: 7,
+			color: theme.secondary.text,
+			cursor: "pointer",
+			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+			transition: "background 100ms",
+			"&:hover": {
+				background: theme.secondary.dark,
+				backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
+			},
+			height: 90,
+			display: "flex",
+			flexDirection: "column-reverse",
+		},
+		openApp: {
+			borderBottom: `2px solid ${theme.secondary.main}`,
+		},
+		appIcon: {
+			userSelect: "none",
+			textAlign: "center",
+			maxWidth: 100,
+			fontSize: 50,
+		},
+		appName: {
+			whiteSpace: "nowrap",
+			overflow: "hidden",
+			textOverflow: "ellipsis",
+			maxWidth: "100%",
+			textAlign: "center",
+			userSelect: "none",
+		},
+	});
+
+interface DesktopState {
+	openWindows: Window[];
+	filterAppQuery: string;
+}
+
+class Desktop extends ReflowReactComponent<
+	DesktopInterface,
+	WithStyles<typeof styles>,
+	DesktopState
+> {
+	constructor(props: Desktop["props"]) {
+		super(props);
+		this.state = {
+			openWindows: windowManager.windows,
+			filterAppQuery: "",
+		};
+		windowManager.emitter.on("addWindow", this.updateWindow);
+		windowManager.emitter.on("closeWindow", this.updateWindow);
+		windowManager.emitter.on("maximizeWindow", this.updateWindow);
+		windowManager.emitter.on("minimizeWindow", this.updateWindow);
+	}
+
+	updateWindow = () =>
+		this.setState({ openWindows: [...windowManager.windows] });
+
+	renderAppGrid = (
+		app: { name: string; icon: IconType },
+		isOpen: boolean,
+		onClick: () => void,
+		index: number
+	) => {
+		const { classes } = this.props;
+		return (
+			<div
+				key={index}
+				className={`${classes.app} ${isOpen ? classes.openApp : ""}`}
+				onClick={onClick}
+			>
+				{app.icon.type === "img" ? (
+					<img alt={`${app.name} icon`} src={app.icon.icon} />
+				) : (
+					<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
+				)}
+				<div className={classes.appName}>{app.name}</div>
+			</div>
+		);
+	};
+
+	render() {
+		const { background, openApps, classes, apps, event } = this.props;
+		const { openWindows, filterAppQuery } = this.state;
+		return (
+			<div className={classes.root} style={{ background }}>
+				{openApps.map((app, i) => (
+					<ConnectionContext.Provider
+						key={i}
+						value={{ host: reflowConnectionManager.host, port: app.port }}
+					>
+						<ReflowDisplayLayerElement
+							wrapper={EmptyComponent}
+							{...reflowConnectionManager.connect(app.port)}
+						/>
+					</ConnectionContext.Provider>
+				))}
+				<div className={classes.appContainer}>
+					<TextField
+						className={classes.appFilter}
+						borderBottom={false}
+						placeholder="search app"
+						value={filterAppQuery}
+						onChange={(filterAppQuery) => this.setState({ filterAppQuery })}
+					></TextField>
+					{openWindows.length !== 0 && (
+						<>
+							<div className={classes.appGrid}>
+								{openWindows
+									.filter((app) =>
+										filterAppQuery ? app.name.includes(filterAppQuery) : true
+									)
+									.map((openWindow, index) =>
+										this.renderAppGrid(
+											openWindow,
+											true,
+											() =>
+												windowManager.updateState(openWindow.id, {
+													minimized: !openWindow.state.minimized,
+												}),
+											index
+										)
+									)}
+							</div>
+							<hr />
+						</>
+					)}
+					<div className={classes.appGrid}>
+						{apps
+							.filter((app) =>
+								filterAppQuery
+									? app.name.includes(filterAppQuery) ||
+									  app.description.includes(filterAppQuery) ||
+									  app.flow.includes(filterAppQuery)
+									: true
+							)
+							.map((app, index) =>
+								this.renderAppGrid(
+									app,
+									false,
+									() =>
+										app && event("launchApp", { flow: app.flow, params: {} }),
+									index
+								)
+							)}
+					</div>
+				</div>
+			</div>
+		);
+	}
+}
+
+export default withStyles(styles)(Desktop);

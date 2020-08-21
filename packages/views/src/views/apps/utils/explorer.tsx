@@ -2,7 +2,7 @@ import ExplorerInterface, {
 	File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
-import * as React from "react";
+import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import Button from "@components/button";

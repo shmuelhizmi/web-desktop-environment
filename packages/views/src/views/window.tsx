@@ -1,6 +1,6 @@
 import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
-import * as React from "react";
+import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import ReactDOM from "react-dom";
@@ -13,7 +13,7 @@ import Icon from "@components/icon";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 
-const defualtWindowSize = {
+export const defualtWindowSize = {
 	height: 600,
 	width: 700,
 	maxHeight: 700,
@@ -121,7 +121,7 @@ class Window extends ReflowReactComponent<
 	WindowState
 > {
 	domContainer: Element;
-	id: number;
+	id!: number;
 	wrapperRef?: HTMLDivElement;
 	constructor(props: Window["props"]) {
 		super(props);
@@ -139,9 +139,11 @@ class Window extends ReflowReactComponent<
 		};
 		this.domContainer = document.createElement("div");
 		document.getElementById("app")?.appendChild(this.domContainer);
+	}
 
-		this.id = windowManager.addWindow(props.name, props.icon, {
-			minimized: props.window.minimized || false,
+	componentDidMount() {
+		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
+			minimized: this.props.window.minimized || false,
 		});
 
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
@@ -167,9 +169,6 @@ class Window extends ReflowReactComponent<
 				this.setState({ collaps: false, isActive: true });
 			} else this.setState({ isActive: false });
 		});
-	}
-
-	componentDidMount() {
 		document.addEventListener("mousedown", (e) => {
 			if (this.wrapperRef && e.target) {
 				if (

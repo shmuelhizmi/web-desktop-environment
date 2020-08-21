@@ -5,7 +5,7 @@ import {
 	ReflowReactComponent,
 	ReflowDisplayLayerElement,
 } from "@mcesystems/reflow-react-display-layer";
-import * as React from "react";
+import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import { reflowConnectionManager } from "@root/index";

@@ -5,7 +5,7 @@ import {
 	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
-import * as React from "react";
+import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme, Themes, Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";

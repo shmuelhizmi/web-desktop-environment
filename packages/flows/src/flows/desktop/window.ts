@@ -38,6 +38,11 @@ const window: Flow<
 		title: app.name,
 		name: app.name,
 		window: appWindow,
+		background: desktopManager.settingsManager.settings.desktop.background,
+	});
+
+	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
+		window.update({ background: settings.desktop.background });
 	});
 
 	window.on("setWindowState", ({ minimized, position, size }) => {

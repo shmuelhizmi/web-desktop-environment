@@ -33,16 +33,19 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 		})),
 	});
 
-	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
-		desktop.update({
-			background: settings.desktop.background,
-			nativeBackground: settings.desktop.nativeBackground,
-		});
-		viewerParameters({
-			theme: settings.desktop.theme,
-			customTheme: settings.desktop.customTheme,
-		});
-	});
+	const listenToNewSettings = desktopManager.settingsManager.emitter.on(
+		"onNewSettings",
+		(settings) => {
+			desktop.update({
+				background: settings.desktop.background,
+				nativeBackground: settings.desktop.nativeBackground,
+			});
+			viewerParameters({
+				theme: settings.desktop.theme,
+				customTheme: settings.desktop.customTheme,
+			});
+		}
+	);
 
 	desktopManager.windowManager.emitter.on("onAppsUpdate", (openApps) => {
 		desktop.update({
@@ -72,4 +75,5 @@ export default <Flow<ViewInterfacesType, defaultFlowInput>>(async ({
 	});
 
 	await desktop;
+	listenToNewSettings.remove();
 });

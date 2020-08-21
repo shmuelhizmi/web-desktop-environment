@@ -10,10 +10,16 @@ export default class Emiiter<EventList> {
 		event: T,
 		listener: (data: EventList[T]) => void
 	) => {
-		const maxListensers = this.emitter.getMaxListeners();
-		if (maxListensers <= this.emitter.listenerCount(event as string)) {
-			this.emitter.setMaxListeners(maxListensers + 10);
-		}
 		this.emitter.on(event as string, listener);
+		return {
+			remove: () => this.off(event, listener),
+			on: this.on,
+			call: (data: EventList[T]) => this.call(event, data),
+		};
 	};
+
+	public off = <T extends keyof EventList>(
+		event: T,
+		listener: (data: EventList[T]) => void
+	) => this.emitter.off(event as string, listener);
 }

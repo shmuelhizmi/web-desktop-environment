@@ -25,12 +25,15 @@ const window: Flow<
 }) => {
 	const logger = parentLogger.mount("window");
 
-	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
-		viewerParameters({
-			theme: settings.desktop.theme,
-			customTheme: settings.desktop.customTheme,
-		});
-	});
+	const listenToNewTheme = desktopManager.settingsManager.emitter.on(
+		"onNewSettings",
+		(settings) => {
+			viewerParameters({
+				theme: settings.desktop.theme,
+				customTheme: settings.desktop.customTheme,
+			});
+		}
+	);
 
 	const appWindow = { ...app.window };
 	const window = view(0, views.window, {
@@ -41,9 +44,12 @@ const window: Flow<
 		background: desktopManager.settingsManager.settings.desktop.background,
 	});
 
-	desktopManager.settingsManager.emitter.on("onNewSettings", (settings) => {
-		window.update({ background: settings.desktop.background });
-	});
+	const listenToNewBackground = desktopManager.settingsManager.emitter.on(
+		"onNewSettings",
+		(settings) => {
+			window.update({ background: settings.desktop.background });
+		}
+	);
 
 	window.on("setWindowState", ({ minimized, position, size }) => {
 		appWindow.position = position;
@@ -74,9 +80,15 @@ const window: Flow<
 		window.update({ title });
 	});
 
+	const cleanUp = () => {
+		listenToNewBackground.remove();
+		listenToNewTheme.remove();
+	};
+
 	window.then(() => {
 		logger.warn(`window ${app.name} - flow is canceled`);
 		runningApp.cancel();
+		cleanUp();
 	});
 	await runningApp;
 	window.done({});

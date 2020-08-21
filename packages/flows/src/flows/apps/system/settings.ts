@@ -11,9 +11,12 @@ const terminalFlow = <App<{}>["flow"]>(async ({
 		settings: desktopManager.settingsManager.settings,
 	});
 
-	desktopManager.settingsManager.emitter.on("onNewSettings", (newSettings) => {
-		settings.update({ settings: newSettings });
-	});
+	const listenToNewSettings = desktopManager.settingsManager.emitter.on(
+		"onNewSettings",
+		(newSettings) => {
+			settings.update({ settings: newSettings });
+		}
+	);
 
 	const updateSystemInfo = async () => {
 		const [cpuInfo, memoryInfo, osInformation, diskInfo] = await Promise.all([
@@ -61,6 +64,7 @@ const terminalFlow = <App<{}>["flow"]>(async ({
 	await updateSystemInfo();
 
 	await settings;
+	listenToNewSettings.remove();
 });
 
 export const settings: App<undefined> = {

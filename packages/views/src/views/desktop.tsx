@@ -14,6 +14,7 @@ import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import EmptyComponent from "@components/emptyWrapper";
+import { Link } from "react-router-dom";
 
 export const windowsBarHeight = 55;
 
@@ -34,6 +35,30 @@ const styles = (theme: Theme) =>
 			cursor: "pointer",
 			width: 80,
 			borderRadius: "15px 15px 0 0",
+			fontSize: 40,
+			paddingTop: 5,
+			borderBottom: "none",
+			display: "flex",
+			justifyContent: "center",
+			color: theme.background.text,
+			backdropFilter: "blur(15px)",
+			border: `solid 2px ${
+				theme.background.transparentDark || theme.background.dark
+			}`,
+			background: theme.background.main,
+			"&:hover": {
+				background: theme.background.transparent,
+			},
+			zIndex: 2,
+		},
+		switchToNativeButton: {
+			position: "absolute",
+			top: 0,
+			right: 45,
+			height: windowsBarHeight,
+			cursor: "pointer",
+			width: 80,
+			borderRadius: "0 0 15px 15px",
 			fontSize: 40,
 			paddingTop: 5,
 			borderBottom: "none",
@@ -79,6 +104,9 @@ const styles = (theme: Theme) =>
 			left: 15,
 			width: 500,
 			height: 500,
+			maxHeight: "60%",
+			maxWidth: "30%",
+			overflowY: "auto",
 			padding: 5,
 			borderRadius: 10,
 			background: theme.background.transparent || theme.background.main,
@@ -229,6 +257,11 @@ class Desktop extends ReflowReactComponent<
 						{...reflowConnectionManager.connect(app.port)}
 					/>
 				))}
+				<Link to="/native">
+					<div className={classes.switchToNativeButton}>
+						<Icon width={40} height={40} name="VscWindow" />
+					</div>
+				</Link>
 				<div
 					className={classes.startBotton}
 					onClick={() => this.setState({ isStartMenuOpen: !isStartMenuOpen })}

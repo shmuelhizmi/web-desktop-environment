@@ -1,6 +1,4 @@
-import DesktopInterface, {
-	App,
-} from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import {
 	ReflowReactComponent,
 	ReflowDisplayLayerElement,
@@ -8,16 +6,15 @@ import {
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
-import { reflowConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import EmptyComponent from "@components/emptyWrapper";
 import { Icon as IconType } from "@web-desktop-environment/interfaces/lib/shared/icon";
-
-export const ConnectionContext = React.createContext<
-	{ port: number; host: string } | undefined
->(undefined);
+import { ConnectionContext } from "@root/contexts";
+import { reflowConnectionManager } from "@root/index";
+import { Link } from "react-router-dom";
+import { windowsBarHeight } from "@views/desktop";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -34,11 +31,39 @@ const styles = (theme: Theme) =>
 		},
 		appContainer: {
 			background: theme.background.transparent,
+			overflowY: "auto",
 			borderRadius: 10,
 			boxShadow: "-5px 6px 10px -1px #0007",
 			padding: 10,
 			width: "90%",
 			height: "90%",
+		},
+		hr: {
+			border: `solid 1px ${theme.background.dark}`,
+		},
+		switchToNativeButton: {
+			position: "absolute",
+			top: 0,
+			right: 45,
+			height: windowsBarHeight,
+			cursor: "pointer",
+			width: 80,
+			borderRadius: "0 0 15px 15px",
+			fontSize: 40,
+			paddingTop: 5,
+			borderBottom: "none",
+			display: "flex",
+			justifyContent: "center",
+			color: theme.background.text,
+			backdropFilter: "blur(15px)",
+			border: `solid 2px ${
+				theme.background.transparentDark || theme.background.dark
+			}`,
+			background: theme.background.main,
+			"&:hover": {
+				background: theme.background.transparent,
+			},
+			zIndex: 2,
 		},
 		appFilter: {
 			height: 55,
@@ -149,6 +174,11 @@ class Desktop extends ReflowReactComponent<
 						/>
 					</ConnectionContext.Provider>
 				))}
+				<Link to="/">
+					<div className={classes.switchToNativeButton}>
+						<Icon width={40} height={40} name="VscMultipleWindows" />
+					</div>
+				</Link>
 				<div className={classes.appContainer}>
 					<TextField
 						className={classes.appFilter}
@@ -176,7 +206,7 @@ class Desktop extends ReflowReactComponent<
 										)
 									)}
 							</div>
-							<hr />
+							<hr className={classes.hr} />
 						</>
 					)}
 					<div className={classes.appGrid}>

@@ -2,7 +2,7 @@ import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Windo
 import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import React from "react";
 import windowManager from "@state/WindowManager";
-import { ConnectionContext } from "./desktop";
+import { ConnectionContext } from "@root/contexts";
 
 class Window extends ReflowReactComponent<WindowInterface, {}> {
 	id!: number;

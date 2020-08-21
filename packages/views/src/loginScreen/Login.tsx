@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 	card: {
 		width: 500,
-		maxWidth: 500,
+		maxWidth: "80%",
 		height: 400,
-		maxHeight: 500,
+		maxHeight: "70%",
 		padding: "70px 60px",
 		display: "flex",
 		color: theme.background.text,

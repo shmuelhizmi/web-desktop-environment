@@ -19,6 +19,7 @@ import {
 import { ThemeProvider as TP } from "@material-ui/styles";
 import ThemeProvider from "@components/themeProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ConnectionContext } from "./contexts";
 
 type Views = "web" | "nativeHost" | "nativeClient";
 
@@ -27,6 +28,7 @@ const viewsMap = {
 	nativeHost: nativeViewsHost,
 	nativeClient: nativeViewsClient,
 };
+
 class ReflowConnectionManager {
 	public readonly host: string;
 	public readonly views: Views;
@@ -78,10 +80,12 @@ const App = () => {
 									{(login) => {
 										const { host, port } = login.match?.params;
 										return (
-											<ReflowDisplayLayerElement
-												{...connectToServer(host, Number(port), "nativeHost")}
-												wrapper={ThemeProvider}
-											/>
+											<ConnectionContext.Provider value={{ host, port }}>
+												<ReflowDisplayLayerElement
+													{...connectToServer(host, Number(port), "nativeHost")}
+													wrapper={ThemeProvider}
+												/>
+											</ConnectionContext.Provider>
 										);
 									}}
 								</Route>
@@ -89,24 +93,32 @@ const App = () => {
 									{(login) => {
 										const { host, port } = login.match?.params;
 										return (
-											<ReflowDisplayLayerElement
-												{...connectToServer(host, Number(port), "nativeClient")}
-												wrapper={ThemeProvider}
-											/>
+											<ConnectionContext.Provider value={{ host, port }}>
+												<ReflowDisplayLayerElement
+													{...connectToServer(
+														host,
+														Number(port),
+														"nativeClient"
+													)}
+													wrapper={ThemeProvider}
+												/>
+											</ConnectionContext.Provider>
 										);
 									}}
 								</Route>
 								<Route>
 									{() =>
 										login.isLoggedIn ? (
-											<ReflowDisplayLayerElement
-												{...connectToServer(
-													login.host,
-													Number(login.port),
-													"nativeHost"
-												)}
-												wrapper={ThemeProvider}
-											/>
+											<ConnectionContext.Provider value={login}>
+												<ReflowDisplayLayerElement
+													{...connectToServer(
+														login.host,
+														Number(login.port),
+														"nativeHost"
+													)}
+													wrapper={ThemeProvider}
+												/>
+											</ConnectionContext.Provider>
 										) : (
 											<Login
 												onLogin={(host, port) =>
@@ -124,24 +136,28 @@ const App = () => {
 									{(login) => {
 										const { host, port } = login.match?.params;
 										return (
-											<ReflowDisplayLayerElement
-												{...connectToServer(host, Number(port), "web")}
-												wrapper={ThemeProvider}
-											/>
+											<ConnectionContext.Provider value={{ host, port }}>
+												<ReflowDisplayLayerElement
+													{...connectToServer(host, Number(port), "web")}
+													wrapper={ThemeProvider}
+												/>
+											</ConnectionContext.Provider>
 										);
 									}}
 								</Route>
 								<Route>
 									{() =>
 										login.isLoggedIn ? (
-											<ReflowDisplayLayerElement
-												{...connectToServer(
-													login.host,
-													Number(login.port),
-													"web"
-												)}
-												wrapper={ThemeProvider}
-											/>
+											<ConnectionContext.Provider value={login}>
+												<ReflowDisplayLayerElement
+													{...connectToServer(
+														login.host,
+														Number(login.port),
+														"web"
+													)}
+													wrapper={ThemeProvider}
+												/>
+											</ConnectionContext.Provider>
 										) : (
 											<Login
 												onLogin={(host, port) =>

@@ -85,7 +85,6 @@ class Window extends ReflowReactComponent<
 		};
 	}
 	componentDidMount = () => {
-		document.title = this.props.title;
 		window.addEventListener("resize", () => {
 			this.props.event("setWindowState", this.windowState);
 		});
@@ -105,6 +104,7 @@ class Window extends ReflowReactComponent<
 
 	render() {
 		const { classes, background } = this.props;
+		document.title = this.props.title;
 		return (
 			<div>
 				<div className={classes.container}>{this.props.children}</div>

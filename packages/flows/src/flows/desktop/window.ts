@@ -1,4 +1,4 @@
-import { Flow } from "@web-desktop-environment/reflow";
+import { Flow, createContext } from "@web-desktop-environment/reflow";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@apps/index";
 import Logger from "@utils/logger";
@@ -13,6 +13,11 @@ export interface WindowInput<
 	parentLogger: Logger;
 }
 
+export const windowContext = createContext<{
+	setWindowTitle: (title: string) => void;
+	closeWindow: () => void;
+}>();
+
 const window: Flow<
 	ViewInterfacesType,
 	WindowInput & defaultFlowInput
@@ -21,10 +26,10 @@ const window: Flow<
 	views,
 	flow,
 	viewerParameters,
+	addContext,
 	input: { app, appParams, parentLogger, desktopManager },
 }) => {
 	const logger = parentLogger.mount("window");
-
 	const listenToNewTheme = desktopManager.settingsManager.emitter.on(
 		"onNewSettings",
 		(settings) => {
@@ -42,6 +47,10 @@ const window: Flow<
 		name: app.name,
 		window: appWindow,
 		background: desktopManager.settingsManager.settings.desktop.background,
+	});
+	addContext(windowContext, {
+		setWindowTitle: (title) => window.update({ title }),
+		closeWindow: () => window.done({}),
 	});
 
 	const listenToNewBackground = desktopManager.settingsManager.emitter.on(

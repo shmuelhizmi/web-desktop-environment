@@ -41,6 +41,7 @@ const styles = (theme: Theme) =>
 			flexDirection: "row-reverse",
 			height: windowBarHeight,
 			width: "100%",
+			justifyContent: "space-between",
 		},
 		barCollaps: {
 			borderRadius: "7px 7px 7px 7px",
@@ -86,13 +87,14 @@ const styles = (theme: Theme) =>
 		},
 		barTitle: {
 			position: "relative",
-			right: -35,
 			top: 2,
+			left: 45,
 			width: "100%",
 			textAlign: "center",
 			whiteSpace: "nowrap",
 			overflow: "hidden",
 			textOverflow: "ellipsis",
+			maxWidth: "calc(100% - 90px)",
 			userSelect: "none",
 			color: theme.background.text,
 		},

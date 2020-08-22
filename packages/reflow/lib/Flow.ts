@@ -57,7 +57,7 @@ export type Flow<ViewsMap extends ViewsMapInterface, Input extends any = void, O
 		back: FlowBack,
 		backOutput: (output: Output) => void;
 		addContext<T>(context: Context<T>, value: T);
-		getContext<T>(context: Context<T>): T;
+		getContext<T>(context: Context<T>): T | undefined;
 	}) => Promise<Output>;
 
 export class CancellationError { }

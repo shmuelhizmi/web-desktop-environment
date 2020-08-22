@@ -8,6 +8,7 @@ import {
 import * as fs from "fs-extra";
 import { join, sep } from "path";
 import { App } from "@apps/index";
+import { windowContext } from "@desktop/window";
 
 interface ExplorerInput {
 	path?: string;
@@ -16,6 +17,7 @@ interface ExplorerInput {
 const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 	view,
 	views,
+	getContext,
 	input: { path: startingPath = homedir() },
 }) => {
 	let currentPath = startingPath;
@@ -45,7 +47,8 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 		platfromPathSperator: sep as "/" | "\\",
 		files: await listFiles(),
 	});
-
+	const window = getContext(windowContext);
+	if (window) window.setWindowTitle(`explorer - ${currentPath}`);
 	let isUpdatingFiles = false;
 	const updateFiles = async () => {
 		if (!isUpdatingFiles) {
@@ -57,6 +60,7 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 	explorer
 		.on("changeCurrentPath", async (path) => {
 			currentPath = path;
+			if (window) window.setWindowTitle(`explorer - ${currentPath}`);
 			explorer.update({
 				currentPath,
 				files: await listFiles(),

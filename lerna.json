@@ -1,6 +1,6 @@
 {
   "packages": [
-    "reflow/packages*",
+    "reflow/packages/*",
     "packages/*"
   ],
   "version": "1.0.0"

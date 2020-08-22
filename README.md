@@ -17,9 +17,33 @@ the twist with this one is that this one visual interface runs on the web (react
 ![dark theme](https://i.ibb.co/TbsHdxm/Screenshot-from-2020-07-13-21-28-51.png)
 ![light theme](https://i.ibb.co/m0wjDkB/Screenshot-from-2020-07-13-21-29-50.png)
 
-## Contribute
+# Contribute
 
 if you have any new feature or existing feature you wnat to create or improve fell free to open a Pull Request
+
+# Features
+
+## Desktop
+:heavy_check_mark: full web based desktop  
+:heavy_check_mark: Themes and custom themes  
+:heavy_check_mark: PWA app  
+:heavy_check_mark: app windows can be open as in app windows or as native separated windows  
+
+## Apps
+:heavy_check_mark: Terminal  
+:heavy_check_mark: Explorer  
+:heavy_check_mark: Settings / System info  
+
+# To do
+
+## Desktop
+:comet: more animations :)  
+:comet: white theme color ajustements  
+
+## Apps
+:comet: Notepad  
+:comet: Task manager  
+:comet: Applications store ( will take quite a long time to implement )  
 
 ## Run
 

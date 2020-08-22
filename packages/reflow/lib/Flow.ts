@@ -1,6 +1,7 @@
 
 import { FlowToolkit } from "./index";
 import { ViewsMapInterface } from "./View";
+import { Context } from "./Context";
 
 export class ActionPromise<T> extends Promise<T> {
 	onCanceled: (cb: () => void) => ActionPromise<T>;
@@ -39,6 +40,7 @@ export type FlowAction = <T>(action: Promise<T>) => ActionPromise<T>;
 export type FlowStepRegisterer = <T>(handler: () => Promise<T>, name?: string) => T;
 export type FlowBackPointRegisterer = (id?: string) => void;
 export type FlowBack = (id?: string) => void;
+export type FlowContext = Record<string, any>;
 
 export type Flow<ViewsMap extends ViewsMapInterface, Input extends any = void, Output extends any = void, State extends object = {}, Notifications extends FlowEventsDescriptor = {}, Events extends FlowEventsDescriptor = {}> =
 	(toolkit: FlowToolkit<ViewsMap> & {
@@ -54,6 +56,8 @@ export type Flow<ViewsMap extends ViewsMapInterface, Input extends any = void, O
 		backPoint: FlowBackPointRegisterer,
 		back: FlowBack,
 		backOutput: (output: Output) => void;
+		addContext<T>(context: Context<T>, value: T);
+		getContext<T>(context: Context<T>): T;
 	}) => Promise<Output>;
 
 export class CancellationError { }
@@ -81,11 +85,13 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 	private backOutput: Output | undefined;
 	private currentStepActions: ActionPromise<any>[] = [];
 
+	public context: FlowContext;
+
 	public flowProcedure: Flow<ViewsMap, Input, Output>;
 	public toolkit: FlowToolkit<ViewsMap>;
 	public state: State;
 	public input: Input;
-	constructor(executor: (resolve: () => void, reject: () => void) => FlowProxy<ViewsMap, Input, Output, State, Notifications, Events> | null, flowProc: Flow<ViewsMap, Input, Output, State>, toolkit: FlowToolkit<ViewsMap>, input?: Input, state?: State, options?: FlowOptions) {
+	constructor(executor: (resolve: () => void, reject: () => void) => FlowProxy<ViewsMap, Input, Output, State, Notifications, Events> | null, flowProc: Flow<ViewsMap, Input, Output, State>, toolkit: FlowToolkit<ViewsMap>,context: FlowContext, input?: Input, state?: State, options?: FlowOptions) {
 		super(executor ? executor : (resolve, reject) => {
 			tmpResolve = resolve;
 			tmpReject = reject;
@@ -105,6 +111,7 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 		this.toolkit = toolkit;
 		this.state = state;
 		this.input = input;
+		this.context = context;
 
 		this.event = this.event.bind(this);
 		this.action = this.action.bind(this);
@@ -117,6 +124,8 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 		this.back = this.back.bind(this);
 		this.backPoint = this.backPoint.bind(this);
 		this.setBackOutput = this.setBackOutput.bind(this);
+		this.getContext = this.getContext.bind(this);
+		this.addContext = this.addContext.bind(this);
 
 		if (main) {
 			this.hookFlowFunction();
@@ -155,6 +164,8 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 			backPoint: this.backPoint,
 			backOutput: this.setBackOutput,
 			back: this.back,
+			getContext: this.getContext,
+			addContext: this.addContext,
 		})).then(this.resolve, this.reject).catch(() => { }).then(() => {
 			// cancel child flow if any left
 			this.cancelChildFlows();
@@ -400,5 +411,11 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 			this.flowRouteContinuePromiseResolver(false);
 		this.flowRouteCurrentEntryIndex = backEntryIndex;
 		this.startFlowRoute();
+	}
+	addContext<T>(context: Context<T>, value: T) {
+		this.context[context.uid] = value;
+	}
+	getContext<T>(context: Context<T>): T | undefined {
+		return this.context[context.uid];
 	}
 }

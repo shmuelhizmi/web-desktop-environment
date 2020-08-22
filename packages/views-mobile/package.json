@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@web-desktop-environment/reflow": "^4.3.4",
-    "@web-desktop-environment/reflow-react-display-layer": "^4.3.4",
+    "@mcesystems/reflow-react-display-layer": "^4.3.4",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/blur": "^3.6.0",
     "@react-native-community/datetimepicker": "^2.6.0",

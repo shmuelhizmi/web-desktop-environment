@@ -2,17 +2,16 @@
 	"name": "@web-desktop-environment/reflow",
 	"version": "4.3.4",
 	"description": "Reflow's core library",
-	"main": "dist/index",
-	"typings": "dist/index",
+	"main": "lib/index",
+	"typings": "lib/index",
 	"scripts": {
 		"dev": "tsc --watch",
-		"build": "tsc",
-		"prepublish": "npm run build"
+		"build": "tsc"
 	},
 	"repository": {
-		"url": "https://github.com/mceSystems/reflow"
+		"url": "https://github.com/shmuelhizmi/web-desktop-environment"
 	},
-	"author": "mceSystems",
+	"author": "shmuelhizmi",
 	"license": "MIT",
 	"dependencies": {
 		"socket.io": "2.1.1",

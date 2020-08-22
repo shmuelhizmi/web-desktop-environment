@@ -1,7 +1,7 @@
 import WindowInterface, {
 	LastWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import React from "react";
 import { withStyles, WithStyles, createStyles } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";

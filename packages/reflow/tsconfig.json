@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "declaration": true,
+    "jsx": "react"
+  },
+  "include": ["lib/**/*"]
+}

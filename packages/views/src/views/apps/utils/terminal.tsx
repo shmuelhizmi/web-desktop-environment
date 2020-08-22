@@ -1,5 +1,5 @@
 import TerminalInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Terminal";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import React from "react";
 import {
 	withStyles,

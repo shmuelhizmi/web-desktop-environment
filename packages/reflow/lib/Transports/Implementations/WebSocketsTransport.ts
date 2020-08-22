@@ -16,7 +16,7 @@ export default class WebSocketsTransport<
   ViewerParameters = {}
 > extends ReflowTransport<ViewerParameters> {
   private __connectionOptions: WebSocketConnectionOptions;
-  private __socket: ServerSocket | ClientSocket;
+  private __socket!: ServerSocket | ClientSocket;
   private __server?: Server;
   private requestIndex: number = 0;
   constructor(
@@ -25,7 +25,6 @@ export default class WebSocketsTransport<
   ) {
     super(connectionOptions);
     this.__connectionOptions = connectionOptions;
-    this.__socket = null;
     this.__server = server;
   }
 

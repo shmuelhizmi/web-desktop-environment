@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Transports } from "@web-desktop-environment/reflow";
-import {
-	renderDisplayLayer,
-	ReflowDisplayLayerElement,
-} from "@web-desktop-environment/reflow-react-display-layer";
 import Login from "@root/loginScreen/Login";
 import "@root/index.css";
 import * as webViews from "@root/views";
@@ -20,6 +16,7 @@ import { ThemeProvider as TP } from "@material-ui/styles";
 import ThemeProvider from "@components/themeProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
+import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
 
 type Views = "web" | "nativeHost" | "nativeClient";
 
@@ -31,12 +28,10 @@ const viewsMap = {
 
 class ReflowConnectionManager {
 	public readonly host: string;
-	public readonly views: Views;
-	constructor(host: string, views: Views) {
+	constructor(host: string) {
 		this.host = host;
-		this.views = views;
 	}
-	connect = (port: number, mountPoint?: Element) => {
+	connect = (port: number, views: Views) => {
 		const transport = new Transports.WebSocketsTransport<{
 			theme?: ThemeType;
 			customTheme?: Theme;
@@ -44,23 +39,15 @@ class ReflowConnectionManager {
 			port,
 			host: this.host,
 		});
-		if (mountPoint) {
-			renderDisplayLayer({
-				element: mountPoint,
-				transport,
-				views: viewsMap[this.views],
-				wrapper: ThemeProvider,
-			});
-		}
-		return { transport, views: viewsMap[this.views] };
+		return { transport, views: viewsMap[views] };
 	};
 }
 
 export let reflowConnectionManager: ReflowConnectionManager;
 
 export const connectToServer = (host: string, port: number, views: Views) => {
-	reflowConnectionManager = new ReflowConnectionManager(host, views);
-	return reflowConnectionManager.connect(port);
+	reflowConnectionManager = new ReflowConnectionManager(host);
+	return reflowConnectionManager.connect(port, views);
 };
 
 const App = () => {
@@ -76,8 +63,9 @@ const App = () => {
 					<Switch>
 						<Route path="/native">
 							<Switch>
-								<Route path="/native/connect/:host/:port/">
-									{(login) => {
+								<Route
+									path="/native/connect/:host/:port/"
+									render={(login) => {
 										const { host, port } = login.match?.params;
 										return (
 											<ConnectionContext.Provider value={{ host, port }}>
@@ -88,7 +76,7 @@ const App = () => {
 											</ConnectionContext.Provider>
 										);
 									}}
-								</Route>
+								></Route>
 								<Route path="/native/client/connect/:host/:port/">
 									{(login) => {
 										const { host, port } = login.match?.params;

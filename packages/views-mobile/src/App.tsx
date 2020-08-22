@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { Transports } from "@web-desktop-environment/reflow";
-import { ReflowDisplayLayerElement } from "@web-desktop-environment/reflow-react-display-layer";
 import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import * as views from "@views/index";
 import LinearGradient from "react-native-linear-gradient";
 import { getKey, setKey } from "@root/localstorage";
 import ThemeProvider from "@components/themeProvider";
+import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
 
 class ReflowConnectionManager {
 	host: string;

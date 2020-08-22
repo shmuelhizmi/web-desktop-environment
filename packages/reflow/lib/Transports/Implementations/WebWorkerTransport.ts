@@ -12,8 +12,6 @@ interface WorkerConnectionOptions {
   connection: Worker | MessageClient | BroadcastChannel | Window;
 }
 
-BroadcastChannel;
-
 interface WorkerEvent {
   name: string;
   data: any;

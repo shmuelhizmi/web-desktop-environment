@@ -3,6 +3,7 @@ import { ViewProxy } from "./ViewProxy";
 import { ViewsMapInterface, ViewInterface } from "./View";
 import { v4 } from "uuid";
 import { ReflowTransport } from "./Transports";
+import { FlowContext } from ".";
 
 export interface Strings {
 	[locale: string]: {
@@ -200,7 +201,7 @@ export class Reflow<ViewsMap extends ViewsMapInterface, ViewerParameters = {}> {
 	}
 	private getToolkit(flowViewStackIndex: number, viewParent: ViewProxy<ViewsMap, ViewsMap[keyof ViewsMap]>, viewParentUid: string): FlowToolkit<ViewsMap> {
 		return {
-			flow: this.flow.bind(this, viewParent),
+			flow: this.flow.bind(this, viewParent, {}),
 			view: this.view.bind(this, flowViewStackIndex, viewParentUid),
 			views: this.views,
 			viewerParameters: this.updateViewerParameters.bind(this),
@@ -329,6 +330,7 @@ export class Reflow<ViewsMap extends ViewsMapInterface, ViewerParameters = {}> {
 		Events extends object
 	>(
 		hiddenViewParent: ViewProxy<ViewsMap, ViewsMap[keyof ViewsMap]>,
+		context: FlowContext,
 		flow: Flow<ViewsMap, Input, Output, State, Notifications, Events> | FlowProxy<ViewsMap, Input, Output, State, Notifications, Events>,
 		input?: Input,
 		viewParent: ViewProxy<ViewsMap, ViewsMap[keyof ViewsMap]> = null,
@@ -349,10 +351,11 @@ export class Reflow<ViewsMap extends ViewsMapInterface, ViewerParameters = {}> {
 				done: false,
 			};
 		}
+		const flowContext = {...context};
 		if (flow instanceof FlowProxy) {
-			flowProxy = new FlowProxy(null, flow.flowProcedure, flow.toolkit, input, flow.state, options);
+			flowProxy = new FlowProxy(null, flow.flowProcedure, {...flow.toolkit, flow: this.flow.bind(this, realViewParent, flowContext)}, flowContext, input, flow.state, options);
 		} else {
-			flowProxy = new FlowProxy<ViewsMap, Input, Output>(null, flow, this.getToolkit(flowViewStackIndex, realViewParent, viewParentUid), input, {}, options);
+			flowProxy = new FlowProxy<ViewsMap, Input, Output>(null, flow, {...this.getToolkit(flowViewStackIndex, realViewParent, viewParentUid), flow: this.flow.bind(this, realViewParent, flowContext)}, flowContext, input, {}, options);
 		}
 		flowProxy.then((result) => {
 			// when a flow finishes, remove all its views
@@ -382,7 +385,7 @@ export class Reflow<ViewsMap extends ViewsMapInterface, ViewerParameters = {}> {
 		}
 		this.started = true;
 		await this.transport.initializeAsEngine();
-		this.mainFlowProxy = <FlowProxy<ViewsMap, Input, Output>>this.flow(null, flow, input);
+		this.mainFlowProxy = <FlowProxy<ViewsMap, Input, Output>>this.flow(null, {}, flow, input);
 		return await this.mainFlowProxy;
 	}
 	cancel() {

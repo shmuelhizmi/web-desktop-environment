@@ -1,8 +1,5 @@
 import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import {
-	ReflowReactComponent,
-	ReflowDisplayLayerElement,
-} from "@web-desktop-environment/reflow-react-display-layer";
+import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
@@ -15,6 +12,7 @@ import { ConnectionContext } from "@root/contexts";
 import { reflowConnectionManager } from "@root/index";
 import { Link } from "react-router-dom";
 import { windowsBarHeight } from "@views/desktop";
+import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -170,7 +168,7 @@ class Desktop extends ReflowReactComponent<
 					>
 						<ReflowDisplayLayerElement
 							wrapper={EmptyComponent}
-							{...reflowConnectionManager.connect(app.port)}
+							{...reflowConnectionManager.connect(app.port, "nativeHost")}
 						/>
 					</ConnectionContext.Provider>
 				))}

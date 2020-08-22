@@ -2,7 +2,7 @@
 a web/nodejs-based cross-platform desktop environment
 
 ## What is a Web Desktop Environment
-like any other desktop environemnt it's just a visual interface for your computer.
+like any other desktop environment it's just a visual interface for your computer.
 the twist with this one is that this one visual interface runs on the web (react) with his server (node) running on your computer
 
 ## Use Cases

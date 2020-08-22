@@ -47,7 +47,12 @@ const window: Flow<
 	const listenToNewBackground = desktopManager.settingsManager.emitter.on(
 		"onNewSettings",
 		(settings) => {
-			window.update({ background: settings.desktop.background });
+			{
+				window.update({ background: settings.desktop.background });
+				logger.info(
+					`set window - ${app.name} to ${settings.desktop.background}`
+				);
+			}
 		}
 	);
 

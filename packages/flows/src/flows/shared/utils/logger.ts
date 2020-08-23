@@ -9,18 +9,42 @@ export default class Logger {
 			this.level = color.bgBlack("root");
 		}
 	}
-	info = (message: string) => {
-		console.info(`[ ${this.level} ]: ${color.green(message)}`);
+	private formatMessage = (message: string) => {
+		if (message.includes("\n")) {
+			return `
+			-------------------message-----------------
+			|${message.split("\n").reduce(
+				(previousValue, currentValue) =>
+					`${previousValue}
+			|${currentValue}`
+			)}
+			-------------------------------------------
+			`;
+		} else {
+			return message;
+		}
 	};
-	error = (message: string) => {
-		console.error(`[ ${this.level} ]: ${color.red(message)}`);
+
+	public info = (message: string) => {
+		console.info(
+			`[ ${this.level} ]: ${color.green(this.formatMessage(message))}`
+		);
 	};
-	warn = (message: string) => {
-		console.warn(`[ ${this.level} ]: ${color.yellow(message)}`);
+	public error = (message: string) => {
+		console.error(
+			`[ ${this.level} ]: ${color.red(this.formatMessage(message))}`
+		);
 	};
-	mount = (levelName: string) => {
+	public warn = (message: string) => {
+		console.warn(
+			`[ ${this.level} ]: ${color.yellow(this.formatMessage(message))}`
+		);
+	};
+
+	public mount = (levelName: string) => {
 		return new Logger(`${this.level}:${this.randomBG()(levelName)}`);
 	};
+
 	private randomBG = () => {
 		const randomColor = () => {
 			const r = Math.random() * 125; //not 255 to avoid white on white

@@ -59,18 +59,22 @@ const window: Flow<
 			{
 				window.update({ background: settings.desktop.background });
 				logger.info(
-					`set window - ${app.name} to ${settings.desktop.background}`
+					`set ${app.name} window background to ${settings.desktop.background}`
 				);
 			}
 		}
 	);
 
-	window.on("setWindowState", ({ minimized, position, size }) => {
+	window.tryEvent("setWindowState", ({ minimized, position, size }) => {
 		appWindow.position = position;
 		appWindow.minimized = minimized;
 		appWindow.height = size.height;
 		appWindow.width = size.width;
 		window.update({ window: appWindow });
+	});
+
+	window.catchEvent("setWindowState", (error) => {
+		logger.error(`${error.message} from ${error.name} in ${error.stack}`);
 	});
 
 	window.on("launchApp", async (app) => {

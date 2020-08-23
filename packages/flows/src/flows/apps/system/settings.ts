@@ -4,6 +4,7 @@ import { cpu, mem, osInfo, diskLayout } from "systeminformation";
 const terminalFlow = <App<{}>["flow"]>(async ({
 	view,
 	views,
+	onCanceled,
 	input: { parentLogger, desktopManager },
 }) => {
 	const logger = parentLogger.mount("settings-app");
@@ -61,10 +62,15 @@ const terminalFlow = <App<{}>["flow"]>(async ({
 		desktopManager.settingsManager.setSettings(newSettings);
 	});
 	settings.on("reload", updateSystemInfo);
+
+	const cleanUp = () => {
+		listenToNewSettings.remove();
+		logger.info("settings clean up");
+	};
+	onCanceled(cleanUp);
 	await updateSystemInfo();
 
 	await settings;
-	listenToNewSettings.remove();
 });
 
 export const settings: App<undefined> = {

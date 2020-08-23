@@ -33,6 +33,7 @@ export class ViewProxy<ViewsMap extends ViewsMapInterface, T extends ViewsMap[ke
 	private reject: (output: Error) => void = (output) => { };
 	private onUpdate: ViewOnUpdateCallback<ViewsMap, T> = (input) => { };
 	private onRemove: ViewOnRemoveCallback = () => { };
+	private eventCatchers: { [K in ViewInterfaceEvents<ViewsMap, T>]?: Array<(error: Error) => void> } = {};
 
 	constructor(executor: (resolve: () => void, reject: () => void) => ViewProxy<ViewsMap, T> | null, onUpdate: ViewOnUpdateCallback<ViewsMap, T>, onRemove: ViewOnRemoveCallback) {
 		super(executor ? executor : (resolve) => {
@@ -49,7 +50,7 @@ export class ViewProxy<ViewsMap extends ViewsMapInterface, T extends ViewsMap[ke
 		this.onRemove = onRemove || this.onRemove;
 		this.eventListeners = {};
 	}
-	done(output: T["output"]) {
+	public done(output: T["output"]) {
 		if (!this.resolve) {
 			this.doneCalled = true;
 			this.doneCallValue = output;
@@ -57,7 +58,7 @@ export class ViewProxy<ViewsMap extends ViewsMapInterface, T extends ViewsMap[ke
 		}
 		this.resolve(output);
 	}
-	event<U extends ViewInterfaceEvents<ViewsMap, T>>(eventName: U, data: ViewInterfaceEventData<ViewsMap, T, U>) {
+	public event<U extends ViewInterfaceEvents<ViewsMap, T>>(eventName: U, data: ViewInterfaceEventData<ViewsMap, T, U>) {
 		if (this.removed) {
 			return;
 		}
@@ -75,7 +76,7 @@ export class ViewProxy<ViewsMap extends ViewsMapInterface, T extends ViewsMap[ke
 			return result;
 		}
 	}
-	on<U extends ViewInterfaceEvents<ViewsMap, T>>(eventName: U, listener: ViewInterfaceEventCallback<ViewsMap, T, U>): ViewProxy<ViewsMap, T> {
+	public on<U extends ViewInterfaceEvents<ViewsMap, T>>(eventName: U, listener: ViewInterfaceEventCallback<ViewsMap, T, U>): ViewProxy<ViewsMap, T> {
 		if (this.removed) {
 			return;
 		}
@@ -85,16 +86,34 @@ export class ViewProxy<ViewsMap extends ViewsMapInterface, T extends ViewsMap[ke
 		this.eventListeners[eventName].push(listener);
 		return this;
 	}
-	update(params: PartialViewInterfaceInput<ViewsMap, T>) {
-		if (this.removed) {
+	public update(params: PartialViewInterfaceInput<ViewsMap, T>) {
+		if (this.removed || this.doneCalled) {
 			return;
 		}
 		this.onUpdate(params);
 	}
-	remove() {
+	public remove() {
 		this.removed = true;
 		this.onRemove();
 		// when a view is removed, resolve the promise.
 		this.done(undefined);
+	}
+	tryEvent<U extends ViewInterfaceEvents<ViewsMap, T>>(eventName: U, listener: ViewInterfaceEventCallback<ViewsMap, T, U>): ViewProxy<ViewsMap, T> {
+		this.on(eventName, (data: ViewInterfaceEventData<ViewsMap, T, U>) => {
+			try {
+				return listener(data);
+			} catch(e) {
+				if (this.eventCatchers[eventName]) {
+					this.eventCatchers[eventName].forEach((catcher) => catcher(e));
+				}
+			}
+			});
+		return this;
+	}
+	public catchEvent(location: ViewInterfaceEvents<ViewsMap, T>, catcher: (error: Error) => void){
+		if(!this.eventCatchers[location]) {
+			this.eventCatchers[location] = [];
+		}
+		this.eventCatchers[location].push(catcher);
 	}
 }

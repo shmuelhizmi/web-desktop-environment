@@ -146,7 +146,7 @@ class Window extends ReflowReactComponent<
 		if (this.props.window.position) {
 			const position = { ...this.props.window.position };
 			if (position.x > window.innerWidth - size.width / 2) {
-				position.x = window.innerWidth - size.width;
+				position.x = position.x % window.innerWidth;
 			}
 			if (position.x < windowBarHeight) {
 				position.x = windowBarHeight;
@@ -293,7 +293,7 @@ class Window extends ReflowReactComponent<
 					<div className={classes.root} onClick={() => this.moveToTop()}>
 						<ResizableBox
 							width={size.width}
-							height={size.height}
+							height={collaps ? 0 : size.height}
 							onResize={(_e: null, resize: { size: Size }) =>
 								this.setState({ size: resize.size })
 							}

@@ -71,7 +71,7 @@ const styles = (theme: Theme) =>
 			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 120px))",
 			margin: 15,
 			justifyContent: "center",
-			gridGap: 10,
+			gridGap: 30,
 			gridAutoRows: 100,
 		},
 		app: {
@@ -80,9 +80,12 @@ const styles = (theme: Theme) =>
 			color: theme.secondary.text,
 			cursor: "pointer",
 			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
-			transition: "background 100ms",
+			transition: "background 280ms, color 280ms, transform 450ms",
 			"&:hover": {
-				background: theme.secondary.dark,
+				boxShadow: `0px 10px 10px 10px ${theme.shadowColor}`,
+				background: theme.secondary.main,
+				color: theme.secondary.text,
+				transform: "scale(1.25) translateY(-20px)",
 				backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
 			},
 			height: 90,
@@ -91,6 +94,9 @@ const styles = (theme: Theme) =>
 		},
 		openApp: {
 			borderBottom: `2px solid ${theme.secondary.main}`,
+			"&:hover": {
+				borderBottom: `2px solid ${theme.secondary.text}`,
+			},
 		},
 		appIcon: {
 			userSelect: "none",

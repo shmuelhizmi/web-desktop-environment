@@ -1,4 +1,4 @@
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import WindowViewInterface from "@web-desktop-environment/interfaces/lib/views/Window";
 
 class Window extends ReflowReactComponent<WindowViewInterface> {

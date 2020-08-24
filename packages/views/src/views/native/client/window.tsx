@@ -1,7 +1,7 @@
 import WindowInterface, {
 	LastWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React, { useState, useEffect } from "react";
 import {
 	withStyles,
@@ -63,7 +63,7 @@ export const LocationBasedImage = ({ background }: { background: string }) => {
 				height: window.screen.height,
 				transform: `translate(
 				  -${left && left % window.screen.availWidth}px,
-				  -${top && top - 40}px
+				  -${top && top - 70}px
 				   )`,
 			}}
 		/>

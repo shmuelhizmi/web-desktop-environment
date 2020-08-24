@@ -1,5 +1,5 @@
 import React from "react";
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import DesktopInterface, {
 	App,
 	OpenApp,

@@ -24,7 +24,7 @@ const useStyle = (
 
 interface TextFieldProps {
 	onChange?: (newValue: string, e: React.ChangeEvent<HTMLInputElement>) => void;
-	value?: string | number | readonly string[] | undefined;
+	value?: string | number | string[] | undefined;
 	placeholder?: string;
 	className?: string;
 	color?: Colors;
@@ -32,7 +32,7 @@ interface TextFieldProps {
 	border?: boolean;
 	borderBottom?: boolean;
 	transparent?: boolean;
-	defaultValue?: string | number | readonly string[] | undefined;
+	defaultValue?: string | number | string[] | undefined;
 }
 
 const TextField = ({

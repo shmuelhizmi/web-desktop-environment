@@ -2,8 +2,8 @@ import {
 	ViewsMapInterface,
 	ReflowTransport,
 } from "@web-desktop-environment/reflow";
-import { ViewsComponents } from "@mcesystems/reflow-react-display-layer/dist/ReflowDisplayLayer";
-import { ReflowDisplayLayerElement as BaseElement } from "@mcesystems/reflow-react-display-layer";
+import { ViewsComponents } from "@web-desktop-environment/reflow-react-display-layer/dist/ReflowDisplayLayer";
+import { ReflowDisplayLayerElement as BaseElement } from "@web-desktop-environment/reflow-react-display-layer";
 
 interface ReactReflowDisplayLayerElementProps<
 	ViewMap extends ViewsMapInterface,

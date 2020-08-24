@@ -16,7 +16,10 @@ import { ThemeProvider as TP } from "@material-ui/styles";
 import ThemeProvider from "@components/themeProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
-import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
+import { ReflowDisplayLayerElement } from "@web-desktop-environment/reflow-react-display-layer";
+import StateComponent from "@components/stateComponent";
+
+window.React = React;
 
 type Views = "web" | "nativeHost" | "nativeClient";
 
@@ -68,12 +71,20 @@ const App = () => {
 									render={(login) => {
 										const { host, port } = login.match?.params;
 										return (
-											<ConnectionContext.Provider value={{ host, port }}>
-												<ReflowDisplayLayerElement
-													{...connectToServer(host, Number(port), "nativeHost")}
-													wrapper={ThemeProvider}
-												/>
-											</ConnectionContext.Provider>
+											<StateComponent<{}> defaultState={{}}>
+												{() => (
+													<ConnectionContext.Provider value={{ host, port }}>
+														<ReflowDisplayLayerElement
+															{...connectToServer(
+																host,
+																Number(port),
+																"nativeHost"
+															)}
+															wrapper={ThemeProvider}
+														/>
+													</ConnectionContext.Provider>
+												)}
+											</StateComponent>
 										);
 									}}
 								></Route>

@@ -16,17 +16,13 @@ export interface Move {
   originalPath: string;
   newPath: string;
 }
-
-export interface Download {
-  file: string;
-  downloadLink: string;
-}
+type ExplorerViewType = "explore" | "select-file" | "select-folder";
 
 export interface Input {
+  type: ExplorerViewType;
   currentPath: string;
   platfromPathSperator: "/" | "\\";
   files: File[];
-  downloads: Download[];
 }
 
 export interface Events {
@@ -35,11 +31,14 @@ export interface Events {
   move: Move;
   copy: Move;
   delete: string; //path
-  requestDownload: string; // path
+  requestDownloadLink: (path: string) => Promise<{ path: string; port: number; }>; // download link
   changeCurrentPath: string; //path
 }
 
-export interface Output {}
+export interface Output {
+  type: ExplorerViewType;
+  result?: string; // path
+}
 
 export default interface Explorer
   extends ViewInterface<Input, Events, Output> {}

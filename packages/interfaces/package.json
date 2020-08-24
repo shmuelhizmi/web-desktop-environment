@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@web-desktop-environment/reflow": "^4.3.4"
+    "@web-desktop-environment/reflow": "^1.0.0"
   },
   "devDependencies": {
     "typescript": "^3.9.7",

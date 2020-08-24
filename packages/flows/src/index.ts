@@ -26,24 +26,22 @@ const rootLogger = new Logger();
 
 const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 
-desktopManager.settingsManager.initalize().then(() => {
-	desktopManager.portManager
-		.getPort(true)
-		.then((port) => {
-			const reflow = createReflow(
-				port,
-				desktopManager.settingsManager.settings.desktop.theme,
-				desktopManager.settingsManager.settings.desktop.customTheme
-			);
-			rootLogger.info(`starting webOS on port ${port}`);
-			reflow
-				.start(desktop, {
-					desktopManager,
-					parentLogger: rootLogger,
-				})
-				.then(() => {
-					rootLogger.warn("app exist");
-				});
+(async () => {
+	await desktopManager.settingsManager.initalize();
+	await desktopManager.downloadManager.initalize();
+	const desktopPort = await desktopManager.portManager.getPort(true);
+	const reflow = createReflow(
+		desktopPort,
+		desktopManager.settingsManager.settings.desktop.theme,
+		desktopManager.settingsManager.settings.desktop.customTheme
+	);
+	rootLogger.info(`starting webOS on port ${desktopPort}`);
+	reflow
+		.start(desktop, {
+			desktopManager,
+			parentLogger: rootLogger,
 		})
-		.catch((e) => rootLogger.error((e && e.message) || e));
-});
+		.then(() => {
+			rootLogger.warn("app exist");
+		});
+})();

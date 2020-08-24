@@ -1,7 +1,10 @@
 import DesktopInterface, {
 	App,
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import {
+	ReflowReactComponent,
+	ReflowDisplayLayerElement,
+} from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
@@ -12,7 +15,6 @@ import windowManager, { Window } from "@state/WindowManager";
 import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import EmptyComponent from "@components/emptyWrapper";
 import { Link } from "react-router-dom";
-import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
 
 export const windowsBarHeight = 55;
 

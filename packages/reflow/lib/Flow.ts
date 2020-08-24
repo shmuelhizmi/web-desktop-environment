@@ -44,17 +44,17 @@ export type FlowContext = Record<string, any>;
 
 export type Flow<ViewsMap extends ViewsMapInterface, Input extends any = void, Output extends any = void, State extends object = {}, Notifications extends FlowEventsDescriptor = {}, Events extends FlowEventsDescriptor = {}> =
 	(toolkit: FlowToolkit<ViewsMap> & {
-		input: Input,
-		state: State,
-		event: FlowEventsEmitter<Events>,
-		on: FlowEventRegisterer<Notifications>,
-		off: FlowEventRemover<Notifications>,
-		action: FlowAction,
-		onCanceled: (cb: () => void) => void,
-		cancel: () => void,
-		step: FlowStepRegisterer,
-		backPoint: FlowBackPointRegisterer,
-		back: FlowBack,
+		input: Input;
+		state: State;
+		event: FlowEventsEmitter<Events>;
+		on: FlowEventRegisterer<Notifications>;
+		off: FlowEventRemover<Notifications>;
+		action: FlowAction;
+		onCanceled: (cb: () => void) => void;
+		cancel: () => void;
+		step: FlowStepRegisterer;
+		backPoint: FlowBackPointRegisterer;
+		back: FlowBack;
 		backOutput: (output: Output) => void;
 		addContext<T>(context: Context<T>, value: T);
 		getContext<T>(context: Context<T>): T | undefined;
@@ -72,6 +72,7 @@ export class FlowProxy<ViewsMap extends ViewsMapInterface, Input extends any = v
 	private resolve: (output: Output) => void = () => { };
 	private reject: (err?) => void = () => { };
 	private notificationListeners: { [T in keyof Notifications]?: Array<FlowEventListener<Notifications, T>> } = {};
+	private eventCatchers: { [T in keyof Notifications | "cancel" | "step"]?: Array<(error: Error) => void> } = {};
 	private eventListeners: { [T in keyof Events]?: Array<FlowEventListener<Events, T>> } = {};
 	private cancellationPromise: Promise<CancellationError>;
 	private cancellationPromiseEmitters: Array<() => void> = [];

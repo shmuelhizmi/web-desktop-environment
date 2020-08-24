@@ -12,7 +12,7 @@ export default class PortManager {
 		this.logger = parentLogger.mount("port-manager");
 		this.desktopManager = desktopManger;
 	}
-	getPort = async (isMainPort?: boolean): Promise<number> => {
+	public getPort = async (isMainPort?: boolean): Promise<number> => {
 		const {
 			endPort,
 			mainPort,

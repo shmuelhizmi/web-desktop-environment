@@ -1,6 +1,6 @@
 {
 	"name": "@web-desktop-environment/reflow",
-	"version": "4.3.4",
+	"version": "1.0.0",
 	"description": "Reflow's core library",
 	"main": "lib/index",
 	"typings": "lib/index",
@@ -20,7 +20,7 @@
 	"devDependencies": {
 		"@types/uuid": "^3.4.3",
 		"@types/node": "^12.0.0",
-		"typescript": "^3.2.4"
+		"typescript": "^3.9.7"
 	},
 	"publishConfig": {
 		"access": "public"

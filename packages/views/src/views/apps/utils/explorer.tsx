@@ -1,7 +1,7 @@
 import ExplorerInterface, {
 	File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
-import { ReflowReactComponent } from "@mcesystems/reflow-react-display-layer";
+import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
@@ -9,6 +9,7 @@ import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
 import Emiiter from "@state/Emitter";
+import { reflowConnectionManager } from "@root/index";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -36,6 +37,7 @@ const styles = (theme: Theme) =>
 			display: "flex",
 		},
 		actionButton: {
+			textDecoration: "none",
 			padding: 4,
 			minWidth: 40,
 			textAlign: "center",
@@ -252,6 +254,7 @@ interface ExplorerState {
 	cutPath?: { fullPath: string; name: string };
 	confirm?: Confirm;
 	prompt?: Prompt;
+	downloadUrl?: string;
 }
 
 interface ExplorerEvents {
@@ -426,6 +429,8 @@ class Explorer extends ReflowReactComponent<
 				"delete",
 				`${currentPath}${platfromPathSperator}${this.selectedFile.name}`
 			);
+			this.setState({ selectedFile: undefined });
+			this.selectedFile = undefined;
 		}
 	};
 
@@ -483,7 +488,13 @@ class Explorer extends ReflowReactComponent<
 			currentPath,
 			platfromPathSperator,
 		} = this.props;
-		const { fileIsOverFile, selectedFile, copyPath, cutPath } = this.state;
+		const {
+			fileIsOverFile,
+			selectedFile,
+			copyPath,
+			cutPath,
+			downloadUrl,
+		} = this.state;
 		return (
 			<div className={classes.root}>
 				<div className={classes.locationBarContainer}>
@@ -563,6 +574,17 @@ class Explorer extends ReflowReactComponent<
 						>
 							Past
 						</div>
+						<a
+							className={`${classes.actionButton} ${
+								downloadUrl === undefined ? classes.actionButtonDisabled : ""
+							}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							href={downloadUrl}
+							download={this.selectedFile?.name}
+						>
+							{!selectedFile || downloadUrl ? "Download" : "Loading..."}
+						</a>
 					</div>
 				</div>
 				<div className={classes.fileBoxContainer}>
@@ -707,12 +729,35 @@ class Explorer extends ReflowReactComponent<
 										}}
 										onClick={() => {
 											if (selectedFile !== index) {
-												this.setState({ selectedFile: index });
+												this.selectedFile = {
+													...file,
+													fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
+												};
+												this.setState(
+													{ selectedFile: index, downloadUrl: undefined },
+													() => {
+														if (
+															this.selectedFile &&
+															!this.selectedFile.isFolder
+														) {
+															event(
+																"requestDownloadLink",
+																this.selectedFile.fullPath
+															).then((result) => {
+																this.setState({
+																	downloadUrl: `http://${reflowConnectionManager.host}:${result.port}${result.path}`,
+																});
+															});
+														}
+													}
+												);
+											} else {
+												this.setState({
+													selectedFile: undefined,
+													downloadUrl: undefined,
+												});
+												this.selectedFile = undefined;
 											}
-											this.selectedFile = {
-												...file,
-												fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
-											};
 										}}
 										onDoubleClick={() =>
 											file.isFolder &&

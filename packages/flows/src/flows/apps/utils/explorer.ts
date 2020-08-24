@@ -1,10 +1,5 @@
-import { Flow } from "@web-desktop-environment/reflow";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 import { homedir } from "os";
-import {
-	Download,
-	File,
-} from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
+import { File } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
 import { join, sep } from "path";
 import { App } from "@apps/index";
@@ -14,14 +9,14 @@ interface ExplorerInput {
 	path?: string;
 }
 
-const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
+const terminalFlow = <App<ExplorerInput>["flow"]>(async ({
 	view,
 	views,
 	getContext,
-	input: { path: startingPath = homedir() },
+	input: { path: startingPath = homedir(), desktopManager, parentLogger },
 }) => {
+	const logger = parentLogger.mount("explorer");
 	let currentPath = startingPath;
-	const downloads: Download[] = [];
 	const listFiles = async (): Promise<File[]> => {
 		const filesNames = await fs.readdir(currentPath);
 		const files = await filesNames.map(
@@ -43,9 +38,9 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 	};
 	const explorer = view(0, views.explorer, {
 		currentPath,
-		downloads,
 		platfromPathSperator: sep as "/" | "\\",
 		files: await listFiles(),
+		type: "explore",
 	});
 	const window = getContext(windowContext);
 	if (window) window.setWindowTitle(`explorer - ${currentPath}`);
@@ -85,6 +80,16 @@ const terminalFlow = <Flow<ViewInterfacesType, ExplorerInput>>(async ({
 		.on("upload", async ({ data, path }) => {
 			await fs.writeFile(path, data);
 			await updateFiles();
+		})
+		.on("requestDownloadLink", async (path) => {
+			const hash = desktopManager.downloadManager.addFile(path);
+			logger.info(
+				`user request download link for ${path} secret hash is ${hash}`
+			);
+			return {
+				path: `/${hash}`,
+				port: desktopManager.downloadManager.port,
+			};
 		});
 	await explorer;
 });

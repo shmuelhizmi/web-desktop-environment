@@ -1,4 +1,4 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 import { Settings } from "../../../shared/settings";
 import { PartialPartial } from "../../../shared/types";
 
@@ -31,14 +31,9 @@ interface SystemInformation {
 export interface Input {
   settings: Settings;
   systemInfo?: PartialPartial<SystemInformation>;
+  onReload: () => void;
+  setSettings: (settings: Settings) => void;
 }
-
-export interface Events {
-  reload: null;
-  setSettings: Settings;
-}
-
-export interface Output {}
 
 export default interface SettingsView
-  extends ViewInterface<Input, Events, Output> {}
+  extends View<Input> {}

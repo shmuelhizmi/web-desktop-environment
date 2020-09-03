@@ -11,13 +11,13 @@ import Explorer from "./views/apps/utils/Explorer";
 import Settings from "./views/apps/system/Settings";
 
 export const viewInterfaces = {
-  desktop: <Desktop>{},
-  window: <Window>{},
+  Desktop: <Desktop>{},
+  Window: <Window>{},
   // apps
-  terminal: <Terminal>{},
-  explorer: <Explorer>{},
-  settings: <Settings>{},
-  themeProvider: <ThemeProvider>{},
+  Terminal: <Terminal>{},
+  Explorer: <Explorer>{},
+  Settings: <Settings>{},
+  ThemeProvider: <ThemeProvider>{},
 };
 
 export type ViewInterfacesType = typeof viewInterfaces;

@@ -1,4 +1,4 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 import { Icon } from "../shared/icon";
 import { Window } from "../shared/window";
 
@@ -8,6 +8,12 @@ export interface Input {
   icon: Icon;
   window: Window;
   background: string;
+  setWindowState: (windowState: LastWindowState) => void;
+  onClose: () => void;
+  onLaunchApp: (parameters: {
+    name: string;
+    params: any;
+  }) => void;
 }
 
 export interface LastWindowState {
@@ -22,14 +28,4 @@ export interface LastWindowState {
   };
 }
 
-export interface Events {
-  setWindowState: LastWindowState;
-  launchApp: {
-    flow: string;
-    params: any;
-  };
-}
-
-export interface Output {}
-
-export default interface WindowViewInterface extends ViewInterface<Input, Events, Output> {}
+export default interface WindowViewInterface extends View<Input> {}

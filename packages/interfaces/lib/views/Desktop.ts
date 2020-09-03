@@ -1,4 +1,4 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 import { Icon, NativeIcon } from "../shared/icon";
 
 export interface OpenApp {
@@ -22,16 +22,11 @@ export interface Input {
   nativeBackground: string;
   apps: App[];
   openApps: OpenApp[];
-}
-
-export interface Events {
-  launchApp: {
+  onLaunchApp: (app: {
     flow: string;
     params: any;
-  };
-  closeApp: number; // app id
+  }) => void;
+  onCloseApp: (id: number) => void; // app id
 }
 
-export interface Output {}
-
-export default interface Desktop extends ViewInterface<Input, Events, Output> {}
+export default interface Desktop extends View<Input> {}

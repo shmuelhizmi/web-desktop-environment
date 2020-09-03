@@ -1,4 +1,4 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 
 export interface File {
   isFolder: boolean;
@@ -23,22 +23,14 @@ export interface Input {
   currentPath: string;
   platfromPathSperator: "/" | "\\";
   files: File[];
-}
-
-export interface Events {
-  upload: Upload;
-  createFolder: string; // path
-  move: Move;
-  copy: Move;
-  delete: string; //path
-  requestDownloadLink: (path: string) => Promise<{ path: string; port: number; }>; // download link
-  changeCurrentPath: string; //path
-}
-
-export interface Output {
-  type: ExplorerViewType;
-  result?: string; // path
+  onUpload: (upload: Upload) => void;
+  onCreateFolder: (path: string) => void;
+  onMove: (parameters: Move) => void;
+  onCopy: (parameters: Move) => void;
+  onDelete: (path: string) => void;
+  onRequestDownloadLink: (path: string) => Promise<{ path: string; port: number; }>; // download link
+  onChangeCurrentPath: (path: string) => void;
 }
 
 export default interface Explorer
-  extends ViewInterface<Input, Events, Output> {}
+  extends View<Input> {}

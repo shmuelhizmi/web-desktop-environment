@@ -5,15 +5,18 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "dist",
+    "jsx": "react",
+    "esModuleInterop": true,
     "baseUrl": "src",
     "paths": {
       "@index": ["index"],
-      "@flows": ["flows/flows"],
-      "@apps/*": ["flows/apps/*"],
-      "@desktop/*": ["flows/desktop/*"],
-      "@container/*": ["flows/container/*"],
-      "@managers/*": ["flows/shared/managers/*"],
-      "@utils/*": ["flows/shared/utils/*"]
+      "@components/*": ["components/*"],
+      "@component": ["components/base/Component"],
+      "@apps/*": ["components/apps/*"],
+      "@desktop/*": ["components/desktop/*"],
+      "@container/*": ["components/container/*"],
+      "@managers/*": ["managers/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src/**/*"]

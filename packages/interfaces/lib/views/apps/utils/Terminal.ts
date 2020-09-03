@@ -1,13 +1,7 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 
 export interface Input {
   port: number;
 }
 
-export interface Events {
-}
-
-export interface Output {
-}
-
-export default interface Terminal extends ViewInterface<Input, Events, Output> {}
+export default interface Terminal extends View<Input> {}

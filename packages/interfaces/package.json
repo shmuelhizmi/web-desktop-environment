@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@web-desktop-environment/reflow": "^1.0.0"
+    "@react-fullstack/fullstack": "0.1.10"
   },
   "devDependencies": {
     "typescript": "^3.9.7",

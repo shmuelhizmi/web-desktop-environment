@@ -1,4 +1,4 @@
-import { ViewInterface } from "@web-desktop-environment/reflow";
+import { View } from "@react-fullstack/fullstack";
 
 interface Document {
   name: string;
@@ -9,15 +9,10 @@ interface Document {
 
 export interface Input {
   documents: Document[];
-}
-
-export interface Events {
-  save: {
+  OnSave: (parameters: {
     id: number;
     value: string;
-  };
+  }) => void;
 }
 
-export interface Output {}
-
-export default interface Notepad extends ViewInterface<Input, Events, Output> {}
+export default interface Notepad extends View<Input> {}

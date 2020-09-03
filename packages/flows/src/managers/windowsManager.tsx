@@ -50,7 +50,6 @@ export default class WindowManager {
 						<ProcessIDProvider.Provider value={id}>
 							<Window app={handler} appParams={input} />
 						</ProcessIDProvider.Provider>
-						<handler.App {...input} />
 					</AppProvider.Provider>
 				)}
 			</Server>

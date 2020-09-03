@@ -1,6 +1,6 @@
-import TerminalInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Terminal";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
+import { Component } from "@react-fullstack/fullstack";
+import TerminalInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Terminal";
 import {
 	withStyles,
 	createStyles,
@@ -37,8 +37,9 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-class Terminal extends ReflowReactComponent<
+class Terminal extends Component<
 	TerminalInterface,
+	{},
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
 	socket: SocketIOClient.Socket;

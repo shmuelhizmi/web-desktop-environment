@@ -1,11 +1,11 @@
+import React from "react";
+import { Component } from "@react-fullstack/fullstack";
 import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
 import {
 	Settings as SettingsConfiguration,
 	ThemeType,
 	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
-import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme, Themes, Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
@@ -217,10 +217,10 @@ type ColormindResponse = {
 };
 type RGBArray = [number, number, number];
 
-class Settings extends ReflowReactComponent<
+class Settings extends Component<
 	SettingsInterface,
-	WithStyles<typeof styles>,
-	SettingsState
+	SettingsState,
+	WithStyles<typeof styles>
 > {
 	constructor(props: Settings["props"]) {
 		super(props);
@@ -255,7 +255,7 @@ class Settings extends ReflowReactComponent<
 						error: Themes.transparent.error,
 						warning: Themes.transparent.warning,
 					};
-					this.props.event("setSettings", state.settings);
+					this.props.setSettings(state.settings);
 					return {
 						settings: state.settings,
 					};
@@ -264,7 +264,7 @@ class Settings extends ReflowReactComponent<
 	};
 
 	renderDesktopCategory = () => {
-		const { classes, event } = this.props;
+		const { classes, setSettings } = this.props;
 		return (
 			<div className={classes.category}>
 				<div className={classes.categoryTitle}>Desktop Settings</div>
@@ -280,7 +280,7 @@ class Settings extends ReflowReactComponent<
 										const value = e.target.value;
 										this.setState((state) => {
 											state.settings.desktop.background = value;
-											event("setSettings", state.settings);
+											setSettings(state.settings);
 											return {
 												settings: state.settings,
 											};
@@ -298,7 +298,7 @@ class Settings extends ReflowReactComponent<
 										const value = e.target.value as ThemeType;
 										this.setState((state) => {
 											state.settings.desktop.theme = value;
-											event("setSettings", state.settings);
+											setSettings(state.settings);
 											return {
 												settings: state.settings,
 											};
@@ -385,7 +385,7 @@ class Settings extends ReflowReactComponent<
 									? "#fff"
 									: "#000",
 							};
-							this.props.event("setSettings", fullState.settings);
+							this.props.setSettings(fullState.settings);
 							return {}; // no need to rerender
 						});
 					};
@@ -436,7 +436,7 @@ class Settings extends ReflowReactComponent<
 	};
 
 	renderNetworkCategory = () => {
-		const { classes, event } = this.props;
+		const { classes, setSettings } = this.props;
 		return (
 			<StateComponent
 				defaultState={{
@@ -466,7 +466,7 @@ class Settings extends ReflowReactComponent<
 													setState({ errorMainPort: "" });
 													this.setState((state) => {
 														state.settings.network.ports.mainPort = value;
-														event("setSettings", state.settings);
+														setSettings(state.settings);
 														return {
 															settings: state.settings,
 														};
@@ -497,7 +497,7 @@ class Settings extends ReflowReactComponent<
 													setState({ errorStartPort: "" });
 													this.setState((state) => {
 														state.settings.network.ports.startPort = value;
-														event("setSettings", state.settings);
+														setSettings(state.settings);
 														return {
 															settings: state.settings,
 														};
@@ -528,7 +528,7 @@ class Settings extends ReflowReactComponent<
 													setState({ errorEndPort: "" });
 													this.setState((state) => {
 														state.settings.network.ports.endPort = value;
-														event("setSettings", state.settings);
+														setSettings(state.settings);
 														return {
 															settings: state.settings,
 														};

@@ -1,10 +1,10 @@
-import desktop from "@views/native/host/desktop";
-import window from "@views/native/host/window";
+import Desktop from "@views/native/host/Desktop";
+import Window from "@views/native/host/Window";
 
 //apps
-import terminal from "@views/apps/utils/terminal";
-import explorer from "@views/apps/utils/explorer";
+import Terminal from "@views/apps/utils/Terminal";
+import Explorer from "@views/apps/utils/Explorer";
 // system
-import settings from "@views/apps/system/settings";
+import Settings from "@views/apps/system/Settings";
 
-export { desktop, window, terminal, explorer, settings };
+export { Desktop, Window, Terminal, Explorer, Settings };

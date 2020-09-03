@@ -55,9 +55,11 @@ class Settings extends Component<{}, SettingsState> {
 	};
 	componentDidMount = () => {
 		this.updateSystemInfo();
-		this.desktopManager.settingsManager.emitter.on("onNewSettings", () =>
-			this.forceUpdate()
+		const newSettingsListener = this.desktopManager.settingsManager.emitter.on(
+			"onNewSettings",
+			() => this.forceUpdate()
 		);
+		this.onComponentWillUnmount.push(newSettingsListener.remove);
 	};
 	renderComponent() {
 		const { systemInfo } = this.state;
@@ -66,7 +68,9 @@ class Settings extends Component<{}, SettingsState> {
 				{({ Settings }) => (
 					<Settings
 						onReload={this.updateSystemInfo}
-						setSettings={this.desktopManager.settingsManager.setSettings}
+						setSettings={(newSettings) =>
+							this.desktopManager.settingsManager.setSettings(newSettings)
+						}
 						settings={this.desktopManager.settingsManager.settings}
 						systemInfo={systemInfo}
 					/>

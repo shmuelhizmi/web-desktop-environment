@@ -1,10 +1,7 @@
 import DesktopInterface, {
 	App,
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import {
-	ReflowReactComponent,
-	ReflowDisplayLayerElement,
-} from "@web-desktop-environment/reflow-react-display-layer";
+import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
@@ -13,8 +10,8 @@ import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
-import EmptyComponent from "@components/emptyWrapper";
 import { Link } from "react-router-dom";
+import { Client } from "@react-fullstack/fullstack-socket-client";
 
 export const windowsBarHeight = 55;
 
@@ -202,10 +199,10 @@ interface DesktopState {
 	openWindows: Window[];
 }
 
-class Desktop extends ReflowReactComponent<
+class Desktop extends Component<
 	DesktopInterface,
-	WithStyles<typeof styles>,
-	DesktopState
+	DesktopState,
+	WithStyles<typeof styles>
 > {
 	constructor(props: Desktop["props"]) {
 		super(props);
@@ -223,14 +220,12 @@ class Desktop extends ReflowReactComponent<
 		this.setState({ openWindows: [...windowManager.windows] });
 
 	renderAppListCell = (app: App, index: number) => {
-		const { classes, event } = this.props;
+		const { classes, onLaunchApp } = this.props;
 		return (
 			<div
 				key={index}
 				className={classes.appCell}
-				onClick={() =>
-					app && event("launchApp", { flow: app.flow, params: {} })
-				}
+				onClick={() => app && onLaunchApp({ flow: app.flow, params: {} })}
 			>
 				{app.icon.type === "img" ? (
 					<img alt={`${app.name} icon`} src={app.icon.icon} />
@@ -251,9 +246,8 @@ class Desktop extends ReflowReactComponent<
 		return (
 			<div className={classes.root} style={{ background }}>
 				{openApps.map((app, i) => (
-					<ReflowDisplayLayerElement
+					<Client
 						key={i}
-						wrapper={EmptyComponent}
 						{...reflowConnectionManager.connect(app.port, "web")}
 					/>
 				))}

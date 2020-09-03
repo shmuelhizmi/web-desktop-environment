@@ -15,31 +15,32 @@ interface TerminalInput {
 	location?: string;
 }
 
-class Terminal extends Component<TerminalInput, { port: number }> {
-	server: http.Server;
-	socketServer: socket.Server;
-	port: number;
-	history: string;
-	ptyProcess: PTY;
-	constructor(props: TerminalInput) {
-		super(props);
-		this.server = http.createServer();
-		this.socketServer = socket.listen(this.server);
+interface TerminalState {
+	port?: number;
+}
+
+class Terminal extends Component<TerminalInput, TerminalState> {
+	name = "terminal";
+	server = http.createServer();
+	socketServer = socket.listen(this.server);
+	history = "";
+	ptyProcess = new PTY(
+		(data) => {
+			this.history += data;
+			this.socketServer.emit("output", data);
+		},
+		this.props.process,
+		this.props.location,
+		this.props.args
+	);
+	state: TerminalState = {};
+	componentDidMount = () => {
 		this.desktopManager.portManager.getPort().then((port) => {
 			this.server.listen(port);
 			this.setState({ port });
 		});
-		this.ptyProcess = new PTY(
-			(data) => {
-				history += data;
-				this.socketServer.emit("output", data);
-			},
-			props.process,
-			props.location,
-			props.args
-		);
 		this.socketServer.on("connection", (client) => {
-			this.socketServer.emit("output", history);
+			this.socketServer.emit("output", this.history);
 			client.on("input", (data: string) => {
 				this.ptyProcess.write(data);
 			});
@@ -49,8 +50,7 @@ class Terminal extends Component<TerminalInput, { port: number }> {
 				this.ptyProcess.setCols(columns);
 			});
 		});
-	}
-	name = "terminal";
+	};
 	renderComponent() {
 		const { port } = this.state;
 		return (

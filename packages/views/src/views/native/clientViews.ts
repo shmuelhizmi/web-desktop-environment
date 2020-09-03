@@ -1,9 +1,9 @@
-import window from "@views/native/client/window";
+import Window from "@views/native/client/Window";
 
 //apps
-import terminal from "@views/apps/utils/terminal";
-import explorer from "@views/apps/utils/explorer";
+import Terminal from "@views/apps/utils/Terminal";
+import Explorer from "@views/apps/utils/Explorer";
 // system
-import settings from "@views/apps/system/settings";
+import Settings from "@views/apps/system/Settings";
 
-export { window, terminal, explorer, settings };
+export { Window, Terminal, Explorer, Settings };

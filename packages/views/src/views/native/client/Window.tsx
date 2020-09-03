@@ -1,7 +1,7 @@
 import WindowInterface, {
 	LastWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import { Component } from "@react-fullstack/fullstack";
 import React, { useState, useEffect } from "react";
 import {
 	withStyles,
@@ -70,8 +70,9 @@ export const LocationBasedImage = ({ background }: { background: string }) => {
 	);
 };
 
-class Window extends ReflowReactComponent<
+class Window extends Component<
 	WindowInterface,
+	{},
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
 	get windowState(): LastWindowState {
@@ -86,10 +87,10 @@ class Window extends ReflowReactComponent<
 	}
 	componentDidMount = () => {
 		window.addEventListener("resize", () => {
-			this.props.event("setWindowState", this.windowState);
+			this.props.setWindowState(this.windowState);
 		});
 		window.addEventListener("visibilitychange", () => {
-			this.props.event("setWindowState", this.windowState);
+			this.props.setWindowState(this.windowState);
 		});
 		let positionX = window.screenX;
 		let positionY = window.screenY;
@@ -97,7 +98,7 @@ class Window extends ReflowReactComponent<
 			if (positionX !== window.screenX || positionY !== window.screenY) {
 				positionX = window.screenX;
 				positionY = window.screenY;
-				this.props.event("setWindowState", this.windowState);
+				this.props.setWindowState(this.windowState);
 			}
 		}, 1000);
 	};

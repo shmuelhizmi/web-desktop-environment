@@ -1,7 +1,7 @@
 import ExplorerInterface, {
 	File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
@@ -262,10 +262,10 @@ interface ExplorerEvents {
 	promptDone: Prompt;
 }
 
-class Explorer extends ReflowReactComponent<
+class Explorer extends Component<
 	ExplorerInterface,
-	WithStyles<typeof styles>,
-	ExplorerState
+	ExplorerState,
+	WithStyles<typeof styles>
 > {
 	selectedFile?: File & { fullPath: string };
 	constructor(props: Explorer["props"]) {
@@ -327,7 +327,11 @@ class Explorer extends ReflowReactComponent<
 	};
 
 	getBreadcrumbLocations = (maxLength: number) => {
-		const { currentPath, platfromPathSperator, event } = this.props;
+		const {
+			currentPath,
+			platfromPathSperator,
+			onChangeCurrentPath,
+		} = this.props;
 		let currentLocation = "";
 		const pathArray: string[] = [];
 		currentPath
@@ -343,7 +347,7 @@ class Explorer extends ReflowReactComponent<
 				isFirst: i === 0,
 				isLast: i === pathArray.length - 1,
 				onClick: () => {
-					event("changeCurrentPath", pathPartPath);
+					onChangeCurrentPath(pathPartPath);
 					this.setState({ selectedFile: undefined });
 					this.selectedFile = undefined;
 				},
@@ -358,7 +362,7 @@ class Explorer extends ReflowReactComponent<
 	};
 
 	private onDrop = async (target: File) => {
-		const { currentPath, platfromPathSperator, event } = this.props;
+		const { currentPath, platfromPathSperator, onMove } = this.props;
 		this.setState({ dragedFile: undefined });
 		if (
 			this.state.dragedFile &&
@@ -376,7 +380,7 @@ class Explorer extends ReflowReactComponent<
 					` do you want to move ${this.state.dragedFile.name} to ${newPath}`
 				)
 			) {
-				event("move", {
+				onMove({
 					newPath,
 					originalPath,
 				});
@@ -385,8 +389,7 @@ class Explorer extends ReflowReactComponent<
 	};
 
 	private onDropPath = async (path: string) => {
-		console.log("drop");
-		const { currentPath, platfromPathSperator, event } = this.props;
+		const { currentPath, platfromPathSperator, onMove } = this.props;
 		if (this.state.dragedFile) {
 			const newPath = `${path}${platfromPathSperator}${this.state.dragedFile.name}`;
 			const originalPath = `${currentPath}${platfromPathSperator}${this.state.dragedFile.name}`;
@@ -399,7 +402,7 @@ class Explorer extends ReflowReactComponent<
 					` do you want to move ${this.state.dragedFile.name} to ${newPath}`
 				)
 			) {
-				event("move", {
+				onMove({
 					newPath,
 					originalPath,
 				});
@@ -418,15 +421,14 @@ class Explorer extends ReflowReactComponent<
 	};
 
 	deleteSelected = async () => {
-		const { currentPath, platfromPathSperator } = this.props;
+		const { currentPath, platfromPathSperator, onDelete } = this.props;
 		if (
 			this.selectedFile &&
 			(await this.confirm(
 				`are you sure you want to delete ${this.selectedFile.name}`
 			))
 		) {
-			this.props.event(
-				"delete",
+			onDelete(
 				`${currentPath}${platfromPathSperator}${this.selectedFile.name}`
 			);
 			this.setState({ selectedFile: undefined });
@@ -436,10 +438,9 @@ class Explorer extends ReflowReactComponent<
 
 	createFolder = async () => {
 		const promptCreate = await this.prompt("please enter folder name:");
-		const { currentPath, platfromPathSperator } = this.props;
+		const { currentPath, platfromPathSperator, onCreateFolder } = this.props;
 		if (promptCreate.value) {
-			this.props.event(
-				"createFolder",
+			onCreateFolder(
 				`${currentPath}${platfromPathSperator}${promptCreate.value}`
 			);
 		}
@@ -447,31 +448,31 @@ class Explorer extends ReflowReactComponent<
 
 	private Past = () => {
 		const { cutPath, copyPath } = this.state;
-		const { event, platfromPathSperator, currentPath } = this.props;
+		const { platfromPathSperator, currentPath, onMove, onCopy } = this.props;
 		if (cutPath || copyPath) {
 			if (this.selectedFile?.isFolder) {
 				if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
-					event("move", {
+					onMove({
 						newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${cutPath.name}`,
 						originalPath: cutPath.fullPath,
 					});
 					this.setState({ copyPath: undefined });
 				}
 				if (copyPath && copyPath.fullPath !== this.selectedFile?.fullPath) {
-					event("copy", {
+					onCopy({
 						newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${copyPath.name}`,
 						originalPath: copyPath.fullPath,
 					});
 				}
 			} else {
 				if (cutPath) {
-					event("move", {
+					onMove({
 						newPath: `${currentPath}${platfromPathSperator}${cutPath.name}`,
 						originalPath: cutPath.fullPath,
 					});
 				}
 				if (copyPath) {
-					event("copy", {
+					onCopy({
 						newPath: `${currentPath}${platfromPathSperator}${copyPath.name}`,
 						originalPath: copyPath.fullPath,
 					});
@@ -484,9 +485,10 @@ class Explorer extends ReflowReactComponent<
 		const {
 			classes,
 			files,
-			event,
 			currentPath,
 			platfromPathSperator,
+			onRequestDownloadLink,
+			onChangeCurrentPath,
 		} = this.props;
 		const {
 			fileIsOverFile,
@@ -740,8 +742,7 @@ class Explorer extends ReflowReactComponent<
 															this.selectedFile &&
 															!this.selectedFile.isFolder
 														) {
-															event(
-																"requestDownloadLink",
+															onRequestDownloadLink(
 																this.selectedFile.fullPath
 															).then((result) => {
 																this.setState({
@@ -761,8 +762,7 @@ class Explorer extends ReflowReactComponent<
 										}}
 										onDoubleClick={() =>
 											file.isFolder &&
-											event(
-												"changeCurrentPath",
+											onChangeCurrentPath(
 												`${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
 											)
 										}

@@ -1,20 +1,17 @@
-import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import {
-	ReflowReactComponent,
-	ReflowDisplayLayerElement,
-} from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
+import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import { Client } from "@react-fullstack/fullstack-socket-client";
+import { Component } from "@react-fullstack/fullstack";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
-import EmptyComponent from "@components/emptyWrapper";
 import { Icon as IconType } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { ConnectionContext } from "@root/contexts";
 import { reflowConnectionManager } from "@root/index";
 import { Link } from "react-router-dom";
-import { windowsBarHeight } from "@views/desktop";
+import { windowsBarHeight } from "@views/Desktop";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -121,10 +118,10 @@ interface DesktopState {
 	filterAppQuery: string;
 }
 
-class Desktop extends ReflowReactComponent<
+class Desktop extends Component<
 	DesktopInterface,
-	WithStyles<typeof styles>,
-	DesktopState
+	DesktopState,
+	WithStyles<typeof styles>
 > {
 	constructor(props: Desktop["props"]) {
 		super(props);
@@ -165,7 +162,7 @@ class Desktop extends ReflowReactComponent<
 	};
 
 	render() {
-		const { background, openApps, classes, apps, event } = this.props;
+		const { background, openApps, classes, apps, onLaunchApp } = this.props;
 		const { openWindows, filterAppQuery } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
@@ -174,8 +171,7 @@ class Desktop extends ReflowReactComponent<
 						key={i}
 						value={{ host: reflowConnectionManager.host, port: app.port }}
 					>
-						<ReflowDisplayLayerElement
-							wrapper={EmptyComponent}
+						<Client
 							{...reflowConnectionManager.connect(app.port, "nativeHost")}
 						/>
 					</ConnectionContext.Provider>
@@ -228,8 +224,7 @@ class Desktop extends ReflowReactComponent<
 								this.renderAppGrid(
 									app,
 									false,
-									() =>
-										app && event("launchApp", { flow: app.flow, params: {} }),
+									() => app && onLaunchApp({ flow: app.flow, params: {} }),
 									index
 								)
 							)}

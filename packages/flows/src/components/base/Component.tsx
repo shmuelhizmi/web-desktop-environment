@@ -1,5 +1,6 @@
 import React from "react";
 import { AppProvider } from "contexts";
+import Logger from "@utils/logger";
 
 abstract class Component<Props = {}, State = {}> extends React.Component<
 	Props,
@@ -8,13 +9,23 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 	static contextType = AppProvider;
 	declare context: React.ContextType<typeof AppProvider>;
 	protected name = "base_class";
+	private _logger!: Logger;
+	public get logger() {
+		if (this._logger) {
+			return this._logger;
+		} else {
+			this._logger = this.context.logger.mount(this.name);
+			return this._logger;
+		}
+	}
+	public get desktopManager() {
+		return this.context.desktopManager;
+	}
 	protected onComponentWillUnmount: (() => void)[] = [];
 	abstract renderComponent(): JSX.Element;
 	componentWillUnmount() {
 		this.onComponentWillUnmount.forEach((cleanUp) => cleanUp());
 	}
-	public readonly logger = this.context.logger.mount(this.name);
-	public readonly desktopManager = this.context.desktopManager;
 	render() {
 		return (
 			<AppProvider.Provider

@@ -1,12 +1,12 @@
-import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
+import { Component } from "@react-fullstack/fullstack";
+import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import ReactDOM from "react-dom";
 import Dragable from "react-draggable";
 import windowManager from "@state/WindowManager";
-import { windowsBarHeight } from "@views/desktop";
+import { windowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
@@ -117,10 +117,10 @@ interface WindowState {
 	isActive?: boolean;
 }
 
-class Window extends ReflowReactComponent<
+class Window extends Component<
 	WindowInterface,
-	WithStyles<typeof styles>,
-	WindowState
+	WindowState,
+	WithStyles<typeof styles>
 > {
 	domContainer: Element;
 	id!: number;
@@ -172,7 +172,7 @@ class Window extends ReflowReactComponent<
 		});
 
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
-			this.props.event("setWindowState", {
+			this.props.setWindowState({
 				minimized: true,
 				position: this.state.position,
 				size: this.state.size,
@@ -184,7 +184,7 @@ class Window extends ReflowReactComponent<
 		});
 
 		windowManager.emitter.on("maximizeWindow", ({ id }) => {
-			this.props.event("setWindowState", {
+			this.props.setWindowState({
 				minimized: false,
 				position: this.state.position,
 				size: this.state.size,
@@ -233,11 +233,11 @@ class Window extends ReflowReactComponent<
 		const {
 			children,
 			classes,
-			done,
 			title,
 			icon,
-			event,
 			window: windowSizes,
+			onClose,
+			setWindowState,
 		} = this.props;
 		const { maxHeight, maxWidth, minHeight, minWidth } = {
 			...defualtWindowSize,
@@ -283,7 +283,7 @@ class Window extends ReflowReactComponent<
 							position.x = window.innerWidth - size.width;
 						}
 						this.setState({ position });
-						event("setWindowState", {
+						setWindowState({
 							position,
 							minimized: this.state.collaps,
 							size: this.state.size,
@@ -298,7 +298,7 @@ class Window extends ReflowReactComponent<
 								this.setState({ size: resize.size })
 							}
 							onResizeStop={() =>
-								event("setWindowState", {
+								setWindowState({
 									position: this.state.position,
 									minimized: this.state.collaps,
 									size: this.state.size,
@@ -334,7 +334,7 @@ class Window extends ReflowReactComponent<
 												: classes.barButtonInactive
 										}`}
 										onClick={() => {
-											done({});
+											onClose();
 											windowManager.closeWindow(this.id);
 										}}
 									/>

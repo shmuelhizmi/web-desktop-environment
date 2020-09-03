@@ -1,10 +1,10 @@
-import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
 import React from "react";
+import { Component } from "@react-fullstack/fullstack";
+import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
 import windowManager from "@state/WindowManager";
 import { ConnectionContext } from "@root/contexts";
 
-class Window extends ReflowReactComponent<WindowInterface, {}> {
+class Window extends Component<WindowInterface, {}> {
 	id!: number;
 	window?: globalThis.Window;
 
@@ -27,7 +27,7 @@ class Window extends ReflowReactComponent<WindowInterface, {}> {
 			const closeInterval = setInterval(() => {
 				if (this.window?.closed) {
 					if (!this.isUnmounted) {
-						this.props.done({});
+						this.props.onClose();
 						windowManager.closeWindow(this.id);
 					}
 					clearInterval(closeInterval);

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, FunctionComponent } from "react";
 import ReactDOM from "react-dom";
-import { Transports } from "@web-desktop-environment/reflow";
 import Login from "@root/loginScreen/Login";
 import "@root/index.css";
 import * as webViews from "@root/views";
@@ -8,18 +7,12 @@ import * as nativeViewsHost from "@root/views/native/hostViews";
 import * as nativeViewsClient from "@root/views/native/clientViews";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
-import {
-	ThemeType,
-	Theme,
-} from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { ThemeProvider as TP } from "@material-ui/styles";
-import ThemeProvider from "@components/themeProvider";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
-import { ReflowDisplayLayerElement } from "@web-desktop-environment/reflow-react-display-layer";
+import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
-
-window.React = React;
+import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 
 type Views = "web" | "nativeHost" | "nativeClient";
 
@@ -34,15 +27,19 @@ class ReflowConnectionManager {
 	constructor(host: string) {
 		this.host = host;
 	}
-	connect = (port: number, views: Views) => {
-		const transport = new Transports.WebSocketsTransport<{
-			theme?: ThemeType;
-			customTheme?: Theme;
-		}>({
-			port,
+	connect = <V extends Views>(
+		port: number,
+		views: V
+	): {
+		port: number;
+		host: string;
+		views: typeof viewsMap[V];
+	} => {
+		return {
 			host: this.host,
-		});
-		return { transport, views: viewsMap[views] };
+			port,
+			views: { ...viewsMap[views] },
+		};
 	};
 }
 
@@ -74,13 +71,12 @@ const App = () => {
 											<StateComponent<{}> defaultState={{}}>
 												{() => (
 													<ConnectionContext.Provider value={{ host, port }}>
-														<ReflowDisplayLayerElement
+														<Client
 															{...connectToServer(
 																host,
 																Number(port),
 																"nativeHost"
 															)}
-															wrapper={ThemeProvider}
 														/>
 													</ConnectionContext.Provider>
 												)}
@@ -93,13 +89,12 @@ const App = () => {
 										const { host, port } = login.match?.params;
 										return (
 											<ConnectionContext.Provider value={{ host, port }}>
-												<ReflowDisplayLayerElement
+												<Client
 													{...connectToServer(
 														host,
 														Number(port),
 														"nativeClient"
 													)}
-													wrapper={ThemeProvider}
 												/>
 											</ConnectionContext.Provider>
 										);
@@ -109,13 +104,12 @@ const App = () => {
 									{() =>
 										login.isLoggedIn ? (
 											<ConnectionContext.Provider value={login}>
-												<ReflowDisplayLayerElement
+												<Client
 													{...connectToServer(
 														login.host,
 														Number(login.port),
 														"nativeHost"
 													)}
-													wrapper={ThemeProvider}
 												/>
 											</ConnectionContext.Provider>
 										) : (
@@ -136,9 +130,8 @@ const App = () => {
 										const { host, port } = login.match?.params;
 										return (
 											<ConnectionContext.Provider value={{ host, port }}>
-												<ReflowDisplayLayerElement
+												<Client
 													{...connectToServer(host, Number(port), "web")}
-													wrapper={ThemeProvider}
 												/>
 											</ConnectionContext.Provider>
 										);
@@ -148,13 +141,12 @@ const App = () => {
 									{() =>
 										login.isLoggedIn ? (
 											<ConnectionContext.Provider value={login}>
-												<ReflowDisplayLayerElement
+												<Client
 													{...connectToServer(
 														login.host,
 														Number(login.port),
 														"web"
 													)}
-													wrapper={ThemeProvider}
 												/>
 											</ConnectionContext.Provider>
 										) : (

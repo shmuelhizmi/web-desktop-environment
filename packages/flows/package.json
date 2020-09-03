@@ -25,7 +25,8 @@
     "ts-node": "8.10.2",
     "tsconfig-paths": "3.9.0",
     "typescript": "^3.9.7",
-    "@types/uuid": "^3.4.3"
+    "@types/uuid": "^3.4.3",
+    "eslint-plugin-react": "7.20.6"
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.1.10",

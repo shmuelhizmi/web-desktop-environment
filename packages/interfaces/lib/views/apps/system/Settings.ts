@@ -2,7 +2,7 @@ import { View } from "@react-fullstack/fullstack";
 import { Settings } from "../../../shared/settings";
 import { PartialPartial } from "../../../shared/types";
 
-interface SystemInformation {
+export interface SystemInformation {
   cpu: {
     manufacturer: string; // e.g. 'Intel(R)'
     brandName: string; // e.g. 'Core(TM)2 Duo'

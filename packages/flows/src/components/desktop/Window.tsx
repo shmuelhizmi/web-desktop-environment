@@ -3,9 +3,7 @@ import Component from "@component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@apps/index";
-import Logger from "@utils/logger";
-import { defaultFlowInput } from "@managers/desktopManager";
-import { ProccessIDProvider } from "@managers/windowsManager";
+import { ProcessIDProvider } from "@managers/windowsManager";
 import { Window as WindowViewState } from "@web-desktop-environment/interfaces/lib/shared/window";
 import {
 	ThemeType,
@@ -45,7 +43,7 @@ class Window extends Component<WindowInput, WindowState> {
 			.customTheme,
 		background: this.desktopManager.settingsManager.settings.desktop.background,
 		title: this.props.app.name,
-		window: { ...app.window },
+		window: { ...this.props.app.window },
 	};
 	componentDidMount = () => {
 		const listenToNewSettings = this.desktopManager.settingsManager.emitter.on(
@@ -64,11 +62,11 @@ class Window extends Component<WindowInput, WindowState> {
 		const { customTheme, theme, background, title, window } = this.state;
 		const { app, appParams } = this.props;
 		return (
-			<ProccessIDProvider.Consumer>
-				{(proccessId) => {
+			<ProcessIDProvider.Consumer>
+				{(processId) => {
 					const closeWindow = () => {
-						if (proccessId) {
-							this.desktopManager.windowManager.killApp(proccessId);
+						if (processId) {
+							this.desktopManager.windowManager.killApp(processId);
 						}
 					};
 					return (
@@ -115,7 +113,8 @@ class Window extends Component<WindowInput, WindowState> {
 						</ViewsProvider>
 					);
 				}}
-			</ProccessIDProvider.Consumer>
+			</ProcessIDProvider.Consumer>
 		);
 	}
 }
+export default Window;

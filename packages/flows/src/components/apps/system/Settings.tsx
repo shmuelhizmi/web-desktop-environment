@@ -1,25 +1,22 @@
+import React from "react";
+import Component from "@component";
+import { ViewsProvider } from "@react-fullstack/fullstack";
 import { App } from "@apps/index";
 import { cpu, mem, osInfo, diskLayout } from "systeminformation";
+import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
+import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
+import { SystemInformation } from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
 
-const terminalFlow = <App<{}>["flow"]>(async ({
-	view,
-	views,
-	onCanceled,
-	input: { parentLogger, desktopManager },
-}) => {
-	const logger = parentLogger.mount("settings-app");
-	const settings = view(0, views.settings, {
-		settings: desktopManager.settingsManager.settings,
-	});
+interface SettingsState {
+	systemInfo: PartialPartial<SystemInformation>;
+}
 
-	const listenToNewSettings = desktopManager.settingsManager.emitter.on(
-		"onNewSettings",
-		(newSettings) => {
-			settings.update({ settings: newSettings });
-		}
-	);
-
-	const updateSystemInfo = async () => {
+class Settings extends Component<{}, SettingsState> {
+	name = "settings";
+	state: SettingsState = {
+		systemInfo: {},
+	};
+	updateSystemInfo = async () => {
 		const [cpuInfo, memoryInfo, osInformation, diskInfo] = await Promise.all([
 			cpu(),
 			mem(),
@@ -51,33 +48,39 @@ const terminalFlow = <App<{}>["flow"]>(async ({
 				vendor: disk.vendor,
 			})),
 		};
-		logger.info("fetch system info");
-		settings.update({
+		this.logger.info("fetch system info");
+		this.setState({
 			systemInfo,
 		});
 	};
-
-	settings.on("setSettings", (newSettings) => {
-		logger.info("settings update");
-		desktopManager.settingsManager.setSettings(newSettings);
-	});
-	settings.on("reload", updateSystemInfo);
-
-	const cleanUp = () => {
-		listenToNewSettings.remove();
-		logger.info("settings clean up");
+	componentDidMount = () => {
+		this.updateSystemInfo();
+		this.desktopManager.settingsManager.emitter.on("onNewSettings", () =>
+			this.forceUpdate()
+		);
 	};
-	onCanceled(cleanUp);
-	await updateSystemInfo();
+	renderComponent() {
+		const { systemInfo } = this.state;
+		return (
+			<ViewsProvider<ViewInterfacesType>>
+				{({ Settings }) => (
+					<Settings
+						onReload={this.updateSystemInfo}
+						setSettings={this.desktopManager.settingsManager.setSettings}
+						settings={this.desktopManager.settingsManager.settings}
+						systemInfo={systemInfo}
+					/>
+				)}
+			</ViewsProvider>
+		);
+	}
+}
 
-	await settings;
-});
-
-export const settings: App<undefined> = {
+export const settings: App<{}> = {
 	name: "Settings",
 	description: "a system settings / info mnager",
-	flow: terminalFlow,
-	defaultInput: undefined,
+	App: Settings,
+	defaultInput: {},
 	icon: {
 		type: "icon",
 		icon: "IoMdSettings",

@@ -1,5 +1,5 @@
 import React from "react";
-import { AppProvider } from "@index";
+import { AppProvider } from "contexts";
 
 abstract class Component<Props = {}, State = {}> extends React.Component<
 	Props,

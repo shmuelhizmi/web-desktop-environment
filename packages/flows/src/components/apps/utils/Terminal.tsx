@@ -1,4 +1,6 @@
-import { Flow } from "@web-desktop-environment/reflow";
+import React from "react";
+import Component from "@component";
+import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@apps/index";
 import * as socket from "socket.io";
@@ -6,7 +8,6 @@ import * as http from "http";
 import { getOS, OS } from "@utils/getOS";
 import { tmpdir } from "os";
 import { spawn, IPty } from "node-pty";
-import { defaultFlowInput } from "@managers/desktopManager";
 
 interface TerminalInput {
 	process?: string;
@@ -14,46 +15,51 @@ interface TerminalInput {
 	location?: string;
 }
 
-const terminalFlow: Flow<
-	ViewInterfacesType,
-	TerminalInput & defaultFlowInput
-> = async ({
-	view,
-	views,
-	onCanceled,
-	input: { process, args, location: cwd, desktopManager },
-}) => {
-	const server = http.createServer();
-	const socketServer = socket.listen(server);
-	const port = await desktopManager.portManager.getPort();
-	server.listen(port);
-	let history = "";
-	const ptyProcces = new PTY(
-		(data) => {
-			history += data;
-			socketServer.emit("output", data);
-		},
-		process,
-		cwd,
-		args
-	);
-	socketServer.on("connection", (client) => {
-		socketServer.emit("output", history);
-		client.on("input", (data: string) => {
-			ptyProcces.write(data);
+class Terminal extends Component<TerminalInput, { port: number }> {
+	server: http.Server;
+	socketServer: socket.Server;
+	port: number;
+	history: string;
+	ptyProcess: PTY;
+	constructor(props: TerminalInput) {
+		super(props);
+		this.server = http.createServer();
+		this.socketServer = socket.listen(this.server);
+		this.desktopManager.portManager.getPort().then((port) => {
+			this.server.listen(port);
+			this.setState({ port });
 		});
+		this.ptyProcess = new PTY(
+			(data) => {
+				history += data;
+				this.socketServer.emit("output", data);
+			},
+			props.process,
+			props.location,
+			props.args
+		);
+		this.socketServer.on("connection", (client) => {
+			this.socketServer.emit("output", history);
+			client.on("input", (data: string) => {
+				this.ptyProcess.write(data);
+			});
 
-		client.on("setColumns", (columns: number) => {
-			// fit columns to window size
-			ptyProcces.setCols(columns);
+			client.on("setColumns", (columns: number) => {
+				// fit columns to window size
+				this.ptyProcess.setCols(columns);
+			});
 		});
-	});
-	const window = view(0, views.terminal, {
-		port,
-	});
-	onCanceled(() => ptyProcces.exitPtyProcess());
-	await window;
-};
+	}
+	name = "terminal";
+	renderComponent() {
+		const { port } = this.state;
+		return (
+			<ViewsProvider<ViewInterfacesType>>
+				{({ Terminal: TerminalView }) => port && <TerminalView port={port} />}
+			</ViewsProvider>
+		);
+	}
+}
 
 const getDefaultBash = () => {
 	const os = getOS();
@@ -74,7 +80,7 @@ const getDefaultBash = () => {
 export const terminal: App<TerminalInput> = {
 	name: "Terminal",
 	description: "a terminal window",
-	flow: terminalFlow,
+	App: Terminal,
 	defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
 	nativeIcon: {
 		icon: "console",
@@ -151,5 +157,3 @@ class PTY {
 		this.out(data);
 	}
 }
-
-export default terminalFlow;

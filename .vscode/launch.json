@@ -18,7 +18,7 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
 
-      "args": ["src/index.ts"],
+      "args": ["src/index.tsx"],
 
       "cwd": "${workspaceRoot}/packages/flows/",
       "internalConsoleOptions": "openOnSessionStart",

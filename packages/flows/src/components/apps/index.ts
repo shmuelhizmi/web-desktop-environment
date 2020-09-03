@@ -3,10 +3,10 @@ import {
 	NativeIcon,
 } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import Component from "@component";
-import { terminal } from "@apps/utils/terminal";
-import { explorer } from "@apps/utils/explorer";
+import { terminal } from "@components/apps/utils/Terminal";
+import { explorer } from "@components/apps/utils/Explorer";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
-import { settings } from "@apps/system/settings";
+import { settings } from "@components/apps/system/Settings";
 
 export interface App<Params> {
 	icon: Icon;

@@ -1,5 +1,5 @@
 import Logger from "@utils/logger";
-import * as getPort from "get-port";
+import getPort from "get-port";
 import DesktopManager from "@managers/desktopManager";
 
 export const timeout = (time: number) =>

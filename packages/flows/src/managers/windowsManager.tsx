@@ -7,10 +7,12 @@ import Logger from "@utils/logger";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import DesktopManager from "@managers/desktopManager";
 import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
-import { AppProvider } from "@index";
-import Window from "@components/desktop/window";
+import Window from "@components/desktop/Window";
+import { AppProvider } from "contexts";
 
-export const ProccessIDProvider = React.createContext<undefined | number>(undefined);
+export const ProcessIDProvider = React.createContext<undefined | number>(
+	undefined
+);
 
 interface WindowManagerEvents {
 	onAppLaunch: OpenApp;
@@ -45,9 +47,9 @@ export default class WindowManager {
 					<AppProvider.Provider
 						value={{ desktopManager: this.desktopManager, logger: this.logger }}
 					>
-						<ProccessIDProvider.Provider value={id}>
+						<ProcessIDProvider.Provider value={id}>
 							<Window app={handler} appParams={input} />
-						</ProccessIDProvider.Provider>
+						</ProcessIDProvider.Provider>
 						<handler.App {...input} />
 					</AppProvider.Provider>
 				)}

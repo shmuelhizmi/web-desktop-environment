@@ -65,7 +65,7 @@ class Window extends Component<WindowInput, WindowState> {
 			<ProcessIDProvider.Consumer>
 				{(processId) => {
 					const closeWindow = () => {
-						if (processId) {
+						if (processId !== undefined) {
 							this.desktopManager.windowManager.killApp(processId);
 						}
 					};

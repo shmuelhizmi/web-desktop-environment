@@ -1,8 +1,8 @@
 //warpper
-import ThemeProvider from "@views/warpper/ThemeProvider";
+import { EmptyThemeProvider as ThemeProvider } from "@views/warpper/ThemeProvider";
 
-import Desktop from "@views/native/host/Desktop";
-import Window from "@views/native/host/Window";
+import Desktop from "@views/Desktop";
+import Window from "@views/Window";
 
 //apps
 import Terminal from "@views/apps/utils/Terminal";

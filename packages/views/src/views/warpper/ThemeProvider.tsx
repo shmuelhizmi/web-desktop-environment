@@ -18,4 +18,10 @@ class ThemeProvider extends Component<ThemeProviderInterface> {
 	}
 }
 
+export class EmptyThemeProvider extends Component<ThemeProviderInterface> {
+	render() {
+		return this.props.children;
+	}
+}
+
 export default ThemeProvider;

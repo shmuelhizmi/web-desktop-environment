@@ -1,8 +1,9 @@
-import React, { useState, FunctionComponent } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Login from "@root/loginScreen/Login";
 import "@root/index.css";
 import * as webViews from "@root/views";
+import * as webViewsWindow from "@root/views/windowViews";
 import * as nativeViewsHost from "@root/views/native/hostViews";
 import * as nativeViewsClient from "@root/views/native/clientViews";
 import "typeface-jetbrains-mono";
@@ -12,14 +13,14 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 
-type Views = "web" | "nativeHost" | "nativeClient";
+type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
 
 const viewsMap = {
 	web: webViews,
 	nativeHost: nativeViewsHost,
 	nativeClient: nativeViewsClient,
+	webWindow: webViewsWindow,
 };
 
 class ReflowConnectionManager {

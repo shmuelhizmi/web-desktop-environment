@@ -41,6 +41,8 @@ class Desktop extends Component<{}, DesktopState> {
 				this.setState({
 					background: settings.desktop.background,
 					nativeBackground: settings.desktop.nativeBackground,
+					customTheme: settings.desktop.customTheme,
+					theme: settings.desktop.theme,
 				});
 			}
 		);

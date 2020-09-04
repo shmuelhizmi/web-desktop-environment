@@ -210,12 +210,14 @@ class Desktop extends Component<
 			isStartMenuOpen: false,
 			openWindows: windowManager.windows,
 		};
+	}
+
+	componentDidMount = () => {
 		windowManager.emitter.on("addWindow", this.updateWindow);
 		windowManager.emitter.on("closeWindow", this.updateWindow);
 		windowManager.emitter.on("maximizeWindow", this.updateWindow);
 		windowManager.emitter.on("minimizeWindow", this.updateWindow);
-	}
-
+	};
 	updateWindow = () =>
 		this.setState({ openWindows: [...windowManager.windows] });
 
@@ -248,7 +250,7 @@ class Desktop extends Component<
 				{openApps.map((app, i) => (
 					<Client
 						key={i}
-						{...reflowConnectionManager.connect(app.port, "web")}
+						{...reflowConnectionManager.connect(app.port, "webWindow")}
 					/>
 				))}
 				<Link to="/native">

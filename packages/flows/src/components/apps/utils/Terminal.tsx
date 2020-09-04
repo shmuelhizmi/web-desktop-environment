@@ -50,6 +50,24 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 				this.ptyProcess.setCols(columns);
 			});
 		});
+		let lastProcessName = "";
+		const updateCurrentProcess = setInterval(() => {
+			const newPrcessName = this.ptyProcess.ptyProcess.process;
+			if (lastProcessName !== newPrcessName) {
+				lastProcessName = newPrcessName;
+				if (this.windowContext) {
+					this.windowContext.setWindowTitle(`Termianl : ${lastProcessName}`);
+				}
+			}
+		}, 100);
+		this.ptyProcess.ptyProcess.onExit(() => {
+			if (!this.isComponentUnmounted && this.windowContext) {
+				this.windowContext.closeWindow();
+			}
+		});
+		this.onComponentWillUnmount.push(() => {
+			clearInterval(updateCurrentProcess);
+		});
 	};
 	renderComponent() {
 		const { port } = this.state;
@@ -104,7 +122,7 @@ export const terminal: App<TerminalInput> = {
 // from https://svaddi.dev/how-to-create-web-based-terminals/;
 class PTY {
 	shell: string;
-	ptyProcess: IPty;
+	public ptyProcess: IPty;
 	out: (data: string) => void;
 	constructor(out: (data) => void, shell: string, cwd: string, args: string[]) {
 		// Setting default terminals based on user os

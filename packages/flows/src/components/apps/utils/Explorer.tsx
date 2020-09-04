@@ -10,7 +10,6 @@ import {
 import * as fs from "fs-extra";
 import { join, sep } from "path";
 import { App } from "@apps/index";
-import { WindowContext } from "@components/desktop/Window";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 
 interface ExplorerInput {
@@ -99,31 +98,28 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 	renderComponent() {
 		const { currentPath, files } = this.state;
 		return (
-			<WindowContext.Consumer>
-				{(window) => (
-					<ViewsProvider<ViewInterfacesType>>
-						{({ Explorer }) => (
-							<Explorer
-								currentPath={currentPath}
-								files={files}
-								platfromPathSperator={sep}
-								type={"explore"}
-								onChangeCurrentPath={(path) => {
-									this.changeCurrentPath(path);
-									if (window)
-										window.setWindowTitle(`explorer - ${currentPath}`);
-								}}
-								onCopy={this.copy}
-								onCreateFolder={this.createFolder}
-								onDelete={this.delete}
-								onMove={this.move}
-								onRequestDownloadLink={this.requestDownloadLink}
-								onUpload={this.upload}
-							/>
-						)}
-					</ViewsProvider>
+			<ViewsProvider<ViewInterfacesType>>
+				{({ Explorer }) => (
+					<Explorer
+						currentPath={currentPath}
+						files={files}
+						platfromPathSperator={sep}
+						type={"explore"}
+						onChangeCurrentPath={(path) => {
+							this.changeCurrentPath(path);
+							if (this.windowContext) {
+								this.windowContext.setWindowTitle(`explorer - ${currentPath}`);
+							}
+						}}
+						onCopy={this.copy}
+						onCreateFolder={this.createFolder}
+						onDelete={this.delete}
+						onMove={this.move}
+						onRequestDownloadLink={this.requestDownloadLink}
+						onUpload={this.upload}
+					/>
 				)}
-			</WindowContext.Consumer>
+			</ViewsProvider>
 		);
 	}
 }

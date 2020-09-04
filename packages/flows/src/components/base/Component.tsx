@@ -1,5 +1,5 @@
 import React from "react";
-import { AppProvider } from "contexts";
+import { AppProvider, WindowContext } from "contexts";
 import Logger from "@utils/logger";
 
 abstract class Component<Props = {}, State = {}> extends React.Component<
@@ -18,12 +18,18 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 			return this._logger;
 		}
 	}
+	private _windowContext?: React.ContextType<typeof WindowContext>;
+	public get windowContext() {
+		return this._windowContext;
+	}
 	public get desktopManager() {
 		return this.context.desktopManager;
 	}
+	public isComponentUnmounted = false;
 	protected onComponentWillUnmount: (() => void)[] = [];
 	abstract renderComponent(): JSX.Element;
 	componentWillUnmount() {
+		this.isComponentUnmounted = true;
 		this.onComponentWillUnmount.forEach((cleanUp) => cleanUp());
 	}
 	render() {
@@ -35,6 +41,12 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 				}}
 			>
 				{this.renderComponent()}
+				<WindowContext.Consumer>
+					{(context) => {
+						this._windowContext = context;
+						return <></>;
+					}}
+				</WindowContext.Consumer>
 			</AppProvider.Provider>
 		);
 	}

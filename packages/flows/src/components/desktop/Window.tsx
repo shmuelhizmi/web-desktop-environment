@@ -9,6 +9,7 @@ import {
 	ThemeType,
 	Theme,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { WindowContext } from "contexts";
 
 export interface WindowInput<
 	P extends Record<string, unknown> = Record<string, unknown>,
@@ -17,15 +18,6 @@ export interface WindowInput<
 	app: T;
 	appParams: P;
 }
-
-type WindowContext = {
-	setWindowTitle: (title: string) => void;
-	closeWindow: () => void;
-};
-
-export const WindowContext = React.createContext<WindowContext | undefined>(
-	undefined
-);
 
 interface WindowState {
 	theme: ThemeType;

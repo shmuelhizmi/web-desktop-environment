@@ -7,7 +7,17 @@ import Window from "@views/Window";
 //apps
 import Terminal from "@views/apps/utils/Terminal";
 import Explorer from "@views/apps/utils/Explorer";
+import Notepad from "@views/apps/utils/Notepad";
+
 // system
 import Settings from "@views/apps/system/Settings";
 
-export { Desktop, Window, Terminal, Explorer, Settings, ThemeProvider };
+export {
+	Desktop,
+	Window,
+	Terminal,
+	Explorer,
+	Settings,
+	ThemeProvider,
+	Notepad,
+};

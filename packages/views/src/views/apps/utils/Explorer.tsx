@@ -104,6 +104,12 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			height: "calc(100% - 80px)",
 			overflowY: "auto",
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "space-between",
+		},
+		fileBoxWithoutActionBar: {
+			height: "calc(100% - 40px)",
 		},
 		fileContainer: {
 			display: "grid",
@@ -232,6 +238,21 @@ const styles = (theme: Theme) =>
 			margin: 10,
 			color: theme.background.text,
 			fontSize: 25,
+		},
+		openButton: {
+			margin: 5,
+		},
+		stickyActionBarContainer: {
+			position: "sticky",
+			bottom: 0,
+			width: "100%",
+			justifyContent: "center",
+			display: "flex",
+			background: theme.background.dark,
+			borderTop: `1px solid ${theme.windowBorderColor}`,
+		},
+		actionBarNoBorder: {
+			borderBottom: "none",
 		},
 	});
 
@@ -448,7 +469,13 @@ class Explorer extends Component<
 
 	private Past = () => {
 		const { cutPath, copyPath } = this.state;
-		const { platfromPathSperator, currentPath, onMove, onCopy } = this.props;
+		const {
+			platfromPathSperator,
+			currentPath,
+			onMove,
+			onCopy,
+			type,
+		} = this.props;
 		if (cutPath || copyPath) {
 			if (this.selectedFile?.isFolder) {
 				if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
@@ -489,6 +516,8 @@ class Explorer extends Component<
 			platfromPathSperator,
 			onRequestDownloadLink,
 			onChangeCurrentPath,
+			onSelect,
+			type,
 		} = this.props;
 		const {
 			fileIsOverFile,
@@ -524,73 +553,82 @@ class Explorer extends Component<
 						</div>
 					</div>
 				</div>
-				<div className={classes.actionBarContainer}>
-					<div className={classes.actionBar}>
-						<div className={classes.actionButton} onClick={this.deleteSelected}>
-							Delete
+				{type === "explore" && (
+					<div className={classes.actionBarContainer}>
+						<div className={classes.actionBar}>
+							<div
+								className={classes.actionButton}
+								onClick={this.deleteSelected}
+							>
+								Delete
+							</div>
+							<div className={classes.actionButton} onClick={this.createFolder}>
+								Create Folder
+							</div>
+							<div
+								className={`${classes.actionButton} ${
+									selectedFile === undefined ? classes.actionButtonDisabled : ""
+								}`}
+								onClick={() =>
+									this.selectedFile &&
+									this.setState({
+										copyPath: {
+											fullPath: this.selectedFile.fullPath,
+											name: this.selectedFile.name,
+										},
+										cutPath: undefined,
+									})
+								}
+							>
+								Copy
+							</div>
+							<div
+								className={`${classes.actionButton} ${
+									selectedFile === undefined ? classes.actionButtonDisabled : ""
+								}`}
+								onClick={() =>
+									this.selectedFile &&
+									this.setState({
+										cutPath: {
+											fullPath: this.selectedFile.fullPath,
+											name: this.selectedFile.name,
+										},
+										copyPath: undefined,
+									})
+								}
+							>
+								Cut
+							</div>
+							<div
+								className={`${classes.actionButton} ${
+									cutPath === undefined && copyPath === undefined
+										? classes.actionButtonDisabled
+										: ""
+								}`}
+								onClick={this.Past}
+							>
+								Past
+							</div>
+							<a
+								className={`${classes.actionButton} ${
+									downloadUrl === undefined ? classes.actionButtonDisabled : ""
+								}`}
+								target="_blank"
+								rel="noopener noreferrer"
+								href={downloadUrl}
+								download={this.selectedFile?.name}
+							>
+								{!selectedFile || downloadUrl ? "Download" : "Loading..."}
+							</a>
 						</div>
-						<div className={classes.actionButton} onClick={this.createFolder}>
-							Create Folder
-						</div>
-						<div
-							className={`${classes.actionButton} ${
-								selectedFile === undefined ? classes.actionButtonDisabled : ""
-							}`}
-							onClick={() =>
-								this.selectedFile &&
-								this.setState({
-									copyPath: {
-										fullPath: this.selectedFile.fullPath,
-										name: this.selectedFile.name,
-									},
-									cutPath: undefined,
-								})
-							}
-						>
-							Copy
-						</div>
-						<div
-							className={`${classes.actionButton} ${
-								selectedFile === undefined ? classes.actionButtonDisabled : ""
-							}`}
-							onClick={() =>
-								this.selectedFile &&
-								this.setState({
-									cutPath: {
-										fullPath: this.selectedFile.fullPath,
-										name: this.selectedFile.name,
-									},
-									copyPath: undefined,
-								})
-							}
-						>
-							Cut
-						</div>
-						<div
-							className={`${classes.actionButton} ${
-								cutPath === undefined && copyPath === undefined
-									? classes.actionButtonDisabled
-									: ""
-							}`}
-							onClick={this.Past}
-						>
-							Past
-						</div>
-						<a
-							className={`${classes.actionButton} ${
-								downloadUrl === undefined ? classes.actionButtonDisabled : ""
-							}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							href={downloadUrl}
-							download={this.selectedFile?.name}
-						>
-							{!selectedFile || downloadUrl ? "Download" : "Loading..."}
-						</a>
 					</div>
-				</div>
+				)}
 				<div className={classes.fileBoxContainer}>
-					<div className={classes.fileBox}>
+					<div
+						className={`${classes.fileBox} ${
+							type !== "explore" ? classes.fileBoxWithoutActionBar : ""
+						}`}
+					>
 						{this.state.prompt && (
 							<div className={classes.dialog}>
 								<div className={classes.dialogMessage}>
@@ -704,85 +742,121 @@ class Explorer extends Component<
 							</div>
 						)}
 						{!this.state.prompt && !this.state.confirm && (
-							<div className={classes.fileContainer}>
-								{files.map((file, index) => (
-									<div
-										className={`${classes.file} ${
-											fileIsOverFile === index || selectedFile === index
-												? classes.fileActive
-												: ""
-										} ${
-											this.state.dragedFile === file ? classes.transparent : ""
-										}`}
-										key={index}
-										draggable
-										onDrag={() => {
-											this.setState({ dragedFile: file });
-										}}
-										onDrop={() => this.onDrop(file)}
-										onDragOverCapture={(e) => {
-											this.onFileDragOver(file, index);
-											e.preventDefault();
-										}}
-										onDragLeave={() => {
-											if (fileIsOverFile === index) {
-												this.setState({ fileIsOverFile: undefined });
-											}
-										}}
-										onClick={() => {
-											if (selectedFile !== index) {
-												this.selectedFile = {
-													...file,
-													fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
-												};
-												this.setState(
-													{ selectedFile: index, downloadUrl: undefined },
-													() => {
-														if (
-															this.selectedFile &&
-															!this.selectedFile.isFolder
-														) {
-															onRequestDownloadLink(
-																this.selectedFile.fullPath
-															).then((result) => {
-																this.setState({
-																	downloadUrl: `http://${reflowConnectionManager.host}:${result.port}${result.path}`,
-																});
-															});
-														}
-													}
-												);
-											} else {
-												this.setState({
-													selectedFile: undefined,
-													downloadUrl: undefined,
-												});
-												this.selectedFile = undefined;
-											}
-										}}
-										onDoubleClick={() =>
-											file.isFolder &&
-											onChangeCurrentPath(
-												`${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
-											)
-										}
-									>
-										<div className={classes.fileName}>{file.name}</div>
-										{file.isFolder ? (
-											<Icon
-												className={classes.fileIcon}
-												name={
-													fileIsOverFile === index
-														? "FcOpenedFolder"
-														: "FcFolder"
+							<>
+								<div className={classes.fileContainer}>
+									{files.map((file, index) => (
+										<div
+											className={`${classes.file} ${
+												fileIsOverFile === index || selectedFile === index
+													? classes.fileActive
+													: ""
+											} ${
+												this.state.dragedFile === file
+													? classes.transparent
+													: ""
+											}`}
+											key={index}
+											draggable
+											onDrag={() => {
+												this.setState({ dragedFile: file });
+											}}
+											onDrop={() => this.onDrop(file)}
+											onDragOverCapture={(e) => {
+												this.onFileDragOver(file, index);
+												e.preventDefault();
+											}}
+											onDragLeave={() => {
+												if (fileIsOverFile === index) {
+													this.setState({ fileIsOverFile: undefined });
 												}
-											/>
-										) : (
-											<Icon className={classes.fileIcon} name="FcDocument" />
-										)}
+											}}
+											onClick={() => {
+												if (selectedFile !== index) {
+													this.selectedFile = {
+														...file,
+														fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
+													};
+													this.setState(
+														{ selectedFile: index, downloadUrl: undefined },
+														() => {
+															if (
+																this.selectedFile &&
+																!this.selectedFile.isFolder
+															) {
+																onRequestDownloadLink(
+																	this.selectedFile.fullPath
+																).then((result) => {
+																	this.setState({
+																		downloadUrl: `http://${reflowConnectionManager.host}:${result.port}${result.path}`,
+																	});
+																});
+															}
+														}
+													);
+												} else {
+													this.setState({
+														selectedFile: undefined,
+														downloadUrl: undefined,
+													});
+													this.selectedFile = undefined;
+												}
+											}}
+											onDoubleClick={() => {
+												if (file.isFolder) {
+													onChangeCurrentPath(
+														`${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
+													);
+												} else if (type === "select-file" && onSelect) {
+													onSelect(
+														`${currentPath}${platfromPathSperator}${file.name}`
+													);
+												}
+											}}
+										>
+											<div className={classes.fileName}>{file.name}</div>
+											{file.isFolder ? (
+												<Icon
+													className={classes.fileIcon}
+													name={
+														fileIsOverFile === index
+															? "FcOpenedFolder"
+															: "FcFolder"
+													}
+												/>
+											) : (
+												<Icon className={classes.fileIcon} name="FcDocument" />
+											)}
+										</div>
+									))}
+								</div>
+								{type !== "explore" && (
+									<div className={classes.stickyActionBarContainer}>
+										<div
+											className={`${classes.actionBar} ${classes.actionBarNoBorder}`}
+										>
+											<Button
+												className={classes.openButton}
+												variant="light"
+												color="secondary"
+												onClick={() => {
+													if (
+														onSelect &&
+														this.selectedFile &&
+														((type === "select-file" &&
+															!this.selectedFile.isFolder) ||
+															(type === "select-folder" &&
+																this.selectedFile.isFolder))
+													) {
+														onSelect(this.selectedFile.fullPath);
+													}
+												}}
+											>
+												Open
+											</Button>
+										</div>
 									</div>
-								))}
-							</div>
+								)}
+							</>
 						)}
 					</div>
 				</div>

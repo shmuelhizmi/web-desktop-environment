@@ -16,7 +16,7 @@ export interface Move {
   originalPath: string;
   newPath: string;
 }
-type ExplorerViewType = "explore" | "select-file" | "select-folder";
+export type ExplorerViewType = "explore" | "select-file" | "select-folder";
 
 export interface Input {
   type: ExplorerViewType;
@@ -30,6 +30,7 @@ export interface Input {
   onDelete: (path: string) => void;
   onRequestDownloadLink: (path: string) => Promise<{ path: string; port: number; }>; // download link
   onChangeCurrentPath: (path: string) => void;
+  onSelect?: (path: string) => void;
 }
 
 export default interface Explorer

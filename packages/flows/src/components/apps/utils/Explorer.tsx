@@ -6,6 +6,7 @@ import {
 	File,
 	Move,
 	Upload,
+	ExplorerViewType,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
 import { join, sep } from "path";
@@ -14,6 +15,9 @@ import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 
 interface ExplorerInput {
 	path?: string;
+	isCurrentApp?: boolean;
+	type: ExplorerViewType;
+	onSelect?: (path: string) => void;
 }
 
 interface ExplorerState {
@@ -24,7 +28,7 @@ interface ExplorerState {
 class Explorer extends Component<ExplorerInput, ExplorerState> {
 	name = "explorer";
 	state: ExplorerState = {
-		currentPath: this.props.path,
+		currentPath: this.props.path || homedir(),
 		files: [],
 	};
 	listFiles = async (currentPath: string): Promise<File[]> => {
@@ -96,6 +100,7 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 		);
 	};
 	renderComponent() {
+		const { type } = this.props;
 		const { currentPath, files } = this.state;
 		return (
 			<ViewsProvider<ViewInterfacesType>>
@@ -104,10 +109,10 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 						currentPath={currentPath}
 						files={files}
 						platfromPathSperator={sep}
-						type={"explore"}
+						type={type}
 						onChangeCurrentPath={(path) => {
 							this.changeCurrentPath(path);
-							if (this.windowContext) {
+							if (this.windowContext && this.props.isCurrentApp) {
 								this.windowContext.setWindowTitle(`explorer - ${currentPath}`);
 							}
 						}}
@@ -117,6 +122,7 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 						onMove={this.move}
 						onRequestDownloadLink={this.requestDownloadLink}
 						onUpload={this.upload}
+						onSelect={this.props.onSelect}
 					/>
 				)}
 			</ViewsProvider>
@@ -124,11 +130,13 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 	}
 }
 
+export { Explorer };
+
 export const explorer: App<ExplorerInput> = {
 	name: "Explorer",
 	description: "a file explorer",
 	App: Explorer,
-	defaultInput: { path: homedir() },
+	defaultInput: { path: homedir(), type: "explore", isCurrentApp: true },
 	icon: {
 		type: "icon",
 		icon: "BsFillFolderFill",

@@ -1,15 +1,19 @@
-# Web Desktop Environment
-a web/nodejs-based cross-platform desktop environment
+![Web Desktop Environment](./assets/Logo.png)
+<p align="center">
+  A cross-platform desktop-environment with a web interface
+</p>
 
 ## What is a Web Desktop Environment
-like any other desktop environment it's just a visual interface for your computer.
-the twist with this one is that this one visual interface runs on the web (react) with his server (node) running on your computer
+just like any other desktop environment it is just a visual interface for your computer.  
+the twist with this desktop-environment is that "web-desktop-environment" visual interface runs on the web with his server running localy on your computer
 
 ## Use Cases
- - interface for a cloud server (can possibly be used as a replacemnt for control panel)
- - interface for small computers like the Raspberry Pi zero
+ - interface for a cloud servers (can possibly be used as a replacemnt for control panel)
+ - interface for small/low power computers like the Raspberry Pi zero
  - interface for controlling your computer over long distance 
 
+## The technologies behind "web-desktop-devironment"
+both the server and are build using a react framework called ["react-fullstack"](https://github.com/shmuelhizmi/react-fullstack/tree/master/packages/fullstack) which is a framework for building fast react applications that rely a tight connection between the client and the server.
 
 ## Screenshots
 
@@ -41,7 +45,6 @@ if you have any new feature or existing feature you wnat to create or improve fe
 :comet: white theme color ajustements  
 
 ## Apps
-:comet: Notepad  
 :comet: Task manager  
 :comet: Applications store ( will take quite a long time to implement )  
 

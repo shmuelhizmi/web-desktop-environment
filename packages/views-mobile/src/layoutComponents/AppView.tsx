@@ -1,6 +1,6 @@
 import React from "react";
 import { DesktopContext } from "@views/desktop";
-import { reflowConnectionManager } from "@root/App";
+import { reactFullstackConnectionManager } from "@root/App";
 import * as views from "@views/index";
 import ThemeProvider from "@components/themeProvider";
 import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
@@ -14,7 +14,7 @@ class AppView extends React.Component {
 					return (
 						currentApp && (
 							<ReflowDisplayLayerElement
-								{...reflowConnectionManager.connect(currentApp.port)}
+								{...reactFullstackConnectionManager.connect(currentApp.port)}
 								views={views}
 								wrapper={ThemeProvider}
 							/>

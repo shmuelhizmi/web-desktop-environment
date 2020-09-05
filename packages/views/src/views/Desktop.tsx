@@ -5,13 +5,14 @@ import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
-import { reflowConnectionManager } from "@root/index";
+import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
+import { ConnectionContext } from "@root/contexts";
 
 export const windowsBarHeight = 55;
 
@@ -247,11 +248,22 @@ class Desktop extends Component<
 		const { isStartMenuOpen, startMenuQuery, openWindows } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
-				{openApps.map((app, i) => (
-					<Client
-						key={i}
-						{...reflowConnectionManager.connect(app.port, "webWindow")}
-					/>
+				{openApps.map((app) => (
+					<ConnectionContext.Provider
+						key={app.id}
+						value={{
+							host: reactFullstackConnectionManager.host,
+							port: app.port,
+						}}
+					>
+						<Client
+							key={app.id}
+							{...reactFullstackConnectionManager.connect(
+								app.port,
+								"webWindow"
+							)}
+						/>
+					</ConnectionContext.Provider>
 				))}
 				<Link to="/native">
 					<div className={classes.switchToNativeButton}>

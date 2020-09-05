@@ -9,7 +9,7 @@ import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import { Icon as IconType } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { ConnectionContext } from "@root/contexts";
-import { reflowConnectionManager } from "@root/index";
+import { reactFullstackConnectionManager } from "@root/index";
 import { Link } from "react-router-dom";
 import { windowsBarHeight } from "@views/Desktop";
 
@@ -166,13 +166,19 @@ class Desktop extends Component<
 		const { openWindows, filterAppQuery } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
-				{openApps.map((app, i) => (
+				{openApps.map((app) => (
 					<ConnectionContext.Provider
-						key={i}
-						value={{ host: reflowConnectionManager.host, port: app.port }}
+						key={app.id}
+						value={{
+							host: reactFullstackConnectionManager.host,
+							port: app.port,
+						}}
 					>
 						<Client
-							{...reflowConnectionManager.connect(app.port, "nativeHost")}
+							{...reactFullstackConnectionManager.connect(
+								app.port,
+								"nativeHost"
+							)}
 						/>
 					</ConnectionContext.Provider>
 				))}

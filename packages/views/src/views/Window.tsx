@@ -12,6 +12,7 @@ import Icon from "@components/icon";
 // @ts-ignore
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
+import { ConnectionContext } from "@root/contexts";
 
 export const defualtWindowSize = {
 	height: 600,
@@ -141,7 +142,8 @@ class Window extends Component<
 		this.domContainer = document.createElement("div");
 		document.getElementById("app")?.appendChild(this.domContainer);
 	}
-
+	static contextType = ConnectionContext;
+	context!: React.ContextType<typeof ConnectionContext>;
 	getPoition = (size: Size) => {
 		if (this.props.window.position) {
 			const position = { ...this.props.window.position };
@@ -254,13 +256,26 @@ class Window extends Component<
 					defaultPosition={this.state.position}
 					onDrag={(e, position) => {
 						this.moveToTop();
-						if (
-							position.y < 0 ||
+						const touchTop = position.y < 0;
+						const touchBottom =
 							position.y >
-								window.innerHeight - windowBarHeight - windowsBarHeight ||
-							position.x < 0 - size.width * 0.5 ||
-							position.x > window.innerWidth - size.width * 0.5
+							window.innerHeight - windowBarHeight - windowsBarHeight;
+						const touchMinimumLeft = position.x < 0 - size.width * 0.5;
+						const touchMinimumRight =
+							position.x > window.innerWidth - size.width * 0.5;
+						if (
+							touchTop ||
+							touchBottom ||
+							touchMinimumLeft ||
+							touchMinimumRight
 						) {
+							if (touchTop) {
+								window.open(
+									`${window.location.origin}/native/client/connect/${this.context?.host}/${this.context?.port}`,
+									"_blank",
+									"noopener"
+								);
+							}
 							return false;
 						}
 					}}
@@ -335,7 +350,6 @@ class Window extends Component<
 										}`}
 										onClick={() => {
 											onClose();
-											windowManager.closeWindow(this.id);
 										}}
 									/>
 								</div>

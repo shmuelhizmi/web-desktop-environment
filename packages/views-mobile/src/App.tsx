@@ -8,7 +8,7 @@ import { getKey, setKey } from "@root/localstorage";
 import ThemeProvider from "@components/themeProvider";
 import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
 
-class ReflowConnectionManager {
+class reactFullstackConnectionManager {
 	host: string;
 	constructor(host: string) {
 		this.host = host;
@@ -24,12 +24,12 @@ class ReflowConnectionManager {
 	};
 }
 
-export let reflowConnectionManager: ReflowConnectionManager;
+export let reactFullstackConnectionManager: reactFullstackConnectionManager;
 
 export const connectToServer = (host: string, port: number) => {
-	reflowConnectionManager = new ReflowConnectionManager(host);
+	reactFullstackConnectionManager = new reactFullstackConnectionManager(host);
 
-	return reflowConnectionManager.connect(port);
+	return reactFullstackConnectionManager.connect(port);
 };
 
 declare const global: { HermesInternal: null | {} };

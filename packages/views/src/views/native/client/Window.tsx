@@ -86,21 +86,23 @@ class Window extends Component<
 		};
 	}
 	componentDidMount = () => {
-		window.addEventListener("resize", () => {
-			this.props.setWindowState(this.windowState);
-		});
-		window.addEventListener("visibilitychange", () => {
-			this.props.setWindowState(this.windowState);
-		});
-		let positionX = window.screenX;
-		let positionY = window.screenY;
-		setInterval(() => {
-			if (positionX !== window.screenX || positionY !== window.screenY) {
-				positionX = window.screenX;
-				positionY = window.screenY;
+		if (window.opener) {
+			window.addEventListener("resize", () => {
 				this.props.setWindowState(this.windowState);
-			}
-		}, 1000);
+			});
+			window.addEventListener("visibilitychange", () => {
+				this.props.setWindowState(this.windowState);
+			});
+			let positionX = window.screenX;
+			let positionY = window.screenY;
+			setInterval(() => {
+				if (positionX !== window.screenX || positionY !== window.screenY) {
+					positionX = window.screenX;
+					positionY = window.screenY;
+					this.props.setWindowState(this.windowState);
+				}
+			}, 1000);
+		}
 	};
 
 	render() {

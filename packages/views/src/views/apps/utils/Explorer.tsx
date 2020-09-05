@@ -9,7 +9,7 @@ import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
 import Emiiter from "@state/Emitter";
-import { reflowConnectionManager } from "@root/index";
+import { reactFullstackConnectionManager } from "@root/index";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -787,7 +787,7 @@ class Explorer extends Component<
 																	this.selectedFile.fullPath
 																).then((result) => {
 																	this.setState({
-																		downloadUrl: `http://${reflowConnectionManager.host}:${result.port}${result.path}`,
+																		downloadUrl: `http://${reactFullstackConnectionManager.host}:${result.port}${result.path}`,
 																	});
 																});
 															}

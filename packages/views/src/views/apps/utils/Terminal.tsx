@@ -10,7 +10,7 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import io from "socket.io-client";
-import { reflowConnectionManager } from "@root/index";
+import { reactFullstackConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import ResizeDetector from "react-resize-detector";
@@ -48,7 +48,7 @@ class Terminal extends Component<
 	containerElement?: HTMLElement;
 	constructor(props: Terminal["props"]) {
 		super(props);
-		this.socket = io(`${reflowConnectionManager.host}:${props.port}`);
+		this.socket = io(`${reactFullstackConnectionManager.host}:${props.port}`);
 		this.term = new XTerm({
 			theme: this.getTermTheme(),
 			allowTransparency: true,

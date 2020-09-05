@@ -23,7 +23,7 @@ const viewsMap = {
 	webWindow: webViewsWindow,
 };
 
-class ReflowConnectionManager {
+class ReactFullstackConnectionManager {
 	public readonly host: string;
 	constructor(host: string) {
 		this.host = host;
@@ -44,11 +44,11 @@ class ReflowConnectionManager {
 	};
 }
 
-export let reflowConnectionManager: ReflowConnectionManager;
+export let reactFullstackConnectionManager: ReactFullstackConnectionManager;
 
 export const connectToServer = (host: string, port: number, views: Views) => {
-	reflowConnectionManager = new ReflowConnectionManager(host);
-	return reflowConnectionManager.connect(port, views);
+	reactFullstackConnectionManager = new ReactFullstackConnectionManager(host);
+	return reactFullstackConnectionManager.connect(port, views);
 };
 
 const App = () => {

@@ -34,8 +34,8 @@ class WindowManager {
 
 	private idIndex = 0;
 	public addWindow = (name: string, icon: Icon, state: WindowState) => {
-		this.idIndex++;
 		const id = this.idIndex;
+		this.idIndex++;
 		const newWindow = { id, name, icon, state };
 		this.windows.push(newWindow);
 		this.emitter.call("addWindow", { window: newWindow });

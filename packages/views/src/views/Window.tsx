@@ -180,7 +180,6 @@ class Window extends Component<
 				size: this.state.size,
 			});
 			if (id === this.id) {
-				this.moveToTop();
 				this.setState({ collaps: true, isActive: true });
 			} else this.setState({ isActive: false });
 		});
@@ -192,9 +191,13 @@ class Window extends Component<
 				size: this.state.size,
 			});
 			if (id === this.id) {
-				this.moveToTop();
 				this.setState({ collaps: false, isActive: true });
 			} else this.setState({ isActive: false });
+		});
+		windowManager.emitter.on("setActiveWindow", ({ id }) => {
+			if (id === this.id) {
+				this.moveToTop();
+			}
 		});
 		document.addEventListener("mousedown", (e) => {
 			if (this.wrapperRef && e.target) {
@@ -255,7 +258,7 @@ class Window extends Component<
 					disabled={!canDrag}
 					defaultPosition={this.state.position}
 					onDrag={(e, position) => {
-						this.moveToTop();
+						windowManager.setActiveWindow(this.id);
 						const touchTop = position.y < 0;
 						const touchBottom =
 							position.y >
@@ -305,7 +308,10 @@ class Window extends Component<
 						});
 					}}
 				>
-					<div className={classes.root} onClick={() => this.moveToTop()}>
+					<div
+						className={classes.root}
+						onClick={() => windowManager.setActiveWindow(this.id)}
+					>
 						<ResizableBox
 							width={size.width}
 							height={collaps ? 0 : size.height}

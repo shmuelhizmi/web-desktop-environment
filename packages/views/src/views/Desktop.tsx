@@ -2,13 +2,18 @@ import DesktopInterface, {
 	App,
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { Component } from "@react-fullstack/fullstack";
-import React from "react";
-import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import React, { useState, useEffect } from "react";
+import {
+	withStyles,
+	createStyles,
+	WithStyles,
+	makeStyles,
+} from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
-import windowManager, { Window } from "@state/WindowManager";
+import windowManager from "@state/WindowManager";
 import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
@@ -177,12 +182,15 @@ const styles = (theme: Theme) =>
 			userSelect: "none",
 			fontSize: 50,
 			padding: 5,
-			marginRight: 1,
+			marginRight: 4,
 			cursor: "pointer",
 			color: theme.background.text,
 			"&:hover": {
 				background: theme.background.transparentDark || theme.background.dark,
 			},
+		},
+		windowsBarButtonActive: {
+			background: theme.background.transparentDark || theme.background.dark,
 		},
 		windowsBarButtonOpen: {
 			borderBottom: `${
@@ -197,7 +205,6 @@ const styles = (theme: Theme) =>
 interface DesktopState {
 	isStartMenuOpen: boolean;
 	startMenuQuery?: string;
-	openWindows: Window[];
 }
 
 class Desktop extends Component<
@@ -209,18 +216,8 @@ class Desktop extends Component<
 		super(props);
 		this.state = {
 			isStartMenuOpen: false,
-			openWindows: windowManager.windows,
 		};
 	}
-
-	componentDidMount = () => {
-		windowManager.emitter.on("addWindow", this.updateWindow);
-		windowManager.emitter.on("closeWindow", this.updateWindow);
-		windowManager.emitter.on("maximizeWindow", this.updateWindow);
-		windowManager.emitter.on("minimizeWindow", this.updateWindow);
-	};
-	updateWindow = () =>
-		this.setState({ openWindows: [...windowManager.windows] });
 
 	renderAppListCell = (app: App, index: number) => {
 		const { classes, onLaunchApp } = this.props;
@@ -245,7 +242,7 @@ class Desktop extends Component<
 
 	render() {
 		const { background, openApps, classes, apps } = this.props;
-		const { isStartMenuOpen, startMenuQuery, openWindows } = this.state;
+		const { isStartMenuOpen, startMenuQuery } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
 				{openApps.map((app) => (
@@ -276,34 +273,7 @@ class Desktop extends Component<
 				>
 					<Icon width={40} height={40} name="FiList" />
 				</div>
-				<div className={classes.windowsBar}>
-					{openWindows.map((openWindow, index) => (
-						<div
-							key={index}
-							className={`${classes.windowsBarButton} ${
-								openWindow.state.minimized
-									? classes.windowsBarButtonCloseMinimized
-									: classes.windowsBarButtonOpen
-							}`}
-							onClick={() =>
-								windowManager.updateState(openWindow.id, {
-									minimized: !openWindow.state.minimized,
-								})
-							}
-						>
-							{openWindow.icon.type === "img" ? (
-								<img
-									alt={`${openWindow.name} icon`}
-									src={openWindow.icon.icon}
-									width={50}
-									height={50}
-								/>
-							) : (
-								<Icon name={openWindow.icon.icon} />
-							)}
-						</div>
-					))}
-				</div>
+				<WindowBar />
 				<MountUnmoutAnmiation
 					mount={isStartMenuOpen}
 					className={`${classes.startMenu} ${
@@ -333,5 +303,58 @@ class Desktop extends Component<
 		);
 	}
 }
+
+export const WindowBar = () => {
+	const classes = makeStyles(styles)({});
+	const [openWindows, setOpenWindows] = useState(windowManager.windows);
+	useEffect(() => {
+		const updateWindow = () => setOpenWindows([...windowManager.windows]);
+		windowManager.emitter.on("addWindow", updateWindow);
+		windowManager.emitter.on("closeWindow", updateWindow);
+		windowManager.emitter.on("maximizeWindow", updateWindow);
+		windowManager.emitter.on("minimizeWindow", updateWindow);
+		windowManager.emitter.on("setActiveWindow", updateWindow);
+	}, []);
+	return (
+		<div className={classes.windowsBar}>
+			{openWindows.map((openWindow, index) => (
+				<div
+					key={index}
+					className={`${classes.windowsBarButton} ${
+						openWindow.state.minimized
+							? classes.windowsBarButtonCloseMinimized
+							: classes.windowsBarButtonOpen
+					} ${
+						openWindow.id === windowManager.activeWindowId
+							? classes.windowsBarButtonActive
+							: ""
+					}`}
+					onClick={() => {
+						if (windowManager.activeWindowId === openWindow.id) {
+							windowManager.updateState(openWindow.id, {
+								minimized: !openWindow.state.minimized,
+							});
+						} else {
+							windowManager.updateState(openWindow.id, {
+								minimized: false,
+							});
+						}
+					}}
+				>
+					{openWindow.icon.type === "img" ? (
+						<img
+							alt={`${openWindow.name} icon`}
+							src={openWindow.icon.icon}
+							width={50}
+							height={50}
+						/>
+					) : (
+						<Icon name={openWindow.icon.icon} />
+					)}
+				</div>
+			))}
+		</div>
+	);
+};
 
 export default withStyles(styles)(Desktop);

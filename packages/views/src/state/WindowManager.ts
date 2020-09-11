@@ -25,13 +25,23 @@ interface WindowManagerEvent {
 	closeWindow: {
 		window: Window;
 	};
+	setActiveWindow: {
+		id: number;
+	};
 }
 
 class WindowManager {
+	public activeWindowId: number | undefined;
 	public windows: Window[] = [];
 
 	public emitter = new Emitter<WindowManagerEvent>();
 
+	public setActiveWindow = (id: number) => {
+		if (this.activeWindowId !== id) {
+			this.activeWindowId = id;
+			this.emitter.call("setActiveWindow", { id });
+		}
+	};
 	private idIndex = 0;
 	public addWindow = (name: string, icon: Icon, state: WindowState) => {
 		const id = this.idIndex;
@@ -51,6 +61,7 @@ class WindowManager {
 	};
 
 	public updateState = (id: number, newState: WindowState) => {
+		this.setActiveWindow(id);
 		const currentWindow = this.windows.find((w) => w.id === id);
 		if (currentWindow) {
 			const { minimized } = currentWindow.state;

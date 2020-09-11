@@ -17,9 +17,11 @@ both the server and are build using a react framework called ["react-fullstack"]
 
 ## Screenshots
 
-![transparent](https://i.ibb.co/0tT3LW0/Screenshot-from-2020-07-13-21-29-28.png)
-![dark theme](https://i.ibb.co/TbsHdxm/Screenshot-from-2020-07-13-21-28-51.png)
-![light theme](https://i.ibb.co/m0wjDkB/Screenshot-from-2020-07-13-21-29-50.png)
+![transparent](./assets/transparent_theme_screenshot.png)
+![dark theme](./assets/dark_theme_screenshot.png)
+![light theme](./assets/light_theme_screenshot.png)
+![pwa](./assets/pwa_app_screenshot.png)
+
 
 # Contribute
 

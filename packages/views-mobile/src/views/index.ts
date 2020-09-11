@@ -1,15 +1,15 @@
-import desktop from "@views/desktop";
-import window from "@views/window";
+import Desktop from "@views/Desktop";
+import Window from "@views/Window";
 
 //apps
 //import terminal from "@views/apps/utils/terminal";
 //import explorer from "@views/apps/utils/explorer";
 // system
-import settings from "@views/apps/system/settings";
+import Settings from "@views/apps/system/Settings";
 
 export {
-	desktop,
-	settings,
-	window,
+	Desktop,
+	Settings,
+	Window,
 	//terminal, explorer
 };

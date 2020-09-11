@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
-import { Transports } from "@web-desktop-environment/reflow";
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import * as views from "@views/index";
 import LinearGradient from "react-native-linear-gradient";
 import { getKey, setKey } from "@root/localstorage";
-import ThemeProvider from "@components/themeProvider";
-import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
+import { Client } from "@react-fullstack/fullstack-socket-client";
 
-class reactFullstackConnectionManager {
-	host: string;
+class ReactFullstackConnectionManager {
+	public readonly host: string;
 	constructor(host: string) {
 		this.host = host;
 	}
-	connect = (port: number) => {
-		const transport = new Transports.WebSocketsTransport<{
-			theme?: ThemeType;
-		}>({
-			port,
+	connect = (
+		port: number
+	): {
+		port: number;
+		host: string;
+	} => {
+		return {
 			host: this.host,
-		});
-		return { transport, views };
+			port,
+		};
 	};
 }
 
-export let reactFullstackConnectionManager: reactFullstackConnectionManager;
+export let reactFullstackConnectionManager: ReactFullstackConnectionManager;
 
 export const connectToServer = (host: string, port: number) => {
-	reactFullstackConnectionManager = new reactFullstackConnectionManager(host);
+	reactFullstackConnectionManager = new ReactFullstackConnectionManager(host);
 
 	return reactFullstackConnectionManager.connect(port);
 };
@@ -108,11 +107,7 @@ const App = () => {
 				<Button onPress={() => setIsConnected(false)} title="dissconnect" />
 			</View>
 			<View style={styles.desktopRoot}>
-				<ReflowDisplayLayerElement
-					wrapper={ThemeProvider}
-					{...connectToServer(host, port)}
-					views={views}
-				/>
+				<Client {...connectToServer(host, port)} views={views} />
 			</View>
 		</View>
 	) : (

@@ -1,6 +1,9 @@
 import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
-import { ThemeType } from "@web-desktop-environment/interfaces/lib/shared/settings";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import {
+	ThemeType,
+	Theme,
+} from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { Colors } from "@root/theme";
 import StateComponent from "@components/stateComponent";
@@ -13,12 +16,12 @@ import {
 	Picker,
 	ImageBackground,
 } from "react-native";
-import { ThemeContext } from "@components/themeProvider";
+import { ThemeContext } from "@views/warpper/ThemeProvider";
 import { Card, View } from "react-native-ui-lib";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "@components/icon";
-import { DesktopContext } from "@views/desktop";
+import { DesktopContext } from "@views/Desktop";
 import { NativeIcon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 
 interface SettingsCategory {
@@ -29,7 +32,7 @@ interface SettingsCategory {
 	subcaption: string;
 }
 
-class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
+class Settings extends Component<SettingsInterface> {
 	constructor(props: Settings["props"]) {
 		super(props);
 	}
@@ -126,7 +129,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 		});
 
 	renderDesktopCategory = () => {
-		const { event } = this.props;
+		const { setSettings } = this.props;
 		return (
 			<ThemeContext.Consumer>
 				{(theme) => {
@@ -165,7 +168,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 															const value = e.nativeEvent.text;
 															setState({ background: value }, () => {
 																this.settings.desktop.nativeBackground = value;
-																event("setSettings", this.settings);
+																setSettings(this.settings);
 															});
 														}}
 													/>
@@ -180,7 +183,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 														onValueChange={(value: ThemeType) => {
 															setState({ theme: value }, () => {
 																this.settings.desktop.theme = value;
-																event("setSettings", this.settings);
+																setSettings(this.settings);
 															});
 														}}
 													>
@@ -205,7 +208,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 	};
 
 	renderNetworkCategory = () => {
-		const { event } = this.props;
+		const { setSettings } = this.props;
 		const { endPort, mainPort, startPort } = this.props.settings.network.ports;
 		return (
 			<ThemeContext.Consumer>
@@ -250,7 +253,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 																value = value - (value % 1);
 																setState({ mainPort: value }, () => {
 																	this.settings.network.ports.mainPort = value;
-																	event("setSettings", this.settings);
+																	setSettings(this.settings);
 																});
 															}
 														}}
@@ -276,7 +279,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 																value = value - (value % 1);
 																setState({ startPort: value }, () => {
 																	this.settings.network.ports.startPort = value;
-																	event("setSettings", this.settings);
+																	setSettings(this.settings);
 																});
 															}
 														}}
@@ -302,7 +305,7 @@ class Settings extends ReflowReactComponent<SettingsInterface, {}, {}> {
 																value = value - (value % 1);
 																setState({ endPort: value }, () => {
 																	this.settings.network.ports.endPort = value;
-																	event("setSettings", this.settings);
+																	setSettings(this.settings);
 																});
 															}
 														}}

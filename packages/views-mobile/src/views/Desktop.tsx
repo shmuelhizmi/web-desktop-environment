@@ -1,5 +1,5 @@
 import React from "react";
-import { ReflowReactComponent } from "@web-desktop-environment/reflow-react-display-layer";
+import { Component } from "@react-fullstack/fullstack";
 import DesktopInterface, {
 	App,
 	OpenApp,
@@ -9,9 +9,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "@layoutComponents/Home";
 import AppView from "@layoutComponents/AppView";
 import { StyleSheet, Text } from "react-native";
-import { Theme } from "@root/theme";
-import { ThemeContext } from "@components/themeProvider";
+import { ThemeContext } from "@views/warpper/ThemeProvider";
 import Icon from "@components/icon";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 interface DesktopContextInterface {
 	openApps: OpenApp[];
@@ -41,7 +41,7 @@ interface DesktopState {
 	currentApp?: OpenApp;
 }
 
-class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
+class Desktop extends Component<DesktopInterface, DesktopState> {
 	state: DesktopState = {};
 
 	navigator = createBottomTabNavigator();
@@ -61,7 +61,13 @@ class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
 
 	render() {
 		const { currentApp } = this.state;
-		const { apps, openApps, nativeBackground: background, event } = this.props;
+		const {
+			apps,
+			openApps,
+			nativeBackground: background,
+			onLaunchApp,
+			onCloseApp,
+		} = this.props;
 		return (
 			<ThemeContext.Consumer>
 				{(theme) => {
@@ -75,10 +81,9 @@ class Desktop extends ReflowReactComponent<DesktopInterface, {}, DesktopState> {
 								background,
 								setCurrentApp: (newCurrentApp) =>
 									this.setState({ currentApp: newCurrentApp }),
-								launchApp: (app) =>
-									event("launchApp", { flow: app.flow, params: {} }),
+								launchApp: (app) => onLaunchApp({ flow: app.flow, params: {} }),
 								closeApp: (id) => {
-									event("closeApp", id);
+									onCloseApp(id);
 									if (id === currentApp?.id) {
 										this.setState({ currentApp: undefined });
 									}

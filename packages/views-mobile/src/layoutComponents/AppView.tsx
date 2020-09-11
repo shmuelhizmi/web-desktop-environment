@@ -1,9 +1,8 @@
 import React from "react";
-import { DesktopContext } from "@views/desktop";
+import { DesktopContext } from "@views/Desktop";
 import { reactFullstackConnectionManager } from "@root/App";
 import * as views from "@views/index";
-import ThemeProvider from "@components/themeProvider";
-import { ReflowDisplayLayerElement } from "@components/reflowDisplayLayerElement";
+import { Client } from "@react-fullstack/fullstack-socket-client";
 
 class AppView extends React.Component {
 	render() {
@@ -13,10 +12,9 @@ class AppView extends React.Component {
 					const { currentApp } = desktop;
 					return (
 						currentApp && (
-							<ReflowDisplayLayerElement
+							<Client
 								{...reactFullstackConnectionManager.connect(currentApp.port)}
 								views={views}
-								wrapper={ThemeProvider}
 							/>
 						)
 					);

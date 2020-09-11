@@ -8,11 +8,11 @@ import {
 	Button,
 	TouchableOpacity,
 } from "react-native";
-import { DesktopContext } from "@views/desktop";
-import { ThemeContext } from "@components/themeProvider";
-import { Theme } from "@root/theme";
+import { DesktopContext } from "@views/Desktop";
+import { ThemeContext } from "@views/warpper/ThemeProvider";
 import Icon from "@components/icon";
 import { Card } from "react-native-ui-lib";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 class Home extends React.Component {
 	makeStyles = (theme: Theme) =>

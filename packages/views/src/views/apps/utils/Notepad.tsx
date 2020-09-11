@@ -66,10 +66,10 @@ const styles = (theme: Theme) =>
 			alignItems: "center",
 		},
 		openFileContainerBody: {
-			width: "94%",
+			width: "calc(96% - 15px)",
 			height: "93%",
-			borderRadius: 10,
-			boxShadow: `inset 0px -1px 9px 2px ${theme.shadowColor}`,
+			borderRadius: 5,
+			boxShadow: `inset 0px 0 8px 2px ${theme.shadowColor}`,
 			padding: "0 15px 15px",
 			background: theme.background.light,
 			border: `1px solid ${theme.windowBorderColor}`,

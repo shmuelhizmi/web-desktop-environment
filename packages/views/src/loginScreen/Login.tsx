@@ -33,6 +33,36 @@ const useStyles = makeStyles((theme: Theme) => ({
 		backdropFilter: "blur(5px)",
 		userSelect: "none",
 	},
+	barButtonsContainer: {
+		position: "relative",
+		top: 30,
+		left: "91%",
+		width: 40,
+		height: 20,
+		display: "flex",
+		justifyContent: "space-between",
+	},
+	barButton: {
+		width: 15,
+		height: 15,
+		borderRadius: "50%",
+		zIndex: 2,
+		border: "1px solid #0004",
+	},
+	barButtonExit: {
+		cursor: "pointer",
+		background: theme.error.main,
+		"&:hover": {
+			background: theme.error.dark,
+		},
+	},
+	barButtonCollaps: {
+		cursor: "pointer",
+		background: theme.success.main,
+		"&:hover": {
+			background: theme.success.dark,
+		},
+	},
 }));
 
 const Login = (props: LoginProps) => {
@@ -41,27 +71,33 @@ const Login = (props: LoginProps) => {
 	const [port, setPort] = useState(5000);
 	return (
 		<div className={classes.root}>
-			<Card className={classes.card}>
-				<h2>Login to your server</h2>
-				<TextField
-					value={host}
-					onChange={(newValue) => setHost(newValue || "")}
-					placeholder="host"
-				></TextField>
-				<TextField
-					value={String(port || "")}
-					onChange={(newValue) => setPort(Number(newValue))}
-					placeholder="port"
-				></TextField>
-				<Button
-					variant="main"
-					onClick={() => props.onLogin(host, port)}
-					color="background"
-					border
-				>
-					Login
-				</Button>
-			</Card>
+			<div>
+				<div className={classes.barButtonsContainer}>
+					<div className={`${classes.barButton} ${classes.barButtonCollaps}`} />
+					<div className={`${classes.barButton} ${classes.barButtonExit}`} />
+				</div>
+				<Card className={classes.card}>
+					<h2>Login to your server</h2>
+					<TextField
+						value={host}
+						onChange={(newValue) => setHost(newValue || "")}
+						placeholder="host"
+					></TextField>
+					<TextField
+						value={String(port || "")}
+						onChange={(newValue) => setPort(Number(newValue))}
+						placeholder="port"
+					></TextField>
+					<Button
+						variant="main"
+						onClick={() => props.onLogin(host, port)}
+						color="background"
+						border
+					>
+						Login
+					</Button>
+				</Card>
+			</div>
 		</div>
 	);
 };

@@ -86,7 +86,7 @@ export const notepad: App<NotepadInput> = {
 		position: { x: 100, y: 20 },
 		maxHeight: 900,
 		maxWidth: 1200,
-		minWidth: 350,
-		minHeight: 200,
+		minWidth: 550,
+		minHeight: 370,
 	},
 };

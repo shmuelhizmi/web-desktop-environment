@@ -22,10 +22,11 @@ const styles = (theme: Theme) =>
 			boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
 			paddingBottom: 2,
 			backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
+			display: "grid",
+			gridTemplateRows: "65px 1fr",
 		},
 		headlineContainer: {
 			width: "100%",
-			height: 35,
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
@@ -33,7 +34,6 @@ const styles = (theme: Theme) =>
 		},
 		menuContainer: {
 			width: "100%",
-			height: 45,
 			display: "flex",
 			justifyContent: "center",
 			alignItems: "center",
@@ -57,17 +57,18 @@ const styles = (theme: Theme) =>
 			position: "relative",
 			right: 0,
 			width: 150,
+			minWidth: "110px !important",
 		},
 		openFileContainer: {
 			width: "100%",
-			height: "calc(100% - 25px)",
+			height: "97%",
 			display: "flex",
 			justifyContent: "center",
-			alignItems: "center",
+			overflow: "hidden",
 		},
 		openFileContainerBody: {
 			width: "calc(96% - 15px)",
-			height: "93%",
+			height: "95%",
 			borderRadius: 5,
 			boxShadow: `inset 0px 0 8px 2px ${theme.shadowColor}`,
 			padding: "0 15px 15px",
@@ -76,14 +77,14 @@ const styles = (theme: Theme) =>
 		},
 		textAreaContanier: {
 			width: "100%",
-			height: "calc(93% - 25px)",
+			height: "97%",
 			display: "flex",
 			justifyContent: "center",
 			alignItems: "center",
 		},
 		textAreaContanierBody: {
 			width: "94%",
-			height: "calc( 95% - 15px )",
+			height: "95%",
 			borderRadius: 10,
 			boxShadow: `inset 0px -1px 9px 2px ${theme.shadowColor}`,
 			padding: 15,
@@ -107,6 +108,10 @@ const styles = (theme: Theme) =>
 		},
 		filename: {
 			width: "100%",
+			whiteSpace: "nowrap",
+			textOverflow: "ellipsis",
+			userSelect: "none",
+			overflow: "hidden",
 		},
 	});
 

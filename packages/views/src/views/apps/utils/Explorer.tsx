@@ -323,7 +323,7 @@ class Explorer extends Component<
 	prompt = async (
 		message: string
 	): Promise<{ result: boolean; value: string }> => {
-		return await new Promise((resolve, reject) => {
+		return await new Promise((resolve) => {
 			this.setState(
 				{
 					prompt: {
@@ -336,7 +336,7 @@ class Explorer extends Component<
 						if (prompt.result) {
 							resolve({ result: prompt.result, value: prompt.value });
 						} else {
-							reject(new Error("prompt does not have a result."));
+							resolve({ result: false, value: prompt.value });
 						}
 						this.setState({ prompt: undefined });
 						this.emitter.removeListener("promptDone", promptFinish);
@@ -618,7 +618,9 @@ class Explorer extends Component<
 								href={downloadUrl}
 								download={this.selectedFile?.name}
 							>
-								{!selectedFile || downloadUrl ? "Download" : "Loading..."}
+								{selectedFile === undefined || downloadUrl
+									? "Download"
+									: "Loading..."}
 							</a>
 						</div>
 					</div>

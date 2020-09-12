@@ -4,6 +4,7 @@ import Card from "@components/card";
 import TextField from "@components/textField";
 import Button from "@components/button";
 import { Theme } from "@root/theme";
+import { Link } from "react-router-dom";
 
 interface LoginProps {
 	onLogin: (host: string, port: number) => void;
@@ -97,6 +98,9 @@ const Login = (props: LoginProps) => {
 						Login
 					</Button>
 				</Card>
+				<Link to="/demo">
+					<p>or instead you can vist the Demo</p>
+				</Link>
 			</div>
 		</div>
 	);

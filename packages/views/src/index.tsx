@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Login from "@root/loginScreen/Login";
+import Demo from "@root/demo/App";
 import "@root/index.css";
 import * as webViews from "@root/views";
 import * as webViewsWindow from "@root/views/windowViews";
@@ -62,6 +63,7 @@ const App = () => {
 			<TP theme={defaultTheme}>
 				<Router>
 					<Switch>
+						<Route path="/demo">{() => <Demo />}</Route>
 						<Route path="/native">
 							<Switch>
 								<Route

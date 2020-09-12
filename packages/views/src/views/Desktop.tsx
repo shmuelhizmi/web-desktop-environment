@@ -309,6 +309,7 @@ export const WindowBar = () => {
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
 	useEffect(() => {
 		const updateWindow = () => setOpenWindows([...windowManager.windows]);
+		updateWindow();
 		windowManager.emitter.on("addWindow", updateWindow);
 		windowManager.emitter.on("closeWindow", updateWindow);
 		windowManager.emitter.on("maximizeWindow", updateWindow);

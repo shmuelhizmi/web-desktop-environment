@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "install": "lerna bootstrap",
-    "dev:server": "cd packages/flows && npm start",
+    "dev:server": "cd packages/server && npm start",
     "dev:web": "cd packages/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "start": "lerna bootstrap && npm run dev",

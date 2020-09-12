@@ -38,7 +38,7 @@ class ReactFullstackConnectionManager {
 		views: typeof viewsMap[V];
 	} => {
 		return {
-			host: this.host,
+			host: `http://${this.host}`,
 			port,
 			views: { ...viewsMap[views] },
 		};

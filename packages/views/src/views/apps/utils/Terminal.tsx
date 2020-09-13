@@ -48,9 +48,7 @@ class Terminal extends Component<
 	containerElement?: HTMLElement;
 	constructor(props: Terminal["props"]) {
 		super(props);
-		this.socket = io(
-			`http://${reactFullstackConnectionManager.host}:${props.port}`
-		);
+		this.socket = io(`${reactFullstackConnectionManager.host}:${props.port}`);
 		this.term = new XTerm({
 			theme: this.getTermTheme(),
 			allowTransparency: true,

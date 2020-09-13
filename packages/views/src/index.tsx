@@ -14,6 +14,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
+import setUpDocument from "@utils/setupDocument";
 
 type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
 
@@ -171,3 +172,5 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
+
+setUpDocument();

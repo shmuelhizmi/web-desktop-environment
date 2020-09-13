@@ -40,24 +40,30 @@ const styles = (theme: Theme) =>
 			textDecoration: "none",
 			padding: 4,
 			minWidth: 40,
+			whiteSpace: "nowrap",
+			overflow: "hidden",
+			textOverflow: "ellipsis",
+			maxHeight: 30,
 			textAlign: "center",
 			userSelect: "none",
 			color: theme.secondary.text,
-			fontSize: 20,
+			fontSize: 18,
 			border: `2px solid ${theme.secondary.text}`,
 			borderRadius: 25,
 			margin: 3,
 			cursor: "pointer",
 			transition: "background 100ms",
-			"&:hover":
-				theme.type === "transparent"
+			"&:hover": {
+				transform: "scale(1.05)",
+				...(theme.type === "transparent"
 					? {
 							backdropFilter: "blur(13px)",
 							background: theme.secondary.light,
 					  }
 					: {
 							background: theme.secondary.light,
-					  },
+					  }),
+			},
 		},
 		actionButtonDisabled: {
 			cursor: "default",
@@ -65,6 +71,7 @@ const styles = (theme: Theme) =>
 			backgroundColor:
 				theme.background.transparentDark || theme.background.dark,
 			"&:hover": {
+				transform: "scale(1)",
 				backgroundColor:
 					theme.background.transparentDark || theme.background.dark,
 			},
@@ -125,8 +132,9 @@ const styles = (theme: Theme) =>
 			color: theme.secondary.text,
 			cursor: "pointer",
 			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
-			transition: "background 100ms",
+			transition: "background 100ms, transform 200ms",
 			"&:hover": {
+				transform: "scale(1.1)",
 				background: theme.secondary.dark,
 				backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",
 			},
@@ -467,15 +475,19 @@ class Explorer extends Component<
 		}
 	};
 
+	createFile = async () => {
+		const promptCreate = await this.prompt("please enter file name:");
+		const { currentPath, platfromPathSperator, onCreateFile } = this.props;
+		if (promptCreate.value) {
+			onCreateFile(
+				`${currentPath}${platfromPathSperator}${promptCreate.value}`
+			);
+		}
+	};
+
 	private Past = () => {
 		const { cutPath, copyPath } = this.state;
-		const {
-			platfromPathSperator,
-			currentPath,
-			onMove,
-			onCopy,
-			type,
-		} = this.props;
+		const { platfromPathSperator, currentPath, onMove, onCopy } = this.props;
 		if (cutPath || copyPath) {
 			if (this.selectedFile?.isFolder) {
 				if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
@@ -564,6 +576,9 @@ class Explorer extends Component<
 							</div>
 							<div className={classes.actionButton} onClick={this.createFolder}>
 								Create Folder
+							</div>
+							<div className={classes.actionButton} onClick={this.createFile}>
+								Create File
 							</div>
 							<div
 								className={`${classes.actionButton} ${

@@ -189,6 +189,34 @@ const styles = (theme: Theme) =>
 				background: theme.background.transparentDark || theme.background.dark,
 			},
 		},
+		windowsBarButtonHover: {
+			position: "absolute",
+			transform: "translateY(-150%) translateX(-33%)",
+			width: 200,
+			height: 150,
+			borderRadius: 6,
+			fontSize: 20,
+			background: `${theme.background.main} !important`,
+			border: `solid 1px ${theme.windowBorderColor}`,
+			textAlign: "center",
+			animation: "$scaleup 300ms",
+			display: "flex",
+			flexDirection: "column",
+		},
+		"@keyframes scaleup": {
+			from: {
+				opacity: 0,
+				width: 150,
+				height: 130,
+				borderRadius: 0,
+			},
+			to: {
+				opacity: 1,
+				width: 200,
+				height: 150,
+				borderRadius: 8,
+			},
+		},
 		windowsBarButtonActive: {
 			background: theme.background.transparentDark || theme.background.dark,
 		},
@@ -307,6 +335,9 @@ class Desktop extends Component<
 export const WindowBar = () => {
 	const classes = makeStyles(styles)({});
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
+	const [slectedButton, setSelectedButton] = useState<number | undefined>(
+		undefined
+	);
 	useEffect(() => {
 		const updateWindow = () => setOpenWindows([...windowManager.windows]);
 		updateWindow();
@@ -321,6 +352,11 @@ export const WindowBar = () => {
 			{openWindows.map((openWindow, index) => (
 				<div
 					key={index}
+					onContextMenu={() =>
+						index === slectedButton
+							? setSelectedButton(undefined)
+							: setSelectedButton(index)
+					}
 					className={`${classes.windowsBarButton} ${
 						openWindow.state.minimized
 							? classes.windowsBarButtonCloseMinimized
@@ -351,6 +387,32 @@ export const WindowBar = () => {
 						/>
 					) : (
 						<Icon name={openWindow.icon.icon} />
+					)}
+					{slectedButton === index && (
+						<div
+							onClick={() => setSelectedButton(undefined)}
+							className={`${classes.windowsBarButton} ${
+								openWindow.state.minimized
+									? classes.windowsBarButtonCloseMinimized
+									: classes.windowsBarButtonOpen
+							} ${
+								openWindow.id === windowManager.activeWindowId
+									? classes.windowsBarButtonActive
+									: ""
+							} ${classes.windowsBarButtonHover}`}
+						>
+							{openWindow.icon.type === "img" ? (
+								<img
+									alt={`${openWindow.name} icon`}
+									src={openWindow.icon.icon}
+									width={100}
+									height={100}
+								/>
+							) : (
+								<Icon size={100} name={openWindow.icon.icon} />
+							)}
+							<div>{openWindow.name}</div>{" "}
+						</div>
 					)}
 				</div>
 			))}

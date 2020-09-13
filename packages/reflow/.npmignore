@@ -1,5 +1,0 @@
-*.ts
-test
-tsconfig.json
-!*.d.ts
-.npmignore

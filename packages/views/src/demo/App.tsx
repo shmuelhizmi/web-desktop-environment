@@ -56,6 +56,7 @@ const App = () => {
 						]}
 						onChangeCurrentPath={emptyFunction}
 						onCopy={emptyFunction}
+						onCreateFile={emptyFunction}
 						onCreateFolder={emptyFunction}
 						onDelete={emptyFunction}
 						onMove={emptyFunction}

@@ -68,6 +68,10 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 		await fs.mkdir(path);
 		await this.updateFiles();
 	};
+	createFile = async (path: string) => {
+		await fs.writeFile(path, "");
+		await this.updateFiles();
+	};
 	delete = async (file) => {
 		await fs.remove(file);
 		await this.updateFiles();
@@ -117,6 +121,7 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 							}
 						}}
 						onCopy={this.copy}
+						onCreateFile={this.createFile}
 						onCreateFolder={this.createFolder}
 						onDelete={this.delete}
 						onMove={this.move}

@@ -34,6 +34,7 @@ const styles = (theme: Theme) =>
 		},
 		menuContainer: {
 			width: "100%",
+			overflow: "hidden",
 			display: "flex",
 			justifyContent: "center",
 			alignItems: "center",

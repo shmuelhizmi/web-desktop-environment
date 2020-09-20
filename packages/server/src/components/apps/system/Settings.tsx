@@ -82,7 +82,7 @@ class Settings extends Component<{}, SettingsState> {
 
 export const settings: App<{}> = {
 	name: "Settings",
-	description: "a system settings / info mnager",
+	description: "a system settings / info manager",
 	App: Settings,
 	defaultInput: {},
 	icon: {

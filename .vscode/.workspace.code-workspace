@@ -9,10 +9,6 @@
 			"path": "../packages/views"
 		},
 		{
-			"name": "flows",
-			"path": "../packages/flows"
-		},
-		{
 			"name": ".web-desktop-environment-config",
 			"path": "../../../../.web-desktop-environment-config"
 		},
@@ -22,6 +18,9 @@
 		},
 		{
 			"path": "../packages/views-mobile"
+		},
+		{
+			"path": "../packages/server"
 		}
 	],
 	"settings": {

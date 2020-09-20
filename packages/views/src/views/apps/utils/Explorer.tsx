@@ -8,7 +8,7 @@ import { Theme } from "@root/theme";
 import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
-import Emiiter from "@state/Emitter";
+import Emiiter from "@utils/Emitter";
 import { reactFullstackConnectionManager } from "@root/index";
 
 const styles = (theme: Theme) =>
@@ -320,7 +320,7 @@ class Explorer extends Component<
 						} else {
 							reject(new Error("confirm does not have a result."));
 						}
-						this.emitter.removeListener("confirmDone", confirmDone);
+						this.emitter.off("confirmDone", confirmDone);
 					};
 					this.emitter.on("confirmDone", confirmDone);
 				}
@@ -347,7 +347,7 @@ class Explorer extends Component<
 							resolve({ result: false, value: prompt.value });
 						}
 						this.setState({ prompt: undefined });
-						this.emitter.removeListener("promptDone", promptFinish);
+						this.emitter.off("promptDone", promptFinish);
 					};
 					this.emitter.on("promptDone", promptFinish);
 				}

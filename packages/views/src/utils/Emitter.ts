@@ -1,4 +1,4 @@
-import { EventEmitter as Events } from "events";
+import Events from "events";
 
 export default class Emiiter<EventList> {
 	private emitter = new Events().setMaxListeners(0); // Infinity

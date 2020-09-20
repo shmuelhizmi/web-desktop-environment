@@ -1,5 +1,5 @@
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
-import Emitter from "@state/Emitter";
+import Emitter from "@utils/Emitter";
 
 export interface Window {
 	id: number;

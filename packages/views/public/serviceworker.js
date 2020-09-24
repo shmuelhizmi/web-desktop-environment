@@ -17,17 +17,24 @@ self.addEventListener("fetch", (event) => {
 	event.respondWith(
 		caches.open(CACHE_NAME).then((cache) => {
 			return cache.match(event.request).then((response) => {
-				return (
-					fetch(event.request).then((response) => {
+				console.log(event.request);
+				return fetch(event.request)
+					.then((response) => {
 						if (
-							event.request.referrer.includes(self.location.origin) &&
-							!event.request.url.includes("socket.io")
+							event.request.url.includes(self.location.host) &&
+							(event.request.destination === "script" ||
+								event.request.destination === "document" ||
+								event.request.url.endsWith(".html") ||
+								event.request.url.endsWith(".css") ||
+								event.request.url.endsWith(".js") ||
+								event.request.url.endsWith(".json"))
 						) {
+							console.log(`cache ${event.request.url}`);
 							cache.put(event.request, response.clone());
 						}
 						return response;
-					}) || response
-				);
+					})
+					.catch(() => response);
 			});
 		})
 	);

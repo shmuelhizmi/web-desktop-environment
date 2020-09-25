@@ -8,9 +8,9 @@ just like any other desktop environment it is just a visual interface for your c
 the twist with this desktop-environment is that "web-desktop-environment" visual interface runs on the web with his server running localy on your computer
 
 ## Use Cases
- - interface for a cloud server (can possibly be used as a replacemnt for control panel)
+ - interface for a cloud server (can possibly be used as a replacement for control panel)
  - interface for small/low power computers like the Raspberry Pi zero
- - interface for controlling your computer over long distance 
+ - interface for controlling your computer over a long distance 
 
 ## The technologies behind "web-desktop-devironment"
 both the server and are build using a react framework called ["react-fullstack"](https://github.com/shmuelhizmi/react-fullstack/tree/master/packages/fullstack) which is a framework for building fast react applications that rely a tight connection between the client and the server.

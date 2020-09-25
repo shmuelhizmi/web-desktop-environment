@@ -8,7 +8,7 @@ just like any other desktop environment it is just a visual interface for your c
 the twist with this desktop-environment is that "web-desktop-environment" visual interface runs on the web with his server running localy on your computer
 
 ## Use Cases
- - interface for a cloud servers (can possibly be used as a replacemnt for control panel)
+ - interface for a cloud server (can possibly be used as a replacemnt for control panel)
  - interface for small/low power computers like the Raspberry Pi zero
  - interface for controlling your computer over long distance 
 

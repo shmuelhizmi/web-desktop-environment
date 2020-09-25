@@ -106,7 +106,7 @@ export const terminal: App<TerminalInput> = {
 	},
 	icon: {
 		type: "icon",
-		icon: "DiTerminal",
+		icon: "FcCommandLine",
 	},
 	window: {
 		height: 400,

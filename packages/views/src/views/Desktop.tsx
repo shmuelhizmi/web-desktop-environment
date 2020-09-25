@@ -18,8 +18,13 @@ import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
+import Color from "@ctrl/tinycolor";
+import StateComponent from "@components/stateComponent";
 
 export const windowsBarHeight = 55;
+
+const transparent = (color: string, alpha = 0.6) =>
+	"#" + Color(color).setAlpha(alpha).toHex8();
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -32,12 +37,12 @@ const styles = (theme: Theme) =>
 		},
 		startBotton: {
 			position: "absolute",
-			bottom: 0,
+			bottom: 5,
 			left: 45,
 			height: windowsBarHeight,
 			cursor: "pointer",
-			width: 80,
-			borderRadius: "15px 15px 0 0",
+			width: 60,
+			borderRadius: 10,
 			fontSize: 40,
 			paddingTop: 5,
 			borderBottom: "none",
@@ -45,12 +50,12 @@ const styles = (theme: Theme) =>
 			justifyContent: "center",
 			color: theme.background.text,
 			backdropFilter: "blur(15px)",
-			border: `solid 2px ${
-				theme.background.transparentDark || theme.background.dark
-			}`,
-			background: theme.background.main,
+			boxShadow: `0 0px 3px 0px ${theme.shadowColor}`,
+			background: transparent(theme.background.main),
 			"&:hover": {
-				background: theme.background.transparent,
+				background: transparent(
+					theme.background.transparent || theme.background.main
+				),
 			},
 			zIndex: 2,
 		},
@@ -69,9 +74,7 @@ const styles = (theme: Theme) =>
 			justifyContent: "center",
 			color: theme.background.text,
 			backdropFilter: "blur(15px)",
-			border: `solid 2px ${
-				theme.background.transparentDark || theme.background.dark
-			}`,
+			boxShadow: `0 0px 3px 0px ${theme.shadowColor}`,
 			background: theme.background.main,
 			"&:hover": {
 				background: theme.background.transparent,
@@ -161,92 +164,88 @@ const styles = (theme: Theme) =>
 		startMenuSearch: {
 			width: "100%",
 		},
-		windowsBar: {
-			position: "absolute",
-			bottom: 0,
-			left: 180,
-			right: 25,
-			borderRadius: "15px 15px 0 0",
-			height: windowsBarHeight,
-			display: "flex",
-			backdropFilter: "blur(2px)",
-			background: theme.background.transparent || theme.background.main,
-			paddingLeft: 10,
-			border: `solid 2px ${
-				theme.background.transparentDark || theme.background.dark
-			}`,
-			borderBottom: "none",
-			zIndex: 2,
-		},
-		windowsBarButton: {
-			userSelect: "none",
-			fontSize: 50,
-			padding: 5,
-			marginRight: 4,
-			cursor: "pointer",
-			color: theme.background.text,
-			"&:hover": {
-				background: theme.background.transparentDark || theme.background.dark,
-			},
-		},
-		windowsBarButtonHover: {
-			position: "absolute",
-			transform: "translateY(-150%) translateX(-33%)",
-			width: 200,
-			height: 150,
-			borderRadius: 6,
-			fontSize: 20,
-			background: `${theme.background.main} !important`,
-			border: `solid 1px ${theme.windowBorderColor}`,
-			textAlign: "center",
-			animation: "$scaleup 300ms",
-			display: "flex",
-			flexDirection: "column",
-		},
-		"@keyframes scaleup": {
-			from: {
-				opacity: 0,
-				width: 150,
-				height: 130,
-				borderRadius: 0,
-			},
-			to: {
-				opacity: 1,
-				width: 200,
-				height: 150,
-				borderRadius: 8,
-			},
-		},
-		windowsBarButtonActive: {
-			background: theme.background.transparentDark || theme.background.dark,
-		},
-		windowsBarButtonOpen: {
-			borderBottom: `${
-				theme.type === "transparent" ? theme.success.main : theme.secondary.main
-			} solid 3px`,
-		},
-		windowsBarButtonCloseMinimized: {
-			borderBottom: `${theme.secondary.dark} solid 3px`,
-		},
 	});
 
-interface DesktopState {
-	isStartMenuOpen: boolean;
-	startMenuQuery?: string;
-}
+const useWindowBarStyles = makeStyles((theme: Theme) => ({
+	windowsBar: {
+		position: "absolute",
+		bottom: 5,
+		left: 180,
+		right: 25,
+		borderRadius: 13,
+		height: windowsBarHeight,
+		display: "flex",
+		backdropFilter: "blur(4px)",
+		background: transparent(
+			theme.background.transparent || theme.background.main
+		),
+		paddingLeft: 10,
+		boxShadow: "0 0px 3px 0px",
+		zIndex: 2,
+	},
+	windowsBarButton: {
+		userSelect: "none",
+		fontSize: 40,
+		boxShadow: "0px 0px 10px 4px #0007",
+		padding: 5,
+		margin: 2,
+		borderRadius: 6,
+		marginRight: 4,
+		cursor: "pointer",
+		color: theme.background.text,
+		"&:hover": {
+			background: theme.background.transparentDark || theme.background.dark,
+		},
+	},
+	windowsBarButtonHover: {
+		position: "absolute",
+		transform: "translateY(-150%) translateX(-33%)",
+		width: 200,
+		height: 150,
+		borderRadius: 6,
+		fontSize: 20,
+		background: `${theme.background.main} !important`,
+		border: `solid 1px ${theme.windowBorderColor}`,
+		textAlign: "center",
+		animation: "$scaleup 300ms",
+		display: "flex",
+		flexDirection: "column",
+	},
+	"@keyframes scaleup": {
+		from: {
+			opacity: 0,
+			width: 150,
+			height: 130,
+			borderRadius: 0,
+		},
+		to: {
+			opacity: 1,
+			width: 200,
+			height: 150,
+			borderRadius: 8,
+		},
+	},
+	windowsBarButtonActive: {
+		backdropFilter: "blur(15px)",
+		borderBottom: `${
+			theme.type === "transparent" ? theme.success.main : theme.secondary.main
+		} solid 6px !important`,
+	},
+	windowsBarButtonOpen: {
+		borderBottom: `${
+			theme.type === "transparent" ? theme.success.main : theme.secondary.main
+		} solid 3px`,
+	},
+	windowsBarButtonCloseMinimized: {
+		borderBottom: `${theme.secondary.dark} solid 3px`,
+	},
+}));
 
 class Desktop extends Component<
 	DesktopInterface,
-	DesktopState,
+	{},
 	WithStyles<typeof styles>
 > {
-	constructor(props: Desktop["props"]) {
-		super(props);
-		this.state = {
-			isStartMenuOpen: false,
-		};
-	}
-
 	renderAppListCell = (app: App, index: number) => {
 		const { classes, onLaunchApp } = this.props;
 		return (
@@ -270,7 +269,6 @@ class Desktop extends Component<
 
 	render() {
 		const { background, openApps, classes, apps } = this.props;
-		const { isStartMenuOpen, startMenuQuery } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
 				{openApps.map((app) => (
@@ -295,45 +293,59 @@ class Desktop extends Component<
 						<Icon width={40} height={40} name="VscWindow" />
 					</div>
 				</Link>
-				<div
-					className={classes.startBotton}
-					onClick={() => this.setState({ isStartMenuOpen: !isStartMenuOpen })}
+				<StateComponent
+					defaultState={{ isStartMenuOpen: false, startMenuQuery: "" }}
 				>
-					<Icon width={40} height={40} name="FiList" />
-				</div>
-				<WindowBar />
-				<MountUnmoutAnmiation
-					mount={isStartMenuOpen}
-					className={`${classes.startMenu} ${
-						isStartMenuOpen ? classes.slidein : classes.slideout
-					}`}
-				>
-					<div className={classes.startMenuBody}>
-						<TextField
-							className={classes.startMenuSearch}
-							borderBottom={false}
-							placeholder="search app"
-							value={startMenuQuery}
-							onChange={(startMenuQuery) => this.setState({ startMenuQuery })}
-						></TextField>
-						{apps
-							.filter((app) =>
-								startMenuQuery
-									? app.name.includes(startMenuQuery) ||
-									  app.description.includes(startMenuQuery) ||
-									  app.flow.includes(startMenuQuery)
-									: true
-							)
-							.map((app, index) => this.renderAppListCell(app, index))}
-					</div>
-				</MountUnmoutAnmiation>
+					{({ isStartMenuOpen, startMenuQuery }, setState) => {
+						return (
+							<>
+								<div
+									className={classes.startBotton}
+									onClick={() =>
+										setState({ isStartMenuOpen: !isStartMenuOpen })
+									}
+								>
+									<Icon width={40} height={40} name="CgMenuGridR" />
+								</div>
+								<WindowBar />
+								<MountUnmoutAnmiation
+									mount={isStartMenuOpen}
+									className={`${classes.startMenu} ${
+										isStartMenuOpen ? classes.slidein : classes.slideout
+									}`}
+								>
+									<div className={classes.startMenuBody}>
+										<TextField
+											className={classes.startMenuSearch}
+											borderBottom={false}
+											placeholder="search app"
+											value={startMenuQuery}
+											onChange={(startMenuQuery) =>
+												setState({ startMenuQuery })
+											}
+										></TextField>
+										{apps
+											.filter((app) =>
+												startMenuQuery
+													? app.name.includes(startMenuQuery) ||
+													  app.description.includes(startMenuQuery) ||
+													  app.flow.includes(startMenuQuery)
+													: true
+											)
+											.map((app, index) => this.renderAppListCell(app, index))}
+									</div>
+								</MountUnmoutAnmiation>
+							</>
+						);
+					}}
+				</StateComponent>
 			</div>
 		);
 	}
 }
 
 export const WindowBar = () => {
-	const classes = makeStyles(styles)({});
+	const classes = useWindowBarStyles();
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
 	const [slectedButton, setSelectedButton] = useState<number | undefined>(
 		undefined
@@ -382,8 +394,8 @@ export const WindowBar = () => {
 						<img
 							alt={`${openWindow.name} icon`}
 							src={openWindow.icon.icon}
-							width={50}
-							height={50}
+							width={40}
+							height={40}
 						/>
 					) : (
 						<Icon name={openWindow.icon.icon} />

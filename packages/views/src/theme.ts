@@ -66,6 +66,55 @@ const transparentTheme: Theme = {
 	},
 };
 
+const transparentDarkTheme: Theme = {
+	type: "transparent",
+	windowBarColor: "#33333377",
+	shadowColor: "#0007",
+	windowBorderColor: "#000",
+	background: {
+		main: "#33333357",
+		light: "#44444477",
+		dark: "#24242477",
+		transparent: "#37373747",
+		transparentDark: "#24242444",
+		text: "#d9d9da",
+	},
+	primary: {
+		main: "#eee9",
+		light: "#fffe",
+		dark: "#bbb7",
+		transparent: "#bebebe22",
+		transparentDark: "#bebebe44",
+		text: "#000",
+	},
+	secondary: {
+		main: "#315bef44",
+		light: "#214b9f33",
+		transparent: "#315bef22",
+		dark: "#214b9f55",
+		text: "#fff",
+	},
+	error: {
+		main: "#db5049ee",
+		light: "#ff354c88",
+		dark: "#f00",
+		text: "#fff",
+	},
+	success: {
+		main: "#21c62f88",
+		transparent: "#21c62f48",
+		dark: "#21c62fb8",
+		light: "#21c62fee",
+		text: "#fff",
+	},
+	warning: {
+		main: "#ffd951",
+		light: "#ffeb51",
+		dark: "#ae9941",
+		text: "#fff",
+	},
+};
+
 const lightTheme: Theme = {
 	type: "light",
 	background: {
@@ -187,4 +236,5 @@ export const Themes = {
 	dark: darkTheme,
 	light: lightTheme,
 	transparent: transparentTheme,
+	transparentDark: transparentDarkTheme,
 };

@@ -78,7 +78,7 @@ export const notepad: App<NotepadInput> = {
 	},
 	icon: {
 		type: "icon",
-		icon: "BiNotepad",
+		icon: "FcFile",
 	},
 	window: {
 		height: 800,

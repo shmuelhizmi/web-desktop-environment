@@ -308,6 +308,7 @@ class Settings extends Component<
 									<option value="dark">dark</option>
 									<option value="light">light</option>
 									<option value="transparent">transparent</option>
+									<option value="transparentDark">transparent dark</option>
 									<option value="custom">custom</option>
 								</select>
 							</div>

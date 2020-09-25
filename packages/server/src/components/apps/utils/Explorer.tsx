@@ -144,7 +144,7 @@ export const explorer: App<ExplorerInput> = {
 	defaultInput: { path: homedir(), type: "explore", isCurrentApp: true },
 	icon: {
 		type: "icon",
-		icon: "BsFillFolderFill",
+		icon: "FcFolder",
 	},
 	nativeIcon: {
 		icon: "folder-multiple",

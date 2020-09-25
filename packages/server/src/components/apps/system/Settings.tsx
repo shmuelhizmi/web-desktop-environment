@@ -87,7 +87,7 @@ export const settings: App<{}> = {
 	defaultInput: {},
 	icon: {
 		type: "icon",
-		icon: "IoMdSettings",
+		icon: "FcSettings",
 	},
 	nativeIcon: {
 		icon: "ios-settings",

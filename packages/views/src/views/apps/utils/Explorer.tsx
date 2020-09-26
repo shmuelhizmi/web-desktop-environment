@@ -10,6 +10,7 @@ import Icon from "@components/icon";
 import TextField from "@components/textField";
 import Emiiter from "@utils/Emitter";
 import { reactFullstackConnectionManager } from "@root/index";
+import { transparent } from "@utils/colors";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -18,7 +19,9 @@ const styles = (theme: Theme) =>
 			height: "100%",
 			borderRadius: "0 0 9px 9px",
 			background: theme.background.main,
-			border: `1px solid ${theme.windowBorderColor}`,
+			border: theme.windowBorder
+				? `1px solid ${theme.windowBorderColor}`
+				: "none",
 			borderTop: "none",
 			boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
 			paddingBottom: 2,
@@ -48,13 +51,27 @@ const styles = (theme: Theme) =>
 			userSelect: "none",
 			color: theme.secondary.text,
 			fontSize: 18,
-			border: `2px solid ${theme.secondary.text}`,
-			borderRadius: 25,
+			border:
+				theme.type === "transparent"
+					? "none"
+					: `1px solid ${theme.secondary.text}`,
 			margin: 3,
+			borderBottom: `2px solid ${theme.secondary.text}`,
 			cursor: "pointer",
-			transition: "background 100ms",
+			transition: "background 100ms, transform 100ms",
+			...(theme.type === "transparent"
+				? {
+						backdropFilter: "blur(7px)",
+						boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+						background: theme.background.transparent,
+						borderBottom: `1px solid ${theme.windowBorderColor}`,
+						borderRadius: 25,
+				  }
+				: {
+						borderRadius: 10,
+				  }),
 			"&:hover": {
-				transform: "scale(1.05)",
+				transform: "scale(1.1)",
 				...(theme.type === "transparent"
 					? {
 							backdropFilter: "blur(13px)",
@@ -85,7 +102,7 @@ const styles = (theme: Theme) =>
 			border: `1px solid ${theme.windowBorderColor}`,
 			borderRight: "none",
 			borderLeft: "none",
-			backdropFilter: theme.type === "transparent" ? "blur(20px)" : "none",
+			backdropFilter: theme.type === "transparent" ? "blur(10px)" : "none",
 			width: "100%",
 			maxHeight: "100%",
 			overflowX: "auto",
@@ -195,8 +212,10 @@ const styles = (theme: Theme) =>
 		breadcrumbButtonItemLast: {
 			cursor: "auto",
 			borderRadius: "0 8px 8px 0",
-			background: theme.primary.main,
-			border: `solid 1px ${theme.windowBorderColor}`,
+			background:
+				theme.type === "light"
+					? theme.primary.main
+					: transparent(theme.primary.main, 0.6),
 			"&:hover": {
 				background: theme.primary.main,
 				backdropFilter: theme.type === "transparent" ? "blur(12px)" : "none",

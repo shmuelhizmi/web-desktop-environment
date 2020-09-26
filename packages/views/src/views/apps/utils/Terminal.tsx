@@ -21,7 +21,9 @@ const styles = (theme: Theme) =>
 		root: {
 			width: "100%",
 			height: "100%",
-			border: `1px solid ${theme.windowBorderColor}`,
+			border: theme.windowBorder
+				? `1px solid ${theme.windowBorderColor}`
+				: "none",
 			borderTop: "none",
 			borderRadius: "0 0 9px 9px",
 			background: theme.background.main,

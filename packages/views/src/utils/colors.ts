@@ -1,3 +1,8 @@
+import Color from "@ctrl/tinycolor";
+
+export const transparent = (color: string, alpha = 0.6) =>
+	"#" + Color(color).setAlpha(alpha).toHex8();
+
 // from https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
 
 const padZero = (str: string) => {

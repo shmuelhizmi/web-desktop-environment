@@ -64,6 +64,7 @@ const transparentTheme: Theme = {
 		dark: "#ae9941",
 		text: "#fff",
 	},
+	windowBorder: false,
 };
 
 const transparentDarkTheme: Theme = {
@@ -113,6 +114,7 @@ const transparentDarkTheme: Theme = {
 		dark: "#ae9941",
 		text: "#fff",
 	},
+	windowBorder: false,
 };
 
 const lightTheme: Theme = {
@@ -180,6 +182,7 @@ const lightTheme: Theme = {
 		transparent: "#ffd95199",
 		transparentDark: "#ffd9518a",
 	},
+	windowBorder: true,
 };
 
 const darkTheme: Theme = {
@@ -228,6 +231,7 @@ const darkTheme: Theme = {
 		dark: "#ae9941",
 		text: "#fff",
 	},
+	windowBorder: true,
 };
 
 export const defaultTheme = darkTheme;

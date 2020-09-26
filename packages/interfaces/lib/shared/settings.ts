@@ -11,6 +11,7 @@ export interface Theme {
 	windowBarColor: string;
 	shadowColor: string;
 	windowBorderColor: string;
+	windowBorder: boolean;
 }
 
 export interface Color {

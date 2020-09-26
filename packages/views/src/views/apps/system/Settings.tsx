@@ -13,7 +13,7 @@ import Button from "@components/button";
 import axios from "axios";
 import Color from "@ctrl/tinycolor";
 import { SketchPicker } from "react-color";
-import { invertColor } from "@utils/invertColor";
+import { invertColor } from "@utils/colors";
 
 const makeColor = (baseColor: RGBArray | string): ColorType => {
 	const color =
@@ -36,7 +36,9 @@ const styles = (theme: Theme) =>
 	createStyles({
 		root: {
 			background: theme.background.main,
-			border: `1px solid ${theme.windowBorderColor}`,
+			border: theme.windowBorder
+				? `1px solid ${theme.windowBorderColor}`
+				: "none",
 			width: "100%",
 			height: "100%",
 			display: "flex",
@@ -48,7 +50,7 @@ const styles = (theme: Theme) =>
 			background: theme.background.dark,
 			borderRight: `solid 1px ${theme.windowBorderColor}`,
 			backdropFilter: theme.type === "transparent" ? "blur(16px)" : "none",
-			borderRadius: "0 0 0 15px",
+			borderRadius: "0 0 0 10px",
 			height: "100%",
 			width: 250,
 		},
@@ -254,6 +256,7 @@ class Settings extends Component<
 						}).toHex8String(),
 						error: Themes.transparent.error,
 						warning: Themes.transparent.warning,
+						windowBorder: true,
 					};
 					this.props.setSettings(state.settings);
 					return {
@@ -385,6 +388,7 @@ class Settings extends Component<
 								windowBorderColor: Color(getColor("background")).isDark()
 									? "#fff"
 									: "#000",
+								windowBorder: true,
 							};
 							this.props.setSettings(fullState.settings);
 							return {}; // no need to rerender

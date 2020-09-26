@@ -17,7 +17,6 @@ self.addEventListener("fetch", (event) => {
 	event.respondWith(
 		caches.open(CACHE_NAME).then((cache) => {
 			return cache.match(event.request).then((response) => {
-				console.log(event.request);
 				return fetch(event.request)
 					.then((response) => {
 						if (
@@ -29,7 +28,6 @@ self.addEventListener("fetch", (event) => {
 								event.request.url.endsWith(".js") ||
 								event.request.url.endsWith(".json"))
 						) {
-							console.log(`cache ${event.request.url}`);
 							cache.put(event.request, response.clone());
 						}
 						return response;

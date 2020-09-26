@@ -7,12 +7,12 @@ import "./icon.css";
 const Icon = (
 	props: IconBaseProps & {
 		name: IconNames;
-		parentClassName?: string;
+		containerClassName?: string;
 		parentFill?: boolean;
 	}
 ) => {
 	return (
-		<span className={`icon-parent ${props.parentClassName || ""}`}>
+		<span className={`icon-parent ${props.containerClassName || ""}`}>
 			{React.createElement(
 				// @eslint-disable-no-undef
 				require("react-icons/all")[props.name] || MdError,

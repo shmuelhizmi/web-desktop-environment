@@ -34,7 +34,9 @@ const styles = (theme: Theme) =>
 		bar: {
 			background: theme.windowBarColor,
 			backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
-			border: `1px solid ${theme.windowBorderColor}`,
+			border: theme.windowBorder
+				? `1px solid ${theme.windowBorderColor}`
+				: "none",
 			borderBottom: "none",
 			borderRadius: "7px 7px 0 0",
 			cursor: "move",
@@ -233,6 +235,14 @@ class Window extends Component<
 		}
 	};
 
+	setActive = () => {
+		if (windowManager.activeWindowId === this.id) {
+			this.setState({ isActive: true });
+		} else {
+			windowManager.setActiveWindow(this.id);
+		}
+	};
+
 	render() {
 		const { size, canDrag, collaps, isActive } = this.state;
 		const {
@@ -258,7 +268,7 @@ class Window extends Component<
 					disabled={!canDrag}
 					defaultPosition={this.state.position}
 					onDrag={(e, position) => {
-						windowManager.setActiveWindow(this.id);
+						this.setActive();
 						const touchTop = position.y < 0;
 						const touchBottom =
 							position.y >
@@ -308,10 +318,7 @@ class Window extends Component<
 						});
 					}}
 				>
-					<div
-						className={classes.root}
-						onClick={() => windowManager.setActiveWindow(this.id)}
-					>
+					<div className={classes.root} onClick={() => this.setActive()}>
 						<ResizableBox
 							width={size.width}
 							height={collaps ? 0 : size.height}
@@ -363,7 +370,7 @@ class Window extends Component<
 									{title} -{" "}
 									{icon.type === "icon" ? (
 										<Icon
-											parentClassName={classes.barTitleIcon}
+											containerClassName={classes.barTitleIcon}
 											name={icon.icon}
 										/>
 									) : (

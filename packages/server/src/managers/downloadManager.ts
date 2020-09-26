@@ -2,7 +2,7 @@ import Logger from "@utils/logger";
 import DesktopManager from "@managers/desktopManager";
 import * as http from "http";
 import { promises as fs } from "fs-extra";
-import { basename } from "path";
+import { basename, extname } from "path";
 import { v4 } from "uuid";
 
 export default class DownloadManager {
@@ -23,7 +23,7 @@ export default class DownloadManager {
 			this.logger.info(`user request to download ${path}`);
 			if (path) {
 				try {
-					const content = await fs.readFile(path, { encoding: "utf-8" });
+					const content = await fs.readFile(path);
 					response.writeHead(200, {
 						"Content-Disposition": "attachment",
 						filename: basename(path),
@@ -41,7 +41,7 @@ export default class DownloadManager {
 		this.server.listen(this.port);
 	};
 	public addFile = (path: string) => {
-		const hash = v4();
+		const hash = v4() + extname(path);
 		this.files[hash] = path;
 		return hash;
 	};

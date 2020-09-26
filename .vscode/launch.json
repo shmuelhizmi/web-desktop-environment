@@ -12,7 +12,7 @@
       "webRoot": "${workspaceFolder}/packages/views/"
     },
     {
-      "name": "flow",
+      "name": "server",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
@@ -21,7 +21,7 @@
       "env": {
         "NODE_ENV": "development"
       },
-      "cwd": "${workspaceRoot}/packages/flows/",
+      "cwd": "${workspaceRoot}/packages/server/",
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**", "node_modules/**"]
     }

@@ -4,20 +4,6 @@ import { EmptyThemeProvider as ThemeProvider } from "@views/warpper/ThemeProvide
 import Desktop from "@views/Desktop";
 import Window from "@views/Window";
 
-//apps
-import Terminal from "@views/apps/utils/Terminal";
-import Explorer from "@views/apps/utils/Explorer";
-import Notepad from "@views/apps/utils/Notepad";
+export * from "@views/apps";
 
-// system
-import Settings from "@views/apps/system/Settings";
-
-export {
-	Desktop,
-	Window,
-	Terminal,
-	Explorer,
-	Settings,
-	ThemeProvider,
-	Notepad,
-};
+export { Desktop, Window, ThemeProvider };

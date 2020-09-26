@@ -8,6 +8,7 @@ import { explorer } from "@components/apps/utils/Explorer";
 import { notepad } from "@components/apps/utils/Notepad";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
 import { settings } from "@components/apps/system/Settings";
+import { mediaPlayer } from "@components/apps/media/MediaPlayer";
 
 export interface App<Params> {
 	icon: Icon;
@@ -19,4 +20,4 @@ export interface App<Params> {
 	App: new (props: Params) => Component<Params>;
 }
 
-export { terminal, explorer, settings, notepad };
+export { terminal, explorer, settings, notepad, mediaPlayer };

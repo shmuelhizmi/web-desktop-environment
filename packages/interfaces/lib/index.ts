@@ -6,7 +6,10 @@ import ThemeProvider from "./views/ThemeProvider";
 // utils
 import Terminal from "./views/apps/utils/Terminal";
 import Explorer from "./views/apps/utils/Explorer";
+
+// file viewers
 import Notepad from "./views/apps/utils/Notepad";
+import MediaPlayer from "./views/apps/media/MediaPlayer";
 
 // system
 import Settings from "./views/apps/system/Settings";
@@ -19,6 +22,7 @@ export const viewInterfaces = {
   Explorer: <Explorer>{},
   Settings: <Settings>{},
   Notepad: <Notepad>{},
+  MediaPlayer: <MediaPlayer>{},
   // warpper
   ThemeProvider: <ThemeProvider>{},
 };

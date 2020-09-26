@@ -2,8 +2,8 @@ import { View } from "@react-fullstack/fullstack";
 import { FileViewerBase } from "../../../shared/fileViewer";
 
 export interface Input extends FileViewerBase {
-  defaultValue: string;
-  onSave: (newValue: string) => void;
+  source: string;
+  port: number;
 }
 
-export default interface Notepad extends View<Input> {}
+export default interface MediaPlayer extends View<Input> {}

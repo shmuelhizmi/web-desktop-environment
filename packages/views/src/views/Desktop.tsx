@@ -18,13 +18,10 @@ import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
-import Color from "@ctrl/tinycolor";
 import StateComponent from "@components/stateComponent";
+import { transparent } from "@utils/colors";
 
 export const windowsBarHeight = 55;
-
-const transparent = (color: string, alpha = 0.6) =>
-	"#" + Color(color).setAlpha(alpha).toHex8();
 
 const styles = (theme: Theme) =>
 	createStyles({

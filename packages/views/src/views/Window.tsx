@@ -4,14 +4,10 @@ import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Windo
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import ReactDOM from "react-dom";
-import Dragable from "react-draggable";
 import windowManager from "@state/WindowManager";
 import { windowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import { ResizableBox } from "react-resizable";
-import "react-resizable/css/styles.css";
+import { Rnd } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 
 export const defualtWindowSize = {
@@ -28,8 +24,8 @@ export const windowBarHeight = 25;
 const styles = (theme: Theme) =>
 	createStyles({
 		root: {
-			position: "absolute",
-			padding: 5,
+			width: "100%",
+			height: "100%",
 		},
 		bar: {
 			background: theme.windowBarColor,
@@ -244,7 +240,7 @@ class Window extends Component<
 	};
 
 	render() {
-		const { size, canDrag, collaps, isActive } = this.state;
+		const { size, canDrag, collaps, isActive, position } = this.state;
 		const {
 			children,
 			classes,
@@ -264,18 +260,40 @@ class Window extends Component<
 					if (element) this.wrapperRef = element;
 				}}
 			>
-				<Dragable
-					disabled={!canDrag}
-					defaultPosition={this.state.position}
-					onDrag={(e, position) => {
+				<Rnd
+					disableDragging={!canDrag}
+					size={size}
+					position={position}
+					onDrag={(e, newPosition) => {
 						this.setActive();
-						const touchTop = position.y < 0;
+						const touchTop = newPosition.y < 0;
 						const touchBottom =
-							position.y >
+							newPosition.y >
 							window.innerHeight - windowBarHeight - windowsBarHeight;
-						const touchMinimumLeft = position.x < 0 - size.width * 0.5;
+						const width = Number(String(size.width).replace("px", ""));
+						const touchMinimumLeft = newPosition.x < 0 - width * 0.5;
 						const touchMinimumRight =
-							position.x > window.innerWidth - size.width * 0.5;
+							newPosition.x > window.innerWidth - width * 0.5;
+						if (
+							touchTop ||
+							touchBottom ||
+							touchMinimumLeft ||
+							touchMinimumRight
+						) {
+							this.setState({ position: { ...position } });
+							return;
+						}
+						this.setState({ position: { x: newPosition.x, y: newPosition.y } });
+					}}
+					onDragStop={(_e, newPosition) => {
+						const touchTop = newPosition.y < 0;
+						const touchBottom =
+							newPosition.y >
+							window.innerHeight - windowBarHeight - windowsBarHeight;
+						const width = Number(String(size.width).replace("px", ""));
+						const touchMinimumLeft = newPosition.x < 0 - width * 0.5;
+						const touchMinimumRight =
+							newPosition.x > window.innerWidth - width * 0.5;
 						if (
 							touchTop ||
 							touchBottom ||
@@ -289,104 +307,88 @@ class Window extends Component<
 									"noopener"
 								);
 							}
-							return false;
+							this.setState({ position: { ...position } });
+							return;
 						}
-					}}
-					onStop={(e, fullPosition) => {
-						const position = { x: fullPosition.x, y: fullPosition.y };
-						if (position.y < 0) {
-							position.y = 0;
-						}
-						if (
-							position.y >
-							window.innerHeight - windowBarHeight - windowsBarHeight
-						) {
-							position.y =
-								window.innerHeight - windowBarHeight - windowsBarHeight;
-						}
-						if (position.x < 0) {
-							position.x = 0;
-						}
-						if (position.x > window.innerWidth - size.width) {
-							position.x = window.innerWidth - size.width;
-						}
-						this.setState({ position });
+						this.setState({ position: { x: newPosition.x, y: newPosition.y } });
 						setWindowState({
 							position,
 							minimized: this.state.collaps,
 							size: this.state.size,
 						});
 					}}
+					defaultSize={size}
+					maxHeight={maxHeight}
+					maxWidth={maxWidth}
+					minHeight={minHeight}
+					minWidth={minWidth}
+					onResize={(e, _resize, ele, delta, newPosition) =>
+						this.setState({
+							size: {
+								width: (ele.style.width as unknown) as number,
+								height: (ele.style.height as unknown) as number,
+								...newPosition,
+							},
+						})
+					}
+					onResizeStop={() =>
+						setWindowState({
+							position: this.state.position,
+							minimized: this.state.collaps,
+							size: this.state.size,
+						})
+					}
 				>
 					<div className={classes.root} onClick={() => this.setActive()}>
-						<ResizableBox
-							width={size.width}
-							height={collaps ? 0 : size.height}
-							onResize={(_e: null, resize: { size: Size }) =>
-								this.setState({ size: resize.size })
-							}
-							onResizeStop={() =>
-								setWindowState({
-									position: this.state.position,
-									minimized: this.state.collaps,
-									size: this.state.size,
-								})
-							}
-							minConstraints={[minWidth, minHeight]}
-							maxConstraints={[maxWidth, maxHeight]}
+						<div
+							onMouseEnter={() => this.setState({ canDrag: true })}
+							onMouseLeave={() => this.setState({ canDrag: false })}
+							className={`${classes.bar} ${
+								this.state.collaps ? classes.barCollaps : ""
+							}`}
 						>
-							<div
-								onMouseEnter={() => this.setState({ canDrag: true })}
-								onMouseLeave={() => this.setState({ canDrag: false })}
-								className={`${classes.bar} ${
-									this.state.collaps ? classes.barCollaps : ""
-								}`}
-							>
-								<div className={classes.barButtonsContainer}>
-									<div
-										onClick={() => {
-											windowManager.updateState(this.id, {
-												minimized: !this.state.collaps,
-											});
-										}}
-										className={`${classes.barButton} ${
-											isActive
-												? classes.barButtonCollaps
-												: classes.barButtonInactive
-										}`}
-									/>
-									<div
-										className={`${classes.barButton} ${
-											isActive
-												? classes.barButtonExit
-												: classes.barButtonInactive
-										}`}
-										onClick={() => {
-											onClose();
-										}}
-									/>
-								</div>
-								<div className={classes.barTitle}>
-									{title} -{" "}
-									{icon.type === "icon" ? (
-										<Icon
-											containerClassName={classes.barTitleIcon}
-											name={icon.icon}
-										/>
-									) : (
-										<img
-											className={classes.barTitleIcon}
-											alt="windows icon"
-											width={14}
-											height={14}
-										/>
-									)}
-								</div>
+							<div className={classes.barButtonsContainer}>
+								<div
+									onClick={() => {
+										windowManager.updateState(this.id, {
+											minimized: !this.state.collaps,
+										});
+									}}
+									className={`${classes.barButton} ${
+										isActive
+											? classes.barButtonCollaps
+											: classes.barButtonInactive
+									}`}
+								/>
+								<div
+									className={`${classes.barButton} ${
+										isActive ? classes.barButtonExit : classes.barButtonInactive
+									}`}
+									onClick={() => {
+										onClose();
+									}}
+								/>
 							</div>
-							{!collaps && <div className={classes.body}>{children}</div>}
-						</ResizableBox>
+							<div className={classes.barTitle}>
+								{title} -{" "}
+								{icon.type === "icon" ? (
+									<Icon
+										containerClassName={classes.barTitleIcon}
+										name={icon.icon}
+									/>
+								) : (
+									<img
+										className={classes.barTitleIcon}
+										alt="windows icon"
+										width={14}
+										height={14}
+									/>
+								)}
+							</div>
+						</div>
+						{!collaps && <div className={classes.body}>{children}</div>}
 					</div>
-				</Dragable>
+				</Rnd>
 			</div>,
 			this.domContainer
 		);

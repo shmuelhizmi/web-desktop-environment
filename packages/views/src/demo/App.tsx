@@ -18,7 +18,7 @@ const defaultWindowProps = {
 
 const App = () => {
 	const [background, setBackground] = useState(
-		"url(https://picsum.photos/1920/1080)"
+		'url("https://picsum.photos/id/1039/1920/1080")'
 	);
 	const [theme, setTheme] = useState<Theme>(Themes.dark);
 	return (
@@ -36,7 +36,7 @@ const App = () => {
 					name={"explorer"}
 					icon={{
 						type: "icon",
-						icon: "BsFillFolderFill",
+						icon: "FcFolder",
 					}}
 					{...defaultWindowProps}
 					window={{
@@ -71,7 +71,7 @@ const App = () => {
 					name={"notepad"}
 					icon={{
 						type: "icon",
-						icon: "BiNotepad",
+						icon: "FcFile",
 					}}
 					{...defaultWindowProps}
 					window={{
@@ -96,7 +96,7 @@ const App = () => {
 					name={"settings"}
 					icon={{
 						type: "icon",
-						icon: "IoMdSettings",
+						icon: "FcSettings",
 					}}
 					{...defaultWindowProps}
 					window={{

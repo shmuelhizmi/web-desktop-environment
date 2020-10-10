@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lib/**/*.js
+lib/**/*.js.map
+lib/**/*.d.ts

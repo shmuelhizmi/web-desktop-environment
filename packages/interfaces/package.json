@@ -6,6 +6,10 @@
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "build": "tsc",
+    "build:server": "npm run build"
+  },
   "dependencies": {
     "@react-fullstack/fullstack": "0.1.10"
   },

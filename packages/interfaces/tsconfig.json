@@ -4,8 +4,11 @@
 		"target": "ES6",
 		"module": "commonjs",
 		"declaration": true,
+		"outDir": "lib",
+		"esModuleInterop": true,
 	},
 	"include": [
 		"lib/**/*"
-	]
+	],
+	"exclude": []
 }

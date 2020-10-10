@@ -31,24 +31,25 @@ type IconProps = Partial<IconCompoentProps> & {
 	icon: NativeIcon;
 };
 
+const icons = {
+	AntDesign,
+	Entypo,
+	EvilIcons,
+	Feather,
+	FontAwesome,
+	FontAwesome5,
+	Fontisto,
+	Foundation,
+	Zocial,
+	SimpleLineIcons,
+	RNIMigration,
+	Octicons,
+	MaterialIcons,
+	MaterialCommunityIcons,
+	Ionicons,
+};
+
 const Icon = (props: IconProps) => {
-	const icons = {
-		AntDesign,
-		Entypo,
-		EvilIcons,
-		Feather,
-		FontAwesome,
-		FontAwesome5,
-		Fontisto,
-		Foundation,
-		Zocial,
-		SimpleLineIcons,
-		RNIMigration,
-		Octicons,
-		MaterialIcons,
-		MaterialCommunityIcons,
-		Ionicons,
-	};
 	// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 	// @ts-ignore
 	return React.createElement(icons[props.icon.type], {

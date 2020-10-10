@@ -12,6 +12,7 @@ import { StyleSheet, Text } from "react-native";
 import { ThemeContext } from "@views/warpper/ThemeProvider";
 import Icon from "@components/icon";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { noAlpah } from "@utils/color";
 
 interface DesktopContextInterface {
 	openApps: OpenApp[];
@@ -49,10 +50,7 @@ class Desktop extends Component<DesktopInterface, DesktopState> {
 	makeStyles = (theme: Theme) =>
 		StyleSheet.create({
 			tabBar: {
-				backgroundColor:
-					theme.type === "transparent"
-						? theme.secondary.main
-						: theme.background.main,
+				backgroundColor: noAlpah(theme.background.main),
 				borderTopColor: theme.windowBorderColor,
 				borderTopWidth: 1,
 				elevation: theme.type === "transparent" ? 0 : 4,
@@ -104,7 +102,7 @@ class Desktop extends Component<DesktopInterface, DesktopState> {
 												{route.name === "Home" ? "Launcher" : currentApp?.name}
 											</Text>
 										),
-										tabBarIcon: ({ color, size, focused }) =>
+										tabBarIcon: ({ focused, size }) =>
 											route.name === "Home" || !currentApp ? (
 												<Icon
 													icon={{
@@ -113,20 +111,25 @@ class Desktop extends Component<DesktopInterface, DesktopState> {
 													}}
 													size={size}
 													color={
-														focused
-															? theme.primary.light
-															: theme.background.text
+														focused ? theme.primary.main : theme.primary.text
 													}
 												/>
 											) : (
 												<Icon
 													icon={currentApp.nativeIcon}
 													size={size}
-													color={color}
+													color={
+														focused ? theme.primary.main : theme.primary.text
+													}
 												/>
 											),
 									})}
-									tabBarOptions={{ style: styles.tabBar }}
+									tabBarOptions={{
+										style: styles.tabBar,
+										tabStyle: {
+											backgroundColor: noAlpah(theme.background.main),
+										},
+									}}
 								>
 									<this.navigator.Screen name="Home" component={Home} />
 									{currentApp && (

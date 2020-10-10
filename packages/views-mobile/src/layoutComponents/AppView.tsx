@@ -1,7 +1,7 @@
 import React from "react";
 import { DesktopContext } from "@views/Desktop";
 import { reactFullstackConnectionManager } from "@root/App";
-import * as views from "@views/index";
+import { appViews } from "@views/index";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 
 class AppView extends React.Component {
@@ -14,7 +14,7 @@ class AppView extends React.Component {
 						currentApp && (
 							<Client
 								{...reactFullstackConnectionManager.connect(currentApp.port)}
-								views={views}
+								views={appViews}
 							/>
 						)
 					);

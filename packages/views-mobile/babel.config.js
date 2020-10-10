@@ -24,6 +24,7 @@ module.exports = {
 					"@layoutComponents": join(srcDir, "layoutComponents"),
 					"@views": join(srcDir, "views"),
 					"@state": join(srcDir, "state"),
+					"@utils": join(srcDir, "utils"),
 					"@root": srcDir,
 					"@index": join(__dirname, "./App"),
 				},

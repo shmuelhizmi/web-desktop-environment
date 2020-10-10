@@ -13,16 +13,17 @@ import {
 	TextInput,
 	ScrollView,
 	TouchableOpacity,
-	Picker,
 	ImageBackground,
+	Pressable,
 } from "react-native";
 import { ThemeContext } from "@views/warpper/ThemeProvider";
-import { Card, View } from "react-native-ui-lib";
+import { View } from "react-native-ui-lib";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Icon from "@components/icon";
 import { DesktopContext } from "@views/Desktop";
 import { NativeIcon } from "@web-desktop-environment/interfaces/lib/shared/icon";
+import { noAlpah } from "@utils/color";
 
 interface SettingsCategory {
 	path: string;
@@ -49,14 +50,23 @@ class Settings extends Component<SettingsInterface> {
 				flex: 1,
 				backgroundColor: theme.background.main,
 			},
-			settingsCard: {
+			settingsSection: {
 				backgroundColor: theme.background.main,
-				width: "90%",
-				margin: 25,
-				borderRadius: 18,
+				width: "100%",
 				alignItems: "center",
-				borderColor: theme.background.light,
-				borderWidth: 3,
+				borderBottomColor: theme.background.dark,
+				borderBottomWidth: 1,
+			},
+			settingsSectionHeader: {
+				fontSize: 18,
+				marginLeft: 10,
+				marginTop: 7,
+				color: theme.primary.main,
+				fontWeight: "600",
+			},
+			settingsOption: {
+				fontSize: 20,
+				color: theme.background.text,
 			},
 			categoryRoot: {
 				flex: 1,
@@ -64,7 +74,7 @@ class Settings extends Component<SettingsInterface> {
 					theme.type !== "transparent" ? theme.background.main : undefined,
 			},
 			settingsContegoryItem: {
-				width: "98%",
+				width: "100%",
 				height: 80,
 				flexDirection: "row",
 				alignItems: "center",
@@ -98,10 +108,16 @@ class Settings extends Component<SettingsInterface> {
 				justifyContent: "center",
 				alignItems: "center",
 			},
+			settingsPropertyList: {
+				width: "100%",
+				flexDirection: "column",
+				padding: 8,
+				justifyContent: "center",
+				alignItems: "center",
+			},
 			settingsPropertyName: {
 				flex: 1,
 				color: theme.background.text,
-				textAlign: "center",
 				fontSize: 30,
 			},
 			settingsPropertyValue: {
@@ -115,10 +131,7 @@ class Settings extends Component<SettingsInterface> {
 				fontSize: 15,
 			},
 			headerStyle: {
-				backgroundColor:
-					theme.type === "transparent"
-						? theme.secondary.main
-						: theme.background.main,
+				backgroundColor: noAlpah(theme.background.main),
 			},
 			headerTitleStyle: {
 				color: theme.background.text,
@@ -153,7 +166,7 @@ class Settings extends Component<SettingsInterface> {
 									style={styles.categoryRoot}
 								>
 									<ScrollView style={styles.categoryRoot}>
-										<Card style={styles.settingsCard}>
+										<View style={styles.settingsSection}>
 											<View style={styles.settingsProperty}>
 												<Text style={styles.settingsPropertyName}>
 													background
@@ -174,29 +187,56 @@ class Settings extends Component<SettingsInterface> {
 													/>
 												</View>
 											</View>
-											<View style={styles.settingsProperty}>
-												<Text style={styles.settingsPropertyName}>theme</Text>
-												<View style={styles.settingsPropertyValue}>
-													<Picker
-														selectedValue={state.theme}
-														style={styles.settingsPropertyPicker}
-														onValueChange={(value: ThemeType) => {
-															setState({ theme: value }, () => {
-																this.settings.desktop.theme = value;
+											<View style={styles.settingsPropertyList}>
+												<Text
+													style={[
+														styles.settingsPropertyName,
+														{ width: "100%" },
+													]}
+												>
+													theme
+												</Text>
+												{([
+													{ name: "dark theme", value: "dark" },
+													{
+														name: "dark transparent theme",
+														value: "transparentDark",
+													},
+													{ name: "transparent", value: "transparent" },
+													{ name: "light theme", value: "light" },
+												] as const).map((option) => (
+													<Pressable
+														key={option.value}
+														style={styles.settingsProperty}
+														onPress={() => {
+															setState({ theme: option.value }, () => {
+																this.settings.desktop.theme = option.value;
 																setSettings(this.settings);
 															});
 														}}
 													>
-														<Picker.Item label="dark" value="dark" />
-														<Picker.Item label="light" value="light" />
-														<Picker.Item
-															label="transparent"
-															value="transparent"
-														/>
-													</Picker>
-												</View>
+														<View style={{ flex: 6 }}>
+															<Text style={styles.settingsOption}>
+																{option.name}
+															</Text>
+														</View>
+														<View style={{ flex: 1 }}>
+															<Icon
+																color={theme.primary.main}
+																size={30}
+																icon={{
+																	icon:
+																		state.theme === option.value
+																			? "radio-button-on"
+																			: "radio-button-off",
+																	type: "Ionicons",
+																}}
+															/>
+														</View>
+													</Pressable>
+												))}
 											</View>
-										</Card>
+										</View>
 									</ScrollView>
 								</ImageBackground>
 							)}
@@ -233,7 +273,10 @@ class Settings extends Component<SettingsInterface> {
 									style={styles.categoryRoot}
 								>
 									<ScrollView style={styles.categoryRoot}>
-										<Card style={styles.settingsCard}>
+										<Text style={styles.settingsSectionHeader}>
+											Port Managment
+										</Text>
+										<View style={styles.settingsSection}>
 											<View style={styles.settingsProperty}>
 												<Text style={styles.settingsPropertyName}>
 													main Port
@@ -312,7 +355,7 @@ class Settings extends Component<SettingsInterface> {
 													/>
 												</View>
 											</View>
-										</Card>
+										</View>
 									</ScrollView>
 								</ImageBackground>
 							)}
@@ -343,215 +386,223 @@ class Settings extends Component<SettingsInterface> {
 						>
 							<ScrollView style={styles.categoryRoot}>
 								{os && (
-									<Card style={styles.settingsCard}>
-										{os.hostname && (
-											<View style={styles.settingsProperty}>
-												<Text style={styles.settingsPropertyName}>
-													hostname
-												</Text>
-												<View style={styles.settingsPropertyValue}>
-													<Text
-														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
-														]}
-													>
-														{os.hostname}
+									<>
+										<Text style={styles.settingsSectionHeader}>OS</Text>
+										<View style={styles.settingsSection}>
+											{os.hostname && (
+												<View style={styles.settingsProperty}>
+													<Text style={styles.settingsPropertyName}>
+														hostname
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{os.hostname}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{os.kernel && (
-											<View style={styles.settingsProperty}>
-												<Text style={styles.settingsPropertyName}>kernel</Text>
-												<View style={styles.settingsPropertyValue}>
-													<Text
-														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
-														]}
-													>
-														{os.kernel}
+											)}
+											{os.kernel && (
+												<View style={styles.settingsProperty}>
+													<Text style={styles.settingsPropertyName}>
+														kernel
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{os.kernel}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{os.platform && (
-											<View style={styles.settingsProperty}>
-												<Text style={styles.settingsPropertyName}>
-													platform
-												</Text>
-												<View style={styles.settingsPropertyValue}>
-													<Text
-														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
-														]}
-													>
-														{os.platform}
+											)}
+											{os.platform && (
+												<View style={styles.settingsProperty}>
+													<Text style={styles.settingsPropertyName}>
+														platform
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{os.platform}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-									</Card>
+											)}
+										</View>
+									</>
 								)}
 								{cpu && (
-									<Card style={styles.settingsCard}>
-										{cpu.brandName && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 30 },
-													]}
-												>
-													name
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+									<>
+										<Text style={styles.settingsSectionHeader}>CPU</Text>
+										<View style={styles.settingsSection}>
+											{cpu.brandName && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 30 },
 														]}
 													>
-														{cpu.brandName}
+														name
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.brandName}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.manufacturer && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													manufacturer name
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.manufacturer && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.manufacturer}
+														manufacturer name
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.manufacturer}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.cores && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													number of cores
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.cores && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.cores}
+														number of cores
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.cores}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.physicalCores && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													number of physical cores
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.physicalCores && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.physicalCores}
+														number of physical cores
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.physicalCores}
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.speed && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													prcessor speed
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.speed && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.speed} GHz
+														prcessor speed
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.speed} GHz
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.speedMax && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													prcessor maximum speed
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.speedMax && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.speedMax} GHz
+														prcessor maximum speed
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.speedMax} GHz
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-										{cpu.speedMin && (
-											<View style={styles.settingsProperty}>
-												<Text
-													style={[
-														styles.settingsPropertyName,
-														{ fontSize: 20 },
-													]}
-												>
-													prcessor minimum speed
-												</Text>
-												<View style={styles.settingsPropertyValue}>
+											)}
+											{cpu.speedMin && (
+												<View style={styles.settingsProperty}>
 													<Text
 														style={[
-															styles.settingsPropertyInput,
-															{ fontSize: 25 },
+															styles.settingsPropertyName,
+															{ fontSize: 20 },
 														]}
 													>
-														{cpu.speedMin} GHz
+														prcessor minimum speed
 													</Text>
+													<View style={styles.settingsPropertyValue}>
+														<Text
+															style={[
+																styles.settingsPropertyInput,
+																{ fontSize: 25 },
+															]}
+														>
+															{cpu.speedMin} GHz
+														</Text>
+													</View>
 												</View>
-											</View>
-										)}
-									</Card>
+											)}
+										</View>
+									</>
 								)}
 							</ScrollView>
 						</ImageBackground>

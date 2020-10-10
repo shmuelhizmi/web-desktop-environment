@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
-import * as views from "@views/index";
+import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { desktopViews } from "@views/index";
 import LinearGradient from "react-native-linear-gradient";
 import { getKey, setKey } from "@root/localstorage";
 import { Client } from "@react-fullstack/fullstack-socket-client";
@@ -107,7 +107,7 @@ const App = () => {
 				<Button onPress={() => setIsConnected(false)} title="dissconnect" />
 			</View>
 			<View style={styles.desktopRoot}>
-				<Client {...connectToServer(host, port)} views={views} />
+				<Client {...connectToServer(host, port)} views={desktopViews} />
 			</View>
 		</View>
 	) : (

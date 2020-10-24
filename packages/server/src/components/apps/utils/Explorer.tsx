@@ -9,7 +9,7 @@ import {
 	ExplorerViewType,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
-import { join, sep } from "path";
+import { basename, join, sep } from "path";
 import { App } from "@apps/index";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 
@@ -112,12 +112,14 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 					<Explorer
 						currentPath={currentPath}
 						files={files}
-						platfromPathSperator={sep}
+						platformPathSeparator={sep}
 						type={type}
 						onChangeCurrentPath={(path) => {
 							this.changeCurrentPath(path);
 							if (this.windowContext && this.props.isCurrentApp) {
-								this.windowContext.setWindowTitle(`explorer - ${currentPath}`);
+								this.windowContext.setWindowTitle(
+									`explorer: ${basename(path)}`
+								);
 							}
 						}}
 						onCopy={this.copy}

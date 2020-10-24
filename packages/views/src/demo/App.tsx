@@ -62,7 +62,7 @@ const App = () => {
 						onMove={emptyFunction}
 						onRequestDownloadLink={() => new Promise<any>(emptyFunction)}
 						onUpload={emptyFunction}
-						platfromPathSperator={"/"}
+						platformPathSeparator={"/"}
 						type={"explore"}
 					/>
 				</Window>

@@ -21,7 +21,7 @@ export type ExplorerViewType = "explore" | "select-file" | "select-folder";
 export interface Input {
   type: ExplorerViewType;
   currentPath: string;
-  platfromPathSperator: "/" | "\\";
+  platformPathSeparator: "/" | "\\";
   files: File[];
   onUpload: (upload: Upload) => void;
   onCreateFolder: (path: string) => void;

@@ -28,7 +28,6 @@
 	"rules": {
 		"prettier/prettier": "error",
 		"linebreak-style": ["error", "unix"],
-		"quotes": ["error", "double"],
 		"semi": ["error", "always"],
 		"@typescript-eslint/explicit-function-return-type": "off"
 	}

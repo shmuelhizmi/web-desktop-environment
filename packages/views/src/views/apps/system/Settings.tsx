@@ -63,17 +63,18 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			textAlign: "center",
 			borderBottom: `solid 1px ${theme.windowBorderColor}`,
-			color: theme.secondary.text,
+			color: theme.background.text,
 			"&:hover":
 				theme.type === "transparent"
 					? {
 							backdropFilter: "blur(3px)",
 					  }
 					: {
-							background: theme.secondary.light,
+							background: theme.background.main,
 					  },
 		},
 		selectCategoryButtonSelected: {
+			color: theme.secondary.text,
 			background: `${theme.secondary.main} !important`,
 		},
 		category: {
@@ -126,7 +127,7 @@ const styles = (theme: Theme) =>
 			display: "flex",
 			justifyContent: "space-between",
 			alignItems: "center",
-			fontSize: "1.3vw",
+			fontSize: 25,
 			color: theme.background.darkText || theme.background.text,
 			minHeight: 45,
 			marginBottom: 5,
@@ -312,6 +313,7 @@ class Settings extends Component<
 									<option value="light">light</option>
 									<option value="transparent">transparent</option>
 									<option value="transparentDark">transparent dark</option>
+									<option value="nord">nord</option>
 									<option value="custom">custom</option>
 								</select>
 							</div>

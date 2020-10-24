@@ -234,10 +234,60 @@ const darkTheme: Theme = {
 	windowBorder: true,
 };
 
+const nordTheme: Theme = {
+	type: "dark",
+	shadowColor: "#0006",
+	windowBorderColor: "#292f3c",
+	windowBarColor: "#3d4455",
+	background: {
+		main: "#3d4455",
+		light: "#434c5e",
+		transparent: "#3d4455e9",
+		dark: "#2e3440",
+		transparentDark: "#2e344099",
+		text: "#eee",
+	},
+	primary: {
+		main: "#2e343f",
+		transparent: "#2e343f69",
+		light: "#3b4251",
+		dark: "#262b34",
+		transparentDark: "#262b3499",
+		text: "#fff",
+	},
+	secondary: {
+		main: "#8fbcbb",
+		dark: "#6f8a91",
+		light: "#8abbb9",
+		transparent: "#8fbcbb97",
+		text: "#fff",
+	},
+	error: {
+		main: "#c6616c",
+		light: "#c6616c88",
+		dark: "#b65e5c",
+		text: "#fff",
+	},
+	success: {
+		main: "#9dbd90",
+		dark: "#9dbd90b8",
+		light: "#9dbd90ee",
+		text: "#fff",
+	},
+	warning: {
+		main: "#ffd951",
+		light: "#ffeb51",
+		dark: "#ae9941",
+		text: "#fff",
+	},
+	windowBorder: true,
+};
+
 export const defaultTheme = darkTheme;
 
 export const Themes = {
 	dark: darkTheme,
+	nord: nordTheme,
 	light: lightTheme,
 	transparent: transparentTheme,
 	transparentDark: transparentDarkTheme,

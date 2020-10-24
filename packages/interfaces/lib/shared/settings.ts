@@ -1,4 +1,4 @@
-export type ThemeType = "transparent" | "transparentDark" | "dark" | "light" | "custom";
+export type ThemeType = "transparent" | "transparentDark" | "dark" | "light" | "nord" | "custom";
 
 export interface Theme {
 	type: ThemeType;

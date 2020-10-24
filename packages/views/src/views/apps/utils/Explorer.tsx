@@ -377,16 +377,16 @@ class Explorer extends Component<
 	getBreadcrumbLocations = (maxLength: number) => {
 		const {
 			currentPath,
-			platfromPathSperator,
+			platformPathSeparator,
 			onChangeCurrentPath,
 		} = this.props;
 		let currentLocation = "";
 		const pathArray: string[] = [];
 		currentPath
-			.split(platfromPathSperator)
+			.split(platformPathSeparator)
 			.filter((path) => path)
-			.forEach((path) => pathArray.push(`${path}${platfromPathSperator}`));
-		pathArray.unshift(platfromPathSperator);
+			.forEach((path) => pathArray.push(`${path}${platformPathSeparator}`));
+		pathArray.unshift(platformPathSeparator);
 		const result = pathArray.map((path, i) => {
 			currentLocation += path;
 			const pathPartPath = currentLocation;
@@ -410,15 +410,15 @@ class Explorer extends Component<
 	};
 
 	private onDrop = async (target: File) => {
-		const { currentPath, platfromPathSperator, onMove } = this.props;
+		const { currentPath, platformPathSeparator, onMove } = this.props;
 		this.setState({ dragedFile: undefined });
 		if (
 			this.state.dragedFile &&
 			this.state.dragedFile !== target &&
 			target.isFolder
 		) {
-			const newPath = `${currentPath}${platfromPathSperator}${target.name}${platfromPathSperator}${this.state.dragedFile.name}`;
-			const originalPath = `${currentPath}${platfromPathSperator}${this.state.dragedFile.name}`;
+			const newPath = `${currentPath}${platformPathSeparator}${target.name}${platformPathSeparator}${this.state.dragedFile.name}`;
+			const originalPath = `${currentPath}${platformPathSeparator}${this.state.dragedFile.name}`;
 			this.setState({
 				fileIsOverFile: undefined,
 				selectedFile: undefined,
@@ -437,10 +437,10 @@ class Explorer extends Component<
 	};
 
 	private onDropPath = async (path: string) => {
-		const { currentPath, platfromPathSperator, onMove } = this.props;
+		const { currentPath, platformPathSeparator, onMove } = this.props;
 		if (this.state.dragedFile) {
-			const newPath = `${path}${platfromPathSperator}${this.state.dragedFile.name}`;
-			const originalPath = `${currentPath}${platfromPathSperator}${this.state.dragedFile.name}`;
+			const newPath = `${path}${platformPathSeparator}${this.state.dragedFile.name}`;
+			const originalPath = `${currentPath}${platformPathSeparator}${this.state.dragedFile.name}`;
 			this.setState({
 				fileIsOverFile: undefined,
 				selectedFile: undefined,
@@ -469,7 +469,7 @@ class Explorer extends Component<
 	};
 
 	deleteSelected = async () => {
-		const { currentPath, platfromPathSperator, onDelete } = this.props;
+		const { currentPath, platformPathSeparator, onDelete } = this.props;
 		if (
 			this.selectedFile &&
 			(await this.confirm(
@@ -477,7 +477,7 @@ class Explorer extends Component<
 			))
 		) {
 			onDelete(
-				`${currentPath}${platfromPathSperator}${this.selectedFile.name}`
+				`${currentPath}${platformPathSeparator}${this.selectedFile.name}`
 			);
 			this.setState({ selectedFile: undefined });
 			this.selectedFile = undefined;
@@ -486,52 +486,52 @@ class Explorer extends Component<
 
 	createFolder = async () => {
 		const promptCreate = await this.prompt("please enter folder name:");
-		const { currentPath, platfromPathSperator, onCreateFolder } = this.props;
+		const { currentPath, platformPathSeparator, onCreateFolder } = this.props;
 		if (promptCreate.value) {
 			onCreateFolder(
-				`${currentPath}${platfromPathSperator}${promptCreate.value}`
+				`${currentPath}${platformPathSeparator}${promptCreate.value}`
 			);
 		}
 	};
 
 	createFile = async () => {
 		const promptCreate = await this.prompt("please enter file name:");
-		const { currentPath, platfromPathSperator, onCreateFile } = this.props;
+		const { currentPath, platformPathSeparator, onCreateFile } = this.props;
 		if (promptCreate.value) {
 			onCreateFile(
-				`${currentPath}${platfromPathSperator}${promptCreate.value}`
+				`${currentPath}${platformPathSeparator}${promptCreate.value}`
 			);
 		}
 	};
 
 	private Past = () => {
 		const { cutPath, copyPath } = this.state;
-		const { platfromPathSperator, currentPath, onMove, onCopy } = this.props;
+		const { platformPathSeparator, currentPath, onMove, onCopy } = this.props;
 		if (cutPath || copyPath) {
 			if (this.selectedFile?.isFolder) {
 				if (cutPath && cutPath.fullPath !== this.selectedFile?.fullPath) {
 					onMove({
-						newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${cutPath.name}`,
+						newPath: `${this.selectedFile.fullPath}${platformPathSeparator}${cutPath.name}`,
 						originalPath: cutPath.fullPath,
 					});
 					this.setState({ copyPath: undefined });
 				}
 				if (copyPath && copyPath.fullPath !== this.selectedFile?.fullPath) {
 					onCopy({
-						newPath: `${this.selectedFile.fullPath}${platfromPathSperator}${copyPath.name}`,
+						newPath: `${this.selectedFile.fullPath}${platformPathSeparator}${copyPath.name}`,
 						originalPath: copyPath.fullPath,
 					});
 				}
 			} else {
 				if (cutPath) {
 					onMove({
-						newPath: `${currentPath}${platfromPathSperator}${cutPath.name}`,
+						newPath: `${currentPath}${platformPathSeparator}${cutPath.name}`,
 						originalPath: cutPath.fullPath,
 					});
 				}
 				if (copyPath) {
 					onCopy({
-						newPath: `${currentPath}${platfromPathSperator}${copyPath.name}`,
+						newPath: `${currentPath}${platformPathSeparator}${copyPath.name}`,
 						originalPath: copyPath.fullPath,
 					});
 				}
@@ -544,7 +544,7 @@ class Explorer extends Component<
 			classes,
 			files,
 			currentPath,
-			platfromPathSperator,
+			platformPathSeparator,
 			onRequestDownloadLink,
 			onChangeCurrentPath,
 			onSelect,
@@ -810,7 +810,7 @@ class Explorer extends Component<
 												if (selectedFile !== index) {
 													this.selectedFile = {
 														...file,
-														fullPath: `${currentPath}${platfromPathSperator}${file.name}`,
+														fullPath: `${currentPath}${platformPathSeparator}${file.name}`,
 													};
 													this.setState(
 														{ selectedFile: index, downloadUrl: undefined },
@@ -840,11 +840,11 @@ class Explorer extends Component<
 											onDoubleClick={() => {
 												if (file.isFolder) {
 													onChangeCurrentPath(
-														`${currentPath}${platfromPathSperator}${file.name}${platfromPathSperator}`
+														`${currentPath}${platformPathSeparator}${file.name}${platformPathSeparator}`
 													);
 												} else if (type === "select-file" && onSelect) {
 													onSelect(
-														`${currentPath}${platfromPathSperator}${file.name}`
+														`${currentPath}${platformPathSeparator}${file.name}`
 													);
 												}
 											}}

@@ -1,5 +1,5 @@
 {
-  "name": "@web-desktop-environment/flows",
+  "name": "@web-desktop-environment/server",
   "version": "1.0.0",
   "main": "src/index.ts",
   "author": "shmuelhizmi",

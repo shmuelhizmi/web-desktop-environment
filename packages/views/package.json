@@ -9,7 +9,7 @@
     "@web-desktop-environment/interfaces": "1.0.0",
     "@web-desktop-environment/shared": "1.0.0",
     "@react-fullstack/fullstack": "0.1.19",
-    "@react-fullstack/fullstack-socket-client": "0.1.10",
+    "@react-fullstack/fullstack-socket-client": "0.1.25",
     "@react-fullstack/render": "0.1.18",
     "axios": "0.19.2",
     "events": "3.1.0",

@@ -26,7 +26,7 @@ both the server and are build using a react framework called ["react-fullstack"]
 
 # Contribute
 
-if you have any new feature or existing feature you wnat to create or improve fell free to open a Pull Request
+if you have any new feature or existing feature you want to create or improve fell free to open a Pull Request
 
 # Features
 

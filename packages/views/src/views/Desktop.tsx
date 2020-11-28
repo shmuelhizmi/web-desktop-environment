@@ -14,7 +14,7 @@ import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager from "@state/WindowManager";
-import MountUnmoutAnmiation from "@components/mountUnmoutAnimation";
+import MountUnmountAnimation from "@components/mountUnmountAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
@@ -32,33 +32,10 @@ const styles = (theme: Theme) =>
 			right: 0,
 			left: 0,
 		},
-		startBotton: {
-			position: "absolute",
-			bottom: 5,
-			left: 45,
-			height: windowsBarHeight,
-			cursor: "pointer",
-			width: 60,
-			borderRadius: 10,
-			fontSize: 40,
-			paddingTop: 5,
-			borderBottom: "none",
-			display: "flex",
-			justifyContent: "center",
-			color: theme.background.text,
-			backdropFilter: "blur(15px)",
-			boxShadow: `0 0px 3px 0px ${theme.shadowColor}`,
-			background: transparent(theme.background.main),
-			"&:hover": {
-				background: transparent(
-					theme.background.transparent || theme.background.main
-				),
-			},
-			zIndex: 2,
-		},
 		switchToNativeButton: {
 			position: "absolute",
-			top: 0,
+			top: 10 - windowsBarHeight,
+			transition: "top 300ms",
 			right: 45,
 			height: windowsBarHeight,
 			cursor: "pointer",
@@ -70,15 +47,20 @@ const styles = (theme: Theme) =>
 			display: "flex",
 			justifyContent: "center",
 			color: theme.background.text,
-			backdropFilter: "blur(15px)",
 			boxShadow: `0 0px 3px 0px ${theme.shadowColor}`,
-			background: theme.background.main,
+			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
+			backdropFilter: "blur(10px)",
+			background: transparent(
+				theme.background.transparent || theme.background.main,
+				theme.type === "transparent" ? 0.15 : 0.6
+			),
 			"&:hover": {
+				top: 0,
 				background: theme.background.transparent,
 			},
 			zIndex: 2,
 		},
-		"@keyframes slidein": {
+		"@keyframes slideIn": {
 			"0%": {
 				transform: "translateX(-100%)",
 			},
@@ -86,7 +68,7 @@ const styles = (theme: Theme) =>
 				transform: "translateX(0%)",
 			},
 		},
-		"@keyframes slideout": {
+		"@keyframes slideOut": {
 			"0%": {
 				transform: "translateX(0%)",
 			},
@@ -94,11 +76,11 @@ const styles = (theme: Theme) =>
 				transform: "translateX(-100%)",
 			},
 		},
-		slidein: {
-			animation: "$slidein 200ms",
+		slideIn: {
+			animation: "$slideIn 200ms",
 		},
-		slideout: {
-			animation: "$slideout 200ms",
+		slideOut: {
+			animation: "$slideOut 200ms",
 		},
 		startMenu: {
 			position: "absolute",
@@ -112,9 +94,12 @@ const styles = (theme: Theme) =>
 			overflowY: "auto",
 			padding: 5,
 			borderRadius: 10,
-			background: theme.background.transparent || theme.background.main,
+			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
 			backdropFilter: "blur(10px)",
-			border: `solid 1px ${theme.background.transparent}`,
+			background: transparent(
+				theme.background.transparent || theme.background.main,
+				theme.type === "transparent" ? 0.15 : 0.6
+			),
 			boxShadow: "-5px 6px 10px -1px #0007",
 		},
 		startMenuBody: {
@@ -166,28 +151,43 @@ const styles = (theme: Theme) =>
 const useWindowBarStyles = makeStyles((theme: Theme) => ({
 	windowsBar: {
 		position: "absolute",
+		animation: "$slideUp 1s",
 		bottom: 5,
-		left: 180,
-		right: 25,
+		left: 120,
+		right: 120,
 		borderRadius: 13,
 		height: windowsBarHeight,
 		display: "flex",
-		backdropFilter: "blur(4px)",
+		border: `1px solid ${theme.transparentBorder || "#eee2"}`,
+		backdropFilter: "blur(10px)",
 		background: transparent(
-			theme.background.transparent || theme.background.main
+			theme.background.transparent || theme.background.main,
+			theme.type === "transparent" ? 0.15 : 0.6
 		),
 		paddingLeft: 10,
 		boxShadow: "0 0px 3px 0px",
 		zIndex: 2,
+		overflowX: "auto",
+		overflowY: "hidden",
+	},
+	"@keyframes slideUp": {
+		from: {
+			bottom: -windowsBarHeight - 5,
+		},
+		to: {
+			bottom: 5,
+		},
 	},
 	windowsBarButton: {
 		userSelect: "none",
 		fontSize: 40,
 		boxShadow: "0px 0px 10px 4px #0007",
+		transition: "border-bottom 100ms",
 		padding: 5,
 		margin: 2,
 		borderRadius: 6,
-		marginRight: 4,
+		marginRight: 5,
+		marginLeft: 5,
 		cursor: "pointer",
 		color: theme.background.text,
 		"&:hover": {
@@ -204,11 +204,11 @@ const useWindowBarStyles = makeStyles((theme: Theme) => ({
 		background: `${theme.background.main} !important`,
 		border: `solid 1px ${theme.windowBorderColor}`,
 		textAlign: "center",
-		animation: "$scaleup 300ms",
+		animation: "$scaleUp 300ms",
 		display: "flex",
 		flexDirection: "column",
 	},
-	"@keyframes scaleup": {
+	"@keyframes scaleUp": {
 		from: {
 			opacity: 0,
 			width: 150,
@@ -296,19 +296,18 @@ class Desktop extends Component<
 					{({ isStartMenuOpen, startMenuQuery }, setState) => {
 						return (
 							<>
-								<div
-									className={classes.startBotton}
-									onClick={() =>
-										setState({ isStartMenuOpen: !isStartMenuOpen })
+								<WindowBar
+									isStartMenuOpen={isStartMenuOpen}
+									toggleStartMenu={() =>
+										setState({
+											isStartMenuOpen: !isStartMenuOpen,
+										})
 									}
-								>
-									<Icon width={40} height={40} name="CgMenuGridR" />
-								</div>
-								<WindowBar />
-								<MountUnmoutAnmiation
+								/>
+								<MountUnmountAnimation
 									mount={isStartMenuOpen}
 									className={`${classes.startMenu} ${
-										isStartMenuOpen ? classes.slidein : classes.slideout
+										isStartMenuOpen ? classes.slideIn : classes.slideOut
 									}`}
 								>
 									<div className={classes.startMenuBody}>
@@ -331,7 +330,7 @@ class Desktop extends Component<
 											)
 											.map((app, index) => this.renderAppListCell(app, index))}
 									</div>
-								</MountUnmoutAnmiation>
+								</MountUnmountAnimation>
 							</>
 						);
 					}}
@@ -341,10 +340,16 @@ class Desktop extends Component<
 	}
 }
 
-export const WindowBar = () => {
+export const WindowBar = ({
+	toggleStartMenu,
+	isStartMenuOpen,
+}: {
+	toggleStartMenu: () => void;
+	isStartMenuOpen: boolean;
+}) => {
 	const classes = useWindowBarStyles();
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
-	const [slectedButton, setSelectedButton] = useState<number | undefined>(
+	const [selectedButton, setSelectedButton] = useState<number | undefined>(
 		undefined
 	);
 	useEffect(() => {
@@ -358,11 +363,21 @@ export const WindowBar = () => {
 	}, []);
 	return (
 		<div className={classes.windowsBar}>
+			<div
+				className={`${classes.windowsBarButton} ${
+					!isStartMenuOpen
+						? classes.windowsBarButtonCloseMinimized
+						: classes.windowsBarButtonOpen
+				} ${isStartMenuOpen ? classes.windowsBarButtonActive : ""}`}
+				onClick={() => toggleStartMenu()}
+			>
+				<Icon width={40} height={40} name="FcList" />
+			</div>
 			{openWindows.map((openWindow, index) => (
 				<div
 					key={index}
 					onContextMenu={() =>
-						index === slectedButton
+						index === selectedButton
 							? setSelectedButton(undefined)
 							: setSelectedButton(index)
 					}
@@ -371,7 +386,8 @@ export const WindowBar = () => {
 							? classes.windowsBarButtonCloseMinimized
 							: classes.windowsBarButtonOpen
 					} ${
-						openWindow.id === windowManager.activeWindowId
+						openWindow.id === windowManager.activeWindowId &&
+						!openWindow.state.minimized
 							? classes.windowsBarButtonActive
 							: ""
 					}`}
@@ -397,7 +413,7 @@ export const WindowBar = () => {
 					) : (
 						<Icon name={openWindow.icon.icon} />
 					)}
-					{slectedButton === index && (
+					{selectedButton === index && (
 						<div
 							onClick={() => setSelectedButton(undefined)}
 							className={`${classes.windowsBarButton} ${

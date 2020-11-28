@@ -20,7 +20,7 @@
 /* Track */
 ::-webkit-scrollbar-track {
   background: rgba(191, 191, 191, 0.1);
-  border-radius: 3px;
+  margin: 5px;
 }
 
 /* Handle */
@@ -28,7 +28,6 @@
   background: #00000015;
   border: #00000035 1px solid;
   backdrop-filter: blur(15px);
-  border-radius: 6px;
 }
 
 /* Handle on hover */

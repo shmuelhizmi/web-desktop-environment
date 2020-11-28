@@ -63,7 +63,7 @@ class Player extends Component<PlayerInput, PlayerState> {
 }
 
 export const mediaPlayer: App<PlayerInput> = {
-	name: "Video/Aduio Player",
+	name: "Media",
 	description: "just a Video and Audio media player",
 	App: Player,
 	defaultInput: {},

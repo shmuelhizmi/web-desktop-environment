@@ -8,7 +8,7 @@ import { Theme } from "@root/theme";
 import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
-import Emiiter from "@utils/Emitter";
+import Emitter from "@utils/Emitter";
 import { reactFullstackConnectionManager } from "@root/index";
 import { transparent } from "@utils/colors";
 
@@ -24,40 +24,44 @@ const styles = (theme: Theme) =>
 				: "none",
 			borderTop: "none",
 			boxShadow: `-10px 12px 20px -2px  ${theme.shadowColor}`,
-			paddingBottom: 2,
 			backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
+			display: "grid",
+			gridTemplateRows: "44px calc(100% - 44px)",
 		},
 		actionBarContainer: {
-			width: "100%",
+			width: 175,
 			justifyContent: "center",
 			display: "flex",
+			height: "100%",
 		},
 		actionBar: {
 			borderBottom: `1px solid ${theme.windowBorderColor}`,
-			backdropFilter: theme.type === "transparent" ? "blur(20px)" : "none",
 			width: "100%",
-			justifyContent: "center",
+			height: "100%",
+			background: theme.background.dark,
+			borderRight: `solid 1px ${theme.windowBorderColor}`,
+			backdropFilter: theme.type === "transparent" ? "blur(16px)" : "none",
+			borderRadius: "0 0 0 10px",
+			alignItems: "center",
 			display: "flex",
+			flexDirection: "column",
 		},
 		actionButton: {
 			textDecoration: "none",
-			padding: 4,
-			minWidth: 40,
+			width: "100%",
 			whiteSpace: "nowrap",
 			overflow: "hidden",
 			textOverflow: "ellipsis",
-			maxHeight: 30,
+			height: 20,
+			paddingTop: 10,
+			paddingBottom: 10,
 			textAlign: "center",
 			userSelect: "none",
+			animation: "$opacityUp 150ms",
 			color: theme.secondary.text,
 			fontSize: 18,
-			border:
-				theme.type === "transparent"
-					? "none"
-					: `1px solid ${theme.secondary.text}`,
-			margin: 3,
-			borderBottom: `2px solid ${theme.secondary.text}`,
 			cursor: "pointer",
+			borderBottom: `solid 1px ${theme.windowBorderColor}`,
 			transition: "background 100ms, transform 100ms",
 			...(theme.type === "transparent"
 				? {
@@ -65,13 +69,9 @@ const styles = (theme: Theme) =>
 						boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
 						background: theme.background.transparent,
 						borderBottom: `1px solid ${theme.windowBorderColor}`,
-						borderRadius: 25,
 				  }
-				: {
-						borderRadius: 10,
-				  }),
+				: {}),
 			"&:hover": {
-				transform: "scale(1.1)",
 				...(theme.type === "transparent"
 					? {
 							backdropFilter: "blur(13px)",
@@ -82,15 +82,12 @@ const styles = (theme: Theme) =>
 					  }),
 			},
 		},
-		actionButtonDisabled: {
-			cursor: "default",
-			border: "none",
-			backgroundColor:
-				theme.background.transparentDark || theme.background.dark,
-			"&:hover": {
-				transform: "scale(1)",
-				backgroundColor:
-					theme.background.transparentDark || theme.background.dark,
+		"@keyframes opacityUp": {
+			from: {
+				opacity: 0,
+			},
+			to: {
+				opacity: 1,
 			},
 		},
 		locationBarContainer: {
@@ -106,27 +103,26 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			maxHeight: "100%",
 			overflowX: "auto",
+			display: "flex",
+			justifyContent: "center",
+			flexDirection: "column",
 		},
 		breadcrumbFilesContainer: {
 			maxHeight: "100%",
 			display: "flex",
 			justifyContent: "center",
-			margin: 4,
 		},
 		fileBoxContainer: {
-			height: "95%",
+			height: "100%",
 			width: "100%",
 			display: "flex",
 			justifyContent: "center",
 		},
 		fileBox: {
-			margin: 15,
-			boxShadow: `${theme.shadowColor} 0px 0px 20px -6px inset`,
+			boxShadow: `${theme.shadowColor} 0px 7px 20px 1px inset`,
 			background: theme.background.transparent || theme.background.main,
-			border: `${theme.windowBorderColor} 1px solid`,
-			borderRadius: 7,
 			width: "100%",
-			height: "calc(100% - 80px)",
+			height: "100%",
 			overflowY: "auto",
 			display: "flex",
 			flexDirection: "column",
@@ -140,15 +136,15 @@ const styles = (theme: Theme) =>
 			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 120px))",
 			margin: 15,
 			justifyContent: "center",
-			gridGap: 10,
+			gridGap: 15,
 			gridAutoRows: 100,
 		},
 		file: {
-			borderBottom: `1px solid ${theme.windowBorderColor}`,
 			borderRadius: 7,
+			padding: 2,
 			color: theme.secondary.text,
 			cursor: "pointer",
-			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+			boxShadow: `-1px 2px 10px 1px ${theme.shadowColor}`,
 			transition: "background 100ms, transform 200ms",
 			"&:hover": {
 				transform: "scale(1.1)",
@@ -187,7 +183,6 @@ const styles = (theme: Theme) =>
 			width: "100%",
 		},
 		breadcrumbButtonItem: {
-			height: "100%",
 			minWidth: 20,
 			textAlign: "center",
 			userSelect: "none",
@@ -321,7 +316,7 @@ class Explorer extends Component<
 		this.state = {};
 	}
 
-	emitter = new Emiiter<ExplorerEvents>();
+	emitter = new Emitter<ExplorerEvents>();
 
 	confirm = async (message: string) => {
 		return await new Promise((resolve, reject) => {
@@ -584,82 +579,82 @@ class Explorer extends Component<
 						</div>
 					</div>
 				</div>
-				{type === "explore" && (
-					<div className={classes.actionBarContainer}>
-						<div className={classes.actionBar}>
-							<div
-								className={classes.actionButton}
-								onClick={this.deleteSelected}
-							>
-								Delete
-							</div>
-							<div className={classes.actionButton} onClick={this.createFolder}>
-								Create Folder
-							</div>
-							<div className={classes.actionButton} onClick={this.createFile}>
-								Create File
-							</div>
-							<div
-								className={`${classes.actionButton} ${
-									selectedFile === undefined ? classes.actionButtonDisabled : ""
-								}`}
-								onClick={() =>
-									this.selectedFile &&
-									this.setState({
-										copyPath: {
-											fullPath: this.selectedFile.fullPath,
-											name: this.selectedFile.name,
-										},
-										cutPath: undefined,
-									})
-								}
-							>
-								Copy
-							</div>
-							<div
-								className={`${classes.actionButton} ${
-									selectedFile === undefined ? classes.actionButtonDisabled : ""
-								}`}
-								onClick={() =>
-									this.selectedFile &&
-									this.setState({
-										cutPath: {
-											fullPath: this.selectedFile.fullPath,
-											name: this.selectedFile.name,
-										},
-										copyPath: undefined,
-									})
-								}
-							>
-								Cut
-							</div>
-							<div
-								className={`${classes.actionButton} ${
-									cutPath === undefined && copyPath === undefined
-										? classes.actionButtonDisabled
-										: ""
-								}`}
-								onClick={this.Past}
-							>
-								Past
-							</div>
-							<a
-								className={`${classes.actionButton} ${
-									downloadUrl === undefined ? classes.actionButtonDisabled : ""
-								}`}
-								target="_blank"
-								rel="noopener noreferrer"
-								href={downloadUrl}
-								download={this.selectedFile?.name}
-							>
-								{selectedFile === undefined || downloadUrl
-									? "Download"
-									: "Loading..."}
-							</a>
-						</div>
-					</div>
-				)}
 				<div className={classes.fileBoxContainer}>
+					{type === "explore" && (
+						<div className={classes.actionBarContainer}>
+							<div className={classes.actionBar}>
+								<div className={classes.actionButton} onClick={this.createFile}>
+									new File
+								</div>
+								<div
+									className={classes.actionButton}
+									onClick={this.createFolder}
+								>
+									new Folder
+								</div>
+								{selectedFile !== undefined && (
+									<div
+										className={classes.actionButton}
+										onClick={this.deleteSelected}
+									>
+										Delete
+									</div>
+								)}
+								{selectedFile !== undefined && (
+									<div
+										className={classes.actionButton}
+										onClick={() =>
+											this.selectedFile &&
+											this.setState({
+												copyPath: {
+													fullPath: this.selectedFile.fullPath,
+													name: this.selectedFile.name,
+												},
+												cutPath: undefined,
+											})
+										}
+									>
+										Copy
+									</div>
+								)}
+								{selectedFile !== undefined && (
+									<div
+										className={classes.actionButton}
+										onClick={() =>
+											this.selectedFile &&
+											this.setState({
+												cutPath: {
+													fullPath: this.selectedFile.fullPath,
+													name: this.selectedFile.name,
+												},
+												copyPath: undefined,
+											})
+										}
+									>
+										Cut
+									</div>
+								)}
+								{cutPath && copyPath && (
+									<div className={classes.actionButton} onClick={this.Past}>
+										Past
+									</div>
+								)}
+								{downloadUrl && (
+									<a
+										className={classes.actionButton}
+										target="_blank"
+										rel="noopener noreferrer"
+										href={downloadUrl}
+										download={this.selectedFile?.name}
+									>
+										{selectedFile === undefined || downloadUrl
+											? "Download"
+											: "Loading..."}
+									</a>
+								)}
+							</div>
+						</div>
+					)}
 					<div
 						className={`${classes.fileBox} ${
 							type !== "explore" ? classes.fileBoxWithoutActionBar : ""

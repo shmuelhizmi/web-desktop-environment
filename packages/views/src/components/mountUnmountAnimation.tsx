@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 
-const MountUnmoutAnmiation = (
+const MountUnmountAnimation = (
 	props: PropsWithChildren<{ className: string; mount: boolean }>
 ) => {
 	const [mount, setMount] = useState(props.mount);
@@ -16,4 +16,4 @@ const MountUnmoutAnmiation = (
 	) : null;
 };
 
-export default MountUnmoutAnmiation;
+export default MountUnmountAnimation;

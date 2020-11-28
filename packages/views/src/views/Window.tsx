@@ -10,7 +10,7 @@ import Icon from "@components/icon";
 import { Rnd } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 
-export const defualtWindowSize = {
+export const defaultWindowSize = {
 	height: 600,
 	width: 700,
 	maxHeight: 700,
@@ -42,7 +42,7 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			justifyContent: "space-between",
 		},
-		barCollaps: {
+		barCollapse: {
 			borderRadius: "7px 7px 7px 7px",
 			borderBottom: `1px solid ${theme.windowBorderColor}`,
 		},
@@ -74,7 +74,7 @@ const styles = (theme: Theme) =>
 				background: theme.error.dark,
 			},
 		},
-		barButtonCollaps: {
+		barButtonCollapse: {
 			cursor: "pointer",
 			background: theme.success.main,
 			"&:hover": {
@@ -111,7 +111,7 @@ type Size = {
 interface WindowState {
 	size: Size;
 	canDrag: boolean;
-	collaps: boolean;
+	collapse: boolean;
 	position: { x: number; y: number };
 	isActive?: boolean;
 }
@@ -127,14 +127,14 @@ class Window extends Component<
 	constructor(props: Window["props"]) {
 		super(props);
 		const size = {
-			height: props.window.height || defualtWindowSize.height,
-			width: props.window.width || defualtWindowSize.width,
+			height: props.window.height || defaultWindowSize.height,
+			width: props.window.width || defaultWindowSize.width,
 		};
 		this.state = {
 			size,
 			canDrag: false,
-			collaps: props.window.minimized || false,
-			position: this.getPoition(size),
+			collapse: props.window.minimized || false,
+			position: this.getPosition(size),
 		};
 
 		this.domContainer = document.createElement("div");
@@ -142,7 +142,7 @@ class Window extends Component<
 	}
 	static contextType = ConnectionContext;
 	context!: React.ContextType<typeof ConnectionContext>;
-	getPoition = (size: Size) => {
+	getPosition = (size: Size) => {
 		if (this.props.window.position) {
 			const position = { ...this.props.window.position };
 			if (position.x > window.innerWidth - size.width / 2) {
@@ -178,7 +178,7 @@ class Window extends Component<
 				size: this.state.size,
 			});
 			if (id === this.id) {
-				this.setState({ collaps: true, isActive: true });
+				this.setState({ collapse: true, isActive: true });
 			} else this.setState({ isActive: false });
 		});
 
@@ -189,7 +189,7 @@ class Window extends Component<
 				size: this.state.size,
 			});
 			if (id === this.id) {
-				this.setState({ collaps: false, isActive: true });
+				this.setState({ collapse: false, isActive: true });
 			} else this.setState({ isActive: false });
 		});
 		windowManager.emitter.on("setActiveWindow", ({ id }) => {
@@ -240,7 +240,7 @@ class Window extends Component<
 	};
 
 	render() {
-		const { size, canDrag, collaps, isActive, position } = this.state;
+		const { size, canDrag, collapse, isActive, position } = this.state;
 		const {
 			children,
 			classes,
@@ -251,7 +251,7 @@ class Window extends Component<
 			setWindowState,
 		} = this.props;
 		const { maxHeight, maxWidth, minHeight, minWidth } = {
-			...defualtWindowSize,
+			...defaultWindowSize,
 			...windowSizes,
 		};
 		return ReactDOM.createPortal(
@@ -300,27 +300,20 @@ class Window extends Component<
 							touchMinimumLeft ||
 							touchMinimumRight
 						) {
-							if (touchTop) {
-								window.open(
-									`${window.location.origin}/native/client/connect/${this.context?.host}/${this.context?.port}`,
-									"_blank",
-									"noopener"
-								);
-							}
 							this.setState({ position: { ...position } });
 							return;
 						}
 						this.setState({ position: { x: newPosition.x, y: newPosition.y } });
 						setWindowState({
 							position,
-							minimized: this.state.collaps,
+							minimized: this.state.collapse,
 							size: this.state.size,
 						});
 					}}
 					defaultSize={size}
-					maxHeight={maxHeight}
+					maxHeight={collapse ? windowBarHeight : maxHeight}
 					maxWidth={maxWidth}
-					minHeight={minHeight}
+					minHeight={collapse ? windowBarHeight : minHeight}
 					minWidth={minWidth}
 					onResize={(e, _resize, ele, delta, newPosition) =>
 						this.setState({
@@ -334,7 +327,7 @@ class Window extends Component<
 					onResizeStop={() =>
 						setWindowState({
 							position: this.state.position,
-							minimized: this.state.collaps,
+							minimized: this.state.collapse,
 							size: this.state.size,
 						})
 					}
@@ -344,19 +337,19 @@ class Window extends Component<
 							onMouseEnter={() => this.setState({ canDrag: true })}
 							onMouseLeave={() => this.setState({ canDrag: false })}
 							className={`${classes.bar} ${
-								this.state.collaps ? classes.barCollaps : ""
+								this.state.collapse ? classes.barCollapse : ""
 							}`}
 						>
 							<div className={classes.barButtonsContainer}>
 								<div
 									onClick={() => {
 										windowManager.updateState(this.id, {
-											minimized: !this.state.collaps,
+											minimized: !this.state.collapse,
 										});
 									}}
 									className={`${classes.barButton} ${
 										isActive
-											? classes.barButtonCollaps
+											? classes.barButtonCollapse
 											: classes.barButtonInactive
 									}`}
 								/>
@@ -386,7 +379,7 @@ class Window extends Component<
 								)}
 							</div>
 						</div>
-						{!collaps && <div className={classes.body}>{children}</div>}
+						{!collapse && <div className={classes.body}>{children}</div>}
 					</div>
 				</Rnd>
 			</div>,

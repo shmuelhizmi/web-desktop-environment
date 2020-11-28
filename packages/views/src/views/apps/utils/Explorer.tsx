@@ -128,9 +128,6 @@ const styles = (theme: Theme) =>
 			flexDirection: "column",
 			justifyContent: "space-between",
 		},
-		fileBoxWithoutActionBar: {
-			height: "calc(100% - 40px)",
-		},
 		fileContainer: {
 			display: "grid",
 			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 120px))",
@@ -268,6 +265,7 @@ const styles = (theme: Theme) =>
 			position: "sticky",
 			bottom: 0,
 			width: "100%",
+			borderRadius: "0 0 9px 9px",
 			justifyContent: "center",
 			display: "flex",
 			background: theme.background.dark,
@@ -655,11 +653,7 @@ class Explorer extends Component<
 							</div>
 						</div>
 					)}
-					<div
-						className={`${classes.fileBox} ${
-							type !== "explore" ? classes.fileBoxWithoutActionBar : ""
-						}`}
-					>
+					<div className={classes.fileBox}>
 						{this.state.prompt && (
 							<div className={classes.dialog}>
 								<div className={classes.dialogMessage}>

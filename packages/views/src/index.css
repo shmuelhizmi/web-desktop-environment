@@ -20,7 +20,7 @@
 /* Track */
 ::-webkit-scrollbar-track {
   background: rgba(191, 191, 191, 0.1);
-  margin: 5px;
+  margin: 15px;
 }
 
 /* Handle */

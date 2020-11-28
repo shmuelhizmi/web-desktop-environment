@@ -1,12 +1,12 @@
 import React from "react";
 import { Component, View } from "@react-fullstack/fullstack";
 import { FileViewerBase } from "@web-desktop-environment/interfaces/lib/shared/fileViewer";
-import { WithStyles } from "@material-ui/styles";
+import { createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import Button from "@components/button";
 
 export const makeFileViewerStyles = (theme: Theme) =>
-	({
+	createStyles({
 		root: {
 			width: "100%",
 			height: "100%",
@@ -20,17 +20,19 @@ export const makeFileViewerStyles = (theme: Theme) =>
 			paddingBottom: 2,
 			backdropFilter: theme.type === "transparent" ? "blur(15px)" : "none",
 			display: "grid",
-			gridTemplateRows: "65px 1fr",
+			gridTemplateRows: "44px calc(100% - 44px)",
 		},
 		headlineContainer: {
 			width: "100%",
-			display: "flex",
-			flexDirection: "column",
 			justifyContent: "center",
-			alignItems: "center",
+			display: "flex",
 		},
 		menuContainer: {
 			width: "100%",
+			border: `1px solid ${theme.windowBorderColor}`,
+			borderRight: "none",
+			borderLeft: "none",
+			backdropFilter: theme.type === "transparent" ? "blur(10px)" : "none",
 			overflow: "hidden",
 			display: "flex",
 			justifyContent: "center",
@@ -40,7 +42,7 @@ export const makeFileViewerStyles = (theme: Theme) =>
 			fontSize: 25,
 			width: "70%",
 			borderRadius: 7,
-			margin: 5,
+			height: 33,
 			userSelect: "none",
 			color: theme.background.darkText || theme.background.text,
 			textAlign: "center",
@@ -54,24 +56,28 @@ export const makeFileViewerStyles = (theme: Theme) =>
 		backButton: {
 			position: "relative",
 			right: 0,
+			borderRight: `1px solid ${theme.windowBorderColor} !important`,
 			width: 150,
+			height: "100%",
+			minHeight: "0 !important",
+			borderRadius: "5px !important",
+			padding: "0 !important",
 			minWidth: "110px !important",
+			borderTopRightRadius: "0 !important",
+			borderBottomRightRadius: "0 !important",
 		},
 		openFileContainer: {
 			width: "100%",
-			height: "97%",
+			height: "100%",
 			display: "flex",
 			justifyContent: "center",
 			overflow: "hidden",
 		},
 		openFileContainerBody: {
-			width: "calc(96% - 15px)",
-			height: "95%",
-			borderRadius: 5,
+			width: "100%",
+			height: "100%",
 			boxShadow: `inset 0px 0 8px 2px ${theme.shadowColor}`,
-			padding: "0 15px 15px",
 			background: theme.background.light,
-			border: `1px solid ${theme.windowBorderColor}`,
 		},
 		filename: {
 			width: "100%",
@@ -80,7 +86,7 @@ export const makeFileViewerStyles = (theme: Theme) =>
 			userSelect: "none",
 			overflow: "hidden",
 		},
-	} as const);
+	});
 
 abstract class FileViewer<
 	ViewType extends View<FileViewerBase>,

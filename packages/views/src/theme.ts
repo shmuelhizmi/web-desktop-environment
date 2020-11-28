@@ -71,7 +71,7 @@ const transparentDarkTheme: Theme = {
 	type: "transparent",
 	windowBarColor: "#33333377",
 	shadowColor: "#0007",
-	windowBorderColor: "#000",
+	windowBorderColor: "#eee4",
 	background: {
 		main: "#33333357",
 		light: "#44444477",
@@ -114,7 +114,7 @@ const transparentDarkTheme: Theme = {
 		dark: "#ae9941",
 		text: "#fff",
 	},
-	windowBorder: false,
+	windowBorder: true,
 };
 
 const lightTheme: Theme = {

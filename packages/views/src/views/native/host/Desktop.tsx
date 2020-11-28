@@ -12,6 +12,7 @@ import { ConnectionContext } from "@root/contexts";
 import { reactFullstackConnectionManager } from "@root/index";
 import { Link } from "react-router-dom";
 import { windowsBarHeight } from "@views/Desktop";
+import { transparent } from "@utils/colors";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -38,9 +39,10 @@ const styles = (theme: Theme) =>
 		hr: {
 			border: `solid 1px ${theme.background.dark}`,
 		},
-		switchToNativeButton: {
+		switchToDesktopButton: {
 			position: "absolute",
-			top: 0,
+			top: 10 - windowsBarHeight,
+			transition: "top 300ms",
 			right: 45,
 			height: windowsBarHeight,
 			cursor: "pointer",
@@ -52,12 +54,15 @@ const styles = (theme: Theme) =>
 			display: "flex",
 			justifyContent: "center",
 			color: theme.background.text,
-			backdropFilter: "blur(15px)",
-			border: `solid 2px ${
-				theme.background.transparentDark || theme.background.dark
-			}`,
-			background: theme.background.main,
+			boxShadow: `0 0px 3px 0px ${theme.shadowColor}`,
+			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
+			backdropFilter: "blur(10px)",
+			background: transparent(
+				theme.background.transparent || theme.background.main,
+				theme.type === "transparent" ? 0.15 : 0.6
+			),
 			"&:hover": {
+				top: 0,
 				background: theme.background.transparent,
 			},
 			zIndex: 2,
@@ -183,7 +188,7 @@ class Desktop extends Component<
 					</ConnectionContext.Provider>
 				))}
 				<Link to="/">
-					<div className={classes.switchToNativeButton}>
+					<div className={classes.switchToDesktopButton}>
 						<Icon width={40} height={40} name="VscMultipleWindows" />
 					</div>
 				</Link>

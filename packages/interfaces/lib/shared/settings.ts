@@ -12,6 +12,7 @@ export interface Theme {
 	shadowColor: string;
 	windowBorderColor: string;
 	windowBorder: boolean;
+	transparentBorder?: string;
 }
 
 export interface Color {

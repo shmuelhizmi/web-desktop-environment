@@ -134,7 +134,12 @@ const App = () => {
 						}}
 					/>
 				</Window>
-				<WindowBar />
+				<WindowBar
+					isStartMenuOpen={false}
+					toggleStartMenu={() => {
+						/* intently empty */
+					}}
+				/>
 			</ThemeProvider>
 		</div>
 	);

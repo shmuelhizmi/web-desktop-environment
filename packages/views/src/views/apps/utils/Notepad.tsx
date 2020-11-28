@@ -12,14 +12,14 @@ import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 const styles = (theme: Theme) =>
 	createStyles({
 		...makeFileViewerStyles(theme),
-		textAreaContanier: {
+		textAreaContainer: {
 			width: "100%",
 			height: "97%",
 			display: "flex",
 			justifyContent: "center",
 			alignItems: "center",
 		},
-		textAreaContanierBody: {
+		textAreaContainerBody: {
 			width: "94%",
 			height: "95%",
 			borderRadius: 10,
@@ -34,11 +34,11 @@ const styles = (theme: Theme) =>
 			maxHeight: "100%",
 			border: "none",
 			resize: "none",
-			background: theme.background.light,
-			color:
+			background:
 				theme.type === "transparent"
-					? theme.windowBorderColor
-					: theme.background.text,
+					? theme.background.main
+					: theme.background.light,
+			color: theme.background.text,
 			borderRadius: 10,
 			outline: "none",
 			height: "100%",
@@ -60,8 +60,8 @@ class Notepad extends FileViewer<NotepadInterface, WithStyles<typeof styles>> {
 	renderViewer() {
 		const { classes, onSave, defaultValue } = this.props;
 		return (
-			<div className={classes.textAreaContanier}>
-				<div className={classes.textAreaContanierBody}>
+			<div className={classes.textAreaContainer}>
+				<div className={classes.textAreaContainerBody}>
 					<textarea
 						defaultValue={defaultValue}
 						onChange={(e) => onSave(e.target.value)}

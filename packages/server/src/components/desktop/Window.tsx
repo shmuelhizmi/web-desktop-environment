@@ -82,13 +82,6 @@ class Window extends Component<WindowInput, WindowState> {
 												};
 											});
 										}}
-										onLaunchApp={(app) => {
-											this.logger.info(`launch app flow ${app.name}`);
-											this.desktopManager.windowManager.spawnApp(
-												app.name,
-												app.params
-											);
-										}}
 										onClose={closeWindow}
 									>
 										<WindowContext.Provider

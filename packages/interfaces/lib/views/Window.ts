@@ -10,10 +10,6 @@ export interface Input {
   background: string;
   setWindowState: (windowState: LastWindowState) => void;
   onClose: () => void;
-  onLaunchApp: (parameters: {
-    name: string;
-    params: any;
-  }) => void;
 }
 
 export interface LastWindowState {

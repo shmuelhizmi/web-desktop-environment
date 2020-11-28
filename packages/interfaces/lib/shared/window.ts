@@ -1,10 +1,10 @@
 export interface Window {
     width?: number;
-    maxWidth?: string | number;
-    minWidth?: string | number;
+    maxWidth?: number;
+    minWidth?: number;
     height?:  number;
-    maxHeight?: string | number;
-	minHeight?: string | number;
+    maxHeight?: number;
+	minHeight?: number;
 	minimized?: boolean;
 	position?: { x: number; y: number };
 }

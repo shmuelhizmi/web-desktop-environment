@@ -18,8 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 		alignItems: "center",
 		width: "100%",
 		height: "100%",
-		background:
-			"linear-gradient(45deg, rgba(29,217,105,1) 0%, rgba(0,189,255,1) 100%)",
+		background: 'url("https://picsum.photos/id/1039/1920/1080")',
 	},
 	card: {
 		width: 500,
@@ -64,6 +63,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 			background: theme.success.dark,
 		},
 	},
+	link: {
+		textDecoration: "none",
+	},
 }));
 
 const Login = (props: LoginProps) => {
@@ -97,10 +99,12 @@ const Login = (props: LoginProps) => {
 					>
 						Login
 					</Button>
+					<Link to="/demo" className={classes.link}>
+						<Button variant="main" color="background" border>
+							or instead you can visit the Demo
+						</Button>
+					</Link>
 				</Card>
-				<Link to="/demo">
-					<p>or instead you can vist the Demo</p>
-				</Link>
 			</div>
 		</div>
 	);

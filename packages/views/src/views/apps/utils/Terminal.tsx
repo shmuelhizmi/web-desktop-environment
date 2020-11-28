@@ -50,7 +50,9 @@ class Terminal extends Component<
 	containerElement?: HTMLElement;
 	constructor(props: Terminal["props"]) {
 		super(props);
-		this.socket = io(`${reactFullstackConnectionManager.host}:${props.port}`);
+		this.socket = io(`${reactFullstackConnectionManager.host}:${props.port}`, {
+			transports: ["websocket"],
+		});
 		this.term = new XTerm({
 			theme: this.getTermTheme(),
 			allowTransparency: true,
@@ -76,6 +78,10 @@ class Terminal extends Component<
 			this.term.open(this.containerElement);
 			this.termFit.fit();
 		}
+	};
+
+	componentWillUnmount = () => {
+		this.socket.close();
 	};
 
 	onResize = () => {

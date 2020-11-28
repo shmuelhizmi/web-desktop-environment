@@ -1,6 +1,6 @@
 import Events from "events";
 
-export default class Emiiter<EventList> {
+export default class Emitter<EventList> {
 	private emitter = new Events().setMaxListeners(0); // Infinity
 
 	public call = <T extends keyof EventList>(event: T, data: EventList[T]) =>

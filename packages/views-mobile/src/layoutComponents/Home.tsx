@@ -9,7 +9,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import { DesktopContext } from "@views/Desktop";
-import { ThemeContext } from "@views/warpper/ThemeProvider";
+import { ThemeContext } from "@views/wrapper/ThemeProvider";
 import Icon from "@components/icon";
 import { Card } from "react-native-ui-lib";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";

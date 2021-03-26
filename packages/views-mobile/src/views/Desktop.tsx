@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "@layoutComponents/Home";
 import AppView from "@layoutComponents/AppView";
 import { StyleSheet, Text } from "react-native";
-import { ThemeContext } from "@views/warpper/ThemeProvider";
+import { ThemeContext } from "@views/wrapper/ThemeProvider";
 import Icon from "@components/icon";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { noAlpah } from "@utils/color";

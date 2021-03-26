@@ -1,5 +1,5 @@
-//warpper
-import { EmptyThemeProvider as ThemeProvider } from "@views/warpper/ThemeProvider";
+//wrapper
+import { EmptyThemeProvider as ThemeProvider } from "@views/wrapper/ThemeProvider";
 
 import Desktop from "@views/Desktop";
 import Window from "@views/Window";

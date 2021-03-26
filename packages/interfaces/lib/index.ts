@@ -23,7 +23,7 @@ export const viewInterfaces = {
   Settings: <Settings>{},
   Notepad: <Notepad>{},
   MediaPlayer: <MediaPlayer>{},
-  // warpper
+  // wrapper
   ThemeProvider: <ThemeProvider>{},
 };
 

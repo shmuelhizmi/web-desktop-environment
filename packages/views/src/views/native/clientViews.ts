@@ -1,5 +1,5 @@
-//warpper
-import ThemeProvider from "@views/warpper/ThemeProvider";
+//wrapper
+import ThemeProvider from "@views/wrapper/ThemeProvider";
 
 import Window from "@views/native/client/Window";
 

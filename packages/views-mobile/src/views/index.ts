@@ -1,7 +1,7 @@
 import Desktop from "@views/Desktop";
 import Window from "@views/Window";
 
-import ThemeProvider from "@views/warpper/ThemeProvider";
+import ThemeProvider from "@views/wrapper/ThemeProvider";
 
 //apps
 //import terminal from "@views/apps/utils/terminal";

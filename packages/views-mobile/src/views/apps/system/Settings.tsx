@@ -16,7 +16,7 @@ import {
 	ImageBackground,
 	Pressable,
 } from "react-native";
-import { ThemeContext } from "@views/warpper/ThemeProvider";
+import { ThemeContext } from "@views/wrapper/ThemeProvider";
 import { View } from "react-native-ui-lib";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";

@@ -92,15 +92,16 @@ const styles = (theme: Theme) =>
 		},
 		locationBarContainer: {
 			width: "100%",
+			overflow: "auto",
 			justifyContent: "center",
 			display: "flex",
-		},
-		locationBar: {
 			border: `1px solid ${theme.windowBorderColor}`,
 			borderRight: "none",
 			borderLeft: "none",
+		},
+		locationBar: {
 			backdropFilter: theme.type === "transparent" ? "blur(10px)" : "none",
-			width: "100%",
+			width: "95%",
 			maxHeight: "100%",
 			overflowX: "auto",
 			display: "flex",
@@ -124,6 +125,7 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			height: "100%",
 			overflowY: "auto",
+			borderBottomRightRadius: 9,
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "space-between",
@@ -134,6 +136,7 @@ const styles = (theme: Theme) =>
 			margin: 15,
 			justifyContent: "center",
 			gridGap: 15,
+			gap: "15px",
 			gridAutoRows: 100,
 		},
 		file: {
@@ -632,7 +635,7 @@ class Explorer extends Component<
 										Cut
 									</div>
 								)}
-								{cutPath && copyPath && (
+								{(cutPath || copyPath) && (
 									<div className={classes.actionButton} onClick={this.Past}>
 										Past
 									</div>
@@ -643,7 +646,7 @@ class Explorer extends Component<
 										target="_blank"
 										rel="noopener noreferrer"
 										href={downloadUrl}
-										download={this.selectedFile?.name}
+										download
 									>
 										{selectedFile === undefined || downloadUrl
 											? "Download"

@@ -1,5 +1,5 @@
 import WindowInterface, {
-	LastWindowState,
+	WindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
 import { Component } from "@react-fullstack/fullstack";
 import React, { useState, useEffect } from "react";
@@ -75,7 +75,7 @@ class Window extends Component<
 	{},
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
-	get windowState(): LastWindowState {
+	get windowState(): WindowState {
 		return {
 			size: { height: window.innerHeight, width: window.innerWidth },
 			minimized: window.document.hidden,

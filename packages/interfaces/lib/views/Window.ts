@@ -8,17 +8,17 @@ export interface Input {
   icon: Icon;
   window: Window;
   background: string;
-  setWindowState: (windowState: LastWindowState) => void;
+  setWindowState: (windowState: WindowState) => void;
   onClose: () => void;
 }
 
-export interface LastWindowState {
+export interface WindowState {
   minimized?: boolean;
   position?: {
     x: number;
     y: number;
   };
-  size: {
+  size?: {
     width: number;
     height: number;
   };

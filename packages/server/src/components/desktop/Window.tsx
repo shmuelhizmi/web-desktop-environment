@@ -71,14 +71,15 @@ class Window extends Component<WindowInput, WindowState> {
 										title={title}
 										window={window}
 										background={background}
-										setWindowState={({ minimized, position, size }) => {
+										setWindowState={(updatedWindow) => {
 											this.setState((state) => {
-												state.window.position = position;
-												state.window.minimized = minimized;
-												state.window.height = size.height;
-												state.window.width = size.width;
 												return {
-													window: { ...state.window },
+													window: {
+														...state.window,
+														position:
+															updatedWindow.position || state.window.position,
+														...updatedWindow.size,
+													},
 												};
 											});
 										}}

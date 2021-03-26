@@ -1,6 +1,8 @@
 import React from "react";
 import { Component } from "@react-fullstack/fullstack";
-import WindowInterface from "@web-desktop-environment/interfaces/lib/views/Window";
+import WindowInterface, {
+	WindowState as LocalWindowState,
+} from "@web-desktop-environment/interfaces/lib/views/Window";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@root/theme";
 import ReactDOM from "react-dom";
@@ -109,11 +111,11 @@ type Size = {
 };
 
 interface WindowState {
-	size: Size;
 	canDrag: boolean;
 	collapse: boolean;
-	position: { x: number; y: number };
 	isActive?: boolean;
+	localWindowState?: LocalWindowState;
+	useLocalWindowState: boolean;
 }
 
 class Window extends Component<
@@ -124,29 +126,28 @@ class Window extends Component<
 	domContainer: Element;
 	id!: number;
 	wrapperRef?: HTMLDivElement;
+
 	constructor(props: Window["props"]) {
 		super(props);
-		const size = {
-			height: props.window.height || defaultWindowSize.height,
-			width: props.window.width || defaultWindowSize.width,
-		};
 		this.state = {
-			size,
 			canDrag: false,
 			collapse: props.window.minimized || false,
-			position: this.getPosition(size),
+			useLocalWindowState: false,
 		};
 
 		this.domContainer = document.createElement("div");
 		document.getElementById("app")?.appendChild(this.domContainer);
 	}
+
 	static contextType = ConnectionContext;
+
 	context!: React.ContextType<typeof ConnectionContext>;
-	getPosition = (size: Size) => {
-		if (this.props.window.position) {
-			const position = { ...this.props.window.position };
+
+	getPosition = () => {
+		const { position, size } = this.windowProperties;
+		if (position && size) {
 			if (position.x > window.innerWidth - size.width / 2) {
-				position.x = position.x % window.innerWidth;
+				position.x = window.innerWidth - (position.x % window.innerWidth);
 			}
 			if (position.x < windowBarHeight) {
 				position.x = windowBarHeight;
@@ -174,8 +175,6 @@ class Window extends Component<
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
 			this.props.setWindowState({
 				minimized: true,
-				position: this.state.position,
-				size: this.state.size,
 			});
 			if (id === this.id) {
 				this.setState({ collapse: true, isActive: true });
@@ -185,8 +184,6 @@ class Window extends Component<
 		windowManager.emitter.on("maximizeWindow", ({ id }) => {
 			this.props.setWindowState({
 				minimized: false,
-				position: this.state.position,
-				size: this.state.size,
 			});
 			if (id === this.id) {
 				this.setState({ collapse: false, isActive: true });
@@ -239,21 +236,46 @@ class Window extends Component<
 		}
 	};
 
+	get serverWindowProperties() {
+		return {
+			size:
+				this.props.window.width && this.props.window.height
+					? {
+							width: this.props.window.width,
+							height: this.props.window.height,
+					  }
+					: undefined,
+			position: this.props.window.position,
+		};
+	}
+
+	get windowProperties() {
+		if (this.state.useLocalWindowState) {
+			return this.state.localWindowState || this.serverWindowProperties;
+		} else {
+			return this.serverWindowProperties;
+		}
+	}
+
+	setWindowState(state: LocalWindowState) {
+		this.setState({
+			localWindowState: { ...this.state.localWindowState, ...state },
+		});
+	}
+
 	render() {
-		const { size, canDrag, collapse, isActive, position } = this.state;
-		const {
-			children,
-			classes,
-			title,
-			icon,
-			window: windowSizes,
-			onClose,
-			setWindowState,
-		} = this.props;
+		const { canDrag, collapse, isActive } = this.state;
+		const { children, classes, title, icon, onClose } = this.props;
+		const windowProperties = this.windowProperties;
 		const { maxHeight, maxWidth, minHeight, minWidth } = {
 			...defaultWindowSize,
-			...windowSizes,
+			...windowProperties,
 		};
+		const size = {
+			height: windowProperties.size?.height || defaultWindowSize.height,
+			width: windowProperties.size?.width || defaultWindowSize.width,
+		};
+		const position = this.getPosition();
 		return ReactDOM.createPortal(
 			<div
 				ref={(element) => {
@@ -280,34 +302,28 @@ class Window extends Component<
 							touchMinimumLeft ||
 							touchMinimumRight
 						) {
-							this.setState({ position: { ...position } });
+							this.setWindowState({ position });
 							return;
 						}
-						this.setState({ position: { x: newPosition.x, y: newPosition.y } });
+						this.setWindowState({
+							position: { x: newPosition.x, y: newPosition.y },
+						});
 					}}
-					onDragStop={(_e, newPosition) => {
-						const touchTop = newPosition.y < 0;
-						const touchBottom =
-							newPosition.y >
-							window.innerHeight - windowBarHeight - windowsBarHeight;
-						const width = Number(String(size.width).replace("px", ""));
-						const touchMinimumLeft = newPosition.x < 0 - width * 0.5;
-						const touchMinimumRight =
-							newPosition.x > window.innerWidth - width * 0.5;
-						if (
-							touchTop ||
-							touchBottom ||
-							touchMinimumLeft ||
-							touchMinimumRight
-						) {
-							this.setState({ position: { ...position } });
-							return;
-						}
-						this.setState({ position: { x: newPosition.x, y: newPosition.y } });
-						setWindowState({
-							position,
-							minimized: this.state.collapse,
-							size: this.state.size,
+					onDragStart={() =>
+						this.setState({
+							useLocalWindowState: true,
+							localWindowState: {
+								position,
+								size,
+							},
+						})
+					}
+					onDragStop={() => {
+						this.props.setWindowState({ position }).then(() => {
+							this.setState({
+								useLocalWindowState: false,
+								localWindowState: undefined,
+							});
 						});
 					}}
 					defaultSize={size}
@@ -315,20 +331,30 @@ class Window extends Component<
 					maxWidth={maxWidth}
 					minHeight={collapse ? windowBarHeight : minHeight}
 					minWidth={minWidth}
-					onResize={(e, _resize, ele, delta, newPosition) =>
+					onResizeStart={() =>
 						this.setState({
-							size: {
-								width: (ele.style.width as unknown) as number,
-								height: (ele.style.height as unknown) as number,
-								...newPosition,
+							useLocalWindowState: true,
+							localWindowState: {
+								position,
+								size,
 							},
 						})
 					}
 					onResizeStop={() =>
-						setWindowState({
-							position: this.state.position,
-							minimized: this.state.collapse,
-							size: this.state.size,
+						this.props.setWindowState({ position, size }).then(() => {
+							this.setState({
+								useLocalWindowState: false,
+								localWindowState: undefined,
+							});
+						})
+					}
+					onResize={(e, _resize, ele, delta, newPosition) =>
+						this.setWindowState({
+							size: {
+								width: Number(ele.style.width.replace("px", "")),
+								height: Number(ele.style.height.replace("px", "")),
+							},
+							position: newPosition,
 						})
 					}
 				>

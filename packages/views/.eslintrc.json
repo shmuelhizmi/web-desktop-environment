@@ -29,6 +29,8 @@
 		"prettier/prettier": "error",
 		"linebreak-style": ["error", "unix"],
 		"semi": ["error", "always"],
+		"@typescript-eslint/ban-types": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/explicit-function-return-type": "off"
 	}
 }

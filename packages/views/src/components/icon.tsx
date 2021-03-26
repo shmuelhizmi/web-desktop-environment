@@ -14,7 +14,7 @@ const Icon = (
 	return (
 		<span className={`icon-parent ${props.containerClassName || ""}`}>
 			{React.createElement(
-				// @eslint-disable-no-undef
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				require("react-icons/all")[props.name] || MdError,
 				props
 			)}

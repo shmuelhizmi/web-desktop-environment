@@ -327,7 +327,7 @@ class Settings extends Component<
 													border: `solid 1px ${Themes[key].windowBorderColor}`,
 													color: Themes[key].background.text,
 												}}
-												onClick={(e) => {
+												onClick={() => {
 													this.setState((state) => {
 														state.settings.desktop.theme = key;
 														setSettings(state.settings);

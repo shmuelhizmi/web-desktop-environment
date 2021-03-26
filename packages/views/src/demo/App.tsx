@@ -60,7 +60,7 @@ const App = () => {
 						onCreateFolder={emptyFunction}
 						onDelete={emptyFunction}
 						onMove={emptyFunction}
-						onRequestDownloadLink={() => new Promise<any>(emptyFunction)}
+						onRequestDownloadLink={() => new Promise(emptyFunction)}
 						onUpload={emptyFunction}
 						platformPathSeparator={"/"}
 						type={"explore"}

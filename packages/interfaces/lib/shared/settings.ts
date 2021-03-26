@@ -1,6 +1,7 @@
 export type ThemeType = "transparent" | "transparentDark" | "dark" | "light" | "nord" | "custom";
 
 export interface Theme {
+	name: string;
 	type: ThemeType;
 	background: Color;
 	primary: Color;

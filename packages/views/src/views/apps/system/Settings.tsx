@@ -3,7 +3,6 @@ import { Component } from "@react-fullstack/fullstack";
 import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
 import {
 	Settings as SettingsConfiguration,
-	ThemeType,
 	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
@@ -143,7 +142,7 @@ const styles = (theme: Theme) =>
 			fontSize: "1.8vw",
 		},
 		settingsPropertyValueCol: {
-			width: "auto !important",
+			width: "100% !important",
 			margin: 5,
 			height: "auto",
 			display: "flex",
@@ -206,6 +205,19 @@ const styles = (theme: Theme) =>
 				transform: "scale(1.2)",
 			},
 		},
+		themeGrid: {
+			width: "100%",
+			display: "grid",
+			padding: 15,
+			borderRadius: 10,
+			justifyContent: "center",
+			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 180px))",
+			gridGap: 15,
+			gap: "15px",
+		},
+		themeButton: {
+			height: 130,
+		},
 	});
 
 type SettingsCategory = "desktop" | "network" | "systemInfo";
@@ -244,6 +256,7 @@ class Settings extends Component<
 				this.setState((state) => {
 					state.settings.desktop.customTheme = {
 						type: "custom",
+						name: "custom",
 						shadowColor: "#000",
 						background: makeColor(colors[0]),
 						primary: makeColor(colors[1]),
@@ -293,29 +306,42 @@ class Settings extends Component<
 								/>
 							</div>
 						</div>
-						<div className={classes.settingsProperty}>
-							<div className={classes.settingsPropertyName}>theme</div>
-							<div className={classes.settingsPropertyValue}>
-								<select
-									value={this.state.settings.desktop.theme}
-									onChange={(e) => {
-										const value = e.target.value as ThemeType;
-										this.setState((state) => {
-											state.settings.desktop.theme = value;
-											setSettings(state.settings);
-											return {
-												settings: state.settings,
-											};
-										});
+						<div
+							className={`${classes.settingsProperty} ${classes.settingsPropertyCol}`}
+						>
+							<div className={classes.settingsPropertyNameCol}>theme</div>
+							<div className={classes.settingsPropertyValueCol}>
+								<div
+									className={classes.themeGrid}
+									style={{
+										background: this.state.settings.desktop.background,
 									}}
 								>
-									<option value="dark">dark</option>
-									<option value="light">light</option>
-									<option value="transparent">transparent</option>
-									<option value="transparentDark">transparent dark</option>
-									<option value="nord">nord</option>
-									<option value="custom">custom</option>
-								</select>
+									{(Object.keys(Themes) as (keyof typeof Themes)[]).map(
+										(key) => (
+											<Button
+												key={key}
+												className={classes.themeButton}
+												style={{
+													background: Themes[key].background.main,
+													border: `solid 1px ${Themes[key].windowBorderColor}`,
+													color: Themes[key].background.text,
+												}}
+												onClick={(e) => {
+													this.setState((state) => {
+														state.settings.desktop.theme = key;
+														setSettings(state.settings);
+														return {
+															settings: state.settings,
+														};
+													});
+												}}
+											>
+												{Themes[key].name}
+											</Button>
+										)
+									)}
+								</div>
 							</div>
 						</div>
 						{this.state.settings.desktop.theme === "custom" && (
@@ -379,6 +405,7 @@ class Settings extends Component<
 						this.setState((fullState) => {
 							fullState.settings.desktop.customTheme = {
 								type: "custom",
+								name: "custom",
 								shadowColor: "#000",
 								background: makeColor(getColor("background")),
 								primary: makeColor(getColor("primary")),

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { CSSProperties, PropsWithChildren } from "react";
 import { useTheme, makeStyles } from "@material-ui/styles";
 import { Theme, Colors } from "@root/theme";
 
@@ -42,6 +42,7 @@ interface ButtonProps {
 	border?: boolean;
 	transparent?: boolean;
 	shadow?: boolean;
+	style?: CSSProperties;
 }
 
 const Button = ({
@@ -52,6 +53,7 @@ const Button = ({
 	border,
 	transparent,
 	onClick,
+	style,
 	shadow,
 }: PropsWithChildren<ButtonProps>) => {
 	const theme: Theme = useTheme();
@@ -81,6 +83,7 @@ const Button = ({
 	return (
 		<div
 			onClick={onClick}
+			style={style}
 			className={`${classes.root} ${shadow ? classes.shadow : ""} ${
 				className || ""
 			}`}

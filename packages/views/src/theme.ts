@@ -20,6 +20,7 @@ export { Theme };
 
 const transparentTheme: Theme = {
 	type: "transparent",
+	name: "transparent",
 	windowBarColor: "#BFBFBF57",
 	shadowColor: "#0007",
 	windowBorderColor: "#000",
@@ -69,6 +70,7 @@ const transparentTheme: Theme = {
 
 const transparentDarkTheme: Theme = {
 	type: "transparent",
+	name: "transparent dark",
 	windowBarColor: "#33333377",
 	shadowColor: "#0007",
 	windowBorderColor: "#eee4",
@@ -119,6 +121,7 @@ const transparentDarkTheme: Theme = {
 
 const lightTheme: Theme = {
 	type: "light",
+	name: "light",
 	background: {
 		main: "#f5f5f4",
 		dark: "#e4e9f2",
@@ -187,6 +190,7 @@ const lightTheme: Theme = {
 
 const darkTheme: Theme = {
 	type: "dark",
+	name: "dark",
 	shadowColor: "#0007",
 	windowBorderColor: "#000",
 	windowBarColor: "#333333",
@@ -236,6 +240,7 @@ const darkTheme: Theme = {
 
 const nordTheme: Theme = {
 	type: "dark",
+	name: "nord",
 	shadowColor: "#0006",
 	windowBorderColor: "#292f3c",
 	windowBarColor: "#3d4455",

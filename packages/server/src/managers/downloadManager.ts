@@ -19,7 +19,7 @@ export default class DownloadManager {
 		this.port = await this.desktopManager.portManager.getPort();
 		this.logger.info(`starting static file server at port ${this.port}`);
 		this.server = http.createServer(async (request, response) => {
-			const path = this.files[request.url.replace("/", "")];
+			const path = this.files[request.url.replace("/", "")]; // from "/${hash}.${ext}" to "${hash}.${ext}"
 			this.logger.info(`user request to download ${path}`);
 			if (path) {
 				try {

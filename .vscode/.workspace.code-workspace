@@ -13,10 +13,6 @@
 			"path": "../../../../.web-desktop-environment-config"
 		},
 		{
-			"name": "reflow",
-			"path": "../../reflow"
-		},
-		{
 			"path": "../packages/views-mobile"
 		},
 		{

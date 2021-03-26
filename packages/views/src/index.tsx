@@ -60,114 +60,108 @@ const App = () => {
 		port: number;
 	}>({ host: "localhost", port: 5000, isLoggedIn: false });
 	return (
-		<React.StrictMode>
-			<TP theme={defaultTheme}>
-				<Router>
-					<Switch>
-						<Route path="/demo">{() => <Demo />}</Route>
-						<Route path="/native">
-							<Switch>
-								<Route
-									path="/native/connect/:host/:port/"
-									render={(login) => {
-										const { host, port } = login.match?.params;
-										return (
-											<StateComponent<{}> defaultState={{}}>
-												{() => (
-													<ConnectionContext.Provider value={{ host, port }}>
-														<Client
-															{...connectToServer(
-																host,
-																Number(port),
-																"nativeHost"
-															)}
-														/>
-													</ConnectionContext.Provider>
+		<TP theme={defaultTheme}>
+			<Router>
+				<Switch>
+					<Route path="/demo">{() => <Demo />}</Route>
+					<Route path="/native">
+						<Switch>
+							<Route
+								path="/native/connect/:host/:port/"
+								render={(login) => {
+									const { host, port } = login.match?.params;
+									return (
+										<StateComponent<{}> defaultState={{}}>
+											{() => (
+												<ConnectionContext.Provider value={{ host, port }}>
+													<Client<{}>
+														{...connectToServer(
+															host,
+															Number(port),
+															"nativeHost"
+														)}
+													/>
+												</ConnectionContext.Provider>
+											)}
+										</StateComponent>
+									);
+								}}
+							></Route>
+							<Route path="/native/client/connect/:host/:port/">
+								{(login) => {
+									const { host, port } = login.match?.params;
+									return (
+										<ConnectionContext.Provider value={{ host, port }}>
+											<Client<{}>
+												{...connectToServer(host, Number(port), "nativeClient")}
+											/>
+										</ConnectionContext.Provider>
+									);
+								}}
+							</Route>
+							<Route>
+								{() =>
+									login.isLoggedIn ? (
+										<ConnectionContext.Provider value={login}>
+											<Client<{}>
+												{...connectToServer(
+													login.host,
+													Number(login.port),
+													"nativeHost"
 												)}
-											</StateComponent>
-										);
-									}}
-								></Route>
-								<Route path="/native/client/connect/:host/:port/">
-									{(login) => {
-										const { host, port } = login.match?.params;
-										return (
-											<ConnectionContext.Provider value={{ host, port }}>
-												<Client
-													{...connectToServer(
-														host,
-														Number(port),
-														"nativeClient"
-													)}
-												/>
-											</ConnectionContext.Provider>
-										);
-									}}
-								</Route>
-								<Route>
-									{() =>
-										login.isLoggedIn ? (
-											<ConnectionContext.Provider value={login}>
-												<Client
-													{...connectToServer(
-														login.host,
-														Number(login.port),
-														"nativeHost"
-													)}
-												/>
-											</ConnectionContext.Provider>
-										) : (
-											<Login
-												onLogin={(host, port) =>
-													setLogin({ host, port, isLoggedIn: true })
-												}
 											/>
-										)
-									}
-								</Route>
-							</Switch>
-						</Route>
-						<Route>
-							<Switch>
-								<Route path="/connect/:host/:port/">
-									{(login) => {
-										const { host, port } = login.match?.params;
-										return (
-											<ConnectionContext.Provider value={{ host, port }}>
-												<Client
-													{...connectToServer(host, Number(port), "web")}
-												/>
-											</ConnectionContext.Provider>
-										);
-									}}
-								</Route>
-								<Route>
-									{() =>
-										login.isLoggedIn ? (
-											<ConnectionContext.Provider value={login}>
-												<Client
-													{...connectToServer(
-														login.host,
-														Number(login.port),
-														"web"
-													)}
-												/>
-											</ConnectionContext.Provider>
-										) : (
-											<Login
-												onLogin={(host, port) =>
-													setLogin({ host, port, isLoggedIn: true })
-												}
+										</ConnectionContext.Provider>
+									) : (
+										<Login
+											onLogin={(host, port) =>
+												setLogin({ host, port, isLoggedIn: true })
+											}
+										/>
+									)
+								}
+							</Route>
+						</Switch>
+					</Route>
+					<Route>
+						<Switch>
+							<Route path="/connect/:host/:port/">
+								{(login) => {
+									const { host, port } = login.match?.params;
+									return (
+										<ConnectionContext.Provider value={{ host, port }}>
+											<Client<{}>
+												{...connectToServer(host, Number(port), "web")}
 											/>
-										)
-									}
-								</Route>
-							</Switch>
-						</Route>
-					</Switch>
-				</Router>
-			</TP>
-		</React.StrictMode>
+										</ConnectionContext.Provider>
+									);
+								}}
+							</Route>
+							<Route>
+								{() =>
+									login.isLoggedIn ? (
+										<ConnectionContext.Provider value={login}>
+											<Client<{}>
+												{...connectToServer(
+													login.host,
+													Number(login.port),
+													"web"
+												)}
+											/>
+										</ConnectionContext.Provider>
+									) : (
+										<Login
+											onLogin={(host, port) =>
+												setLogin({ host, port, isLoggedIn: true })
+											}
+										/>
+									)
+								}
+							</Route>
+						</Switch>
+					</Route>
+				</Switch>
+			</Router>
+		</TP>
 	);
 };
 

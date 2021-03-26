@@ -276,7 +276,7 @@ class Desktop extends Component<
 							port: app.port,
 						}}
 					>
-						<Client
+						<Client<{}>
 							key={app.id}
 							{...reactFullstackConnectionManager.connect(
 								app.port,

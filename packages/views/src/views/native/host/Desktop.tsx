@@ -28,7 +28,7 @@ const styles = (theme: Theme) =>
 			alignItems: "center",
 		},
 		appContainer: {
-			background: theme.background.transparent,
+			background: theme.background.main,
 			overflowY: "auto",
 			borderRadius: 10,
 			boxShadow: "-5px 6px 10px -1px #0007",
@@ -76,17 +76,18 @@ const styles = (theme: Theme) =>
 			margin: 15,
 			justifyContent: "center",
 			gridGap: 30,
+			gap: "20px",
 			gridAutoRows: 100,
 		},
 		app: {
-			borderBottom: `1px solid ${theme.windowBorderColor}`,
 			borderRadius: 7,
+			padding: 2,
 			color: theme.secondary.text,
 			cursor: "pointer",
-			boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+			boxShadow: `-1px 2px 10px 1px ${theme.shadowColor}`,
 			transition: "background 280ms, color 280ms, transform 450ms",
 			"&:hover": {
-				boxShadow: `0px 10px 10px 10px ${theme.shadowColor}`,
+				boxShadow: `0px 0px 20px 9px ${theme.shadowColor}`,
 				background: theme.secondary.main,
 				color: theme.secondary.text,
 				transform: "scale(1.25) translateY(-20px)",
@@ -179,7 +180,7 @@ class Desktop extends Component<
 							port: app.port,
 						}}
 					>
-						<Client
+						<Client<{}>
 							{...reactFullstackConnectionManager.connect(
 								app.port,
 								"nativeHost"

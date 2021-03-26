@@ -15,7 +15,7 @@ const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 	await desktopManager.settingsManager.initalize();
 	await desktopManager.downloadManager.initalize();
 	const desktopPort = await desktopManager.portManager.getPort(true);
-	rootLogger.info(`starting webOS on port ${desktopPort}`);
+	rootLogger.info(`starting web-desktop-environment on port ${desktopPort}`);
 	Render(
 		<Server views={viewInterfaces} singleInstance port={desktopPort}>
 			{() => (

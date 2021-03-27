@@ -8,8 +8,8 @@
     "@material-ui/styles": "^4.10.0",
     "@web-desktop-environment/interfaces": "1.0.0",
     "@web-desktop-environment/shared": "1.0.0",
-    "@react-fullstack/fullstack": "0.1.28",
-    "@react-fullstack/fullstack-socket-client": "0.1.25",
+    "@react-fullstack/fullstack": "0.1.29",
+    "@react-fullstack/fullstack-socket-client": "0.1.29",
     "@react-fullstack/render": "0.1.23",
     "axios": "0.19.2",
     "events": "3.1.0",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "4.3.3",
+    "@types/mime-types": "2.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",

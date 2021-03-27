@@ -11,7 +11,7 @@
     "build:server": "npm run build"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.1.28"
+    "@react-fullstack/fullstack": "0.1.29"
   },
   "devDependencies": {
     "typescript": "^4.2.3",

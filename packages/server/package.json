@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.1.29",
-    "@react-fullstack/fullstack-socket-server": "0.1.29",
+    "@react-fullstack/fullstack-socket-server": "0.1.32",
     "@react-fullstack/render": "0.1.23",
     "react": "16.13.1",
     "fs-extra": "9.0.1",

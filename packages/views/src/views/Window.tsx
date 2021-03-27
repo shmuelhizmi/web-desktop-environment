@@ -4,7 +4,7 @@ import WindowInterface, {
 	WindowState as LocalWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import ReactDOM from "react-dom";
 import windowManager from "@state/WindowManager";
 import { windowsBarHeight } from "@views/Desktop";

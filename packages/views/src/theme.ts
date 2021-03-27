@@ -16,8 +16,6 @@ export type Colors =
 	| "warning"
 	| "error";
 
-export { Theme };
-
 const transparentTheme: Theme = {
 	type: "transparent",
 	name: "transparent",

@@ -3,7 +3,7 @@ import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desk
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { Component } from "@react-fullstack/fullstack";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";

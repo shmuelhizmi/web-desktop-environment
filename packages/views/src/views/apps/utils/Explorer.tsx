@@ -4,7 +4,7 @@ import ExplorerInterface, {
 import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";

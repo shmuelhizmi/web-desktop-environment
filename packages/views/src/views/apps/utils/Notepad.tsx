@@ -6,7 +6,7 @@ import {
 	WithStyles,
 	withTheme,
 } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 
 const styles = (theme: Theme) =>

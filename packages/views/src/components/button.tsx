@@ -1,6 +1,7 @@
 import React, { CSSProperties, PropsWithChildren } from "react";
 import { useTheme, makeStyles } from "@material-ui/styles";
-import { Theme, Colors } from "@root/theme";
+import { Colors } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 const useStyle = (
 	textColor: string,

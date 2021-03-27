@@ -6,7 +6,8 @@ import {
 	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
-import { Theme, Themes, Colors } from "@root/theme";
+import { Themes, Colors } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import StateComponent from "@components/stateComponent";
 import Button from "@components/button";
 import axios from "axios";

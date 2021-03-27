@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import Card from "@components/card";
 import TextField from "@components/textField";
 import Button from "@components/button";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Link } from "react-router-dom";
 
 interface LoginProps {

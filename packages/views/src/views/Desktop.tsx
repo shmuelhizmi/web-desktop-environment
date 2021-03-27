@@ -9,7 +9,7 @@ import {
 	WithStyles,
 	makeStyles,
 } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";

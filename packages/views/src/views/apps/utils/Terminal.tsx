@@ -8,7 +8,7 @@ import {
 	withTheme,
 	WithTheme,
 } from "@material-ui/styles";
-import { Theme } from "@root/theme";
+import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import io from "socket.io-client";
 import { reactFullstackConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";

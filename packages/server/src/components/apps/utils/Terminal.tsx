@@ -3,7 +3,7 @@ import Component from "@component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@apps/index";
-import * as socket from "socket.io";
+import socketIO from "socket.io";
 import * as http from "http";
 import { getOS, OS } from "@utils/getOS";
 import { tmpdir } from "os";
@@ -22,7 +22,7 @@ interface TerminalState {
 class Terminal extends Component<TerminalInput, TerminalState> {
 	name = "terminal";
 	server = http.createServer();
-	socketServer = socket.listen(this.server);
+	socketServer = new socketIO.Server(this.server);
 	history = "";
 	ptyProcess = new PTY(
 		(data) => {
@@ -33,7 +33,9 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 		this.props.location,
 		this.props.args
 	);
+
 	state: TerminalState = {};
+
 	componentDidMount = () => {
 		this.desktopManager.portManager.getPort().then((port) => {
 			this.server.listen(port);
@@ -69,6 +71,7 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 			clearInterval(updateCurrentProcess);
 		});
 	};
+
 	renderComponent() {
 		const { port } = this.state;
 		return (
@@ -151,7 +154,7 @@ class PTY {
 		});
 
 		// Add a "data" event listener.
-		this.ptyProcess.on("data", (data) => {
+		this.ptyProcess.onData((data) => {
 			// Whenever terminal generates any data, send that output to socket.io client
 			this.sendToClient(data);
 		});

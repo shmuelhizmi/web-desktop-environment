@@ -21,7 +21,7 @@
     "react-rnd": "10.2.3",
     "react-resize-detector": "5.0.6",
     "react-router-dom": "5.2.0",
-    "socket.io-client": "3.1.0",
+    "socket.io-client": "4.0.0",
     "typeface-jetbrains-mono": "^2.0.0",
     "uws": "10.148.1",
     "xterm": "4.7.0",

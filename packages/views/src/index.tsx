@@ -37,11 +37,15 @@ class ReactFullstackConnectionManager {
 		port: number;
 		host: string;
 		views: typeof viewsMap[V];
+		socketOptions: SocketIOClient.ConnectOpts;
 	} => {
 		return {
 			host: this.host,
 			port,
 			views: { ...viewsMap[views] },
+			socketOptions: {
+				transports: ["websocket"],
+			},
 		};
 	};
 }

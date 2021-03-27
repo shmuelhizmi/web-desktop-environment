@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { WindowBar } from "@views/Desktop";
 import { Explorer, Notepad, Settings, Window } from "@views/index";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { Window as WindowState } from "@web-desktop-environment/interfaces/lib/shared/window";
+import { WindowState as WindowStateUpdate } from "@web-desktop-environment/interfaces/lib/views/Window";
 import { Themes } from "@root/theme";
 import { ThemeProvider } from "@material-ui/styles";
 
@@ -16,11 +18,47 @@ const defaultWindowProps = {
 	window: {},
 };
 
+const useWindow = (initialState: WindowState) => {
+	const [state, setState] = useState(initialState);
+	return {
+		state,
+		setWindowState: async (newWindowState: WindowStateUpdate) => {
+			setState({
+				...state,
+				...newWindowState.size,
+				position: newWindowState.position || state.position,
+			});
+		},
+	};
+};
+
 const App = () => {
 	const [background, setBackground] = useState(
 		'url("https://picsum.photos/id/1039/1920/1080")'
 	);
 	const [theme, setTheme] = useState<Theme>(Themes.dark);
+
+	const explorerWindow = useWindow({
+		position: { x: 50, y: 100 },
+		minWidth: 600,
+		minHeight: 550,
+		height: 500,
+		width: 800,
+	});
+	const notepadWindow = useWindow({
+		position: { x: 950, y: 50 },
+		minWidth: 600,
+		minHeight: 550,
+		height: 750,
+		width: 700,
+	});
+	const settingsWindow = useWindow({
+		position: { x: 700, y: 300 },
+		minWidth: 600,
+		minHeight: 550,
+		height: 600,
+		width: 900,
+	});
 	return (
 		<div
 			style={{
@@ -39,11 +77,8 @@ const App = () => {
 						icon: "FcFolder",
 					}}
 					{...defaultWindowProps}
-					window={{
-						position: { x: 100, y: 100 },
-						minWidth: 600,
-						minHeight: 550,
-					}}
+					window={explorerWindow.state}
+					setWindowState={explorerWindow.setWindowState}
 				>
 					<Explorer
 						currentPath={"/home/web-desktop-environment"}
@@ -74,11 +109,8 @@ const App = () => {
 						icon: "FcFile",
 					}}
 					{...defaultWindowProps}
-					window={{
-						position: { x: 850, y: 100 },
-						minWidth: 600,
-						minHeight: 550,
-					}}
+					window={notepadWindow.state}
+					setWindowState={notepadWindow.setWindowState}
 				>
 					<Notepad
 						defaultValue={
@@ -99,11 +131,8 @@ const App = () => {
 						icon: "FcSettings",
 					}}
 					{...defaultWindowProps}
-					window={{
-						position: { x: 500, y: 300 },
-						minWidth: 600,
-						minHeight: 550,
-					}}
+					window={settingsWindow.state}
+					setWindowState={settingsWindow.setWindowState}
 				>
 					<Settings
 						onReload={emptyFunction}

@@ -209,8 +209,8 @@ const styles = (theme: Theme) =>
 		themeGrid: {
 			width: "100%",
 			display: "grid",
-			padding: 15,
-			borderRadius: 10,
+			padding: 20,
+			boxShadow: `inset 0 0 20px 0px ${theme.shadowColor}`,
 			justifyContent: "center",
 			gridTemplateColumns: "repeat(auto-fit, minmax(80px, 180px))",
 			gridGap: 15,
@@ -325,8 +325,12 @@ class Settings extends Component<
 												className={classes.themeButton}
 												style={{
 													background: Themes[key].background.main,
-													border: `solid 1px ${Themes[key].windowBorderColor}`,
 													color: Themes[key].background.text,
+													boxShadow: `0 0 20px 0px ${Themes[key].shadowColor}`,
+													backdropFilter:
+														Themes[key].type === "transparent"
+															? "blur(5px)"
+															: "",
 												}}
 												onClick={() => {
 													this.setState((state) => {

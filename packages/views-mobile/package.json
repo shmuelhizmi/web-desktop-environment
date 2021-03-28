@@ -32,7 +32,7 @@
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",
     "react-native-ui-lib": "5.11.0",
-    "react-native-vector-icons": "7.0.0",
+    "react-native-vector-icons": "8.1.0",
     "socket.io-client": "4.0.0"
   },
   "devDependencies": {
@@ -42,7 +42,6 @@
     "@types/jest": "^25.2.3",
     "@types/react-native": "^0.63.1",
     "@types/react-native-vector-icons": "4.6.1",
-    "@types/react-test-renderer": "^16.9.2",
     "@types/socket.io-client": "1.4.32",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",

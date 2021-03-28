@@ -1,7 +1,7 @@
 {
-  "name": "@web-desktop-environment/server",
+  "name": "@web-desktop-environment/server-sdk",
   "version": "1.0.0",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
@@ -9,16 +9,16 @@
     "start": "nodemon .",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
     "build:server": "npm run build",
-	"prepare": "npm run build",
+    "prepare": "npm run build",
     "lint": "eslint ."
   },
   "devDependencies": {
     "@types/chalk": "2.2.0",
     "@types/fs-extra": "5.0.2",
     "@types/node": "^12.0.0",
-	"tscpaths": "0.0.9",
+    "tscpaths": "0.0.9",
     "@types/socket.io": "1.4.33",
-    "@types/react": "16.8.24",
+    "@types/react": "^16.8.24",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "eslint": "^7.5.0",
@@ -32,8 +32,10 @@
     "@types/uuid": "^3.4.3",
     "eslint-plugin-react": "7.20.6"
   },
+  "peerDependencies": {
+    "@react-fullstack/fullstack": "0.1.29"
+  },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.1.29",
     "@react-fullstack/fullstack-socket-server": "0.1.32",
     "@react-fullstack/render": "0.1.23",
     "react": "16.13.1",

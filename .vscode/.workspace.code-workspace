@@ -16,7 +16,7 @@
 			"path": "../packages/views-mobile"
 		},
 		{
-			"path": "../packages/server"
+			"path": "../packages/server-sdk"
 		}
 	],
 	"settings": {

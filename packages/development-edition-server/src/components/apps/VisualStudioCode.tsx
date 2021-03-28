@@ -1,8 +1,8 @@
 import React from "react";
-import Component from "@web-desktop-environment/server/lib/components/base/Component";
+import Component from "@web-desktop-environment/server-sdk/lib/components/base/Component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { App } from "@web-desktop-environment/server/lib/components/apps";
+import { App } from "@web-desktop-environment/server-sdk/lib/components/apps";
 import { homedir } from "os";
 import { AuthType, DefaultedArgs } from "code-server/out/node/cli";
 import * as path from "path";

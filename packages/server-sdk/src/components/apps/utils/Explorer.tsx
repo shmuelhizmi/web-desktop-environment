@@ -48,7 +48,7 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 				}
 			}
 		);
-		return (await Promise.all(files)).filter((file) => file);
+		return (await Promise.all<File>(files)).filter((file) => file);
 	};
 	isUpdatingFiles = false;
 	updateFiles = async () => {

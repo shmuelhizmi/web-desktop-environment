@@ -12,11 +12,26 @@ export default class PortManager {
 		this.logger = parentLogger.mount("port-manager");
 		this.desktopManager = desktopManger;
 	}
-	public getPort = async (isMainPort?: boolean): Promise<number> => {
+
+	public usedPorts: number[] = [];
+
+	public getAvialablePorts = () => {
 		const {
 			endPort,
-			mainPort,
 			startPort,
+		} = this.desktopManager.settingsManager.settings.network.ports;
+		const result: number[] = [];
+		for (const currentPort of getPort.makeRange(startPort, endPort)) {
+			if (!this.usedPorts.includes(currentPort)) {
+				result.push(currentPort);
+			}
+		}
+		return result.sort(() => 0.5 - Math.random()); // shuffle
+	};
+
+	public getPort = async (isMainPort?: boolean): Promise<number> => {
+		const {
+			mainPort,
 		} = this.desktopManager.settingsManager.settings.network.ports;
 		if (isMainPort) {
 			return getPort({
@@ -27,8 +42,9 @@ export default class PortManager {
 			});
 		} else {
 			return getPort({
-				port: getPort.makeRange(startPort, endPort),
+				port: this.getAvialablePorts(),
 			}).then((value) => {
+				this.usedPorts.push(value);
 				this.logger.info(`port ${value} is avilable as app port`);
 				return value;
 			});

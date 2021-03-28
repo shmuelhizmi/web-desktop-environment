@@ -55,6 +55,7 @@ class Terminal extends Component<
 		});
 		this.term = new XTerm({
 			theme: this.getTermTheme(),
+			fontFamily: "JetBrains Mono",
 			allowTransparency: true,
 		});
 		this.termFit = new FitAddon();

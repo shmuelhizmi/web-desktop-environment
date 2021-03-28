@@ -9,7 +9,7 @@ import {
 	ThemeType,
 	Theme,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
-import { WindowContext } from "contexts";
+import { WindowContext } from "@root/contexts";
 
 export interface WindowInput<
 	P extends Record<string, unknown> = Record<string, unknown>,

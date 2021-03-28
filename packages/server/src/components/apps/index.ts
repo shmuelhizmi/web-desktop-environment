@@ -20,4 +20,18 @@ export interface App<Params> {
 	App: new (props: Params) => Component<Params>;
 }
 
-export { terminal, explorer, settings, notepad, mediaPlayer };
+export class AppsManager {
+	private static registerdApps = new Map<string, App<any>>();
+
+	public static registerApp(apps: Record<string, App<any>>) {
+		for (const appName in apps) {
+			AppsManager.registerdApps.set(appName, apps[appName]);
+		}
+	}
+
+	public static get apps() {
+		return new Map(AppsManager.registerdApps);
+	}
+}
+
+AppsManager.registerApp({ terminal, explorer, settings, notepad, mediaPlayer });

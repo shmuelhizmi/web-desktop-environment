@@ -14,6 +14,8 @@ import MediaPlayer from "./views/apps/media/MediaPlayer";
 // system
 import Settings from "./views/apps/system/Settings";
 
+import Iframe from './views/apps/thirdParty/Iframe'
+
 export const viewInterfaces = {
   Desktop: <Desktop>{},
   Window: <Window>{},
@@ -23,6 +25,7 @@ export const viewInterfaces = {
   Settings: <Settings>{},
   Notepad: <Notepad>{},
   MediaPlayer: <MediaPlayer>{},
+  Iframe: <Iframe>{},
   // wrapper
   ThemeProvider: <ThemeProvider>{},
 };

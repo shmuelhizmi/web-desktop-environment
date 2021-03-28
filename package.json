@@ -2,11 +2,11 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "install": "lerna bootstrap",
+    "install": "lerna bootstrap --  --unsafe-perm",
     "dev:server": "cd packages/server && npm start",
     "dev:web": "cd packages/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
-    "start": "lerna bootstrap && npm run dev",
+    "start": "lerna bootstrap --  --unsafe-perm && npm run dev",
     "lint": "lerna run lint"
   },
   "devDependencies": {

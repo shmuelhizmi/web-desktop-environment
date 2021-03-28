@@ -227,16 +227,16 @@ class Desktop extends Component<
 						{apps
 							.filter((app) =>
 								filterAppQuery
-									? app.name.includes(filterAppQuery) ||
+									? app.displayName.includes(filterAppQuery) ||
 									  app.description.includes(filterAppQuery) ||
-									  app.flow.includes(filterAppQuery)
+									  app.appName.includes(filterAppQuery)
 									: true
 							)
 							.map((app, index) =>
 								this.renderAppGrid(
-									app,
+									{ name: app.displayName, icon: app.icon },
 									false,
-									() => app && onLaunchApp({ flow: app.flow, params: {} }),
+									() => app && onLaunchApp({ name: app.appName, params: {} }),
 									index
 								)
 							)}

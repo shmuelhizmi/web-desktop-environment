@@ -10,8 +10,8 @@ export interface OpenApp {
 }
 
 export interface App {
-  name: string;
-  flow: string;
+  displayName: string;
+  appName: string;
   icon: Icon;
   nativeIcon: NativeIcon;
   description: string;
@@ -23,7 +23,7 @@ export interface Input {
   apps: App[];
   openApps: OpenApp[];
   onLaunchApp: (app: {
-    flow: string;
+    name: string;
     params: any;
   }) => void;
   onCloseApp: (id: number) => void; // app id

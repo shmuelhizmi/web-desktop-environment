@@ -2,12 +2,13 @@ import React from "react";
 import Component from "@component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import * as apps from "@apps/index";
+import { AppsManager } from "@apps/index";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import {
 	ThemeType,
 	Theme,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { Input as DesktopProps } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 
 interface DesktopState {
 	background: string;
@@ -59,13 +60,13 @@ class Desktop extends Component<{}, DesktopState> {
 			});
 		});
 	};
-	launchApp = async (app) => {
-		this.logger.info(`launch app flow ${app.flow}`);
-		this.desktopManager.windowManager.spawnApp(app.flow, app.params);
+	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
+		this.logger.info(`launch app ${app.name}`);
+		this.desktopManager.windowManager.spawnApp(app.name, app.params);
 	};
-	closeApp = async (id) => {
+	closeApp: DesktopProps["onCloseApp"] = async (id) => {
 		this.logger.info(
-			`closing app flow ${
+			`closing app appName ${
 				this.desktopManager.windowManager.runningApps.find(
 					(app) => app.id === id
 				).name
@@ -74,14 +75,16 @@ class Desktop extends Component<{}, DesktopState> {
 		this.desktopManager.windowManager.killApp(id);
 	};
 	renderComponent() {
-		const appsProp = Object.keys(apps).map((flow) => {
-			const { name, description, icon, nativeIcon } = apps[flow];
+		const appsProp = Array.from(AppsManager.apps.keys()).map((appName) => {
+			const { name, description, icon, nativeIcon } = AppsManager.apps.get(
+				appName
+			);
 			return {
-				name,
+				displayName: name,
 				nativeIcon,
 				description,
 				icon,
-				flow,
+				appName,
 			};
 		});
 		const {

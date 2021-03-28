@@ -1,6 +1,7 @@
 import React from "react";
-import { AppProvider, WindowContext } from "contexts";
+import { AppProvider, WindowContext } from "@root/contexts";
 import Logger from "@utils/logger";
+import DesktopManager from "@managers/desktopManager";
 
 abstract class Component<Props = {}, State = {}> extends React.Component<
 	Props,
@@ -22,7 +23,7 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 	public get windowContext() {
 		return this._windowContext;
 	}
-	public get desktopManager() {
+	public get desktopManager(): DesktopManager {
 		return this.context.desktopManager;
 	}
 	public isComponentUnmounted = false;

@@ -7,4 +7,7 @@ import MediaPlayer from "@views/apps/media/MediaPlayer";
 // system
 import Settings from "@views/apps/system/Settings";
 
-export { Terminal, Explorer, Settings, Notepad, MediaPlayer };
+// thirdParty
+import Iframe from "@views/apps/thirdParty/Iframe";
+
+export { Terminal, Explorer, Settings, Notepad, MediaPlayer, Iframe };

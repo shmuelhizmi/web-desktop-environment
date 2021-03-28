@@ -249,15 +249,15 @@ class Desktop extends Component<
 			<div
 				key={index}
 				className={classes.appCell}
-				onClick={() => app && onLaunchApp({ flow: app.flow, params: {} })}
+				onClick={() => app && onLaunchApp({ name: app.appName, params: {} })}
 			>
 				{app.icon.type === "img" ? (
-					<img alt={`${app.name} icon`} src={app.icon.icon} />
+					<img alt={`${app.displayName} icon`} src={app.icon.icon} />
 				) : (
 					<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
 				)}
 				<div className={classes.appContent}>
-					<div className={classes.appName}>{app.name}</div>
+					<div className={classes.appName}>{app.displayName}</div>
 					<div>{app.description}</div>
 				</div>
 			</div>
@@ -323,9 +323,9 @@ class Desktop extends Component<
 										{apps
 											.filter((app) =>
 												startMenuQuery
-													? app.name.includes(startMenuQuery) ||
+													? app.displayName.includes(startMenuQuery) ||
 													  app.description.includes(startMenuQuery) ||
-													  app.flow.includes(startMenuQuery)
+													  app.appName.includes(startMenuQuery)
 													: true
 											)
 											.map((app, index) => this.renderAppListCell(app, index))}

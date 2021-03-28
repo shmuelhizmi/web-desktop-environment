@@ -2,13 +2,13 @@ import React from "react";
 import { Server } from "@react-fullstack/fullstack-socket-server";
 import { Render } from "@react-fullstack/render";
 import Emitter from "@utils/emitter";
-import * as apps from "@apps/index";
+import { AppsManager } from "@apps/index";
 import Logger from "@utils/logger";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import DesktopManager from "@managers/desktopManager";
 import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
 import Window from "@components/desktop/Window";
-import { AppProvider } from "contexts";
+import { AppProvider } from "@root/contexts";
 
 export const ProcessIDProvider = React.createContext<undefined | number>(
 	undefined
@@ -37,7 +37,7 @@ export default class WindowManager {
 	}
 
 	spawnApp = async (name: string, input: Record<string, unknown>) => {
-		const handler = apps[name];
+		const handler = AppsManager.apps.get(name);
 		const port = await this.desktopManager.portManager.getPort();
 		const id = this.newAppId;
 		this.newAppId++;

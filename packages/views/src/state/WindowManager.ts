@@ -72,6 +72,7 @@ class WindowManager {
 		this.windows.push(newWindow);
 		this.emitter.call("addWindow", { window: newWindow });
 		this.windowsLayers.push(id);
+		this.sendWindowZIndex();
 		return id;
 	};
 

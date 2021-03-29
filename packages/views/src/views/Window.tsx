@@ -163,6 +163,8 @@ class Window extends Component<
 		}
 	};
 
+	private intervalsToClear: NodeJS.Timeout[] = [];
+
 	componentDidMount() {
 		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
 			minimized: this.props.window.minimized || false,
@@ -188,6 +190,8 @@ class Window extends Component<
 		windowManager.emitter.on("setActiveWindow", ({ id }) => {
 			if (id === this.id) {
 				this.setState({ isActive: true });
+			} else {
+				this.setState({ isActive: false });
 			}
 		});
 		windowManager.emitter.on("updateZIndex", ({ id, layer }) => {
@@ -205,10 +209,24 @@ class Window extends Component<
 				}
 			}
 		});
+		this.intervalsToClear.push(
+			setInterval(() => {
+				const activeElement = document.activeElement;
+				if (
+					this.wrapperRef &&
+					activeElement &&
+					!this.state.isActive &&
+					this.wrapperRef.contains(activeElement)
+				) {
+					this.setActive();
+				}
+			}, 50)
+		);
 	}
 
 	componentWillUnmount = () => {
 		windowManager.closeWindow(this.id);
+		this.intervalsToClear.forEach(clearInterval);
 	};
 
 	handleClickOutside = () => {

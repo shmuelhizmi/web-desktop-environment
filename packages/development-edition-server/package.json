@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/fs-extra": "5.0.2",
     "@types/node": "^12.0.0",
-    "@types/react": "^16.8.24",
+    "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "eslint": "^7.5.0",
@@ -28,11 +28,11 @@
     "eslint-plugin-react": "7.20.6"
   },
   "dependencies": {
-    "react": "16.13.1",
+    "react": "17.0.1",
     "@web-desktop-environment/interfaces": "1.0.0",
     "@web-desktop-environment/shared": "1.0.0",
     "@web-desktop-environment/server-sdk": "1.0.0",
-	  "@react-fullstack/fullstack": "0.1.29",
-	  "code-server": "3.9.2"
+	  "@react-fullstack/fullstack": "^0.2.1",
+    "code-server": "3.9.2"
   }
 }

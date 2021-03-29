@@ -77,7 +77,9 @@ const App = () => {
 									return (
 										<StateComponent<{}> defaultState={{}}>
 											{() => (
-												<ConnectionContext.Provider value={{ host, port }}>
+												<ConnectionContext.Provider
+													value={{ host, port: Number(port) }}
+												>
 													<Client<{}>
 														{...connectToServer(
 															host,
@@ -93,14 +95,23 @@ const App = () => {
 							></Route>
 							<Route path="/native/client/connect/:host/:port/">
 								{(login) => {
-									const { host, port } = login.match?.params;
-									return (
-										<ConnectionContext.Provider value={{ host, port }}>
-											<Client<{}>
-												{...connectToServer(host, Number(port), "nativeClient")}
-											/>
-										</ConnectionContext.Provider>
-									);
+									const { host, port } = login.match?.params || {};
+
+									if (host && port) {
+										return (
+											<ConnectionContext.Provider
+												value={{ host, port: Number(port) }}
+											>
+												<Client<{}>
+													{...connectToServer(
+														host,
+														Number(port),
+														"nativeClient"
+													)}
+												/>
+											</ConnectionContext.Provider>
+										);
+									}
 								}}
 							</Route>
 							<Route>
@@ -130,14 +141,18 @@ const App = () => {
 						<Switch>
 							<Route path="/connect/:host/:port/">
 								{(login) => {
-									const { host, port } = login.match?.params;
-									return (
-										<ConnectionContext.Provider value={{ host, port }}>
-											<Client<{}>
-												{...connectToServer(host, Number(port), "web")}
-											/>
-										</ConnectionContext.Provider>
-									);
+									const { host, port } = login.match?.params || {};
+									if (host && port) {
+										return (
+											<ConnectionContext.Provider
+												value={{ host, port: Number(port) }}
+											>
+												<Client<{}>
+													{...connectToServer(host, Number(port), "web")}
+												/>
+											</ConnectionContext.Provider>
+										);
+									}
 								}}
 							</Route>
 							<Route>

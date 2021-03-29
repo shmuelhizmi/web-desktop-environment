@@ -5,28 +5,16 @@ import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@web-desktop-environment/server-sdk/lib/components/apps";
 import { homedir } from "os";
 import { AuthType, DefaultedArgs } from "code-server/out/node/cli";
-import * as path from "path";
 import * as cp from "child_process";
 import { CliMessage } from "code-server/lib/vscode/src/vs/server/ipc";
 
-export const runVsCodeCli = (
-  args: DefaultedArgs
-): void => {
-  const vscode = cp.spawn(
-    "node",
-    [
-      path.resolve(
-        __dirname,
-        "../../../node_modules/code-server/lib/vscode/out/vs/server/fork"
-      ),
-    ],
-    {
-      env: {
-        ...process.env,
-        CODE_SERVER_PARENT_PID: process.pid.toString(),
-      },
-    }
-  );
+export const runVsCodeCli = (args: DefaultedArgs): void => {
+  const vscode = cp.fork("src/utils/runCode.js", [], {
+    env: {
+      ...process.env,
+      CODE_SERVER_PARENT_PID: process.pid.toString(),
+    },
+  });
   vscode.once("message", (message: any) => {
     if (message.type !== "ready") {
       process.exit(1);

@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
-    "@types/react": "^16.8.24",
+    "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "eslint": "^7.5.0",
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "@web-desktop-environment/server-sdk": "1.0.0",
-    "@react-fullstack/fullstack": "0.1.29"
+    "@react-fullstack/fullstack": "^0.2.1"
   }
 }

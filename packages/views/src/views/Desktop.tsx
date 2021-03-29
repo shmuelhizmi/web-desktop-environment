@@ -58,7 +58,7 @@ const styles = (theme: Theme) =>
 				top: 0,
 				background: theme.background.transparent,
 			},
-			zIndex: 2,
+			zIndex: windowManager.windowsMinMaxLayer.max + 1,
 		},
 		"@keyframes slideIn": {
 			"0%": {
@@ -84,7 +84,7 @@ const styles = (theme: Theme) =>
 		},
 		startMenu: {
 			position: "absolute",
-			zIndex: 2,
+			zIndex: windowManager.windowsMinMaxLayer.max + 1,
 			bottom: 105,
 			left: 15,
 			width: 500,
@@ -166,7 +166,7 @@ const useWindowBarStyles = makeStyles((theme: Theme) => ({
 		),
 		paddingLeft: 10,
 		boxShadow: "0 0px 3px 0px",
-		zIndex: 2,
+		zIndex: windowManager.windowsMinMaxLayer.max + 1,
 		overflowX: "auto",
 		overflowY: "hidden",
 	},

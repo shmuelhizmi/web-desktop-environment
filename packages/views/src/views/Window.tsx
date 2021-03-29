@@ -105,17 +105,13 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-type Size = {
-	height: number;
-	width: number;
-};
-
 interface WindowState {
 	canDrag: boolean;
 	collapse: boolean;
 	isActive?: boolean;
 	localWindowState?: LocalWindowState;
 	useLocalWindowState: boolean;
+	zIndex?: number;
 }
 
 class Window extends Component<
@@ -191,7 +187,12 @@ class Window extends Component<
 		});
 		windowManager.emitter.on("setActiveWindow", ({ id }) => {
 			if (id === this.id) {
-				this.moveToTop();
+				this.setState({ isActive: true });
+			}
+		});
+		windowManager.emitter.on("updateZIndex", ({ id, layer }) => {
+			if (id === this.id) {
+				this.setState({ zIndex: layer });
 			}
 		});
 		document.addEventListener("mousedown", (e) => {
@@ -212,20 +213,6 @@ class Window extends Component<
 
 	handleClickOutside = () => {
 		this.setState({ isActive: false });
-	};
-
-	moveToTop = () => {
-		this.setState({ isActive: true });
-		// remove and readd window -> move to top in html tree
-		const parent = document.getElementById("app");
-		if (parent) {
-			if (
-				parent.childNodes[parent.childNodes.length - 1] !== this.domContainer
-			) {
-				parent.removeChild(this.domContainer);
-				parent.appendChild(this.domContainer);
-			}
-		}
 	};
 
 	setActive = () => {
@@ -264,7 +251,7 @@ class Window extends Component<
 	}
 
 	render() {
-		const { canDrag, collapse, isActive } = this.state;
+		const { canDrag, collapse, isActive, zIndex } = this.state;
 		const { children, classes, title, icon, onClose } = this.props;
 		const windowProperties = this.windowProperties;
 		const { maxHeight, maxWidth, minHeight, minWidth } = {
@@ -357,6 +344,7 @@ class Window extends Component<
 							position: newPosition,
 						})
 					}
+					style={{ zIndex }}
 				>
 					<div className={classes.root} onClick={() => this.setActive()}>
 						<div

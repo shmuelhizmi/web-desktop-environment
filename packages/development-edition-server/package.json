@@ -9,7 +9,8 @@
     "start": "nodemon .",
     "build": "tsc",
     "build:server": "npm run build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "code-server": "code-server"
   },
   "devDependencies": {
     "@types/fs-extra": "5.0.2",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "react": "17.0.1",
+    "axios": "0.21.1",
     "@web-desktop-environment/interfaces": "1.0.0",
     "@web-desktop-environment/shared": "1.0.0",
     "@web-desktop-environment/server-sdk": "1.0.0",

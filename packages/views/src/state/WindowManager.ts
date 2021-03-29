@@ -28,18 +28,40 @@ interface WindowManagerEvent {
 	setActiveWindow: {
 		id: number;
 	};
+	updateZIndex: {
+		id: number;
+		layer: number;
+	};
 }
 
 class WindowManager {
 	public activeWindowId: number | undefined;
 	public windows: Window[] = [];
+	public windowsLayers: number[] = [];
 
 	public emitter = new Emitter<WindowManagerEvent>();
+
+	public readonly windowsMinMaxLayer = { min: 5, max: 200 };
+
+	public sendWindowZIndex = () => {
+		let currentZIndex = this.windowsMinMaxLayer.max;
+		[...this.windowsLayers].reverse().forEach((id) => {
+			this.emitter.call("updateZIndex", { id, layer: currentZIndex });
+			if (currentZIndex > this.windowsMinMaxLayer.min) {
+				currentZIndex--;
+			}
+		});
+	};
 
 	public setActiveWindow = (id: number) => {
 		if (this.activeWindowId !== id) {
 			this.activeWindowId = id;
 			this.emitter.call("setActiveWindow", { id });
+			this.windowsLayers = this.windowsLayers.filter(
+				(currentId) => currentId !== id
+			);
+			this.windowsLayers.push(id);
+			this.sendWindowZIndex();
 		}
 	};
 	private idIndex = 0;
@@ -49,6 +71,7 @@ class WindowManager {
 		const newWindow = { id, name, icon, state };
 		this.windows.push(newWindow);
 		this.emitter.call("addWindow", { window: newWindow });
+		this.windowsLayers.push(id);
 		return id;
 	};
 
@@ -57,9 +80,11 @@ class WindowManager {
 		if (windowToClose) {
 			this.windows = this.windows.filter((w) => w.id !== id);
 			this.emitter.call("closeWindow", { window: windowToClose });
+			this.windowsLayers = this.windowsLayers.filter(
+				(currentId) => currentId !== id
+			);
 		}
 	};
-
 	public updateState = (id: number, newState: WindowState) => {
 		this.setActiveWindow(id);
 		const currentWindow = this.windows.find((w) => w.id === id);

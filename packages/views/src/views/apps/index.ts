@@ -10,4 +10,15 @@ import Settings from "@views/apps/system/Settings";
 // thirdParty
 import Iframe from "@views/apps/thirdParty/Iframe";
 
-export { Terminal, Explorer, Settings, Notepad, MediaPlayer, Iframe };
+// shared
+import LoadingScreen from "@views/apps/shared/LoadingScreen";
+
+export {
+	Terminal,
+	Explorer,
+	Settings,
+	Notepad,
+	MediaPlayer,
+	Iframe,
+	LoadingScreen,
+};

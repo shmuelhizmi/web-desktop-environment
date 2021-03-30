@@ -218,6 +218,7 @@ class Window extends Component<
 		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
 			minimized: this.props.window.minimized || false,
 		});
+		windowManager.reloadWindowsLayers();
 
 		this.intervalsToClear.push(
 			setInterval(() => {

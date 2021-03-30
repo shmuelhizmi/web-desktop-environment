@@ -43,7 +43,7 @@ class WindowManager {
 
 	public readonly windowsMinMaxLayer = { min: 5, max: 200 };
 
-	public sendWindowZIndex = () => {
+	public reloadWindowsLayers = () => {
 		let currentZIndex = this.windowsMinMaxLayer.max;
 		[...this.windowsLayers].reverse().forEach((id) => {
 			this.emitter.call("updateZIndex", { id, layer: currentZIndex });
@@ -61,10 +61,11 @@ class WindowManager {
 				(currentId) => currentId !== id
 			);
 			this.windowsLayers.push(id);
-			this.sendWindowZIndex();
+			this.reloadWindowsLayers();
 		}
 	};
 	private idIndex = 0;
+
 	public addWindow = (name: string, icon: Icon, state: WindowState) => {
 		const id = this.idIndex;
 		this.idIndex++;
@@ -72,7 +73,6 @@ class WindowManager {
 		this.windows.push(newWindow);
 		this.emitter.call("addWindow", { window: newWindow });
 		this.windowsLayers.push(id);
-		this.sendWindowZIndex();
 		return id;
 	};
 

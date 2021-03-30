@@ -11,6 +11,7 @@ import { windowsBarHeight as desktopWindowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
 import { Rnd } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
+import { lastTaskQueuer } from "@utils/tasks";
 
 export const defaultWindowSize = {
 	height: 600,
@@ -20,8 +21,6 @@ export const defaultWindowSize = {
 	minHeight: 300,
 	minWidth: 400,
 };
-
-export const minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation = 20;
 
 export const windowBarHeight = 25;
 
@@ -45,6 +44,9 @@ const styles = (theme: Theme) =>
 			height: windowBarHeight,
 			width: "100%",
 			justifyContent: "space-between",
+		},
+		smoothMove: {
+			transition: "top 305ms, left 305ms",
 		},
 		barCollapse: {
 			borderRadius: "7px 7px 7px 7px",
@@ -173,6 +175,7 @@ class Window extends Component<
 	private willUnmount = false;
 
 	componentDidMount() {
+		this.updateWindowPositionORSizeQueuer.start();
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
 			this.props.setWindowState({
 				minimized: true,
@@ -277,35 +280,16 @@ class Window extends Component<
 		}
 	}
 
-	setWindowStatePromises: Promise<any>[] = [];
+	updateWindowPositionORSizeQueuer = lastTaskQueuer();
 
 	async setWindowState(state: LocalWindowState) {
 		this.setState({
 			localWindowState: { ...this.state.localWindowState, ...state },
 		});
-		await Promise.all(this.setWindowStatePromises);
-		const {
-			position: remotePosition,
-			width: remoteWidth,
-			height: remoteHeight,
-		} = this.props.window;
-		if (
-			(state.position &&
-				remotePosition &&
-				Math.abs(state.position.x - remotePosition.x) >
-					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation &&
-				Math.abs(state.position.y - remotePosition.y) >
-					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation) ||
-			(state.size &&
-				remoteHeight &&
-				remoteWidth &&
-				Math.abs(state.size.width - remoteWidth) >
-					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation &&
-				Math.abs(state.size.height - remoteHeight) >
-					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation)
-		) {
-			this.setWindowStatePromises.push(this.props.setWindowState(state));
-		}
+
+		this.updateWindowPositionORSizeQueuer.queueTask(() =>
+			this.props.setWindowState(state)
+		);
 	}
 
 	toggleWindowsMaximize = (forceOn?: boolean) => {
@@ -330,27 +314,33 @@ class Window extends Component<
 	static fullscreenWindowPosition = { x: 0, y: 0 };
 
 	/*
-		The reason that we switch back a forth between absolute and translation base position
-		is to avoid using translation base position as much as we can sens it is causing blurriness in iframes
+		we are removing the translation base position and replace it with an absolute position using top and left
+		css properties in the render we need to avoid using translation base position since it is causing blurriness in iframes
 	*/
 	switchToAbsolutePosition = () => {
-		const position = this.getPosition();
 		const rndElement = document.getElementsByClassName(
 			this.randomClassNameForRndContainer
 		)[0] as HTMLDivElement;
 		rndElement.style.transform = "";
-		if (!this.state.fullscreenMode) {
-			rndElement.style.top = Math.round(position.y) + "px";
-			rndElement.style.left = Math.round(position.x) + "px";
-		} else {
-			rndElement.style.top = 0 + "px";
-			rndElement.style.left = 0 + "px";
-		}
 	};
 
 	randomClassNameForRndContainer = `rndElement${Math.random()}`;
 
 	previousDelta = { width: 0, height: 0 };
+
+	getTopAndLeftPosition() {
+		if (this.state.fullscreenMode) {
+			return {
+				top: 0,
+				left: 0,
+			};
+		}
+		const position = this.getPosition();
+		return {
+			top: position.y,
+			left: position.x,
+		};
+	}
 
 	render() {
 		const {
@@ -388,7 +378,9 @@ class Window extends Component<
 				}}
 			>
 				<Rnd
-					className={this.randomClassNameForRndContainer}
+					className={`${this.randomClassNameForRndContainer} ${
+						useLocalWindowState ? "" : classes.smoothMove
+					}`}
 					disableDragging={!canDrag}
 					size={fullscreenMode ? Window.fullscreenWindowSize : size}
 					position={fullscreenMode ? Window.fullscreenWindowPosition : position}
@@ -513,7 +505,7 @@ class Window extends Component<
 						});
 						this.previousDelta = delta;
 					}}
-					style={{ zIndex }}
+					style={{ zIndex, ...this.getTopAndLeftPosition() }}
 				>
 					<div className={classes.root} onClick={() => this.setActive()}>
 						<div

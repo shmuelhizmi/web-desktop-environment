@@ -2,7 +2,7 @@ import Emitter from "./Emitter";
 
 export const lastTaskQueuer = () => {
 	let stop = false;
-	let lastTask: () => Promise<any>;
+	let lastTask: undefined | (() => Promise<any>);
 
 	const continueEmitter = new Emitter<{ continue: void }>();
 
@@ -17,7 +17,9 @@ export const lastTaskQueuer = () => {
 		async start() {
 			while (!stop) {
 				if (lastTask) {
-					await lastTask();
+					const currentTask = lastTask;
+					lastTask = undefined;
+					await currentTask();
 				}
 				if (!lastTask) {
 					await new Promise((res) => continueEmitter.on("continue", res));

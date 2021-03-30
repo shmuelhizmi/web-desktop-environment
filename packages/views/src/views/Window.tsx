@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import windowManager from "@state/WindowManager";
 import { windowsBarHeight as desktopWindowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
-import { Rnd } from "react-rnd";
+import { Rnd, RndDragCallback } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 import { lastTaskQueuer } from "@utils/tasks";
 
@@ -283,6 +283,9 @@ class Window extends Component<
 
 	updateWindowPositionORSizeQueuer = lastTaskQueuer();
 
+	/**
+	 * update window size or position locally on remotely
+	 */
 	async setWindowState(state: LocalWindowState) {
 		this.setState({
 			localWindowState: { ...this.state.localWindowState, ...state },
@@ -306,6 +309,9 @@ class Window extends Component<
 		}
 	};
 
+	/**
+	 * static constance window properties to use when we are in fullscreen mode
+	 */
 	static fullscreenWindowSize = {
 		width: "100%",
 		height: `calc(100% - ${
@@ -315,9 +321,9 @@ class Window extends Component<
 	static fullscreenWindowPosition = { x: 0, y: 0 };
 
 	/*
-		we are removing the translation base position and replace it with an absolute position using top and left
-		css properties in the render we need to avoid using translation base position since it is causing blurriness in iframes
-	*/
+	 *	we are removing the translation base position and replace it with an absolute position using top and left
+	 *	css properties in the render we need to avoid using translation base position since it is causing blurriness in iframes
+	 */
 	switchToAbsolutePosition = () => {
 		const rndElement = document.getElementsByClassName(
 			this.randomClassNameForRndContainer
@@ -329,6 +335,9 @@ class Window extends Component<
 
 	previousDelta = { width: 0, height: 0 };
 
+	/**
+	 * calculate window position
+	 */
 	getTopAndLeftPosition() {
 		if (this.state.fullscreenMode) {
 			return {
@@ -342,6 +351,64 @@ class Window extends Component<
 			left: position.x,
 		};
 	}
+
+	onDrag: RndDragCallback = (e, newPosition) => {
+		this.setActive();
+		const { isResizing } = this.state;
+		if (isResizing) {
+			return;
+		}
+
+		const position = this.getPosition();
+		const windowProperties = this.windowProperties;
+		const size = {
+			height: windowProperties.size?.height || defaultWindowSize.height,
+			width: windowProperties.size?.width || defaultWindowSize.width,
+		};
+		const { clientX, clientY } = e as MouseEvent;
+
+		const updatedPosition = {
+			x: position.x + newPosition.deltaX,
+			y: position.y + newPosition.deltaY,
+		};
+
+		// snap window drag to mouse
+		if (updatedPosition.x > clientX) {
+			updatedPosition.x = clientX;
+		}
+		if (updatedPosition.x < clientX - size.width) {
+			updatedPosition.x = clientX - size.width;
+		}
+		if (updatedPosition.y > clientY - windowBarHeight) {
+			updatedPosition.y = clientY - windowBarHeight;
+		}
+		if (updatedPosition.y < clientY) {
+			updatedPosition.y = clientY;
+		}
+
+		// calculate if the window is touching one of the screen borders
+		const touchTop = updatedPosition.y < -windowBarHeight / 3; // need to go a bit over the edge to go fullscreen
+		const touchBottom =
+			updatedPosition.y >
+			window.innerHeight - windowBarHeight - desktopWindowsBarHeight;
+		const width = Number(String(size.width).replace("px", ""));
+		const touchMinimumLeft = updatedPosition.x < 0;
+		const touchMinimumRight = updatedPosition.x > window.innerWidth - width;
+
+		// in case the window touches the screen upper edge toggle fullscreen mode
+		if (touchTop) {
+			this.toggleWindowsMaximize(true);
+			return;
+		}
+
+		// in case the window touches any other corner we should prevent it from moving further
+		if (touchBottom || touchMinimumLeft || touchMinimumRight) {
+			return;
+		}
+		this.setWindowState({
+			position: updatedPosition,
+		});
+	};
 
 	render() {
 		const {
@@ -385,34 +452,7 @@ class Window extends Component<
 					disableDragging={!canDrag}
 					size={fullscreenMode ? Window.fullscreenWindowSize : size}
 					position={fullscreenMode ? Window.fullscreenWindowPosition : position}
-					onDrag={(e, newPosition) => {
-						const updatedPosition = {
-							x: position.x + newPosition.deltaX,
-							y: position.y + newPosition.deltaY,
-						};
-						if (isResizing) {
-							return;
-						}
-						this.setActive();
-						const touchTop = updatedPosition.y < -windowBarHeight / 3; // need to go a bit over the edge to go fullscreen
-						const touchBottom =
-							updatedPosition.y >
-							window.innerHeight - windowBarHeight - desktopWindowsBarHeight;
-						const width = Number(String(size.width).replace("px", ""));
-						const touchMinimumLeft = updatedPosition.x < 0;
-						const touchMinimumRight =
-							updatedPosition.x > window.innerWidth - width;
-						if (touchTop) {
-							this.toggleWindowsMaximize(true);
-							return;
-						}
-						if (touchBottom || touchMinimumLeft || touchMinimumRight) {
-							return;
-						}
-						this.setWindowState({
-							position: updatedPosition,
-						});
-					}}
+					onDrag={this.onDrag}
 					onDragStart={(e) => {
 						if (fullscreenMode) {
 							const { clientX, clientY } = e as MouseEvent;

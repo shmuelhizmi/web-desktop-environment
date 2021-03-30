@@ -7,5 +7,5 @@ export interface Window {
 	minHeight?: number | string;
 	minimized?: boolean;
 	position?: { x: number; y: number };
-    allowFullscreen?: boolean;
+    allowLocalScreenSnapping?: boolean;
 }

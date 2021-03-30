@@ -89,6 +89,6 @@ export const vscode: App<VSCodeInput> = {
     maxWidth: 7000,
     minWidth: 500,
     minHeight: 500,
-    allowFullscreen: true,
+    allowLocalScreenSnapping: true,
   },
 };

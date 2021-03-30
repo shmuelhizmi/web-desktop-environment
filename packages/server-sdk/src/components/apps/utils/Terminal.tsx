@@ -119,7 +119,7 @@ export const terminal: App<TerminalInput> = {
 		maxWidth: 1200,
 		minWidth: 350,
 		minHeight: 200,
-		allowFullscreen: true,
+		allowLocalScreenSnapping: true,
 	},
 };
 

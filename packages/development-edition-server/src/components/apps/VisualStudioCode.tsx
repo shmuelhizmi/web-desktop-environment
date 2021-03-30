@@ -82,12 +82,13 @@ export const vscode: App<VSCodeInput> = {
     icon: "VscCode",
   },
   window: {
-    height: 900,
-    width: 1500,
+    height: 700,
+    width: 1000,
     position: { x: 50, y: 50 },
-    maxHeight: 100000,
-    maxWidth: 100000,
+    maxHeight: 7000,
+    maxWidth: 7000,
     minWidth: 500,
     minHeight: 500,
+    allowFullscreen: true,
   },
 };

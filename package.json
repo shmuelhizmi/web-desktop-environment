@@ -6,7 +6,8 @@
     "dev:web": "cd packages/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "start": "lerna bootstrap --  --unsafe-perm && npm run dev",
-    "lint": "lerna run lint"
+    "lint": "lerna run lint",
+    "prepare": "lerna run prepare"
   },
   "devDependencies": {
     "concurrently": "5.3.0",

@@ -7,7 +7,7 @@ import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import ReactDOM from "react-dom";
 import windowManager from "@state/WindowManager";
-import { windowsBarHeight } from "@views/Desktop";
+import { windowsBarHeight as desktopWindowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
 import { Rnd } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
@@ -20,6 +20,8 @@ export const defaultWindowSize = {
 	minHeight: 300,
 	minWidth: 400,
 };
+
+export const minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation = 20;
 
 export const windowBarHeight = 25;
 
@@ -111,7 +113,9 @@ interface WindowState {
 	isActive?: boolean;
 	localWindowState?: LocalWindowState;
 	useLocalWindowState: boolean;
+	isResizing: boolean;
 	zIndex?: number;
+	fullscreenMode?: boolean;
 }
 
 class Window extends Component<
@@ -129,6 +133,7 @@ class Window extends Component<
 			canDrag: false,
 			collapse: props.window.minimized || false,
 			useLocalWindowState: false,
+			isResizing: false,
 		};
 
 		this.domContainer = document.createElement("div");
@@ -142,17 +147,17 @@ class Window extends Component<
 	getPosition = () => {
 		const { position, size } = this.windowProperties;
 		if (position && size) {
-			if (position.x > window.innerWidth - size.width / 2) {
+			if (position.x > window.innerWidth - size.width) {
 				position.x = window.innerWidth - (position.x % window.innerWidth);
 			}
-			if (position.x < windowBarHeight) {
-				position.x = windowBarHeight;
+			if (position.x < 0) {
+				position.x = 0;
 			}
-			if (position.y > window.innerHeight) {
-				position.y = window.innerHeight;
+			if (position.y > window.innerHeight - desktopWindowsBarHeight) {
+				position.y = window.innerHeight - desktopWindowsBarHeight;
 			}
-			if (position.y < windowBarHeight) {
-				position.y = windowBarHeight;
+			if (position.y < 0) {
+				position.y = 0;
 			}
 			return position;
 		} else {
@@ -165,11 +170,9 @@ class Window extends Component<
 
 	private intervalsToClear: NodeJS.Timeout[] = [];
 
-	componentDidMount() {
-		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
-			minimized: this.props.window.minimized || false,
-		});
+	private willUnmount = false;
 
+	componentDidMount() {
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
 			this.props.setWindowState({
 				minimized: true,
@@ -209,6 +212,10 @@ class Window extends Component<
 				}
 			}
 		});
+		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
+			minimized: this.props.window.minimized || false,
+		});
+
 		this.intervalsToClear.push(
 			setInterval(() => {
 				const activeElement = document.activeElement;
@@ -222,9 +229,17 @@ class Window extends Component<
 				}
 			}, 50)
 		);
+		const switchPosition = () => {
+			if (!this.willUnmount) {
+				this.switchToAbsolutePosition();
+				window.requestAnimationFrame(switchPosition);
+			}
+		};
+		switchPosition();
 	}
 
 	componentWillUnmount = () => {
+		this.willUnmount = true;
 		windowManager.closeWindow(this.id);
 		this.intervalsToClear.forEach(clearInterval);
 	};
@@ -262,19 +277,104 @@ class Window extends Component<
 		}
 	}
 
-	setWindowState(state: LocalWindowState) {
+	setWindowStatePromises: Promise<any>[] = [];
+
+	async setWindowState(state: LocalWindowState) {
 		this.setState({
 			localWindowState: { ...this.state.localWindowState, ...state },
 		});
+		await Promise.all(this.setWindowStatePromises);
+		const {
+			position: remotePosition,
+			width: remoteWidth,
+			height: remoteHeight,
+		} = this.props.window;
+		if (
+			(state.position &&
+				remotePosition &&
+				Math.abs(state.position.x - remotePosition.x) >
+					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation &&
+				Math.abs(state.position.y - remotePosition.y) >
+					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation) ||
+			(state.size &&
+				remoteHeight &&
+				remoteWidth &&
+				Math.abs(state.size.width - remoteWidth) >
+					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation &&
+				Math.abs(state.size.height - remoteHeight) >
+					minLocationOrSizeChangeForUpdatingRemoteSizeOrLocation)
+		) {
+			this.setWindowStatePromises.push(this.props.setWindowState(state));
+		}
 	}
 
+	toggleWindowsMaximize = (forceOn?: boolean) => {
+		const {
+			props: {
+				window: { allowFullscreen },
+			},
+			state: { fullscreenMode },
+		} = this;
+		if (allowFullscreen) {
+			const newState = forceOn || !fullscreenMode;
+			this.setState({ fullscreenMode: newState });
+		}
+	};
+
+	static fullscreenWindowSize = {
+		width: "100%",
+		height: `calc(100% - ${
+			desktopWindowsBarHeight + 10 /* add 5 to account for margin */
+		}px)`,
+	};
+	static fullscreenWindowPosition = { x: 0, y: 0 };
+
+	/*
+		The reason that we switch back a forth between absolute and translation base position
+		is to avoid using translation base position as much as we can sens it is causing blurriness in iframes
+	*/
+	switchToAbsolutePosition = () => {
+		const position = this.getPosition();
+		const rndElement = document.getElementsByClassName(
+			this.randomClassNameForRndContainer
+		)[0] as HTMLDivElement;
+		rndElement.style.transform = "";
+		if (!this.state.fullscreenMode) {
+			rndElement.style.top = Math.round(position.y) + "px";
+			rndElement.style.left = Math.round(position.x) + "px";
+		} else {
+			rndElement.style.top = 0 + "px";
+			rndElement.style.left = 0 + "px";
+		}
+	};
+
+	randomClassNameForRndContainer = `rndElement${Math.random()}`;
+
+	previousDelta = { width: 0, height: 0 };
+
 	render() {
-		const { canDrag, collapse, isActive, zIndex } = this.state;
-		const { children, classes, title, icon, onClose } = this.props;
+		const {
+			canDrag,
+			collapse,
+			isActive,
+			zIndex,
+			fullscreenMode,
+			useLocalWindowState,
+			isResizing,
+		} = this.state;
+		const isDragging = useLocalWindowState && !isResizing;
+		const {
+			children,
+			classes,
+			title,
+			icon,
+			onClose,
+			window: windowSizes,
+		} = this.props;
 		const windowProperties = this.windowProperties;
 		const { maxHeight, maxWidth, minHeight, minWidth } = {
 			...defaultWindowSize,
-			...windowProperties,
+			...windowSizes,
 		};
 		const size = {
 			height: windowProperties.size?.height || defaultWindowSize.height,
@@ -288,41 +388,62 @@ class Window extends Component<
 				}}
 			>
 				<Rnd
+					className={this.randomClassNameForRndContainer}
 					disableDragging={!canDrag}
-					size={size}
-					position={position}
+					size={fullscreenMode ? Window.fullscreenWindowSize : size}
+					position={fullscreenMode ? Window.fullscreenWindowPosition : position}
 					onDrag={(e, newPosition) => {
+						const updatedPosition = {
+							x: position.x + newPosition.deltaX,
+							y: position.y + newPosition.deltaY,
+						};
+						if (isResizing) {
+							return;
+						}
 						this.setActive();
-						const touchTop = newPosition.y < 0;
+						const touchTop = updatedPosition.y < -windowBarHeight / 3; // need to go a bit over the edge to go fullscreen
 						const touchBottom =
-							newPosition.y >
-							window.innerHeight - windowBarHeight - windowsBarHeight;
+							updatedPosition.y >
+							window.innerHeight - windowBarHeight - desktopWindowsBarHeight;
 						const width = Number(String(size.width).replace("px", ""));
-						const touchMinimumLeft = newPosition.x < 0 - width * 0.5;
+						const touchMinimumLeft = updatedPosition.x < 0;
 						const touchMinimumRight =
-							newPosition.x > window.innerWidth - width * 0.5;
-						if (
-							touchTop ||
-							touchBottom ||
-							touchMinimumLeft ||
-							touchMinimumRight
-						) {
-							this.setWindowState({ position });
+							updatedPosition.x > window.innerWidth - width;
+						if (touchTop) {
+							this.toggleWindowsMaximize(true);
+							return;
+						}
+						if (touchBottom || touchMinimumLeft || touchMinimumRight) {
 							return;
 						}
 						this.setWindowState({
-							position: { x: newPosition.x, y: newPosition.y },
+							position: updatedPosition,
 						});
 					}}
-					onDragStart={() =>
-						this.setState({
-							useLocalWindowState: true,
-							localWindowState: {
-								position,
-								size,
-							},
-						})
-					}
+					onDragStart={(e) => {
+						if (fullscreenMode) {
+							const { clientX, clientY } = e as MouseEvent;
+							this.setState({
+								useLocalWindowState: true,
+								localWindowState: {
+									position: {
+										x: clientX - size.width / 2,
+										y: clientY + windowBarHeight / 2,
+									},
+									size,
+								},
+								fullscreenMode: false,
+							});
+						} else {
+							this.setState({
+								useLocalWindowState: true,
+								localWindowState: {
+									position,
+									size,
+								},
+							});
+						}
+					}}
 					onDragStop={() => {
 						this.props.setWindowState({ position }).then(() => {
 							this.setState({
@@ -334,8 +455,16 @@ class Window extends Component<
 					defaultSize={size}
 					maxHeight={collapse ? windowBarHeight : maxHeight}
 					maxWidth={maxWidth}
-					minHeight={collapse ? windowBarHeight : minHeight}
-					minWidth={minWidth}
+					minHeight={
+						collapse
+							? windowBarHeight
+							: fullscreenMode
+							? Window.fullscreenWindowSize.height
+							: minHeight
+					}
+					minWidth={
+						fullscreenMode ? Window.fullscreenWindowSize.width : minWidth
+					}
 					onResizeStart={() =>
 						this.setState({
 							useLocalWindowState: true,
@@ -343,40 +472,63 @@ class Window extends Component<
 								position,
 								size,
 							},
+							fullscreenMode: false,
+							isResizing: true,
 						})
 					}
-					onResizeStop={() =>
+					onResizeStop={() => {
+						this.previousDelta = { height: 0, width: 0 };
 						this.props.setWindowState({ position, size }).then(() => {
 							this.setState({
 								useLocalWindowState: false,
+								isResizing: false,
 								localWindowState: undefined,
 							});
-						})
-					}
-					onResize={(e, _resize, ele, delta, newPosition) =>
+						});
+					}}
+					onResize={(e, dir, ele, delta, _) => {
+						switch (dir) {
+							case "top": {
+								position.y -= delta.height - this.previousDelta.height;
+								break;
+							}
+							case "left": {
+								position.x -= delta.width - this.previousDelta.width;
+								break;
+							}
+							case "topLeft": {
+								position.y -= delta.height - this.previousDelta.height;
+								position.x -= delta.width - this.previousDelta.width;
+								break;
+							}
+						}
 						this.setWindowState({
 							size: {
-								width: Number(ele.style.width.replace("px", "")),
-								height: Number(ele.style.height.replace("px", "")),
+								width: size.width + delta.width - this.previousDelta.width,
+								height: size.height + delta.height - this.previousDelta.height,
 							},
-							position: newPosition,
-						})
-					}
+							position: {
+								...position,
+							},
+						});
+						this.previousDelta = delta;
+					}}
 					style={{ zIndex }}
 				>
 					<div className={classes.root} onClick={() => this.setActive()}>
 						<div
 							onMouseEnter={() => this.setState({ canDrag: true })}
 							onMouseLeave={() => this.setState({ canDrag: false })}
+							onDoubleClick={() => this.toggleWindowsMaximize()}
 							className={`${classes.bar} ${
-								this.state.collapse ? classes.barCollapse : ""
+								collapse || isDragging ? classes.barCollapse : ""
 							}`}
 						>
 							<div className={classes.barButtonsContainer}>
 								<div
 									onClick={() => {
 										windowManager.updateState(this.id, {
-											minimized: !this.state.collapse,
+											minimized: !collapse,
 										});
 									}}
 									className={`${classes.barButton} ${
@@ -411,7 +563,13 @@ class Window extends Component<
 								)}
 							</div>
 						</div>
-						{!collapse && <div className={classes.body}>{children}</div>}
+
+						<div
+							className={classes.body}
+							style={isDragging || collapse ? { display: "none" } : {}}
+						>
+							{children}
+						</div>
 					</div>
 				</Rnd>
 			</div>,

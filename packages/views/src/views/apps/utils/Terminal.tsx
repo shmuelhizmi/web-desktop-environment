@@ -86,8 +86,11 @@ class Terminal extends Component<
 	};
 
 	onResize = () => {
-		this.termFit.fit();
-		this.socket.emit("setColumns", this.term.cols);
+		if (this.containerElement?.clientWidth) {
+			// do not resize is container is in display: none mode
+			this.termFit.fit();
+			this.socket.emit("setColumns", this.term.cols);
+		}
 	};
 
 	render() {

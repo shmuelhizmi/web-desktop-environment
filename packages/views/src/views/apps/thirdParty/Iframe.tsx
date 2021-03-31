@@ -37,6 +37,9 @@ class Iframe extends Component<
 
 		return (
 			<iframe
+				allowFullScreen
+				allowTransparency
+				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; allow-popups; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"
 				className={classes.root}
 				src={`http://${host || reactFullstackConnectionManager.host}${
 					port ? ":" + port : ""

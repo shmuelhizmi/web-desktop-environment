@@ -19,6 +19,7 @@ interface TerminalState {
 	port?: number;
 }
 
+export const maxTerminalHistoryLength = 100000;
 class Terminal extends Component<TerminalInput, TerminalState> {
 	name = "terminal";
 	server = http.createServer();
@@ -27,6 +28,10 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 	ptyProcess = new PTY(
 		(data) => {
 			this.history += data;
+			this.history = this.history.slice(
+				this.history.length - maxTerminalHistoryLength,
+				this.history.length
+			);
 			this.socketServer.emit("output", data);
 		},
 		this.props.process,

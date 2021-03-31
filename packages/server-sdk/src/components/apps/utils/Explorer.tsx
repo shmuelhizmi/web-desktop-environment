@@ -14,7 +14,7 @@ import { App } from "@apps/index";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
 
 interface ExplorerInput {
-	path?: string;
+	location?: string;
 	isCurrentApp?: boolean;
 	type: ExplorerViewType;
 	onSelect?: (path: string) => void;
@@ -28,7 +28,7 @@ interface ExplorerState {
 class Explorer extends Component<ExplorerInput, ExplorerState> {
 	name = "explorer";
 	state: ExplorerState = {
-		currentPath: this.props.path || homedir(),
+		currentPath: this.props.location || homedir(),
 		files: [],
 	};
 	listFiles = async (currentPath: string): Promise<File[]> => {
@@ -143,7 +143,7 @@ export const explorer: App<ExplorerInput> = {
 	name: "Explorer",
 	description: "a file explorer",
 	App: Explorer,
-	defaultInput: { path: homedir(), type: "explore", isCurrentApp: true },
+	defaultInput: { location: homedir(), type: "explore", isCurrentApp: true },
 	icon: {
 		type: "icon",
 		icon: "FcFolder",

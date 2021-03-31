@@ -59,9 +59,9 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 		});
 		let lastProcessName = "";
 		const updateCurrentProcess = setInterval(() => {
-			const newPrcessName = this.ptyProcess.ptyProcess.process;
-			if (lastProcessName !== newPrcessName) {
-				lastProcessName = newPrcessName;
+			const newProcessName = this.ptyProcess.ptyProcess.process;
+			if (lastProcessName !== newProcessName) {
+				lastProcessName = newProcessName;
 				if (this.windowContext) {
 					this.windowContext.setWindowTitle(`Termianl : ${lastProcessName}`);
 				}
@@ -156,7 +156,7 @@ class PTY {
 	startPtyProcess(cwd: string, args: string[]) {
 		this.ptyProcess = spawn(this.shell, args, {
 			name: "xterm-color",
-			cwd, // Which path should terminal start
+			cwd,
 		});
 
 		// Add a "data" event listener.

@@ -9,6 +9,8 @@ import DesktopManager from "@managers/desktopManager";
 import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
 import Window from "@components/desktop/Window";
 import { AppProvider } from "@root/contexts";
+import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from "@root/const";
+import { BroadcastChannel } from "broadcast-channel";
 
 export const ProcessIDProvider = React.createContext<undefined | number>(
 	undefined
@@ -34,7 +36,25 @@ export default class WindowManager {
 	constructor(parentLogger: Logger, desktopManager: DesktopManager) {
 		this.logger = parentLogger.mount("windows-manager");
 		this.desktopManager = desktopManager;
+		this.listenToExternalAppLaunches();
 	}
+
+	listenToExternalAppLaunches = () => {
+		const channel = new BroadcastChannel(
+			webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast
+		);
+		channel.onmessage = ({
+			name,
+			input,
+		}: {
+			name: string;
+			input: Record<string, unknown>;
+		}) => {
+			if (typeof name === "string" && typeof input === "object") {
+				this.spawnApp(name, input);
+			}
+		};
+	};
 
 	spawnApp = async (name: string, input: Record<string, unknown>) => {
 		const handler = AppsManager.apps.get(name);

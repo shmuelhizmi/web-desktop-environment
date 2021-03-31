@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import windowManager from "@state/WindowManager";
 import { windowsBarHeight as desktopWindowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
-import { Rnd, RndDragCallback } from "react-rnd";
+import { Rnd, RndDragCallback, RndResizeCallback } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 import { lastTaskQueuer } from "@utils/tasks";
 
@@ -179,6 +179,7 @@ class Window extends Component<
 
 	getSize = () => {
 		const size = { ...(this.windowProperties.size || {}) };
+		const { collapse } = this.state;
 		const {
 			maxHeight,
 			maxWidth,
@@ -198,11 +199,14 @@ class Window extends Component<
 			if (minWidth > size.width) {
 				size.width = minWidth;
 			}
+			if (collapse) {
+				size.height = windowBarHeight;
+			}
 			return size as { width: number; height: number };
 		} else {
 			return {
 				width: defaultWindowSize.width,
-				height: defaultWindowSize.height,
+				height: collapse ? windowBarHeight : defaultWindowSize.height,
 			};
 		}
 	};
@@ -375,11 +379,13 @@ class Window extends Component<
 			props: {
 				window: { allowLocalScreenSnapping },
 			},
-			state: { snap: currentSnap },
+			state: { snap: currentSnap, collapse },
 		} = this;
-		if (allowLocalScreenSnapping) {
-			const snapNow = forceState !== undefined ? forceState : !currentSnap;
-			this.setState({ snap: snapNow ? snap : undefined });
+		if (!collapse) {
+			if (allowLocalScreenSnapping) {
+				const snapNow = forceState !== undefined ? forceState : !currentSnap;
+				this.setState({ snap: snapNow ? snap : undefined });
+			}
 		}
 	};
 
@@ -482,6 +488,58 @@ class Window extends Component<
 		this.setWindowState({
 			position: updatedPosition,
 		});
+	};
+	onResize: RndResizeCallback = (e, dir, ele, delta) => {
+		const position = this.getPosition();
+		const { localWindowState, collapse } = this.state;
+		if (localWindowState?.size) {
+			const { size } = localWindowState;
+			const {
+				maxHeight,
+				maxWidth,
+				minHeight,
+				minWidth,
+			} = this.screenSizesToNumbers();
+			const newSize = {
+				width: size.width + delta.width - this.lastResizeDelta.width,
+				height: size.height + delta.height - this.lastResizeDelta.height,
+			};
+			if (collapse) {
+				newSize.height -= delta.height - this.lastResizeDelta.height;
+			}
+			switch (dir) {
+				case "topRight":
+				case "top": {
+					if (newSize.height < maxHeight && newSize.height > minHeight) {
+						position.y -= delta.height - this.lastResizeDelta.height;
+					}
+					break;
+				}
+				case "bottomLeft":
+				case "left": {
+					if (newSize.width < maxWidth && newSize.width > minWidth) {
+						position.x -= delta.width - this.lastResizeDelta.width;
+					}
+					break;
+				}
+				case "topLeft": {
+					if (newSize.height < maxHeight && newSize.height > minHeight) {
+						position.y -= delta.height - this.lastResizeDelta.height;
+					}
+					if (newSize.width < maxWidth && newSize.width > minWidth) {
+						position.x -= delta.width - this.lastResizeDelta.width;
+					}
+					break;
+				}
+			}
+			this.setWindowState({
+				size: newSize,
+				position: {
+					...position,
+				},
+			});
+			this.lastResizeDelta = delta;
+		}
 	};
 
 	getWindowSize = () => {
@@ -607,61 +665,7 @@ class Window extends Component<
 							localWindowState: undefined,
 						});
 					}}
-					onResize={(e, dir, ele, delta) => {
-						const { localWindowState } = this.state;
-						if (localWindowState?.size) {
-							const { size } = localWindowState;
-							const {
-								maxHeight,
-								maxWidth,
-								minHeight,
-								minWidth,
-							} = this.screenSizesToNumbers();
-							const newSize = {
-								width: size.width + delta.width - this.lastResizeDelta.width,
-								height:
-									size.height + delta.height - this.lastResizeDelta.height,
-							};
-							switch (dir) {
-								case "topRight":
-								case "top": {
-									if (
-										newSize.height < maxHeight &&
-										newSize.height > minHeight
-									) {
-										position.y -= delta.height - this.lastResizeDelta.height;
-									}
-									break;
-								}
-								case "bottomLeft":
-								case "left": {
-									if (newSize.width < maxWidth && newSize.width > minWidth) {
-										position.x -= delta.width - this.lastResizeDelta.width;
-									}
-									break;
-								}
-								case "topLeft": {
-									if (
-										newSize.height < maxHeight &&
-										newSize.height > minHeight
-									) {
-										position.y -= delta.height - this.lastResizeDelta.height;
-									}
-									if (newSize.width < maxWidth && newSize.width > minWidth) {
-										position.x -= delta.width - this.lastResizeDelta.width;
-									}
-									break;
-								}
-							}
-							this.setWindowState({
-								size: newSize,
-								position: {
-									...position,
-								},
-							});
-							this.lastResizeDelta = delta;
-						}
-					}}
+					onResize={this.onResize}
 					style={{ zIndex, ...this.getWindowTransformStyles() }}
 				>
 					<div className={classes.root} onClick={() => this.setActive()}>

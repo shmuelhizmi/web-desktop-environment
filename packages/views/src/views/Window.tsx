@@ -455,8 +455,8 @@ class Window extends Component<
 		}
 
 		// calculate if the window is touching one of the screen borders
-		const touchTop = clientY < -windowBarHeight / 3; // need to go a bit over the edge to go fullscreen
-		const farFromTop = clientY > windowBarHeight / 3;
+		const touchTop = clientY < 2; // need to go a bit over the edge to go fullscreen
+		const farFromTop = clientY > 50;
 		const touchMinimumLeft = clientX < 25;
 		const farFromMinimumLeft = clientX > 50;
 		const touchMinimumRight = clientX > window.innerWidth - 25;

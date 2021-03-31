@@ -42,7 +42,7 @@ export default class SettingsManager {
 
 	public static defaultSettings: Settings = {
 		desktop: {
-			theme: "transparentDark",
+			theme: "dark",
 			background: "url(https://picsum.photos/id/1039/1920/1080)",
 			nativeBackground: "https://picsum.photos/id/237/1080/1920",
 		},

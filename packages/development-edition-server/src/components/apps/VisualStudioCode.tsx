@@ -29,7 +29,7 @@ class VSCode extends Component<VSCodeInput, VSCodeState> {
   willUnmount = false;
 
   runVsCodeCli = (port: number): void => {
-    this.vscode = cp.spawn("code-server", [`--port=${port}`, `--auth=none`]);
+    this.vscode = cp.spawn("code-server", [`--port=${port}`, `--auth=none`, "--host=0.0.0.0"]);
     const waitForVscodeToLoad = () => {
       if (!this.willUnmount) {
         axios.get("http://localhost:" + port).then(() => !this.willUnmount && this.setState({ isLoaded: true })).catch(() => {

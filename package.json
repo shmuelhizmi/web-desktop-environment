@@ -7,10 +7,10 @@
     "dev:web": "cd packages/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "dev:dev": "concurrently \"npm run dev:server:dev\" \"npm run dev:web\"",
-    "start": "npm install  --unsafe-perm && npm run dev",
+    "start": "npm install --unsafe-perm && npm run dev",
     "lint": "lerna run lint",
     "prepare": "lerna run prepare",
-    "vercel-setup": "npm i -g npm@latest && npm install"
+    "vercel-setup": "npm i -g npm@latest && npm install --unsafe-perm"
   },
   "devDependencies": {
     "concurrently": "5.3.0",

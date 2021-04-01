@@ -11,6 +11,7 @@ the twist with "web-desktop-environment" compare to other desktop-environments i
  - interface for a cloud server (can possibly be used as a replacement for a control panel)
  - interface for small/low power computers like the Raspberry Pi zero
  - interface for controlling your computer over a long distance 
+ - interface for a developemt server  
 
 ## The technologies behind "web-desktop-devironment"
 both the server and are build using a react framework called ["react-fullstack"](https://github.com/shmuelhizmi/react-fullstack/tree/master/packages/fullstack) which is a framework for building fast react applications that rely on a tight reactive connection between the client and the server.
@@ -41,7 +42,8 @@ if you have any new feature or existing feature you want to create or improve fe
 :heavy_check_mark: Explorer  
 :heavy_check_mark: Settings / System info  
 :heavy_check_mark: Notepad  
-:heavy_check_mark: Media app (still bad lol)  
+:heavy_check_mark: VS-Code  
+:heavy_check_mark: Media app (early developemnt)  
 
 # To do
 
@@ -51,13 +53,14 @@ if you have any new feature or existing feature you want to create or improve fe
 
 ## Apps
 :comet: Task manager  
+:comet: Music Player  
+:comet: x-server integration
 :comet: Applications store with user made apps ( will take quite a long time to implement )  
 
 ## Run
 
 **quick run**
-1. `npm i`
-2. `npm start`
+1 `npm start`
 
 ## Advanced run
 
@@ -65,11 +68,11 @@ if you have any new feature or existing feature you want to create or improve fe
 1. `npm i -g lerna`
 2. `lerna bootstrap`
 
-**run flow (server)**
-1. `cd packages/flow`
+**run server**
+1. `cd packages/development-edition-server` or `cd packages/home-edition-server`
 2. `npm start`
 
 
-**run views (web server)**
+**run client**
 1. `cd packages/views`
 2. `npm start`

@@ -138,7 +138,7 @@ const App = () => {
 						onReload={emptyFunction}
 						setSettings={async (newSettings) => {
 							setBackground(newSettings.desktop.background);
-							if (newSettings.desktop.theme !== theme.type) {
+							if (newSettings.desktop.theme !== theme.name) {
 								if (newSettings.desktop.theme === "custom") {
 									setTheme(newSettings.desktop.customTheme || Themes.dark);
 								} else {

@@ -33,7 +33,13 @@ class Iframe extends Component<
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
 	render() {
-		const { classes, host, port, path } = this.props;
+		const {
+			classes,
+			host,
+			port,
+			path,
+			https = reactFullstackConnectionManager.https,
+		} = this.props;
 
 		return (
 			<iframe
@@ -41,9 +47,9 @@ class Iframe extends Component<
 				allowTransparency
 				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; allow-popups; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"
 				className={classes.root}
-				src={`http://${host || reactFullstackConnectionManager.host}${
-					port ? ":" + port : ""
-				}${path || ""}`}
+				src={`${https ? "https" : "http"}://${
+					host || reactFullstackConnectionManager.host
+				}${port ? ":" + port : ""}${path || ""}`}
 			/>
 		);
 	}

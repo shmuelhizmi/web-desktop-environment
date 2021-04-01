@@ -815,7 +815,13 @@ class Explorer extends Component<
 																	this.selectedFile.fullPath
 																).then((result) => {
 																	this.setState({
-																		downloadUrl: `http://${reactFullstackConnectionManager.host}:${result.port}${result.path}`,
+																		downloadUrl: `${
+																			reactFullstackConnectionManager.https
+																				? "https"
+																				: "http"
+																		}://${
+																			reactFullstackConnectionManager.host
+																		}:${result.port}${result.path}`,
 																	});
 																});
 															}

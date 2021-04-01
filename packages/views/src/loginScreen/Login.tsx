@@ -7,7 +7,7 @@ import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Link } from "react-router-dom";
 
 interface LoginProps {
-	onLogin: (host: string, port: number) => void;
+	onLogin: (host: string, port: number, useHttps: boolean) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 			background: theme.error.dark,
 		},
 	},
+	flex: {
+		display: "flex",
+	},
 	barButtonCollaps: {
 		cursor: "pointer",
 		background: theme.success.main,
@@ -72,6 +75,7 @@ const Login = (props: LoginProps) => {
 	const classes = useStyles();
 	const [host, setHost] = useState("localhost");
 	const [port, setPort] = useState(5000);
+	const [https, setHttps] = useState(false);
 	return (
 		<div className={classes.root}>
 			<div>
@@ -91,9 +95,17 @@ const Login = (props: LoginProps) => {
 						onChange={(newValue) => setPort(Number(newValue))}
 						placeholder="port"
 					></TextField>
+					{/* <div className={classes.flex}>
+						<input
+							type="checkbox"
+							checked={https}
+							onChange={(e) => setHttps(e.target.checked)}
+						/>
+						<label>Use HTTPS</label>
+					</div> */}
 					<Button
 						variant="main"
-						onClick={() => props.onLogin(host, port)}
+						onClick={() => props.onLogin(host, port, https)}
 						color="background"
 						border
 					>

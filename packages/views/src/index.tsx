@@ -15,6 +15,7 @@ import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
+import { WebSocket } from "cors-bypass";
 
 type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
 
@@ -27,8 +28,13 @@ const viewsMap = {
 
 class ReactFullstackConnectionManager {
 	public readonly host: string;
-	constructor(host: string) {
+	public readonly https: boolean;
+	constructor(host: string, https: boolean) {
 		this.host = host;
+		this.https = https;
+		if (location.protocol.includes("https") && !this.https) {
+			window.WebSocket = WebSocket as typeof window.WebSocket;
+		}
 	}
 	connect = <V extends Views>(
 		port: number,
@@ -40,7 +46,7 @@ class ReactFullstackConnectionManager {
 		socketOptions: SocketIOClient.ConnectOpts;
 	} => {
 		return {
-			host: this.host,
+			host: `${this.https ? "https" : "http"}://${this.host}`,
 			port,
 			views: { ...viewsMap[views] },
 			socketOptions: {
@@ -52,8 +58,16 @@ class ReactFullstackConnectionManager {
 
 export let reactFullstackConnectionManager: ReactFullstackConnectionManager;
 
-export const connectToServer = (host: string, port: number, views: Views) => {
-	reactFullstackConnectionManager = new ReactFullstackConnectionManager(host);
+export const connectToServer = (
+	host: string,
+	useHttps: boolean,
+	port: number,
+	views: Views
+) => {
+	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
+		host,
+		useHttps
+	);
 	return reactFullstackConnectionManager.connect(port, views);
 };
 
@@ -83,6 +97,7 @@ const App = () => {
 													<Client<{}>
 														{...connectToServer(
 															host,
+															false,
 															Number(port),
 															"nativeHost"
 														)}
@@ -105,6 +120,7 @@ const App = () => {
 												<Client<{}>
 													{...connectToServer(
 														host,
+														false,
 														Number(port),
 														"nativeClient"
 													)}
@@ -121,6 +137,7 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
+													false,
 													Number(login.port),
 													"nativeHost"
 												)}
@@ -148,7 +165,7 @@ const App = () => {
 												value={{ host, port: Number(port) }}
 											>
 												<Client<{}>
-													{...connectToServer(host, Number(port), "web")}
+													{...connectToServer(host, false, Number(port), "web")}
 												/>
 											</ConnectionContext.Provider>
 										);
@@ -162,6 +179,7 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
+													false,
 													Number(login.port),
 													"web"
 												)}

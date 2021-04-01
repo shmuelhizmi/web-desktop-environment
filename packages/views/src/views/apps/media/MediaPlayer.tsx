@@ -60,7 +60,9 @@ class MediaPlayer extends FileViewer<
 				<div className={classes.videoAreaContanierBody}>
 					<video controls className={classes.videoArea}>
 						<source
-							src={`http://${reactFullstackConnectionManager.host}:${port}/${source}`}
+							src={`${
+								reactFullstackConnectionManager.https ? "https" : "http"
+							}://${reactFullstackConnectionManager.host}:${port}/${source}`}
 						></source>
 					</video>
 				</div>

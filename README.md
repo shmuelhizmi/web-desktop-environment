@@ -1,4 +1,4 @@
-![Web Desktop Environment](./assets/Logo.jpg)
+![Web Desktop Environment](./assets/Logo.png)
 <p align="center">
   A cross-platform desktop-environment with a web interface
 </p>

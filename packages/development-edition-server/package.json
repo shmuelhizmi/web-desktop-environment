@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -34,8 +34,8 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/interfaces": "^0.0.5",
-    "@web-desktop-environment/server-sdk": "^0.0.5",
+    "@web-desktop-environment/interfaces": "^0.0.6",
+    "@web-desktop-environment/server-sdk": "^0.0.6",
     "axios": "0.21.1",
     "code-server": "3.9.2",
     "react": "^17.0.1"

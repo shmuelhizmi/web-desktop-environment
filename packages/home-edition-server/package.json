@@ -1,7 +1,7 @@
 {
   "name": "@web-desktop-environment/home-edition-server",
-  "version": "0.0.3",
-  "main": "src/index.ts",
+  "version": "0.0.2",
+  "main": "dist/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
@@ -15,6 +15,7 @@
   "bin": {
     "web-desktop-home": "./bin/index.js"
   },
+  "files": [],
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.3",
@@ -32,6 +33,6 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/server-sdk": "^0.0.3"
+    "@web-desktop-environment/server-sdk": "^0.0.2"
   }
 }

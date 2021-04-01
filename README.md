@@ -1,4 +1,4 @@
-![Web Desktop Environment](./assets/Logo.png)
+![Web Desktop Environment](./assets/Logo.jpg)
 <p align="center">
   A cross-platform desktop-environment with a web interface
 </p>
@@ -18,11 +18,11 @@ both the server and are build using a react framework called ["react-fullstack"]
 
 ## Screenshots
 
-![dark theme](./assets/dark_theme_screenshot.png)
-![transparent](./assets/transparent_theme_screenshot.png)
-![nord theme](./assets/nord_theme_screenshot.png)
-![pwa](./assets/pwa_app_screenshot.png)
-![light theme](./assets/light_theme_screenshot.png)
+![dark theme](./assets/dark_theme_screenshot.jpg)
+![transparent](./assets/transparent_theme_screenshot.jpg)
+![nord theme](./assets/nord_theme_screenshot.jpg)
+![pwa](./assets/pwa_app_screenshot.jpg)
+![light theme](./assets/light_theme_screenshot.jpg)
 
 
 # Contribute

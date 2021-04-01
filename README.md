@@ -17,11 +17,11 @@ both the server and are build using a react framework called ["react-fullstack"]
 
 ## Screenshots
 
-![transparent dark](./assets/dark_transparent_theme_screenshot.png)
 ![dark theme](./assets/dark_theme_screenshot.png)
 ![transparent](./assets/transparent_theme_screenshot.png)
-![light theme](./assets/light_theme_screenshot.png)
+![nord theme](./assets/nord_theme_screenshot.png)
 ![pwa](./assets/pwa_app_screenshot.png)
+![light theme](./assets/light_theme_screenshot.png)
 
 
 # Contribute

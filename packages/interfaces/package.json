@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/interfaces",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.ts",
   "types": "lib",
   "author": "shmuelhizmi",

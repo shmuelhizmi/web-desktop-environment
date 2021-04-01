@@ -1,6 +1,7 @@
-import type * as Icons from "react-icons/all";
+import type * as FcIcons from "react-icons/fc";
+import type * as VSCIcons from "react-icons/vsc";
 
-export type IconNames = keyof typeof Icons;
+export type IconNames = keyof typeof FcIcons | keyof typeof VSCIcons;
 
 export type NativeIconTypes =
   | "AntDesign"

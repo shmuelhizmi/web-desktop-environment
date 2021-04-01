@@ -36,7 +36,7 @@ class VSCode extends Component<VSCodeInput, VSCodeState> {
       `--port=${port}`,
       `--auth=none`,
       "--host=0.0.0.0",
-    ]);
+    ], { cwd: __dirname });
     const waitForVscodeToLoad = () => {
       if (!this.willUnmount) {
         axios

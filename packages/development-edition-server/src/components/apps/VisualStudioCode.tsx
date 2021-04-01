@@ -5,7 +5,7 @@ import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { App } from "@web-desktop-environment/server-sdk/lib/components/apps";
 import { homedir } from "os";
 import * as cp from "child_process";
-import axios from 'axios'
+import axios from "axios";
 
 interface VSCodeInput {
   process?: string;
@@ -29,21 +29,31 @@ class VSCode extends Component<VSCodeInput, VSCodeState> {
   willUnmount = false;
 
   runVsCodeCli = (port: number): void => {
-    this.vscode = cp.spawn("code-server", [`--port=${port}`, `--auth=none`, "--host=0.0.0.0"]);
+    this.vscode = cp.spawn("npm", [
+      "run",
+      "code-server",
+      "--",
+      `--port=${port}`,
+      `--auth=none`,
+      "--host=0.0.0.0",
+    ]);
     const waitForVscodeToLoad = () => {
       if (!this.willUnmount) {
-        axios.get("http://localhost:" + port).then(() => !this.willUnmount && this.setState({ isLoaded: true })).catch(() => {
-          setTimeout(() => waitForVscodeToLoad(), 250);
-        })
+        axios
+          .get("http://localhost:" + port)
+          .then(() => !this.willUnmount && this.setState({ isLoaded: true }))
+          .catch(() => {
+            setTimeout(() => waitForVscodeToLoad(), 250);
+          });
       }
-    }
+    };
     waitForVscodeToLoad();
   };
 
   componentWillUnmount = () => {
     this.willUnmount = true;
     this.vscode.kill();
-  }
+  };
 
   componentDidMount = () => {
     this.desktopManager.portManager.getPort().then((port) => {

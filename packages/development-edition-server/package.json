@@ -10,7 +10,11 @@
     "build": "tsc",
     "build:server": "npm run build",
     "lint": "eslint .",
-    "code-server": "code-server"
+    "code-server": "code-server",
+    "prepublish": "npm run build"
+  },
+  "bin": {
+    "web-desktop-dev": "./bin/index.js"
   },
   "devDependencies": {
     "@types/fs-extra": "5.0.2",

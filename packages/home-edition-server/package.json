@@ -9,7 +9,11 @@
     "start": "nodemon .",
     "build": "tsc",
     "build:server": "npm run build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepublish": "npm run build"
+  },
+  "bin": {
+    "web-desktop:home": "./bin/index.js"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",

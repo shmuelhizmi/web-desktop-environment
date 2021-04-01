@@ -8,7 +8,7 @@
 		"esModuleInterop": true,
 	},
 	"include": [
-		"lib/**/*"
+		"src/**/*"
 	],
 	"exclude": []
 }

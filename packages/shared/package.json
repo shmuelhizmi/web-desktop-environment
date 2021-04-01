@@ -1,12 +1,11 @@
 {
   "name": "@web-desktop-environment/shared",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "lib/index.ts",
   "types": "lib",
   "author": "shmuelhizmi",
   "license": "none",
   "private": true,
-  "dependencies": {},
   "devDependencies": {
     "typescript": "^4.2.3"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-sdk",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -46,7 +46,7 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "^0.2.1",
     "@react-fullstack/render": "^0.2.1",
-    "@web-desktop-environment/interfaces": "^0.0.6",
+    "@web-desktop-environment/interfaces": "^0.1.0",
     "broadcast-channel": "3.5.3",
     "chalk": "4.1.0",
     "fs-extra": "9.0.1",

@@ -16,6 +16,11 @@
   "bin": {
     "web-desktop-dev": "./bin/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/development-edition-server"
+  },
   "devDependencies": {
     "@types/fs-extra": "5.0.2",
     "@types/node": "^12.0.0",

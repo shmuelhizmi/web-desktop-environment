@@ -38,6 +38,11 @@
   "peerDependencies": {
     "@react-fullstack/fullstack": "^0.2.1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/server-sdk"
+  },
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "^0.2.1",
     "@react-fullstack/render": "^0.2.1",

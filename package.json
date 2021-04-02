@@ -10,7 +10,7 @@
     "start": "npm install --unsafe-perm && npm run dev",
     "lint": "lerna run lint",
     "prepare": "lerna run prepare",
-    "vercel-setup": "npm i -g npm@latest && npm install --unsafe-perm --ignore-scripts --silent",
+    "vercel-setup": "npm i -g npm@latest && npm install --unsafe-perm --ignore-scripts --silent && lerna run prepare",
     "mirror-readme": "lerna exec 'cp ../../README.md ./ && cp -r ../../assets/* ./assets/' "
   },
   "devDependencies": {

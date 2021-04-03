@@ -21,6 +21,10 @@ import { ConnectionContext } from "@root/contexts";
 import StateComponent from "@components/stateComponent";
 import { transparent } from "@utils/colors";
 import { connect } from "@root/gtk-broadway-display/index";
+import {
+	GTKBridgeEmitter,
+	status as GTKConnectionStatus,
+} from "@root/gtk-broadway-display/state";
 
 export const windowsBarHeight = 55;
 
@@ -239,8 +243,6 @@ const useWindowBarStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
-let gtkServerIsConnected = false;
-
 class Desktop extends Component<
 	DesktopInterface,
 	{},
@@ -267,20 +269,40 @@ class Desktop extends Component<
 		);
 	};
 
-	checkIfGTKServerNeedToStart = () => {
+	willUnmount = false;
+
+	componentWillUnmount = () => {
+		this.willUnmount = true;
+	};
+
+	componentDidMount = () => {
+		GTKBridgeEmitter.on("status", () => {
+			this.forceUpdate();
+		});
+
+		this.tryToStartGtkServer();
+	};
+
+	componentDidUpdate = () => {
+		this.tryToStartGtkServer();
+	};
+
+	tryToStartGtkServer = () => {
 		const { gtkBridge } = this.props;
-		if (!gtkServerIsConnected && gtkBridge) {
-			gtkServerIsConnected = true;
-			connect(
-				reactFullstackConnectionManager.host,
-				reactFullstackConnectionManager.https,
-				gtkBridge.port
-			);
+		if (GTKConnectionStatus === "disconnected" && gtkBridge) {
+			try {
+				connect(
+					reactFullstackConnectionManager.host,
+					reactFullstackConnectionManager.https,
+					gtkBridge.port
+				);
+			} catch (e) {
+				/* no handle */
+			}
 		}
 	};
 
 	render() {
-		this.checkIfGTKServerNeedToStart();
 		const { background, openApps, classes, apps } = this.props;
 		return (
 			<div className={classes.root} style={{ background }}>

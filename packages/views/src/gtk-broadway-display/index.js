@@ -3,6 +3,8 @@
 
 const { inflateRaw } = require("zlib");
 const { default: WindowManager } = require("../state/WindowManager");
+const { GTKBridgeEmitter } = require("./state");
+
 
 const rootDiv = document.createElement("div");
 document.body.appendChild(rootDiv);
@@ -111,7 +113,7 @@ var windowWithMouse = 0;
 var surfaces = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
-var inputSocket = null;
+export var inputSocket = null;
 var debugDecoding = false;
 var fakeInput = null;
 var showKeyboard = false;
@@ -168,7 +170,7 @@ function addWindow(surface) {
 	let layer = 0;
 	const id = WindowManager.addWindow(
 		"gnome-window",
-		{ type: "icon", icon: "FcProcess" },
+		{ type: "icon", icon: "VscServerProcess" },
 		{ minimized: false }
 	);
 	WindowManager.emitter.on(
@@ -190,7 +192,7 @@ function addWindow(surface) {
 	};
 	doBeforeEveryFrame();
 	const i = setInterval(() => {
-		if (!surface.toplevelElement) {
+		if (!rootDiv.contains(surface.toplevelElement)) {
 			WindowManager.closeWindow(id);
 			clearInterval(i);
 		}
@@ -545,7 +547,7 @@ function decodeBuffer(context, oldData, w, h, data, debug) {
 					break;
 
 				default:
-					alert("Unknown buffer commend " + cmd);
+					console.error("Unknown buffer commend " + cmd);
 			}
 		}
 	}
@@ -598,8 +600,8 @@ function handleCommands(cmd) {
 		lastSerial = cmd.get_32();
 		switch (command) {
 			case "D":
-				alert("disconnected");
 				inputSocket = null;
+				GTKBridgeEmitter.call("status", "disconnected");
 				break;
 
 			case "s": // create new surface
@@ -684,7 +686,9 @@ function handleCommands(cmd) {
 				break;
 
 			default:
-				alert("Unknown op " + command);
+				console.error(
+					"Unknown op " + command
+				);
 		}
 	}
 	return true;
@@ -2834,7 +2838,6 @@ function setupDocument(document) {
 		document.addEventListener("keypress", onKeyPress, false);
 		document.addEventListener("keyup", onKeyUp, false);
 
-
 		document.addEventListener("DOMMouseScroll", onMouseWheel, false);
 		document.addEventListener("mousewheel", onMouseWheel, false);
 		document.addEventListener("touchstart", onTouchStart, false);
@@ -2865,13 +2868,17 @@ export function connect(host, https, port) {
 		`${https ? "wss" : "ws"}://${host}:${port}/socket`,
 		"broadway"
 	);
+	GTKBridgeEmitter.call("status", "connecting");
 	ws.binaryType = "arraybuffer";
 
 	ws.onopen = function () {
+		GTKBridgeEmitter.call("status", "connected");
 		inputSocket = ws;
 	};
 	ws.onclose = function () {
-		if (inputSocket != null) alert("disconnected");
+		if (inputSocket != null) {
+			GTKBridgeEmitter.call("status", "disconnected");
+		}
 		inputSocket = null;
 	};
 	ws.onmessage = function (event) {

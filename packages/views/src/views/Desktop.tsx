@@ -20,6 +20,7 @@ import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
 import StateComponent from "@components/stateComponent";
 import { transparent } from "@utils/colors";
+import { connect } from "@root/gtk-broadway-display/index";
 
 export const windowsBarHeight = 55;
 
@@ -238,6 +239,8 @@ const useWindowBarStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
+let gtkServerIsConnected = false;
+
 class Desktop extends Component<
 	DesktopInterface,
 	{},
@@ -264,7 +267,20 @@ class Desktop extends Component<
 		);
 	};
 
+	checkIfGTKServerNeedToStart = () => {
+		const { gtkBridge } = this.props;
+		if (!gtkServerIsConnected && gtkBridge) {
+			gtkServerIsConnected = true;
+			connect(
+				reactFullstackConnectionManager.host,
+				reactFullstackConnectionManager.https,
+				gtkBridge.port
+			);
+		}
+	};
+
 	render() {
+		this.checkIfGTKServerNeedToStart();
 		const { background, openApps, classes, apps } = this.props;
 		return (
 			<div className={classes.root} style={{ background }}>

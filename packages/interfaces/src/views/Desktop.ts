@@ -17,8 +17,13 @@ export interface App {
   description: string;
 }
 
+export interface GTKBridge {
+	port: number;
+}
+
 export interface Input {
   background: string;
+  gtkBridge?: GTKBridge;
   nativeBackground: string;
   apps: App[];
   openApps: OpenApp[];

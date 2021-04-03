@@ -3,12 +3,16 @@ import Component from "@component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { AppsManager } from "@apps/index";
-import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import {
+	OpenApp,
+	GTKBridge,
+} from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import {
 	ThemeType,
 	Theme,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Input as DesktopProps } from "@web-desktop-environment/interfaces/lib/views/Desktop";
+import { GTKBridge as GTKBridgeConnector } from "@utils/gtkBridge";
 
 interface DesktopState {
 	background: string;
@@ -16,6 +20,7 @@ interface DesktopState {
 	openApps: OpenApp[];
 	theme: ThemeType;
 	customTheme: Theme;
+	gtkBridgeConnection?: GTKBridge;
 }
 
 class Desktop extends Component<{}, DesktopState> {
@@ -59,6 +64,15 @@ class Desktop extends Component<{}, DesktopState> {
 				})),
 			});
 		});
+		const connectToGTK = new GTKBridgeConnector(
+			this.logger,
+			this.desktopManager
+		);
+		connectToGTK.initialize().then((connection) => {
+			if (connection.success) {
+				this.setState({ gtkBridgeConnection: { port: connection.port } });
+			}
+		});
 	};
 	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
 		this.logger.info(`launch app ${app.name}`);
@@ -93,12 +107,14 @@ class Desktop extends Component<{}, DesktopState> {
 			openApps,
 			customTheme,
 			theme,
+			gtkBridgeConnection,
 		} = this.state;
 		return (
 			<ViewsProvider<ViewInterfacesType>>
 				{({ Desktop: DesktopView, ThemeProvider }) => (
 					<ThemeProvider theme={theme} customTheme={customTheme}>
 						<DesktopView
+							gtkBridge={gtkBridgeConnection}
 							apps={appsProp}
 							openApps={openApps}
 							background={background}

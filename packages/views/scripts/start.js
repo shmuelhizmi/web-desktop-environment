@@ -117,7 +117,6 @@ checkBrowsers(paths.appPath, isInteractive)
 		);
 		const devServer = new WebpackDevServer(compiler, {
 			...serverConfig,
-			https: true,
 		});
 		// Launch WebpackDevServer.
 		devServer.listen(port, HOST, (err) => {

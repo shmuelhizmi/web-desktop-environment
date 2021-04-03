@@ -248,8 +248,6 @@ class Window extends Component<
 		}
 	};
 
-	private intervalsToClear: NodeJS.Timeout[] = [];
-
 	private willUnmount = false;
 
 	componentDidMount() {
@@ -298,19 +296,6 @@ class Window extends Component<
 		});
 		windowManager.reloadWindowsLayers();
 
-		this.intervalsToClear.push(
-			setInterval(() => {
-				const activeElement = document.activeElement;
-				if (
-					this.wrapperRef &&
-					activeElement &&
-					!this.state.isActive &&
-					this.wrapperRef.contains(activeElement)
-				) {
-					this.setActive();
-				}
-			}, 50)
-		);
 		const switchPosition = () => {
 			if (!this.willUnmount) {
 				this.switchToAbsolutePosition();
@@ -323,7 +308,6 @@ class Window extends Component<
 	componentWillUnmount = () => {
 		this.willUnmount = true;
 		windowManager.closeWindow(this.id);
-		this.intervalsToClear.forEach(clearInterval);
 	};
 
 	handleClickOutside = () => {

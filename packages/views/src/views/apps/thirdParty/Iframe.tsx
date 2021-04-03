@@ -32,6 +32,30 @@ class Iframe extends Component<
 	{},
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
+	private iframeRef = React.createRef<HTMLIFrameElement>();
+
+	private intervalsToClear: NodeJS.Timeout[] = [];
+
+	componentDidMount = () => {
+		this.intervalsToClear.push(
+			setInterval(() => {
+				const activeElement = document.activeElement;
+				if (
+					this.iframeRef.current &&
+					activeElement &&
+					activeElement !== document.body &&
+					this.iframeRef.current === activeElement
+				) {
+					this.iframeRef.current.click();
+				}
+			}, 50)
+		);
+	};
+
+	componentWillUnmount = () => {
+		this.intervalsToClear.forEach(clearInterval);
+	};
+
 	render() {
 		const {
 			classes,
@@ -43,6 +67,7 @@ class Iframe extends Component<
 
 		return (
 			<iframe
+				ref={this.iframeRef}
 				allowFullScreen
 				allowTransparency
 				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; allow-popups; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"

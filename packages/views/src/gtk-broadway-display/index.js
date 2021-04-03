@@ -182,7 +182,6 @@ function addWindow(surface) {
 	surface.toplevelElement.addEventListener("mousedown", () => {
 		WindowManager.setActiveWindow(id);
 	});
-	WindowManager.setActiveWindow(id);
 	WindowManager.reloadWindowsLayers();
 	surface.toplevelElement.focus();
 	const doBeforeEveryFrame = () => {
@@ -2659,7 +2658,7 @@ function cancelEvent(ev) {
 	// ev.cancelBubble = true;
 	// ev.cancel = true;
 	// ev.returnValue = false;
-	return true;
+	// return false;
 }
 
 function onMouseWheel(ev) {
@@ -2817,16 +2816,25 @@ function setupDocument(document) {
 	document.oncontextmenu = function () {
 		return false;
 	};
-	document.onmousemove = onMouseMove;
-	document.onmouseover = onMouseOver;
-	document.onmouseout = onMouseOut;
-	document.onmousedown = onMouseDown;
-	document.onmouseup = onMouseUp;
-	document.onkeydown = onKeyDown;
-	document.onkeypress = onKeyPress;
-	document.onkeyup = onKeyUp;
+	// document.onmousemove = onMouseMove;
+	// document.onmouseover = onMouseOver;
+	// document.onmouseout = onMouseOut;
+	// document.onmousedown = onMouseDown;
+	// document.onmouseup = onMouseUp;
+	// document.onkeydown = onKeyDown;
+	// document.onkeypress = onKeyPress;
+	// document.onkeyup = onKeyUp;
 
 	if (document.addEventListener) {
+		document.addEventListener("mousemove", onMouseMove, false);
+		document.addEventListener("mouseover", onMouseOver, false);
+		document.addEventListener("mousedown", onMouseDown, false);
+		document.addEventListener("mouseup", onMouseUp, false);
+		document.addEventListener("keydown", onKeyDown, false);
+		document.addEventListener("keypress", onKeyPress, false);
+		document.addEventListener("keyup", onKeyUp, false);
+
+
 		document.addEventListener("DOMMouseScroll", onMouseWheel, false);
 		document.addEventListener("mousewheel", onMouseWheel, false);
 		document.addEventListener("touchstart", onTouchStart, false);

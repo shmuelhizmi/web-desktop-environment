@@ -11,7 +11,7 @@ now we will install "web-desktop-environment" with the following commands  -
 After the "web-desktop-environment" server is installed we can run it using
 the command `web-desktop-home` or `web-desktop-dev` for the development edition of "web-desktop-environment".  
   
-Now that "web-desktop-environment" is running we can enter "https://web-desktop-environment.vercel.app" and connect to it.  
+Now that "web-desktop-environment" is running we can enter "https://www.web-desktop.app" and connect to it.  
 to connect to the server we will need to enter the server host and port,  
 if we are running the server locally we can keep the default `localhost` host, otherwise enter the server host IP,  
 to get the server port we can look at the server console output, it should print somewhere in the start something along the line of `[ root ]: starting web-desktop-environment on port $PORT 0ms` we need to copy the value that is present in the place of `$PORT` to the connection web-site.  

@@ -15,7 +15,6 @@ import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
-import { WebSocket } from "cors-bypass";
 
 type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
 
@@ -32,9 +31,6 @@ class ReactFullstackConnectionManager {
 	constructor(host: string, https: boolean) {
 		this.host = host;
 		this.https = https;
-		if (location.protocol.includes("https") && !this.https) {
-			window.WebSocket = WebSocket as typeof window.WebSocket;
-		}
 	}
 	connect = <V extends Views>(
 		port: number,

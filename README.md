@@ -4,20 +4,19 @@
 </p>
 
 # Installation and run guide
-
-first we need to make sure we have node and npm installed, I recommend using node 14.x with npm 7.x.  
+First, we need to make sure we have node and npm installed, I recommend using node 14.x with npm 7.x.  
 now we will install "web-desktop-environment" with the following commands  -  
 `npm install @web-desktop-environment/home-edition-server` or `npm install @web-desktop-environment/development-edition-server --unsafe-perm` for the development edition of "web-desktop-environment".  
   
-after the "web-desktop-environment" server is installed we can run it using
+After the "web-desktop-environment" server is installed we can run it using
 the command `web-desktop-home` or `web-desktop-dev` for the development edition of "web-desktop-environment".  
   
-now that "web-desktop-environment" is running we can enter "https://web-desktop-environment.vercel.app" and connect to it.  
-to connect to server we will need to enter the server host and port,  
-if we are running the sever locally we can keep the default `localhost` host, otherwise enter the server host ip,  
+Now that "web-desktop-environment" is running we can enter "https://www.web-desktop.app" and connect to it.  
+to connect to the server we will need to enter the server host and port,  
+if we are running the server locally we can keep the default `localhost` host, otherwise enter the server host IP,  
 to get the server port we can look at the server console output, it should print somewhere in the start something along the line of `[ root ]: starting web-desktop-environment on port $PORT 0ms` we need to copy the value that is present in the place of `$PORT` to the connection web-site.  
 
-click on the "Login" button and we should now be done 🎊🎊🎊 - if nothing gone wrong we should now be able to see our web desktop interface in the browser!
+Click on the "Login" button and we should now be done 🎊🎊🎊 - if nothing went wrong we should now be able to see our web desktop interface in the browser!
 
 # What is a Web Desktop Environment
 

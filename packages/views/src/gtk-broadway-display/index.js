@@ -602,6 +602,7 @@ function handleCommands(cmd) {
 			case "D":
 				inputSocket = null;
 				GTKBridgeEmitter.call("status", "disconnected");
+				rootDiv.innerHTML = "";
 				break;
 
 			case "s": // create new surface
@@ -2863,6 +2864,7 @@ function start() {
 	sendInput("d", [w, h]);
 }
 
+
 export function connect(host, https, port) {
 	const ws = new WebSocket(
 		`${https ? "wss" : "ws"}://${host}:${port}/socket`,
@@ -2878,6 +2880,7 @@ export function connect(host, https, port) {
 	ws.onclose = function () {
 		if (inputSocket != null) {
 			GTKBridgeEmitter.call("status", "disconnected");
+			rootDiv.innerHTML = "";
 		}
 		inputSocket = null;
 	};

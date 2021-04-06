@@ -70,7 +70,8 @@ class Iframe extends Component<
 				ref={this.iframeRef}
 				allowFullScreen
 				allowTransparency
-				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; allow-popups; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"
+				sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-scripts allow-same-origin"
+				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"
 				className={classes.root}
 				src={`${https ? "https" : "http"}://${
 					host || reactFullstackConnectionManager.host

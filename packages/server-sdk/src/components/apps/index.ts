@@ -21,16 +21,16 @@ export interface App<Params> {
 }
 
 export class AppsManager {
-	private static registerdApps = new Map<string, App<any>>();
+	private static registeredApps = new Map<string, App<any>>();
 
 	public static registerApp(apps: Record<string, App<any>>) {
 		for (const appName in apps) {
-			AppsManager.registerdApps.set(appName, apps[appName]);
+			AppsManager.registeredApps.set(appName, apps[appName]);
 		}
 	}
 
 	public static get apps() {
-		return new Map(AppsManager.registerdApps);
+		return new Map(AppsManager.registeredApps);
 	}
 }
 

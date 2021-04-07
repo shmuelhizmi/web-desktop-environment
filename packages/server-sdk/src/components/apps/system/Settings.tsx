@@ -29,9 +29,9 @@ class Settings extends Component<{}, SettingsState> {
 				brandName: cpuInfo.brand,
 				manufacturer: cpuInfo.manufacturer,
 				physicalCores: cpuInfo.physicalCores,
-				speed: cpuInfo.speed,
-				speedMax: cpuInfo.speedmax,
-				speedMin: cpuInfo.speedmin,
+				speed: cpuInfo.speed.toString(),
+				speedMax: cpuInfo.speedMax.toString(),
+				speedMin: cpuInfo.speedMin.toString(),
 			},
 			os: {
 				hostname: osInformation.hostname,

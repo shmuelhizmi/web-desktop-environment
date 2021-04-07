@@ -27,7 +27,6 @@ class Client<ViewsInterface extends Views> extends React.Component<
 	render() {
 		const { views } = this.props;
 		return (
-			//@ts-ignore
 			<FullstackClient<ViewsInterface> views={views} transport={this.socket} />
 		);
 	}

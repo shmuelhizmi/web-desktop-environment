@@ -75,7 +75,7 @@ const Login = (props: LoginProps) => {
 	const classes = useStyles();
 	const [host, setHost] = useState("localhost");
 	const [port, setPort] = useState(5000);
-	const [https, setHttps] = useState(false);
+	const [https /* , setHttps */] = useState(false);
 	return (
 		<div className={classes.root}>
 			<div>

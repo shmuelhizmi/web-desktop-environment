@@ -170,7 +170,7 @@ function addWindow(surface) {
 	let layer = 0;
 	const id = WindowManager.addWindow(
 		"gnome-window",
-		{ type: "icon", icon: "VscServerProcess" },
+		{ type: "icon", icon: "FcLinux" },
 		{ minimized: false }
 	);
 	WindowManager.emitter.on(
@@ -607,6 +607,7 @@ function handleCommands(cmd) {
 
 			case "s": // create new surface
 				id = cmd.get_16();
+				console.log(id);
 				x = cmd.get_16s();
 				y = cmd.get_16s();
 				w = cmd.get_16();

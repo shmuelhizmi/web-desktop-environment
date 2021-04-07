@@ -624,10 +624,12 @@ class Window extends Component<
 						}
 					}}
 					onDragStop={() => {
-						this.setState({
-							useLocalWindowState: false,
-							localWindowState: undefined,
-						});
+						this.updateWindowPositionORSizeQueuer.idle().then(() =>
+							this.setState({
+								useLocalWindowState: false,
+								localWindowState: undefined,
+							})
+						);
 					}}
 					defaultSize={size}
 					onResizeStart={() =>
@@ -643,11 +645,18 @@ class Window extends Component<
 					}
 					onResizeStop={() => {
 						this.lastResizeDelta = { height: 0, width: 0 };
-						this.setState({
-							useLocalWindowState: false,
-							isResizing: false,
-							localWindowState: undefined,
-						});
+						this.setState(
+							{
+								isResizing: false,
+							},
+							() =>
+								this.updateWindowPositionORSizeQueuer.idle().then(() => {
+									this.setState({
+										useLocalWindowState: false,
+										localWindowState: undefined,
+									});
+								})
+						);
 					}}
 					onResize={this.onResize}
 					style={{ zIndex, ...this.getWindowTransformStyles() }}

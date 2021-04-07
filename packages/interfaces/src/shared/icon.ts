@@ -27,10 +27,6 @@ export type Icon =
   | {
       icon: string;
       type: "img";
-    }
-  | {
-      type: "text";
-      icon: string;
     };
 
 export type NativeIcon = { type: NativeIconTypes; icon: string; };

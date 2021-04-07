@@ -1,4 +1,4 @@
-import { View } from "@react-fullstack/fullstack";
+import type { View } from "@react-fullstack/fullstack";
 
 export interface Input {
   port: number;

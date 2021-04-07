@@ -1,6 +1,6 @@
-import { View } from "@react-fullstack/fullstack";
-import { Settings } from "../../../shared/settings";
-import { PartialPartial } from "../../../shared/types";
+import type { View } from "@react-fullstack/fullstack";
+import type { Settings } from "../../../shared/settings";
+import type { PartialPartial } from "../../../shared/types";
 
 export interface SystemInformation {
   cpu: {

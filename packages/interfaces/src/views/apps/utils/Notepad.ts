@@ -1,5 +1,5 @@
-import { View } from "@react-fullstack/fullstack";
-import { FileViewerBase } from "../../../shared/fileViewer";
+import type { View } from "@react-fullstack/fullstack";
+import type { FileViewerBase } from "../../../shared/fileViewer";
 
 export interface Input extends FileViewerBase {
   defaultValue: string;

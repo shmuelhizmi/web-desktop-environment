@@ -1,5 +1,5 @@
-import { View } from "@react-fullstack/fullstack";
-import { Icon, NativeIcon } from "../shared/icon";
+import type { View } from "@react-fullstack/fullstack";
+import type { Icon, NativeIcon } from "../shared/icon";
 
 export interface OpenApp {
   port: number;

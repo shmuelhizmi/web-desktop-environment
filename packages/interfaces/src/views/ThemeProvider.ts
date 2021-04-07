@@ -1,5 +1,5 @@
-import { View } from "@react-fullstack/fullstack";
-import { ThemeType, Theme } from "../shared/settings";
+import type { View } from "@react-fullstack/fullstack";
+import type { ThemeType, Theme } from "../shared/settings";
 
 export interface Input {
   theme: ThemeType;

@@ -1,6 +1,6 @@
-import { View } from "@react-fullstack/fullstack";
-import { Icon } from "../shared/icon";
-import { Window } from "../shared/window";
+import type { View } from "@react-fullstack/fullstack";
+import type { Icon } from "../shared/icon";
+import type { Window } from "../shared/window";
 
 export interface Input {
   title: string;

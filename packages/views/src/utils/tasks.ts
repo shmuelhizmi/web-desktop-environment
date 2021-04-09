@@ -2,6 +2,7 @@ import Emitter from "./Emitter";
 
 export const lastTaskQueuer = () => {
 	let stop = false;
+	let isIdle = true;
 	let lastTask: undefined | (() => Promise<void>);
 
 	const continueEmitter = new Emitter<{ continue: void; idle: void }>();
@@ -15,16 +16,21 @@ export const lastTaskQueuer = () => {
 			stop = true;
 		},
 		idle() {
-			return new Promise((res) => {
+			return new Promise<void>((res) => {
+				if (isIdle) {
+					res();
+				}
 				continueEmitter.on("idle", res);
 			});
 		},
 		async start() {
 			while (!stop) {
 				if (lastTask) {
+					isIdle = false;
 					const currentTask = lastTask;
 					lastTask = undefined;
 					await currentTask();
+					isIdle = true;
 				}
 				if (!lastTask) {
 					continueEmitter.call("idle", (null as unknown) as void);

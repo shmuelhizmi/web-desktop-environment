@@ -233,8 +233,12 @@ class Window extends Component<
 					position.x = window.innerWidth - size.width;
 				}
 			}
-			if (position.y > window.innerHeight - desktopWindowsBarHeight) {
-				position.y = window.innerHeight - desktopWindowsBarHeight;
+			if (
+				position.y >
+				window.innerHeight - desktopWindowsBarHeight - windowBarHeight
+			) {
+				position.y =
+					window.innerHeight - desktopWindowsBarHeight - windowBarHeight;
 			}
 			if (position.y < 0) {
 				position.y = 0;
@@ -724,4 +728,4 @@ class Window extends Component<
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(Window);
+export default withStyles(styles, { withTheme: true, name: "Window" })(Window);

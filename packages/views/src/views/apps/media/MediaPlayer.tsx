@@ -13,7 +13,7 @@ import { reactFullstackConnectionManager } from "@root/index";
 const styles = (theme: Theme) =>
 	createStyles({
 		...makeFileViewerStyles(theme),
-		videoAreaContanier: {
+		videoAreaContainer: {
 			width: "100%",
 			height: "97%",
 			display: "flex",
@@ -21,7 +21,7 @@ const styles = (theme: Theme) =>
 			alignItems: "center",
 			overflow: "hidden",
 		},
-		videoAreaContanierBody: {
+		videoAreaContainerBody: {
 			width: "94%",
 			height: "95%",
 			borderRadius: 10,
@@ -56,8 +56,8 @@ class MediaPlayer extends FileViewer<
 	renderViewer() {
 		const { classes, source, port } = this.props;
 		return (
-			<div className={classes.videoAreaContanier}>
-				<div className={classes.videoAreaContanierBody}>
+			<div className={classes.videoAreaContainer}>
+				<div className={classes.videoAreaContainerBody}>
 					<video controls className={classes.videoArea}>
 						<source
 							src={`${
@@ -71,4 +71,6 @@ class MediaPlayer extends FileViewer<
 	}
 }
 
-export default withTheme(withStyles(styles, { withTheme: true })(MediaPlayer));
+export default withTheme(
+	withStyles(styles, { withTheme: true, name: "MediaPlayer" })(MediaPlayer)
+);

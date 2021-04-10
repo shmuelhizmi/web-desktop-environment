@@ -821,4 +821,6 @@ class Settings extends Component<
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(Settings);
+export default withStyles(styles, { withTheme: true, name: "Settings" })(
+	Settings
+);

@@ -73,4 +73,6 @@ class Notepad extends FileViewer<NotepadInterface, WithStyles<typeof styles>> {
 	}
 }
 
-export default withTheme(withStyles(styles, { withTheme: true })(Notepad));
+export default withTheme(
+	withStyles(styles, { withTheme: true, name: "Notepad" })(Notepad)
+);

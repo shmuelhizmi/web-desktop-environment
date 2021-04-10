@@ -1,4 +1,4 @@
-export type ThemeType = "transparent" | "transparentDark" | "dark" | "light" | "nord" | "custom";
+export type ThemeType = "transparent" | "transparentDark" | "dark" | "light" | "nord" | "mint" | "custom";
 
 export interface Theme {
 	name: string;
@@ -14,6 +14,7 @@ export interface Theme {
 	windowBorderColor: string;
 	windowBorder: boolean;
 	transparentBorder?: string;
+	overrides?: any; // jss overrides 
 }
 
 export interface Color {

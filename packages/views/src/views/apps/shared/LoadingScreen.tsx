@@ -144,4 +144,4 @@ class LoadingScreen extends Component<
 	}
 }
 
-export default withStyles(styles)(LoadingScreen);
+export default withStyles(styles, { name: "LoadingScreen" })(LoadingScreen);

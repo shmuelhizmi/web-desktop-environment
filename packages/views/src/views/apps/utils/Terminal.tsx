@@ -119,4 +119,6 @@ class Terminal extends Component<
 	}
 }
 
-export default withTheme(withStyles(styles, { withTheme: true })(Terminal));
+export default withTheme(
+	withStyles(styles, { withTheme: true, name: "Terminal" })(Terminal)
+);

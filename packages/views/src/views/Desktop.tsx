@@ -153,95 +153,98 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-const useWindowBarStyles = makeStyles((theme: Theme) => ({
-	windowsBar: {
-		position: "absolute",
-		animation: "$slideUp 1s",
-		bottom: 5,
-		left: 120,
-		right: 120,
-		borderRadius: 13,
-		height: windowsBarHeight,
-		display: "flex",
-		border: `1px solid ${theme.transparentBorder || "#eee2"}`,
-		backdropFilter: "blur(10px)",
-		background: transparent(
-			theme.background.transparent || theme.background.main,
-			theme.type === "transparent" ? 0.15 : 0.6
-		),
-		paddingLeft: 10,
-		boxShadow: "0 0px 3px 0px",
-		zIndex: windowManager.windowsMinMaxLayer.max + 1,
-		overflowX: "auto",
-		overflowY: "hidden",
-	},
-	"@keyframes slideUp": {
-		from: {
-			bottom: -windowsBarHeight - 5,
-		},
-		to: {
+const useWindowBarStyles = makeStyles(
+	(theme: Theme) => ({
+		windowsBar: {
+			position: "absolute",
+			animation: "$slideUp 1s",
 			bottom: 5,
+			left: 120,
+			right: 120,
+			borderRadius: 13,
+			height: windowsBarHeight,
+			display: "flex",
+			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
+			backdropFilter: "blur(10px)",
+			background: transparent(
+				theme.background.transparent || theme.background.main,
+				theme.type === "transparent" ? 0.15 : 0.6
+			),
+			paddingLeft: 10,
+			boxShadow: "0 0px 3px 0px",
+			zIndex: windowManager.windowsMinMaxLayer.max + 1,
+			overflowX: "auto",
+			overflowY: "hidden",
 		},
-	},
-	windowsBarButton: {
-		userSelect: "none",
-		fontSize: 40,
-		boxShadow: "0px 0px 10px 4px #0007",
-		transition: "border-bottom 100ms",
-		padding: 5,
-		margin: 2,
-		borderRadius: 6,
-		marginRight: 5,
-		marginLeft: 5,
-		cursor: "pointer",
-		color: theme.background.text,
-		"&:hover": {
-			background: theme.background.transparentDark || theme.background.dark,
+		"@keyframes slideUp": {
+			from: {
+				bottom: -windowsBarHeight - 5,
+			},
+			to: {
+				bottom: 5,
+			},
 		},
-	},
-	windowsBarButtonHover: {
-		position: "absolute",
-		transform: "translateY(-150%) translateX(-33%)",
-		width: 200,
-		height: 150,
-		borderRadius: 6,
-		fontSize: 20,
-		background: `${theme.background.main} !important`,
-		border: `solid 1px ${theme.windowBorderColor}`,
-		textAlign: "center",
-		animation: "$scaleUp 300ms",
-		display: "flex",
-		flexDirection: "column",
-	},
-	"@keyframes scaleUp": {
-		from: {
-			opacity: 0,
-			width: 150,
-			height: 130,
-			borderRadius: 0,
+		windowsBarButton: {
+			userSelect: "none",
+			fontSize: 40,
+			boxShadow: "0px 0px 10px 4px #0007",
+			transition: "border-bottom 100ms",
+			padding: 5,
+			margin: 2,
+			borderRadius: 6,
+			marginRight: 5,
+			marginLeft: 5,
+			cursor: "pointer",
+			color: theme.background.text,
+			"&:hover": {
+				background: theme.background.transparentDark || theme.background.dark,
+			},
 		},
-		to: {
-			opacity: 1,
+		windowsBarButtonHover: {
+			position: "absolute",
+			transform: "translateY(-150%) translateX(-33%)",
 			width: 200,
 			height: 150,
-			borderRadius: 8,
+			borderRadius: 6,
+			fontSize: 20,
+			background: `${theme.background.main} !important`,
+			border: `solid 1px ${theme.windowBorderColor}`,
+			textAlign: "center",
+			animation: "$scaleUp 300ms",
+			display: "flex",
+			flexDirection: "column",
 		},
-	},
-	windowsBarButtonActive: {
-		backdropFilter: "blur(15px)",
-		borderBottom: `${
-			theme.type === "transparent" ? theme.success.main : theme.secondary.main
-		} solid 6px !important`,
-	},
-	windowsBarButtonOpen: {
-		borderBottom: `${
-			theme.type === "transparent" ? theme.success.main : theme.secondary.main
-		} solid 3px`,
-	},
-	windowsBarButtonCloseMinimized: {
-		borderBottom: `${theme.secondary.dark} solid 3px`,
-	},
-}));
+		"@keyframes scaleUp": {
+			from: {
+				opacity: 0,
+				width: 150,
+				height: 130,
+				borderRadius: 0,
+			},
+			to: {
+				opacity: 1,
+				width: 200,
+				height: 150,
+				borderRadius: 8,
+			},
+		},
+		windowsBarButtonActive: {
+			backdropFilter: "blur(15px)",
+			borderBottom: `${
+				theme.type === "transparent" ? theme.success.main : theme.secondary.main
+			} solid 6px !important`,
+		},
+		windowsBarButtonOpen: {
+			borderBottom: `${
+				theme.type === "transparent" ? theme.success.main : theme.secondary.main
+			} solid 3px`,
+		},
+		windowsBarButtonCloseMinimized: {
+			borderBottom: `${theme.secondary.dark} solid 3px`,
+		},
+	}),
+	{ name: "WindowBar" }
+);
 
 class Desktop extends Component<
 	DesktopInterface,
@@ -483,4 +486,4 @@ export const WindowBar = ({
 	);
 };
 
-export default withStyles(styles)(Desktop);
+export default withStyles(styles, { name: "Desktop" })(Desktop);

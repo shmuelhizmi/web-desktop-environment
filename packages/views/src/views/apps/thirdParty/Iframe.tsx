@@ -81,4 +81,6 @@ class Iframe extends Component<
 	}
 }
 
-export default withTheme(withStyles(styles, { withTheme: true })(Iframe));
+export default withTheme(
+	withStyles(styles, { withTheme: true, name: "Iframe" })(Iframe)
+);

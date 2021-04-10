@@ -91,6 +91,7 @@ const App = () => {
 						]}
 						onChangeCurrentPath={emptyFunction}
 						onCopy={emptyFunction}
+						onOpen={emptyFunction}
 						onCreateFile={emptyFunction}
 						onCreateFolder={emptyFunction}
 						onDelete={emptyFunction}

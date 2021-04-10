@@ -236,6 +236,191 @@ const darkTheme: Theme = {
 	windowBorder: true,
 };
 
+const mintTheme: Theme = {
+	type: "dark",
+	name: "flat mint",
+	shadowColor: "#0000",
+	windowBorderColor: "#000",
+	windowBarColor: "#2e2e2e",
+	background: {
+		main: "#2e2e2e",
+		light: "#404040",
+		transparent: "#2e2e2ee9",
+		dark: "#242424",
+		transparentDark: "#24242499",
+		text: "#d6d6d6",
+	},
+	primary: {
+		main: "#e3e3e3",
+		transparent: "#e3e3e369",
+		light: "#fff",
+		dark: "#d6d6d6",
+		transparentDark: "#d6d6d699",
+		text: "#000",
+	},
+	secondary: {
+		main: "#90b376",
+		dark: "#5da541",
+		light: "#9ad96c",
+		transparent: "#90b37697",
+		text: "#fafcfb",
+	},
+	error: {
+		main: "#db5049ee",
+		light: "#ff354c88",
+		dark: "#f00",
+		text: "#fff",
+	},
+	success: {
+		main: "#90b376",
+		dark: "#5da541",
+		light: "#9ad96c",
+		transparent: "#90b37697",
+		text: "#fafcfb",
+	},
+	warning: {
+		main: "#ffd951",
+		light: "#ffeb51",
+		dark: "#ae9941",
+		text: "#fff",
+	},
+	windowBorder: true,
+	overrides: {
+		WindowBar: {
+			windowsBar: {
+				bottom: 0,
+				borderRadius: 0,
+				background: "#2e2e2e",
+				justifyContent: "center",
+				width: "max-content",
+				paddingLeft: 0,
+				transform: "translateX(50%)",
+				right: "50%",
+				left: "auto",
+			},
+			"@keyframes slideUp": {
+				from: {
+					bottom: -55,
+				},
+				to: {
+					bottom: 0,
+				},
+			},
+			windowsBarButton: {
+				margin: 0,
+				marginLeft: 0,
+				marginRight: 0,
+				boxShadow: "none",
+				borderRadius: 0,
+			},
+			windowsBarButtonCloseMinimized: {
+				borderBottom: "#5da541 solid 1px",
+			},
+			windowsBarButtonOpen: {
+				borderBottom: "#5da541 solid 1px",
+			},
+		},
+		Desktop: {
+			startMenu: {
+				transform: "translateX(50%)",
+				right: "50%",
+				left: "auto",
+				bottom: 60,
+				borderRadius: 0,
+				boxShadow: "none",
+				background: "#2e2e2e",
+			},
+			appCell: {
+				borderRadius: 0,
+				borderBottom: "none",
+			},
+			slideIn: {
+				animation: "none",
+			},
+			slideOut: {
+				animation: "none",
+			},
+		},
+		Window: {
+			bar: {
+				borderRadius: 0,
+			},
+			barCollapse: {
+				borderRadius: 0,
+			},
+			barButton: {
+				borderRadius: 0,
+			},
+			barButtonInactive: {
+				border: "none",
+			},
+			body: {
+				borderRadius: 0,
+			},
+		},
+		Terminal: {
+			root: {
+				borderRadius: 0,
+			},
+		},
+		LoadingScreen: {
+			root: {
+				borderRadius: 0,
+			},
+		},
+		Iframe: {
+			root: {
+				borderRadius: 0,
+			},
+		},
+		Notepad: {
+			root: {
+				borderRadius: 0,
+			},
+			headline: {
+				borderRadius: 0,
+			},
+			backButton: {
+				borderRadius: "0  !important",
+			},
+		},
+		Explorer: {
+			root: {
+				borderRadius: 0,
+			},
+			actionBar: {
+				borderRadius: 0,
+			},
+			file: {
+				borderRadius: 0,
+			},
+			breadcrumbButtonItemFirst: {
+				borderRadius: 0,
+			},
+			breadcrumbButtonItemLast: {
+				borderRadius: 0,
+			},
+		},
+		Settings: {
+			root: {
+				borderRadius: 0,
+			},
+			categorySelection: {
+				borderRadius: 0,
+			},
+			settingsBlock: {
+				borderRadius: 0,
+			},
+			category: {
+				borderRadius: 0,
+			},
+			themeButton: {
+				borderRadius: "0 !important",
+			},
+		},
+	},
+};
+
 const nordTheme: Theme = {
 	type: "dark",
 	name: "nord",
@@ -294,4 +479,5 @@ export const Themes = {
 	light: lightTheme,
 	transparent: transparentTheme,
 	transparentDark: transparentDarkTheme,
+	mint: mintTheme,
 };

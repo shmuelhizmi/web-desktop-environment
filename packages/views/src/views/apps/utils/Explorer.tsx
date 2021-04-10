@@ -535,6 +535,13 @@ class Explorer extends Component<
 		}
 	};
 
+	openSelected = () => {
+		const { currentPath, platformPathSeparator, onOpen } = this.props;
+		if (this.selectedFile) {
+			onOpen(`${currentPath}${platformPathSeparator}${this.selectedFile.name}`);
+		}
+	};
+
 	render() {
 		const {
 			classes,
@@ -599,6 +606,14 @@ class Explorer extends Component<
 										onClick={this.deleteSelected}
 									>
 										Delete
+									</div>
+								)}
+								{selectedFile !== undefined && !this.selectedFile?.isFolder && (
+									<div
+										className={classes.actionButton}
+										onClick={this.openSelected}
+									>
+										Open
 									</div>
 								)}
 								{selectedFile !== undefined && (
@@ -899,4 +914,6 @@ class Explorer extends Component<
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(Explorer);
+export default withStyles(styles, { withTheme: true, name: "Explorer" })(
+	Explorer
+);

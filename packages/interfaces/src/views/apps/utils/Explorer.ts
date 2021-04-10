@@ -25,6 +25,7 @@ export interface Input {
   files: File[];
   onUpload: (upload: Upload) => void;
   onCreateFolder: (path: string) => void;
+  onOpen: (path: string) => void;
   onCreateFile: (path: string) => void;
   onMove: (parameters: Move) => void;
   onCopy: (parameters: Move) => void;

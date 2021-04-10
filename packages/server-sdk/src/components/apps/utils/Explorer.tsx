@@ -72,6 +72,9 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 		await fs.writeFile(path, "");
 		await this.updateFiles();
 	};
+	onOpen = async (path: string) => {
+		this.desktopManager.windowManager.spawnApp("notepad", { filepath: path });
+	};
 	delete = async (file) => {
 		await fs.remove(file);
 		await this.updateFiles();
@@ -103,6 +106,13 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 			this.setState({ files })
 		);
 	};
+	onChangeCurrentPath = (path) => {
+		this.changeCurrentPath(path);
+		if (this.windowContext && this.props.isCurrentApp) {
+			this.windowContext.setWindowTitle(`explorer: ${basename(path)}`);
+		}
+	};
+
 	renderComponent() {
 		const { type } = this.props;
 		const { currentPath, files } = this.state;
@@ -114,14 +124,8 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 						files={files}
 						platformPathSeparator={sep}
 						type={type}
-						onChangeCurrentPath={(path) => {
-							this.changeCurrentPath(path);
-							if (this.windowContext && this.props.isCurrentApp) {
-								this.windowContext.setWindowTitle(
-									`explorer: ${basename(path)}`
-								);
-							}
-						}}
+						onChangeCurrentPath={this.onChangeCurrentPath}
+						onOpen={this.onOpen}
 						onCopy={this.copy}
 						onCreateFile={this.createFile}
 						onCreateFolder={this.createFolder}

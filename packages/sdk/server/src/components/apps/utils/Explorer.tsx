@@ -1,6 +1,4 @@
 import React from "react";
-import Component from "@component";
-import { ViewsProvider } from "@react-fullstack/fullstack";
 import { homedir } from "os";
 import {
 	File,
@@ -10,13 +8,14 @@ import {
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import * as fs from "fs-extra";
 import { basename, join, sep } from "path";
-import { App } from "@apps/index";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
-
+import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 interface ExplorerInput {
 	location?: string;
 	isCurrentApp?: boolean;
 	type: ExplorerViewType;
+}
+
+interface InternalExplorerInput {
 	onSelect?: (path: string) => void;
 }
 
@@ -25,12 +24,21 @@ interface ExplorerState {
 	files: File[];
 }
 
-class Explorer extends Component<ExplorerInput, ExplorerState> {
+class Explorer extends AppBase<
+	ExplorerInput,
+	ExplorerState,
+	InternalExplorerInput
+> {
 	name = "explorer";
-	state: ExplorerState = {
-		currentPath: this.props.location || homedir(),
-		files: [],
-	};
+	constructor(props: Explorer["props"]) {
+		super(props);
+		this.state = {
+			currentPath: this.props.input.location || homedir(),
+			files: [],
+			useDefaultWindow: true,
+			defaultWindowTitle: "explorer",
+		};
+	}
 	listFiles = async (currentPath: string): Promise<File[]> => {
 		const filesNames = await fs.readdir(currentPath);
 		const files = await filesNames.map(
@@ -73,7 +81,7 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 		await this.updateFiles();
 	};
 	onOpen = async (path: string) => {
-		this.desktopManager.windowManager.spawnApp("notepad", { filepath: path });
+		this.api.appsManager.launchApp("notepad", { filepath: path });
 	};
 	delete = async (file) => {
 		await fs.remove(file);
@@ -92,13 +100,16 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 		await this.updateFiles();
 	};
 	requestDownloadLink = async (path: string) => {
-		const hash = this.desktopManager.downloadManager.addFile(path);
+		const [hash, port] = await Promise.all([
+			this.api.downloadManager.addFile(path),
+			this.api.downloadManager.getDownloadManagerPort(),
+		]);
 		this.logger.info(
 			`user request download link for ${path} secret hash is ${hash}`
 		);
 		return {
 			path: `/${hash}`,
-			port: this.desktopManager.downloadManager.port,
+			port,
 		};
 	};
 	componentDidMount = () => {
@@ -108,61 +119,61 @@ class Explorer extends Component<ExplorerInput, ExplorerState> {
 	};
 	onChangeCurrentPath = (path) => {
 		this.changeCurrentPath(path);
-		if (this.windowContext && this.props.isCurrentApp) {
-			this.windowContext.setWindowTitle(`explorer: ${basename(path)}`);
-		}
+		this.setState({ defaultWindowTitle: `explorer: ${basename(path)}` });
 	};
 
-	renderComponent() {
-		const { type } = this.props;
+	renderApp: AppBase<ExplorerInput, ExplorerState>["renderApp"] = ({
+		Explorer,
+	}) => {
+		const { type } = this.props.input;
 		const { currentPath, files } = this.state;
 		return (
-			<ViewsProvider<ViewInterfacesType>>
-				{({ Explorer }) => (
-					<Explorer
-						currentPath={currentPath}
-						files={files}
-						platformPathSeparator={sep}
-						type={type}
-						onChangeCurrentPath={this.onChangeCurrentPath}
-						onOpen={this.onOpen}
-						onCopy={this.copy}
-						onCreateFile={this.createFile}
-						onCreateFolder={this.createFolder}
-						onDelete={this.delete}
-						onMove={this.move}
-						onRequestDownloadLink={this.requestDownloadLink}
-						onUpload={this.upload}
-						onSelect={this.props.onSelect}
-					/>
-				)}
-			</ViewsProvider>
+			<Explorer
+				currentPath={currentPath}
+				files={files}
+				platformPathSeparator={sep}
+				type={type}
+				onChangeCurrentPath={this.onChangeCurrentPath}
+				onOpen={this.onOpen}
+				onCopy={this.copy}
+				onCreateFile={this.createFile}
+				onCreateFolder={this.createFolder}
+				onDelete={this.delete}
+				onMove={this.move}
+				onRequestDownloadLink={this.requestDownloadLink}
+				onUpload={this.upload}
+				onSelect={this.props.propsForRunningAsChildApp?.onSelect}
+			/>
 		);
-	}
+	};
 }
 
 export { Explorer };
 
-export const explorer: App<ExplorerInput> = {
-	name: "Explorer",
-	description: "a file explorer",
-	App: Explorer,
-	defaultInput: { location: homedir(), type: "explore", isCurrentApp: true },
-	icon: {
-		type: "icon",
-		icon: "FcFolder",
-	},
-	nativeIcon: {
-		icon: "folder-multiple",
-		type: "MaterialCommunityIcons",
-	},
-	window: {
-		height: 600,
-		width: 720,
-		position: { x: 150, y: 150 },
-		maxHeight: 800,
-		maxWidth: 1200,
-		minHeight: 450,
-		minWidth: 600,
-	},
+export const registerApp = () => {
+	AppsManager.registerApp({
+		explorer: {
+			description: "a file explorer",
+			App: Explorer,
+			defaultInput: {
+				location: homedir(),
+				type: "explore",
+				isCurrentApp: true,
+			},
+			icon: {
+				type: "icon",
+				icon: "FcFolder",
+			},
+			displayName: "Explorer",
+			window: {
+				height: 600,
+				width: 720,
+				position: { x: 150, y: 150 },
+				maxHeight: 800,
+				maxWidth: 1200,
+				minHeight: 450,
+				minWidth: 600,
+			},
+		},
+	});
 };

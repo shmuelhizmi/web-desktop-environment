@@ -1,11 +1,10 @@
 import type { View } from "@react-fullstack/fullstack";
-import type { Icon, NativeIcon } from "../shared/icon";
+import type { Icon } from "../shared/icon";
 
 export interface OpenApp {
   port: number;
   name: string;
   icon: Icon;
-  nativeIcon: NativeIcon;
   id: number;
 }
 
@@ -13,7 +12,6 @@ export interface App {
   displayName: string;
   appName: string;
   icon: Icon;
-  nativeIcon: NativeIcon;
   description: string;
 }
 

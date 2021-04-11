@@ -6,6 +6,7 @@ import Emitter from "@utils/emitter";
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
 import Logger from "@utils/logger";
+import { APIClient } from "@web-desktop-environment/server-api";
 
 interface SettingsEvent {
 	onNewSettings: Settings;
@@ -55,7 +56,7 @@ export default class SettingsManager {
 		},
 	};
 
-	async initalize() {
+	async initialize() {
 		const folderExist = await fs.pathExists(this.settingsFolderPath);
 		const fileExist = await fs.pathExists(this.settingsFilePath);
 		if (folderExist && fileExist) {
@@ -74,15 +75,19 @@ export default class SettingsManager {
 			this._settings = SettingsManager.defaultSettings;
 		}
 		this._isInitialized = true;
-		this.logger.info("finish initilazing settings manager");
+		this.logger.info("finish initializing settings manager");
 		this.emitter.call("init", this.settings);
+		APIClient.settingsManager.getSetting.override(() => () => this.settings);
+		this.emitter.on("onNewSettings", (settings) =>
+			APIClient.settingsManager.call("onNewSettings", settings)
+		);
 	}
 
 	async setSettings(newSettings: PartialPartial<Settings>) {
 		if (this.isInitialized) {
 			mergeDeep<Settings>(this._settings, newSettings);
 			this.emitter.call("onNewSettings", this.settings);
-			// use sync to avoid tow setSettings call trying to write the file in the same time
+			// use sync to avoid tow setSettings call trying to write the file in the same time - TODO - replace
 			fs.writeJSONSync(this.settingsFilePath, this._settings);
 		} else {
 			await new Promise((res) => this.emitter.on("init", res));

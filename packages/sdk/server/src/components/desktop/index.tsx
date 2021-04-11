@@ -31,7 +31,6 @@ class Desktop extends Component<{}, DesktopState> {
 			.nativeBackground,
 		openApps: this.desktopManager.windowManager.runningApps.map((app) => ({
 			icon: app.icon,
-			nativeIcon: app.nativeIcon,
 			id: app.id,
 			name: app.name,
 			port: app.port,

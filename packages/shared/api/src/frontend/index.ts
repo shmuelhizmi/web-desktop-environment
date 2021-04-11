@@ -1,9 +1,11 @@
 import appsManager from "./managers/apps/appsManager";
 import settingsManager from "./managers/system/settingsManager";
-import LoggingManager from './managers/logging/loggingManager'
+import loggingManager from "./managers/logging/loggingManager";
+import downloadManager from "./managers/services/downloadManager";
 
 export default {
   appsManager,
   settingsManager,
-  LoggingManager,
+  loggingManager,
+  downloadManager,
 };

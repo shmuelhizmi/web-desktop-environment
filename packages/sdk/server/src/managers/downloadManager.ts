@@ -4,6 +4,7 @@ import * as http from "http";
 import { promises as fs } from "fs-extra";
 import { basename, extname } from "path";
 import { v4 } from "uuid";
+import { APIClient } from "@web-desktop-environment/server-api";
 
 export default class DownloadManager {
 	private logger: Logger;
@@ -14,8 +15,11 @@ export default class DownloadManager {
 	constructor(parentLogger: Logger, desktopManger: DesktopManager) {
 		this.logger = parentLogger.mount("download-manager");
 		this.desktopManager = desktopManger;
+		APIClient.downloadManager.addFile.override(() => (path: string) => ({
+			hash: this.addFile(path),
+		}));
 	}
-	public initalize = async () => {
+	public initialize = async () => {
 		this.port = await this.desktopManager.portManager.getPort();
 		this.logger.info(`starting static file server at port ${this.port}`);
 		this.server = http.createServer(async (request, response) => {

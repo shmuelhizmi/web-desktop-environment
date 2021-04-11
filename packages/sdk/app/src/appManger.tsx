@@ -13,52 +13,55 @@ import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
 
 export interface App<Input> {
 	icon: Icon;
-	nativeIcon: NativeIcon;
 	name: string;
 	displayName: string;
 	defaultInput: Input;
 	description: string;
 	window: Window;
-	App: new (props: Input & AppBaseProps<Input>) => Component<
-		Input & AppBaseProps<Input>
+	App: new (props: Input & AppBaseProps<Input, {}>) => Component<
+		Input & AppBaseProps<Input, {}>
 	>;
 }
 
 export class AppsManager {
-	private static registeredApps = new Map<string, App<unknown>>();
+	private static logger = API.loggingManager.mount("apps_manager");
 
-	public static registerApp(apps: Record<string, App<unknown>>) {
+	private static registeredApps = new Map<string, Omit<App<unknown>, "name">>();
+
+	public static registerApp(apps: Record<string, Omit<App<unknown>, "name">>) {
 		for (const appName in apps) {
 			const {
 				description,
 				icon,
-				name,
 				displayName,
 				App,
 				defaultInput,
-				nativeIcon,
 				window,
 			} = apps[appName];
 			AppsManager.registeredApps.set(appName, apps[appName]);
 			API.appsManager.registerApp(
-				{ description, displayName, icon, name },
-				(port, input) => {
+				{ description, displayName, icon, name: appName },
+				async (port, input, awaitClose) => {
+					const logger = await (await AppsManager.logger).mount(appName);
 					const { stop } = Render(
 						<Server singleInstance port={port} views={viewInterfaces}>
 							{() => (
 								<App
 									close={stop}
-									description={description}
-									displayName={displayName}
-									icon={icon}
+									appData={{
+										description,
+										displayName,
+										icon,
+										name: appName,
+										window,
+									}}
 									input={{ ...(defaultInput as object), ...input }}
-									name={name}
-									nativeIcon={nativeIcon}
-									window={window}
+									logger={logger}
 								/>
 							)}
 						</Server>
 					);
+					awaitClose.then(close);
 				}
 			);
 		}

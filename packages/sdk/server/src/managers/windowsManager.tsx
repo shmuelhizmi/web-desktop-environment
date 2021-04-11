@@ -1,16 +1,13 @@
 import React from "react";
-import { Server } from "@react-fullstack/fullstack-socket-server";
-import { Render } from "@react-fullstack/render";
 import Emitter from "@utils/emitter";
-import { AppsManager } from "@apps/index";
 import Logger from "@utils/logger";
 import { OpenApp } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import DesktopManager from "@managers/desktopManager";
-import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
-import Window from "@components/desktop/Window";
-import { AppProvider } from "@root/contexts";
 import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from "@root/const";
 import { BroadcastChannel } from "broadcast-channel";
+import { APIClient } from "@web-desktop-environment/server-api";
+import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
+import uuid from "uuid";
 
 export const ProcessIDProvider = React.createContext<undefined | number>(
 	undefined
@@ -29,14 +26,21 @@ export default class WindowManager {
 	public get runningApps() {
 		return this._runningApps;
 	}
-	private newAppId = 0;
 
 	public emitter = new Emitter<WindowManagerEvents>();
+
+	private availableApps: { [name: string]: AppRegistrationData };
 
 	constructor(parentLogger: Logger, desktopManager: DesktopManager) {
 		this.logger = parentLogger.mount("windows-manager");
 		this.desktopManager = desktopManager;
 		this.listenToExternalAppLaunches();
+		APIClient.appsManager.registerApp.override(() => (newApp) => {
+			this.availableApps[newApp.name] = newApp;
+		});
+		APIClient.appsManager.launchApp.override(() => async (name, input) => ({
+			processId: await this.spawnApp(name, input),
+		}));
 	}
 
 	listenToExternalAppLaunches = () => {
@@ -57,41 +61,31 @@ export default class WindowManager {
 	};
 
 	spawnApp = async (name: string, input: Record<string, unknown>) => {
-		const handler = AppsManager.apps.get(name);
+		const processId = uuid();
+		const appData = this.availableApps[name];
 		const port = await this.desktopManager.portManager.getPort();
-		const id = this.newAppId;
-		this.newAppId++;
-		const process = Render(
-			<Server port={port} singleInstance views={viewInterfaces}>
-				{() => (
-					<AppProvider.Provider
-						value={{ desktopManager: this.desktopManager, logger: this.logger }}
-					>
-						<ProcessIDProvider.Provider value={id}>
-							<Window app={handler} appParams={input} />
-						</ProcessIDProvider.Provider>
-					</AppProvider.Provider>
-				)}
-			</Server>
-		);
+		APIClient.appsManager.call("launchApp", {
+			appId: appData.id,
+			options: input,
+			port,
+			processId,
+		});
 		const openApp = {
-			icon: handler.icon,
-			nativeIcon: handler.nativeIcon,
-			id,
-			name: handler.name,
+			icon: appData.icon,
+			id: processId,
+			name: appData.name,
 			port,
 			cancel: () => {
-				process.stop();
-				this._runningApps = this._runningApps.filter((app) => app.id !== id);
-				this.emitter.call("onAppsUpdate", this._runningApps);
+				APIClient.appsManager.call("closeApp", { processId });
 			},
 		};
 		this.emitter.call("onAppLaunch", openApp);
 		this._runningApps.push(openApp);
 		this.emitter.call("onAppsUpdate", this._runningApps);
+		return processId;
 	};
 
-	killApp = (id: number) => {
+	killApp = (id: string) => {
 		this._runningApps.find((app) => app.id === id).cancel();
 		this._runningApps = this._runningApps.filter((app) => app.id !== id);
 		this.emitter.call("onAppsUpdate", this._runningApps);

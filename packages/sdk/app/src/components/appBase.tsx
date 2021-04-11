@@ -5,11 +5,15 @@ import { ViewsToServerComponents } from "@react-fullstack/fullstack/lib/Views";
 import API from "@web-desktop-environment/server-api";
 import Window from "./window";
 import { App } from "../appManger";
+import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 
-export interface AppBaseProps<Input>
-	extends Omit<App<Input>, "App" | "defaultInput"> {
+export interface AppBaseProps<Input, PropsForRunningAsChildApp> {
 	close(): void;
 	input: Input;
+	appData?: Omit<App<Input>, "App" | "defaultInput">;
+	logger: LoggingManager;
+	propsForRunningAsChildApp?: PropsForRunningAsChildApp;
+	windowLess?: boolean;
 }
 
 export interface AppBaseState {
@@ -19,20 +23,26 @@ export interface AppBaseState {
 
 abstract class AppBase<
 	Input extends object,
-	State extends AppBaseState
-> extends React.Component<AppBaseProps<Input>, State> {
+	State extends object,
+	PropsForRunningAsChildApp extends object = {}
+> extends React.Component<
+	AppBaseProps<Input, PropsForRunningAsChildApp>,
+	State & AppBaseState
+> {
 	protected api = API;
-	abstract renderApp(
+	logger = this.props.logger;
+	abstract renderApp: (
 		views: ViewsToServerComponents<ViewInterfacesType>
-	): JSX.Element | JSX.Element[];
+	) => JSX.Element | JSX.Element[];
 	render() {
 		const { useDefaultWindow, defaultWindowTitle } = this.state;
-		const { close, icon, name, window } = this.props;
+		const { close, windowLess, appData } = this.props;
+		const { icon, name, window } = appData || {};
 		return (
 			<ViewsProvider<ViewInterfacesType>>
 				{(views) => (
 					<>
-						{useDefaultWindow ? (
+						{useDefaultWindow && !windowLess && appData ? (
 							<Window
 								icon={icon}
 								name={name}

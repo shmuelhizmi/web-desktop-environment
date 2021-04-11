@@ -17,7 +17,8 @@
     "directory": "packages/interfaces"
   },
   "dependencies": {
-    "uid": "2.0.0"
+    "uid": "2.0.0",
+    "@web-desktop-environment/interfaces": "0.1.1"
   },
   "devDependencies": {
     "typescript": "^4.2.3"

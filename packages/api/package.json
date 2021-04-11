@@ -1,0 +1,25 @@
+{
+  "name": "@web-desktop-environment/api",
+  "version": "0.1.1",
+  "main": "lib/index.ts",
+  "types": "lib",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc",
+    "build:server": "npm run build",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/interfaces"
+  },
+  "dependencies": {
+    "uid": "2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}

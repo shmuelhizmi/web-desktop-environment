@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "lib",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "baseUrl": "src",
+    "paths": {
+      "@index": ["index"],
+      "@root/*": ["*"],
+      "@components/*": ["components/*"],
+      "@component": ["components/base/Component"],
+      "@apps/*": ["components/apps/*"],
+      "@desktop/*": ["components/desktop/*"],
+      "@container/*": ["components/container/*"],
+      "@managers/*": ["managers/*"],
+      "@utils/*": ["utils/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/node_modules"]
+}

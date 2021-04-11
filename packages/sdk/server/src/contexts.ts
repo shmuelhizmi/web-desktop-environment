@@ -6,12 +6,3 @@ export const AppProvider = React.createContext<{
 	desktopManager: DesktopManager;
 	logger: Logger;
 }>(undefined);
-
-type WindowContext = {
-	setWindowTitle: (title: string) => void;
-	closeWindow: () => void;
-};
-
-export const WindowContext = React.createContext<WindowContext | undefined>(
-	undefined
-);

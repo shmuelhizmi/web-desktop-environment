@@ -39,10 +39,11 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/interfaces": "^0.1.1",
-    "@web-desktop-environment/server-sdk": "^0.1.1",
+    "@web-desktop-environment/interfaces": "0.1.1",
+    "@web-desktop-environment/server-sdk": "0.1.1",
     "axios": "0.21.1",
     "code-server": "^3.9.3",
-    "react": "^17.0.1"
+    "react": "^17.0.1",
+    "@web-desktop-environment/server-api": "0.1.1"
   }
 }

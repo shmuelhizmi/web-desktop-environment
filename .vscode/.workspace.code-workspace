@@ -5,18 +5,8 @@
 			"path": ".."
 		},
 		{
-			"name": "views",
-			"path": "../packages/views"
-		},
-		{
 			"name": ".web-desktop-environment-config",
 			"path": "../../../../.web-desktop-environment-config"
-		},
-		{
-			"path": "../packages/views-mobile"
-		},
-		{
-			"path": "../packages/server-sdk"
 		}
 	],
 	"settings": {

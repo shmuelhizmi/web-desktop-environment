@@ -13,10 +13,10 @@ export default class DesktopManager {
 	public settingsManager: SettingsManager;
 	public windowManager: WindowManager;
 	public downloadManager: DownloadManager;
-	constructor(name: string, rootLoger?: Logger) {
+	constructor(name: string, rootLogger?: Logger) {
 		this.name = name;
 
-		const parentLogger = rootLoger || new Logger("root");
+		const parentLogger = rootLogger || new Logger("root");
 		this.logger = parentLogger.mount(name);
 
 		this.portManager = new PortManager(this.logger, this);

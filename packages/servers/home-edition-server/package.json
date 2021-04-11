@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/server-sdk": "^0.0.2"
+    "@web-desktop-environment/server-sdk": "^0.0.2",
+    "@web-desktop-environment/server-api": "0.1.1"
   }
 }

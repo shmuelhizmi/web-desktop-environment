@@ -1,5 +1,5 @@
 {
-  "name": "@web-desktop-environment/api",
+  "name": "@web-desktop-environment/server-api",
   "version": "0.1.1",
   "main": "lib/index.ts",
   "types": "lib",

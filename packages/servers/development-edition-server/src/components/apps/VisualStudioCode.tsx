@@ -1,11 +1,8 @@
 import React from "react";
-import Component from "@web-desktop-environment/server-sdk/lib/components/base/Component";
-import { ViewsProvider } from "@react-fullstack/fullstack";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { App } from "@web-desktop-environment/server-sdk/lib/components/apps";
 import { homedir } from "os";
 import * as cp from "child_process";
 import axios from "axios";
+import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 
 interface VSCodeInput {
 	process?: string;
@@ -18,10 +15,12 @@ interface VSCodeState {
 	isLoaded: boolean;
 }
 
-class VSCode extends Component<VSCodeInput, VSCodeState> {
+class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	name = "vscode";
-	state: VSCodeState = {
+	state: AppBase<VSCodeInput, VSCodeState>["state"] = {
 		isLoaded: false,
+		useDefaultWindow: true,
+		defaultWindowTitle: "vs-code",
 	};
 
 	vscode: cp.ChildProcessWithoutNullStreams;
@@ -60,49 +59,46 @@ class VSCode extends Component<VSCodeInput, VSCodeState> {
 	};
 
 	componentDidMount = () => {
-		this.desktopManager.portManager.getPort().then((port) => {
+		this.api.portManager.getPort().then(({ port }) => {
 			this.setState({ port });
 			this.runVsCodeCli(port);
 		});
 	};
 
-	renderComponent() {
+	renderApp: AppBase<VSCodeInput, VSCodeState>["renderApp"] = ({
+		Iframe,
+		LoadingScreen,
+	}) => {
 		const { port, isLoaded } = this.state;
-		return (
-			<ViewsProvider<ViewInterfacesType>>
-				{({ Iframe, LoadingScreen }) =>
-					port && isLoaded ? (
-						<Iframe port={port} />
-					) : (
-						<LoadingScreen message={"loading vs-code"} variant="jumpCube" />
-					)
-				}
-			</ViewsProvider>
+
+		return port && isLoaded ? (
+			<Iframe port={port} />
+		) : (
+			<LoadingScreen message={"loading vs-code"} variant="jumpCube" />
 		);
-	}
+	};
 }
 
-export const vscode: App<VSCodeInput> = {
-	name: "VS-Code",
-	description: "full vscode editor",
-	App: VSCode,
-	defaultInput: { location: homedir() },
-	nativeIcon: {
-		icon: "console",
-		type: "MaterialCommunityIcons",
-	},
-	icon: {
-		type: "icon",
-		icon: "VscCode",
-	},
-	window: {
-		height: 700,
-		width: 1000,
-		position: { x: 50, y: 50 },
-		maxHeight: 7000,
-		maxWidth: 7000,
-		minWidth: 500,
-		minHeight: 500,
-		allowLocalScreenSnapping: true,
-	},
-};
+export const registerApp = () =>
+	AppsManager.registerApp({
+		vscode: {
+			displayName: "VS-Code",
+			description: "full vscode editor",
+			App: VSCode,
+			defaultInput: { location: homedir() },
+			icon: {
+				type: "icon",
+				icon: "VscCode",
+			},
+			window: {
+				height: 700,
+				width: 1000,
+				position: { x: 50, y: 50 },
+				maxHeight: 7000,
+				maxWidth: 7000,
+				minWidth: 500,
+				minHeight: 500,
+				allowLocalScreenSnapping: true,
+			},
+		},
+	});

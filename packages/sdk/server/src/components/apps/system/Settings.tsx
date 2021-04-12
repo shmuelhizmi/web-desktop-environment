@@ -79,14 +79,16 @@ class Settings extends AppBase<{}, SettingsState> {
 	renderApp: AppBase<{}, SettingsState>["renderApp"] = ({ Settings }) => {
 		const { systemInfo, settings } = this.state;
 		return (
-			<Settings
-				onReload={this.updateSystemInfo}
-				setSettings={(newSettings) =>
-					this.api.settingsManager.setSettings(newSettings)
-				}
-				settings={settings}
-				systemInfo={systemInfo}
-			/>
+			settings && (
+				<Settings
+					onReload={this.updateSystemInfo}
+					setSettings={(newSettings) =>
+						this.api.settingsManager.setSettings(newSettings)
+					}
+					settings={settings}
+					systemInfo={systemInfo}
+				/>
+			)
 		);
 	};
 }

@@ -1,20 +1,21 @@
 {
   "name": "@web-desktop-environment/server-api",
   "version": "0.1.1",
-  "main": "lib/index.ts",
+  "main": "lib/index.js",
   "types": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
   "scripts": {
     "build": "tsc",
+    "watch": "tsc --watch",
     "build:server": "npm run build",
     "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
-    "directory": "packages/interfaces"
+    "directory": "packages/shared/api"
   },
   "dependencies": {
     "uid": "2.0.0",

@@ -1,11 +1,9 @@
 import React from "react";
-import Component from "@component";
-import { ViewsProvider } from "@react-fullstack/fullstack";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { App } from "@apps/index";
 import { Explorer } from "@apps/utils/Explorer";
 import { promises as fs } from "fs-extra";
 import { basename } from "path";
+import { AppBase } from "@web-desktop-environment/app-sdk";
+import { AppsManager } from "@web-desktop-environment/app-sdk";
 
 interface NotepadInput {
 	filepath?: string;
@@ -17,14 +15,20 @@ interface NotepadState {
 	defaultValue?: string;
 }
 
-class Notepad extends Component<NotepadInput, NotepadState> {
+class Notepad extends AppBase<NotepadInput, NotepadState> {
+	constructor(props: AppBase<NotepadInput, NotepadState>["props"]) {
+		super(props);
+		this.state = {
+			isOpeningFile: true,
+			useDefaultWindow: true,
+			defaultWindowTitle: "notepad",
+		};
+	}
 	name = "notepad";
-	state: NotepadState = {
-		isOpeningFile: true,
-	};
 	componentDidMount = () => {
-		if (this.props.filepath) {
-			this.onSelectFile(this.props.filepath);
+		const { filepath } = this.props.input;
+		if (filepath) {
+			this.onSelectFile(filepath);
 		}
 	};
 	onSelectFile = async (path: string) => {
@@ -36,57 +40,57 @@ class Notepad extends Component<NotepadInput, NotepadState> {
 			fs.writeFile(this.state.file, newContent);
 		}
 	};
-	renderComponent() {
+	renderApp: AppBase<NotepadInput, NotepadState>["renderApp"] = ({
+		Notepad,
+	}) => {
 		const { isOpeningFile, defaultValue, file } = this.state;
 		return (
-			<ViewsProvider<ViewInterfacesType>>
-				{({ Notepad }) => (
-					<>
-						(
-						<Notepad
-							name={file ? basename(file) : ""}
-							onSave={this.saveFile}
-							isSelectingFile={isOpeningFile}
-							defaultValue={defaultValue}
-							path={file}
-							onReselectFile={() =>
-								this.setState({
-									isOpeningFile: true,
-									defaultValue: "",
-									file: "",
-								})
-							}
-						>
-							<Explorer type="select-file" onSelect={this.onSelectFile} />
-						</Notepad>
-						)
-					</>
-				)}
-			</ViewsProvider>
+			<Notepad
+				name={file ? basename(file) : ""}
+				onSave={this.saveFile}
+				isSelectingFile={isOpeningFile}
+				defaultValue={defaultValue}
+				path={file}
+				onReselectFile={() =>
+					this.setState({
+						isOpeningFile: true,
+						defaultValue: "",
+						file: "",
+					})
+				}
+			>
+				<Explorer
+					parentLogger={this.logger}
+					input={{ type: "select-file" }}
+					propsForRunningAsChildApp={{
+						onSelect: this.onSelectFile,
+					}}
+				/>
+			</Notepad>
 		);
-	}
+	};
 }
 
-export const notepad: App<NotepadInput> = {
-	name: "Notepad",
-	description: "just a text editor",
-	App: Notepad,
-	defaultInput: {},
-	nativeIcon: {
-		icon: "filetext1",
-		type: "AntDesign",
-	},
-	icon: {
-		type: "icon",
-		icon: "FcFile",
-	},
-	window: {
-		height: 800,
-		width: 650,
-		position: { x: 100, y: 20 },
-		maxHeight: 900,
-		maxWidth: 1200,
-		minWidth: 550,
-		minHeight: 370,
-	},
+export const registerApp = () => {
+	AppsManager.registerApp({
+		notepad: {
+			displayName: "Notepad",
+			description: "just a text editor",
+			App: Notepad,
+			defaultInput: {},
+			icon: {
+				type: "icon",
+				icon: "FcFile",
+			},
+			window: {
+				height: 800,
+				width: 650,
+				position: { x: 100, y: 20 },
+				maxHeight: 900,
+				maxWidth: 1200,
+				minWidth: 550,
+				minHeight: 370,
+			},
+		},
+	});
 };

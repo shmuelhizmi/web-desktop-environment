@@ -1,13 +1,10 @@
 import React from "react";
-import Component from "@component";
-import { ViewsProvider } from "@react-fullstack/fullstack";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { App } from "@apps/index";
 import socketIO from "socket.io";
 import * as http from "http";
 import { getOS, OS } from "@utils/getOS";
 import { tmpdir } from "os";
 import { spawn, IPty } from "node-pty";
+import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 
 interface TerminalInput {
 	process?: string;
@@ -20,7 +17,14 @@ interface TerminalState {
 }
 
 export const maxTerminalHistoryLength = 100000;
-class Terminal extends Component<TerminalInput, TerminalState> {
+class Terminal extends AppBase<TerminalInput, TerminalState> {
+	constructor(props: AppBase<TerminalInput, TerminalState>["props"]) {
+		super(props);
+		this.state = {
+			useDefaultWindow: true,
+			defaultWindowTitle: "terminal",
+		};
+	}
 	name = "terminal";
 	server = http.createServer();
 	socketServer = new socketIO.Server(this.server);
@@ -34,15 +38,20 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 			);
 			this.socketServer.emit("output", data);
 		},
-		this.props.process,
-		this.props.location,
-		this.props.args
+		this.props.input.process,
+		this.props.input.location,
+		this.props.input.args
 	);
 
-	state: TerminalState = {};
+	componentDidUnmount = false;
+	onComponentWillUnmount: Function[] = [];
+	componentWillUnmount = () => {
+		this.componentDidUnmount = true;
+		this.onComponentWillUnmount.forEach((f) => f());
+	};
 
 	componentDidMount = () => {
-		this.desktopManager.portManager.getPort().then((port) => {
+		this.api.portManager.getPort().then(({ port }) => {
 			this.server.listen(port);
 			this.setState({ port });
 		});
@@ -62,14 +71,17 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 			const newProcessName = this.ptyProcess.ptyProcess.process;
 			if (lastProcessName !== newProcessName) {
 				lastProcessName = newProcessName;
-				if (this.windowContext) {
-					this.windowContext.setWindowTitle(`Termianl : ${lastProcessName}`);
-				}
+				this.setState({
+					defaultWindowTitle: `terminal : ${lastProcessName}`,
+				});
 			}
 		}, 100);
 		this.ptyProcess.ptyProcess.onExit(() => {
-			if (!this.isComponentUnmounted && this.windowContext) {
-				this.windowContext.closeWindow();
+			if (
+				!this.componentDidUnmount &&
+				this.props.propsForRunningAsSelfContainedApp
+			) {
+				this.props.propsForRunningAsSelfContainedApp.close();
 			}
 		});
 		this.onComponentWillUnmount.push(() => {
@@ -77,17 +89,18 @@ class Terminal extends Component<TerminalInput, TerminalState> {
 		});
 	};
 
-	renderComponent() {
+	renderApp: AppBase<TerminalInput, TerminalState>["renderApp"] = ({
+		Terminal,
+	}) => {
 		const { port } = this.state;
-		return (
-			<ViewsProvider<ViewInterfacesType>>
-				{({ Terminal: TerminalView }) => port && <TerminalView port={port} />}
-			</ViewsProvider>
-		);
-	}
+		return port && <Terminal port={port} />;
+	};
 }
 
 const getDefaultBash = () => {
+	if (process.env.SHELL) {
+		return process.env.SHELL;
+	}
 	const os = getOS();
 	if (os === OS.Linux) {
 		return "bash";
@@ -103,30 +116,33 @@ const getDefaultBash = () => {
 	}
 };
 
-export const terminal: App<TerminalInput> = {
-	name: "Terminal",
-	description: "a terminal window",
-	App: Terminal,
-	defaultInput: { process: getDefaultBash(), args: ["-i"], location: tmpdir() },
-	nativeIcon: {
-		icon: "console",
-		type: "MaterialCommunityIcons",
-	},
-	icon: {
-		type: "icon",
-		icon: "FcCommandLine",
-	},
-	window: {
-		height: 400,
-		width: 1000,
-		position: { x: 50, y: 50 },
-		maxHeight: 900,
-		maxWidth: 1200,
-		minWidth: 350,
-		minHeight: 200,
-		allowLocalScreenSnapping: true,
-	},
-};
+export const registerApp = () =>
+	AppsManager.registerApp({
+		terminal: {
+			displayName: "Terminal",
+			description: "a terminal window",
+			App: Terminal,
+			defaultInput: {
+				process: getDefaultBash(),
+				args: ["-i"],
+				location: tmpdir(),
+			},
+			icon: {
+				type: "icon",
+				icon: "FcCommandLine",
+			},
+			window: {
+				height: 400,
+				width: 1000,
+				position: { x: 50, y: 50 },
+				maxHeight: 900,
+				maxWidth: 1200,
+				minWidth: 350,
+				minHeight: 200,
+				allowLocalScreenSnapping: true,
+			},
+		},
+	});
 
 // from https://svaddi.dev/how-to-create-web-based-terminals/;
 class PTY {

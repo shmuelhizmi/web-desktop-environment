@@ -1,4 +1,5 @@
 import { Settings } from "@web-desktop-environment/interfaces/lib/shared/settings";
+import { PartialPartial } from "@web-desktop-environment/interfaces/lib/shared/types";
 import API from "../../../backend/index";
 
 export class SettingsManager {
@@ -9,6 +10,10 @@ export class SettingsManager {
   }
   getSettings() {
     return API.settingsManager.getSetting.execute();
+  }
+
+  setSettings(settings: PartialPartial<Settings>) {
+    return API.settingsManager.setSetting.execute(settings);
   }
 }
 

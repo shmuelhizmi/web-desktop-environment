@@ -18,6 +18,9 @@ export default class DownloadManager {
 		APIClient.downloadManager.addFile.override(() => (path: string) => ({
 			hash: this.addFile(path),
 		}));
+		APIClient.downloadManager.getDownloadManagerPort.override(() => () =>
+			this.port
+		);
 	}
 	public initialize = async () => {
 		this.port = await this.desktopManager.portManager.getPort();

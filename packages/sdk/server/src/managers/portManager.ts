@@ -1,6 +1,7 @@
 import Logger from "@utils/logger";
 import getPort from "get-port";
 import DesktopManager from "@managers/desktopManager";
+import { APIClient } from "@web-desktop-environment/server-api";
 
 export const timeout = (time: number) =>
 	new Promise((resolve) => setTimeout(resolve, time));
@@ -11,11 +12,14 @@ export default class PortManager {
 	constructor(parentLogger: Logger, desktopManger: DesktopManager) {
 		this.logger = parentLogger.mount("port-manager");
 		this.desktopManager = desktopManger;
+		APIClient.portManager.getPort.override(() => () =>
+			this.getPort().then((port) => ({ port }))
+		);
 	}
 
 	public usedPorts: number[] = [];
 
-	public getAvialablePorts = () => {
+	public getAvailablePorts = () => {
 		const {
 			endPort,
 			startPort,
@@ -42,7 +46,7 @@ export default class PortManager {
 			});
 		} else {
 			return getPort({
-				port: this.getAvialablePorts(),
+				port: this.getAvailablePorts(),
 			}).then((value) => {
 				this.usedPorts.push(value);
 				this.logger.info(`port ${value} is avilable as app port`);

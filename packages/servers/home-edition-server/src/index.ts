@@ -1,3 +1,6 @@
-import { startServer } from "@web-desktop-environment/server-sdk";
+import {
+	startServer,
+	registerDefaultApps,
+} from "@web-desktop-environment/server-sdk";
 
-startServer();
+startServer().then(registerDefaultApps);

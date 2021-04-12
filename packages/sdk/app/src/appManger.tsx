@@ -41,27 +41,28 @@ export class AppsManager {
 			AppsManager.registeredApps.set(appName, apps[appName]);
 			API.appsManager.registerApp(
 				{ description, displayName, icon, name: appName },
-				async (port, input, awaitClose) => {
-					const logger = await (await AppsManager.logger).mount(appName);
+				async (port, input, awaitClose, close) => {
 					const { stop } = Render(
 						<Server singleInstance port={port} views={viewInterfaces}>
 							{() => (
 								<App
-									close={stop}
-									appData={{
-										description,
-										displayName,
-										icon,
-										name: appName,
-										window,
+									propsForRunningAsSelfContainedApp={{
+										close,
+										appData: {
+											description,
+											displayName,
+											icon,
+											name: appName,
+											window,
+										},
 									}}
 									input={{ ...(defaultInput as object), ...input }}
-									logger={logger}
+									parentLogger={this.logger}
 								/>
 							)}
 						</Server>
 					);
-					awaitClose.then(close);
+					awaitClose.then(stop);
 				}
 			);
 		}

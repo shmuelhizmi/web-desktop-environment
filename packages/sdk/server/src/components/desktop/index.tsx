@@ -2,7 +2,6 @@ import React from "react";
 import Component from "@component";
 import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { AppsManager } from "@apps/index";
 import {
 	OpenApp,
 	GTKBridge,
@@ -52,17 +51,25 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		this.desktopManager.windowManager.emitter.on("onAppsUpdate", (openApps) => {
-			this.setState({
-				openApps: openApps.map((app) => ({
-					icon: app.icon,
-					nativeIcon: app.nativeIcon,
-					id: app.id,
-					name: app.name,
-					port: app.port,
-				})),
-			});
-		});
+		this.desktopManager.windowManager.emitter.on(
+			"onOpenAppsUpdate",
+			(openApps) => {
+				this.setState({
+					openApps: openApps.map((app) => ({
+						icon: app.icon,
+						id: app.id,
+						name: app.name,
+						port: app.port,
+					})),
+				});
+			}
+		);
+		this.desktopManager.windowManager.emitter.on(
+			"onInstalledAppsUpdate",
+			() => {
+				this.forceUpdate();
+			}
+		);
 		const connectToGTK = new GTKBridgeConnector(
 			this.logger,
 			this.desktopManager
@@ -88,13 +95,10 @@ class Desktop extends Component<{}, DesktopState> {
 		this.desktopManager.windowManager.killApp(id);
 	};
 	renderComponent() {
-		const appsProp = Array.from(AppsManager.apps.keys()).map((appName) => {
-			const { name, description, icon, nativeIcon } = AppsManager.apps.get(
-				appName
-			);
+		const appsProp = this.desktopManager.windowManager.apps.map((app) => {
+			const { description, icon, appName, displayName } = app;
 			return {
-				displayName: name,
-				nativeIcon,
+				displayName,
 				description,
 				icon,
 				appName,

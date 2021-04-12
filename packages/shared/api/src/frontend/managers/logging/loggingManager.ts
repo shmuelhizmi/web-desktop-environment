@@ -1,49 +1,54 @@
 import API from "../../../backend/index";
 
 export class LoggingManager {
-  token?: string;
-  constructor(token?: string) {
-    this.token = token;
+  token?: Promise<string | undefined>;
+  constructor(token?: Promise<string>) {
+    this.token = token || Promise.resolve(undefined);
   }
-  mountGlobal(name: string) {
-    return API.loggingManager.mount
-      .execute(name, this.token)
-      .then(({ mountToken }) => {
-        this.token = mountToken;
-        API.loggingManager.mount.override((callSuper) => {
-          return (name, token) => {
-            return callSuper(name, token || mountToken);
-          };
+  async mountGlobal(name: string) {
+    const oldTokenPromise = this.token;
+    this.token = new Promise<string>((res) => {
+      oldTokenPromise.then((oldToken) => {
+        API.loggingManager.mount
+        .execute(name, oldToken)
+        .then(({ mountToken }) => {
+          API.loggingManager.mount.override((callSuper) => {
+            return (name, token) => {
+              return callSuper(name, token || mountToken);
+            };
+          });
+          res(mountToken);
         });
-      });
+      })
+    })
   }
-  async mount(name: string) {
-    const { mountToken } = await API.loggingManager.mount.execute(
+  mount(name: string) {
+    const newToken = this.token.then((parentToken) => API.loggingManager.mount.execute(
       name,
-      this.token
-    );
-    return new LoggingManager(mountToken);
+      parentToken
+    ).then(({ mountToken }) => mountToken));
+    return new LoggingManager(newToken);
   }
   private throwTyingToLogFromRootLogger = () => {
     throw new Error("error - logging from root logger is not allowed");
   };
-  info(message: string) {
+  async info(message: string) {
     if (this.token) {
-      API.loggingManager.info.execute(this.token, message);
+      API.loggingManager.info.execute(await this.token, message);
     } else {
       this.throwTyingToLogFromRootLogger();
     }
   }
-  warn(message: string) {
+  async warn(message: string) {
     if (this.token) {
-      API.loggingManager.warn.execute(this.token, message);
+      API.loggingManager.warn.execute(await this.token, message);
     } else {
       this.throwTyingToLogFromRootLogger();
     }
   }
-  error(message: string) {
+  async error(message: string) {
     if (this.token) {
-      API.loggingManager.error.execute(this.token, message);
+      API.loggingManager.error.execute(await this.token, message);
     } else {
       this.throwTyingToLogFromRootLogger();
     }

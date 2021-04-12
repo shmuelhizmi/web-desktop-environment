@@ -8,12 +8,13 @@ import { App } from "../appManger";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 
 export interface AppBaseProps<Input, PropsForRunningAsChildApp> {
-	close(): void;
 	input: Input;
-	appData?: Omit<App<Input>, "App" | "defaultInput">;
-	logger: LoggingManager;
+	parentLogger: LoggingManager;
 	propsForRunningAsChildApp?: PropsForRunningAsChildApp;
-	windowLess?: boolean;
+	propsForRunningAsSelfContainedApp?: {
+		close(): void;
+		appData: Omit<App<Input>, "App" | "defaultInput">;
+	};
 }
 
 export interface AppBaseState {
@@ -30,19 +31,28 @@ abstract class AppBase<
 	State & AppBaseState
 > {
 	protected api = API;
-	logger = this.props.logger;
+	_logger: LoggingManager;
+	abstract name: string;
+	get logger() {
+		if (!this._logger) {
+			this._logger = this.props.parentLogger.mount(this.name);
+		}
+		return this._logger;
+	}
 	abstract renderApp: (
 		views: ViewsToServerComponents<ViewInterfacesType>
 	) => JSX.Element | JSX.Element[];
 	render() {
 		const { useDefaultWindow, defaultWindowTitle } = this.state;
-		const { close, windowLess, appData } = this.props;
-		const { icon, name, window } = appData || {};
+		const { propsForRunningAsSelfContainedApp } = this.props;
+		const { icon, name, window } =
+			propsForRunningAsSelfContainedApp?.appData || {};
+		const { close } = propsForRunningAsSelfContainedApp || {};
 		return (
 			<ViewsProvider<ViewInterfacesType>>
 				{(views) => (
 					<>
-						{useDefaultWindow && !windowLess && appData ? (
+						{useDefaultWindow && propsForRunningAsSelfContainedApp ? (
 							<Window
 								icon={icon}
 								name={name}

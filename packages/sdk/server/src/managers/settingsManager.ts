@@ -78,6 +78,9 @@ export default class SettingsManager {
 		this.logger.info("finish initializing settings manager");
 		this.emitter.call("init", this.settings);
 		APIClient.settingsManager.getSetting.override(() => () => this.settings);
+		APIClient.settingsManager.setSetting.override(() => (settings) =>
+			this.setSettings(settings)
+		);
 		this.emitter.on("onNewSettings", (settings) =>
 			APIClient.settingsManager.call("onNewSettings", settings)
 		);

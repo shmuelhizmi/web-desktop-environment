@@ -35,7 +35,7 @@
     "@types/jest": "^24.0.0",
     "@types/mime-types": "2.1.0",
     "@types/node": "^12.0.0",
-    "@types/react": "^16.8.24",
+    "@types/react": "^17.0.3",
     "@types/react-click-outside": "^3.0.3",
     "@types/react-color": "2.13.5",
     "@types/react-dom": "^17.0.3",
@@ -94,7 +94,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
-    "directory": "packages/views"
+    "directory": "packages/clients/views"
   },
   "scripts": {
     "start": "node scripts/start.js",

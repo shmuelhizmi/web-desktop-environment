@@ -29,7 +29,6 @@ class Explorer extends AppBase<
 	ExplorerState,
 	InternalExplorerInput
 > {
-	name = "explorer";
 	constructor(props: Explorer["props"]) {
 		super(props);
 		this.state = {
@@ -39,6 +38,7 @@ class Explorer extends AppBase<
 			defaultWindowTitle: "explorer",
 		};
 	}
+	name = "explorer";
 	listFiles = async (currentPath: string): Promise<File[]> => {
 		const filesNames = await fs.readdir(currentPath);
 		const files = await filesNames.map(
@@ -100,7 +100,7 @@ class Explorer extends AppBase<
 		await this.updateFiles();
 	};
 	requestDownloadLink = async (path: string) => {
-		const [hash, port] = await Promise.all([
+		const [{ hash }, port] = await Promise.all([
 			this.api.downloadManager.addFile(path),
 			this.api.downloadManager.getDownloadManagerPort(),
 		]);

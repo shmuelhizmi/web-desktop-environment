@@ -1,7 +1,7 @@
 {
   "name": "@web-desktop-environment/interfaces",
   "version": "0.1.1",
-  "main": "lib/index.ts",
+  "main": "lib/index.js",
   "types": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
-    "directory": "packages/interfaces"
+    "directory": "packages/shared/interfaces"
   },
   "devDependencies": {
     "@react-fullstack/fullstack": "^0.2.1",

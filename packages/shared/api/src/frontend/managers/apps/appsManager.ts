@@ -5,7 +5,7 @@ import { AppRegistrationData } from "../../../backend/managers/apps/appsManager"
 export class AppsManager {
   registerApp(
     app: Omit<AppRegistrationData, "id">,
-    onLaunch: (port: number, options: any, closePromise: Promise<void>) => void
+    onLaunch: (port: number, options: any, closePromise: Promise<void>, close: () => Promise<void>) => void
   ) {
     const id = uuid();
     APIBackend.appsManager.on(
@@ -22,7 +22,7 @@ export class AppsManager {
           );
         });
         if (id === appId) {
-          onLaunch(port, options, waitForClose);
+          onLaunch(port, options, waitForClose, () => this.closeApp(processId));
         }
       }
     );
@@ -33,6 +33,9 @@ export class AppsManager {
   }
   launchApp(name: string, options: any) {
     return APIBackend.appsManager.launchApp.execute(name, options);
+  }
+  closeApp(processId: string) {
+    return APIBackend.appsManager.closeApp.execute(processId);
   }
 }
 

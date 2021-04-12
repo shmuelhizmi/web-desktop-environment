@@ -5,7 +5,7 @@ export interface OpenApp {
   port: number;
   name: string;
   icon: Icon;
-  id: number;
+  id: string;
 }
 
 export interface App {
@@ -29,7 +29,7 @@ export interface Input {
     name: string;
     params: any;
   }) => void;
-  onCloseApp: (id: number) => void; // app id
+  onCloseApp: (id: string) => void; // app id
 }
 
 export default interface Desktop extends View<Input> {}

@@ -87,16 +87,25 @@ abstract class ManagerBase<PublicEvents extends Record<string, any>> {
     this.functionHandlers[name] = call;
     return {
       execute: ((...parameters) => {
-        this.functionHandlers[name](...parameters);
+        return this.functionHandlers[name](...parameters);
       }) as Promisify<FunctionType>,
       override: (
-        override: (superFunction: Promisify<FunctionType>) => FunctionType | Promisify<FunctionType>
+        override: (
+          superFunction: Promisify<FunctionType>
+        ) => (FunctionType | Promisify<FunctionType>)
       ) => {
         const newOverride = override(
           this.functionHandlers[name] as Promisify<FunctionType>
         );
         // this is for making sure the override return a promise
-        this.functionHandlers[name] = async (...args) => newOverride(...args);
+        this.functionHandlers[name] = (...args) => {
+          const returnValue = newOverride(...args);
+          if (returnValue instanceof Promise) {
+            return returnValue;
+          } else {
+            return Promise.resolve(returnValue);
+          }
+        };
       },
     };
   }

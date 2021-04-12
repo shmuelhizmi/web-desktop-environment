@@ -1,5 +1,5 @@
 import React from "react";
-import { AppProvider, WindowContext } from "@root/contexts";
+import { AppProvider } from "@root/contexts";
 import Logger from "@utils/logger";
 import DesktopManager from "@managers/desktopManager";
 
@@ -18,10 +18,6 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 			this._logger = this.context.logger.mount(this.name);
 			return this._logger;
 		}
-	}
-	private _windowContext?: React.ContextType<typeof WindowContext>;
-	public get windowContext() {
-		return this._windowContext;
 	}
 	public get desktopManager(): DesktopManager {
 		return this.context.desktopManager;
@@ -42,12 +38,6 @@ abstract class Component<Props = {}, State = {}> extends React.Component<
 				}}
 			>
 				{this.renderComponent()}
-				<WindowContext.Consumer>
-					{(context) => {
-						this._windowContext = context;
-						return <></>;
-					}}
-				</WindowContext.Consumer>
 			</AppProvider.Provider>
 		);
 	}

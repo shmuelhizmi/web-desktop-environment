@@ -33,16 +33,23 @@ class Window extends React.Component<WindowInput, WindowState> {
 	};
 	onComponentWillUnmount: Function[] = [];
 	componentDidMount = () => {
-		const listenToNewSettings = API.settingsManager.onNewSettings(
-			(settings) => {
-				this.setState({
-					theme: settings.desktop.theme,
-					customTheme: settings.desktop.customTheme,
-					background: settings.desktop.background,
-				});
-			}
-		);
-		this.onComponentWillUnmount.push(listenToNewSettings.remove);
+		API.settingsManager.getSettings().then((settings) => {
+			this.setState({
+				theme: settings.desktop.theme,
+				customTheme: settings.desktop.customTheme,
+				background: settings.desktop.background,
+			});
+			const listenToNewSettings = API.settingsManager.onNewSettings(
+				(settings) => {
+					this.setState({
+						theme: settings.desktop.theme,
+						customTheme: settings.desktop.customTheme,
+						background: settings.desktop.background,
+					});
+				}
+			);
+			this.onComponentWillUnmount.push(listenToNewSettings.remove);
+		});
 	};
 	componentWillUnmount = () => this.onComponentWillUnmount.forEach((f) => f());
 	render() {

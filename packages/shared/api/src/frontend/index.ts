@@ -3,6 +3,7 @@ import settingsManager from "./managers/system/settingsManager";
 import loggingManager from "./managers/logging/loggingManager";
 import downloadManager from "./managers/services/downloadManager";
 import portManager from "./managers/services/portManager";
+import packageManager from "./managers/packages/packageManager";
 
 export default {
   appsManager,
@@ -10,4 +11,5 @@ export default {
   loggingManager,
   downloadManager,
   portManager,
+  packageManager,
 };

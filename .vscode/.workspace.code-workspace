@@ -7,6 +7,21 @@
 		{
 			"name": ".web-desktop-environment-config",
 			"path": "../../../../.web-desktop-environment-config"
+		},
+		{
+			"path": "../packages/clients"
+		},
+		{
+			"path": "../packages/sdk"
+		},
+		{
+			"path": "../packages/servers"
+		},
+		{
+			"path": "../packages/shared"
+		},
+		{
+			"path": "../packages/packs"
 		}
 	],
 	"settings": {

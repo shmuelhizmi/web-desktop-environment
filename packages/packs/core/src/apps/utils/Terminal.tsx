@@ -1,10 +1,10 @@
 import React from "react";
 import socketIO from "socket.io";
 import * as http from "http";
-import { getOS, OS } from "@utils/getOS";
 import { tmpdir } from "os";
 import { spawn, IPty } from "node-pty";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
+import * as os from "os";
 
 interface TerminalInput {
 	process?: string;
@@ -101,19 +101,10 @@ const getDefaultBash = () => {
 	if (process.env.SHELL) {
 		return process.env.SHELL;
 	}
-	const os = getOS();
-	if (os === OS.Linux) {
-		return "bash";
-	}
-	if (os === OS.Window) {
+	if (os.platform() === "win32") {
 		return "cmd";
 	}
-	if (os === OS.Mac) {
-		return "bash";
-	}
-	if (os === OS.Other) {
-		return "bash";
-	}
+	return "bash";
 };
 
 export const registerApp = () =>

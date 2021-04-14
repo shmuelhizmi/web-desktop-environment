@@ -28,7 +28,7 @@ class Desktop extends Component<{}, DesktopState> {
 		background: this.desktopManager.settingsManager.settings.desktop.background,
 		nativeBackground: this.desktopManager.settingsManager.settings.desktop
 			.nativeBackground,
-		openApps: this.desktopManager.windowManager.runningApps.map((app) => ({
+		openApps: this.desktopManager.appsManager.runningApps.map((app) => ({
 			icon: app.icon,
 			id: app.id,
 			name: app.name,
@@ -51,7 +51,7 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		this.desktopManager.windowManager.emitter.on(
+		this.desktopManager.appsManager.emitter.on(
 			"onOpenAppsUpdate",
 			(openApps) => {
 				this.setState({
@@ -64,12 +64,9 @@ class Desktop extends Component<{}, DesktopState> {
 				});
 			}
 		);
-		this.desktopManager.windowManager.emitter.on(
-			"onInstalledAppsUpdate",
-			() => {
-				this.forceUpdate();
-			}
-		);
+		this.desktopManager.appsManager.emitter.on("onInstalledAppsUpdate", () => {
+			this.forceUpdate();
+		});
 		const connectToGTK = new GTKBridgeConnector(
 			this.logger,
 			this.desktopManager
@@ -82,20 +79,19 @@ class Desktop extends Component<{}, DesktopState> {
 	};
 	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
 		this.logger.info(`launch app ${app.name}`);
-		this.desktopManager.windowManager.spawnApp(app.name, app.params);
+		this.desktopManager.appsManager.spawnApp(app.name, app.params);
 	};
 	closeApp: DesktopProps["onCloseApp"] = async (id) => {
 		this.logger.info(
 			`closing app appName ${
-				this.desktopManager.windowManager.runningApps.find(
-					(app) => app.id === id
-				).name
+				this.desktopManager.appsManager.runningApps.find((app) => app.id === id)
+					.name
 			}`
 		);
-		this.desktopManager.windowManager.killApp(id);
+		this.desktopManager.appsManager.killApp(id);
 	};
 	renderComponent() {
-		const appsProp = this.desktopManager.windowManager.apps.map((app) => {
+		const appsProp = this.desktopManager.appsManager.apps.map((app) => {
 			const { description, icon, appName, displayName } = app;
 			return {
 				displayName,

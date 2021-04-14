@@ -10,7 +10,6 @@
     "@react-fullstack/fullstack-socket-client": "^0.2.1",
     "@react-fullstack/render": "^0.2.1",
     "@web-desktop-environment/interfaces": "0.1.1",
-	"zlib": "1.0.0",
     "axios": "0.19.2",
     "events": "3.1.0",
     "react": "^17.0.0",
@@ -25,7 +24,8 @@
     "typeface-jetbrains-mono": "^2.0.0",
     "uws": "10.148.1",
     "xterm": "4.7.0",
-    "xterm-addon-fit": "0.5.0"
+    "xterm-addon-fit": "0.5.0",
+    "zlib": "1.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "4.3.3",
@@ -84,7 +84,7 @@
     "terser-webpack-plugin": "2.3.5",
     "ts-loader": "7.0.5",
     "ts-pnp": "1.1.6",
-    "typescript": "^4.2.3",
+    "typescript": "^4.2.4",
     "url-loader": "2.3.0",
     "webpack": "4.42.0",
     "webpack-dev-server": "3.10.3",

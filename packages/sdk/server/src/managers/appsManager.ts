@@ -1,4 +1,3 @@
-import React from "react";
 import Emitter from "@utils/emitter";
 import Logger from "@utils/logger";
 import {
@@ -12,17 +11,13 @@ import { APIClient } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
 import uuid from "uuid";
 
-export const ProcessIDProvider = React.createContext<undefined | number>(
-	undefined
-);
-
-interface WindowManagerEvents {
+interface AppsManagerEvents {
 	onAppLaunch: OpenApp;
 	onOpenAppsUpdate: OpenApp[];
 	onInstalledAppsUpdate: App[];
 }
 
-export default class WindowManager {
+export default class AppsManager {
 	private logger: Logger;
 	private desktopManager: DesktopManager;
 
@@ -31,7 +26,7 @@ export default class WindowManager {
 		return this._runningApps;
 	}
 
-	public emitter = new Emitter<WindowManagerEvents>();
+	public emitter = new Emitter<AppsManagerEvents>();
 
 	private availableApps = new Map<string, AppRegistrationData>();
 

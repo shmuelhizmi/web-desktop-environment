@@ -1,8 +1,9 @@
 {
   "watch": [
-    "src"
+    "src",
+    "node_modules"
   ],
-  "ext": "ts,tsx",
+  "ext": "ts,tsx,js",
   "ignore": [
     "src/**/*.spec.ts"
   ],

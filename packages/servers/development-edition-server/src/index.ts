@@ -1,7 +1,3 @@
-import {
-	startServer,
-	registerDefaultApps,
-} from "@web-desktop-environment/server-sdk";
-import { registerApp as registerVSCode } from "./components/apps/VisualStudioCode";
+import { startServer } from "@web-desktop-environment/server-sdk";
 
-startServer().then(registerDefaultApps).then(registerVSCode);
+startServer();

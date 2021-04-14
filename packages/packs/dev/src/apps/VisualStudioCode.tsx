@@ -3,7 +3,7 @@ import { homedir } from "os";
 import * as cp from "child_process";
 import axios from "axios";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
-
+import { APIClient } from "@web-desktop-environment/server-api";
 interface VSCodeInput {
 	process?: string;
 	args?: string[];
@@ -38,8 +38,9 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 				"--auth=none",
 				"--host=0.0.0.0",
 			],
-			{ cwd: __dirname }
+			{ cwd: __dirname, stdio: ["ipc"] }
 		);
+		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {
 				axios

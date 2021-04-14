@@ -7,6 +7,7 @@
   "private": false,
   "scripts": {
     "start": "nodemon .",
+    "watch": "tsc --watch",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
     "build:server": "npm run build",
     "prepare": "npm run build",

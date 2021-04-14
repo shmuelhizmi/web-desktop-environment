@@ -11,30 +11,10 @@ const rootLogger = new Logger();
 
 const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 
-export const registerDefaultApps = async () => {
-	const [
-		{ registerApp: registerExplorer },
-		{ registerApp: registerTerminal },
-		{ registerApp: registerNotepad },
-		{ registerApp: registerMediaPlayer },
-		{ registerApp: registerSettings },
-	] = await Promise.all([
-		import("@apps/utils/Explorer"),
-		import("@apps/utils/Terminal"),
-		import("@apps/utils/Notepad"),
-		import("@apps/media/MediaPlayer"),
-		import("@apps/system/Settings"),
-	]);
-	registerExplorer();
-	registerTerminal();
-	registerNotepad();
-	registerMediaPlayer();
-	registerSettings();
-};
-
 export const startServer = async () => {
 	await desktopManager.settingsManager.initialize();
 	await desktopManager.downloadManager.initialize();
+	await desktopManager.packageManager.searchForNewPackages();
 	const desktopPort = await desktopManager.portManager.getPort(true);
 	rootLogger.info(`starting web-desktop-environment on port ${desktopPort}`);
 	Render(

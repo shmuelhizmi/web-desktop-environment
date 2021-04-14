@@ -52,15 +52,14 @@ abstract class APIBase {
       if (message && message.type === "api_event_call") {
         const { managerName, value, eventName } = message;
         if (managerName === manager.name) {
-          manager.managerInternalEmitter.call(eventName, value);
+          manager.call(eventName, value);
         }
-        this.childProcess.forEach((cp) => cp.emit("message", message));
       }
     });
     this.managers.set(manager.name, manager);
     return manager;
   }
-  protected addChildProcess(cp: ChildProcess) {
+  public addChildProcess(cp: ChildProcess) {
     let isAlive = true;
     cp.on("message", (message) => {
       if (message) {
@@ -75,7 +74,7 @@ abstract class APIBase {
           targetManager.functionHandlers[functionName](...parameters).then(
             (value) => {
               if (isAlive) {
-                cp.emit("message", {
+                cp.send({
                   type: "api_super_response",
                   id,
                   name: functionName,

@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/web-desktop-environment/static/css/main.dd606acf.chunk.css",
-    "main.js": "/web-desktop-environment/static/js/main.a11cc1fd.chunk.js",
-    "main.js.map": "/web-desktop-environment/static/js/main.a11cc1fd.chunk.js.map",
+    "main.js": "/web-desktop-environment/static/js/main.cd2fd16a.chunk.js",
+    "main.js.map": "/web-desktop-environment/static/js/main.cd2fd16a.chunk.js.map",
     "runtime-main.js": "/web-desktop-environment/static/js/runtime-main.7735c67c.js",
     "runtime-main.js.map": "/web-desktop-environment/static/js/runtime-main.7735c67c.js.map",
     "static/css/2.6709bdc0.chunk.css": "/web-desktop-environment/static/css/2.6709bdc0.chunk.css",
-    "static/js/2.7047546f.chunk.js": "/web-desktop-environment/static/js/2.7047546f.chunk.js",
-    "static/js/2.7047546f.chunk.js.map": "/web-desktop-environment/static/js/2.7047546f.chunk.js.map",
+    "static/js/2.a2d7a950.chunk.js": "/web-desktop-environment/static/js/2.a2d7a950.chunk.js",
+    "static/js/2.a2d7a950.chunk.js.map": "/web-desktop-environment/static/js/2.a2d7a950.chunk.js.map",
     "index.html": "/web-desktop-environment/index.html",
-    "precache-manifest.5ea8d38bec5ae6eaaba9d2cbd6fe879e.js": "/web-desktop-environment/precache-manifest.5ea8d38bec5ae6eaaba9d2cbd6fe879e.js",
+    "precache-manifest.07563ed057af0ae1574ad8ce64a0bd8d.js": "/web-desktop-environment/precache-manifest.07563ed057af0ae1574ad8ce64a0bd8d.js",
     "service-worker.js": "/web-desktop-environment/service-worker.js",
     "static/css/2.6709bdc0.chunk.css.map": "/web-desktop-environment/static/css/2.6709bdc0.chunk.css.map",
     "static/css/main.dd606acf.chunk.css.map": "/web-desktop-environment/static/css/main.dd606acf.chunk.css.map",
-    "static/js/2.7047546f.chunk.js.LICENSE.txt": "/web-desktop-environment/static/js/2.7047546f.chunk.js.LICENSE.txt",
+    "static/js/2.a2d7a950.chunk.js.LICENSE.txt": "/web-desktop-environment/static/js/2.a2d7a950.chunk.js.LICENSE.txt",
     "static/media/index.css": "/web-desktop-environment/static/media/JetBrainsMono-SemiLight.f57f6c88.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.7735c67c.js",
     "static/css/2.6709bdc0.chunk.css",
-    "static/js/2.7047546f.chunk.js",
+    "static/js/2.a2d7a950.chunk.js",
     "static/css/main.dd606acf.chunk.css",
-    "static/js/main.a11cc1fd.chunk.js"
+    "static/js/main.cd2fd16a.chunk.js"
   ]
 }

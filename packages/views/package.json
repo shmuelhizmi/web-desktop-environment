@@ -10,7 +10,7 @@
     "@react-fullstack/fullstack-socket-client": "^0.2.1",
     "@react-fullstack/render": "^0.2.1",
     "@web-desktop-environment/interfaces": "^0.1.1",
-	"zlib": "1.0.0",
+    "zlib": "1.0.0",
     "axios": "0.19.2",
     "events": "3.1.0",
     "react": "^17.0.0",
@@ -28,6 +28,7 @@
     "xterm-addon-fit": "0.5.0"
   },
   "devDependencies": {
+    "gh-pages": "3.1.0",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -96,11 +97,13 @@
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/views"
   },
+  "homepage": "http://http.web-desktop.run/",
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "node scripts/build.js && echo \"http.web-desktop.run\" > build/CNAME",
     "test": "node scripts/test.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "gh-deploy-page": "gh-pages -d build"
   },
   "browserslist": {
     "production": [

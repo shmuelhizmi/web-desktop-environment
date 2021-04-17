@@ -14,7 +14,6 @@ const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 export const startServer = async () => {
 	await desktopManager.settingsManager.initialize();
 	await desktopManager.downloadManager.initialize();
-	await desktopManager.packageManager.searchForNewPackages();
 	const desktopPort = await desktopManager.portManager.getPort(true);
 	rootLogger.info(`starting web-desktop-environment on port ${desktopPort}`);
 	Render(

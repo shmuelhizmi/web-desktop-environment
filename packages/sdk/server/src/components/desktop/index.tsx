@@ -67,16 +67,19 @@ class Desktop extends Component<{}, DesktopState> {
 		this.desktopManager.appsManager.emitter.on("onInstalledAppsUpdate", () => {
 			this.forceUpdate();
 		});
+		this.initializeDesktop();
+	};
+	async initializeDesktop() {
 		const connectToGTK = new GTKBridgeConnector(
 			this.logger,
 			this.desktopManager
 		);
-		connectToGTK.initialize().then((connection) => {
-			if (connection.success) {
-				this.setState({ gtkBridgeConnection: { port: connection.port } });
-			}
-		});
-	};
+		const connection = await connectToGTK.initialize();
+		if (connection.success) {
+			this.setState({ gtkBridgeConnection: { port: connection.port } });
+		}
+		await this.desktopManager.packageManager.searchForNewPackages();
+	}
 	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
 		this.logger.info(`launch app ${app.name}`);
 		this.desktopManager.appsManager.spawnApp(app.name, app.params);

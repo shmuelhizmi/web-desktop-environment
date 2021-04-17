@@ -288,15 +288,19 @@ const mintTheme: Theme = {
 	overrides: {
 		WindowBar: {
 			windowsBar: {
-				bottom: 0,
 				borderRadius: 0,
 				background: "#2e2e2e",
 				justifyContent: "center",
-				width: "max-content",
 				paddingLeft: 0,
-				transform: "translateX(50%)",
-				right: "50%",
-				left: "auto",
+			},
+			"@media (min-width: 768px)": {
+				windowsBar: {
+					bottom: 0,
+					width: "max-content",
+					transform: "translateX(50%)",
+					right: "50%",
+					left: "auto",
+				},
 			},
 			"@keyframes slideUp": {
 				from: {
@@ -322,13 +326,17 @@ const mintTheme: Theme = {
 		},
 		Desktop: {
 			startMenu: {
-				transform: "translateX(50%)",
-				right: "50%",
-				left: "auto",
-				bottom: 60,
 				borderRadius: 0,
 				boxShadow: "none",
 				background: "#2e2e2e",
+			},
+			"@media (min-width: 768px)": {
+				startMenu: {
+					transform: "translateX(50%)",
+					right: "50%",
+					left: "auto",
+					bottom: 60,
+				},
 			},
 			appCell: {
 				borderRadius: 0,

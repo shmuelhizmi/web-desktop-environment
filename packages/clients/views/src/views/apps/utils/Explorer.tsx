@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
 			gridTemplateRows: "44px calc(100% - 44px)",
 		},
 		actionBarContainer: {
-			width: 175,
+			width: "100%",
 			justifyContent: "center",
 			display: "flex",
 			height: "100%",
@@ -116,8 +116,8 @@ const styles = (theme: Theme) =>
 		fileBoxContainer: {
 			height: "100%",
 			width: "100%",
-			display: "flex",
-			justifyContent: "center",
+			display: "grid",
+			gridTemplateColumns: "175px calc(100% - 175px)",
 		},
 		fileBox: {
 			boxShadow: `${theme.shadowColor} 0px 7px 20px 1px inset`,
@@ -237,10 +237,40 @@ const styles = (theme: Theme) =>
 			display: "flex",
 			justifyContent: "center",
 		},
+		"@media (max-width: 700px)": {
+			dialogButtons: {
+				flexDirection: "column",
+				alignItems: "center",
+			},
+			fileContainer: {
+				display: "flex",
+				flexDirection: "column",
+				margin: 0,
+				gap: 0,
+			},
+			fileBoxContainer: {
+				gridTemplateColumns: "145px calc(100% - 145px)",
+			},
+			file: {
+				flexDirection: "row",
+				height: 70,
+				alignItems: "center",
+				justifyContent: "space-between",
+				margin: 5,
+				boxShadow: "none",
+				borderRadius: 0,
+				"&:hover": {
+					transform: "scale(1)",
+				},
+			},
+		},
+		fileContainerMini: {
+			gridTemplateColumns: "100%",
+		},
 		dialogButton: {
 			margin: 10,
+			width: "100%",
 			fontSize: 50,
-			width: "fit-content",
 			height: "fit-content",
 			borderRadius: 7,
 			background: theme.primary.main,
@@ -559,6 +589,8 @@ class Explorer extends Component<
 			copyPath,
 			cutPath,
 			downloadUrl,
+			prompt,
+			confirm,
 		} = this.state;
 		return (
 			<div className={classes.root}>
@@ -587,8 +619,14 @@ class Explorer extends Component<
 						</div>
 					</div>
 				</div>
-				<div className={classes.fileBoxContainer}>
-					{type === "explore" && (
+				<div
+					className={`${classes.fileBoxContainer} ${
+						type === "explore" && !prompt && !confirm
+							? ""
+							: classes.fileContainerMini
+					}`}
+				>
+					{type === "explore" && !prompt && !confirm && (
 						<div className={classes.actionBarContainer}>
 							<div className={classes.actionBar}>
 								<div className={classes.actionButton} onClick={this.createFile}>
@@ -672,48 +710,28 @@ class Explorer extends Component<
 						</div>
 					)}
 					<div className={classes.fileBox}>
-						{this.state.prompt && (
+						{prompt && (
 							<div className={classes.dialog}>
-								<div className={classes.dialogMessage}>
-									{this.state.prompt.message}
-								</div>
+								<div className={classes.dialogMessage}>{prompt.message}</div>
 								<TextField
-									value={this.state.prompt.value}
+									value={prompt.value}
 									onChange={(newValue) =>
-										this.state.prompt &&
+										prompt &&
 										this.setState({
-											prompt: { ...this.state.prompt, value: newValue || "" },
+											prompt: { ...prompt, value: newValue || "" },
 										})
 									}
 									className={classes.dialogInput}
 								/>
 								<div className={classes.dialogButtons}>
 									<Button
-										className={classes.dialogButton}
-										onClick={() =>
-											this.state.prompt &&
-											this.setState(
-												{
-													prompt: { ...this.state.prompt, result: false },
-												},
-												() =>
-													this.emitter.call(
-														"promptDone",
-														this.state.prompt as Prompt
-													)
-											)
-										}
-									>
-										Cancel
-									</Button>
-									<Button
 										color="secondary"
 										className={`${classes.dialogButton} ${classes.dialogButtonPrimary}`}
 										onClick={() =>
-											this.state.prompt &&
+											prompt &&
 											this.setState(
 												{
-													prompt: { ...this.state.prompt, result: true },
+													prompt: { ...prompt, result: true },
 												},
 												() =>
 													this.emitter.call(
@@ -725,14 +743,30 @@ class Explorer extends Component<
 									>
 										OK
 									</Button>
+									<Button
+										className={classes.dialogButton}
+										onClick={() =>
+											prompt &&
+											this.setState(
+												{
+													prompt: { ...prompt, result: false },
+												},
+												() =>
+													this.emitter.call(
+														"promptDone",
+														this.state.prompt as Prompt
+													)
+											)
+										}
+									>
+										Cancel
+									</Button>
 								</div>
 							</div>
 						)}
-						{this.state.confirm && (
+						{confirm && (
 							<div className={classes.dialog}>
-								<div className={classes.dialogMessage}>
-									{this.state.confirm.message}
-								</div>
+								<div className={classes.dialogMessage}>{confirm.message}</div>
 								<div className={classes.dialogButtons}>
 									<Button
 										className={classes.dialogButton}
@@ -784,7 +818,7 @@ class Explorer extends Component<
 								</div>
 							</div>
 						)}
-						{!this.state.prompt && !this.state.confirm && (
+						{!prompt && !confirm && (
 							<>
 								<div className={classes.fileContainer}>
 									{files.map((file, index) => (

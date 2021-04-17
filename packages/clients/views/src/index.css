@@ -13,6 +13,7 @@ body {
 
 * {
   font-family: JetBrains Mono;
+  user-select: none;
 }
 
 /* width */

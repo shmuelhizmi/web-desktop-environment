@@ -14,6 +14,7 @@ import axios from "axios";
 import Color from "@ctrl/tinycolor";
 import { SketchPicker } from "react-color";
 import { invertColor } from "@utils/colors";
+import Icon from "@components/icon";
 
 const makeColor = (baseColor: RGBArray | string): ColorType => {
 	const color =
@@ -52,16 +53,22 @@ const styles = (theme: Theme) =>
 			backdropFilter: theme.type === "transparent" ? "blur(16px)" : "none",
 			borderRadius: "0 0 0 10px",
 			height: "100%",
-			width: 250,
+			width: 280,
+		},
+		categorySelectIcon: {
+			marginRight: 10,
+			marginLeft: 10,
+			transform: "translateY(5px)",
 		},
 		selectCategoryButton: {
-			fontSize: 24,
+			fontSize: "calc(1em + 1vmin)",
 			paddingTop: 5,
 			paddingBottom: 5,
 			userSelect: "none",
 			cursor: "pointer",
 			width: "100%",
-			textAlign: "center",
+			display: "flex",
+			alignItems: "center",
 			borderBottom: `solid 1px ${theme.windowBorderColor}`,
 			color: theme.background.text,
 			"&:hover":
@@ -77,6 +84,14 @@ const styles = (theme: Theme) =>
 			color: theme.secondary.text,
 			background: `${theme.secondary.main} !important`,
 		},
+		"@media (max-width: 700px)": {
+			categorySelection: {
+				width: "100%",
+			},
+			selectCategoryButton: {
+				fontSize: "calc(2em + 1vmin)",
+			},
+		},
 		category: {
 			width: "100%",
 			maxHeight: "100%",
@@ -87,13 +102,25 @@ const styles = (theme: Theme) =>
 			alignItems: "center",
 			borderRadius: "0 0 15px 0",
 		},
+		categoryTopBar: {
+			display: "flex",
+			width: "100%",
+			alignItems: "center",
+		},
+		categoryBackButton: {
+			width: 30,
+			height: 30,
+			minWidth: "30px !important",
+			minHeight: "30px !important",
+			margin: 5,
+		},
 		categoryTitle: {
 			marginTop: 7,
 			width: "90%",
 			userSelect: "none",
 			borderBottom: `solid 2px ${theme.background.transparent}`,
 			color: theme.background.text,
-			fontSize: 40,
+			fontSize: "calc(1.5em + 2vmin)",
 		},
 		categorySubtitle: {
 			width: "85%",
@@ -101,7 +128,7 @@ const styles = (theme: Theme) =>
 			userSelect: "none",
 			borderBottom: `solid 1px ${theme.background.transparent}`,
 			color: theme.background.text,
-			fontSize: 25,
+			fontSize: "calc(0.75em + 1vmin)",
 		},
 		marginBlock: {
 			display: "flex",
@@ -127,7 +154,7 @@ const styles = (theme: Theme) =>
 			display: "flex",
 			justifyContent: "space-between",
 			alignItems: "center",
-			fontSize: 25,
+			fontSize: "calc(0.75em + 1vmin)",
 			color: theme.background.darkText || theme.background.text,
 			minHeight: 45,
 			marginBottom: 5,
@@ -140,7 +167,7 @@ const styles = (theme: Theme) =>
 		},
 		settingsPropertyName: {},
 		settingsPropertyNameCol: {
-			fontSize: "1.8vw",
+			fontSize: "calc(0.75em + 1vmin)",
 		},
 		settingsPropertyValueCol: {
 			width: "100% !important",
@@ -151,7 +178,7 @@ const styles = (theme: Theme) =>
 			alignItems: "center",
 		},
 		text: {
-			fontSize: 17,
+			fontSize: "calc(0.75em + 1vmin)",
 			color: theme.background.text,
 			margin: 5,
 		},
@@ -169,7 +196,7 @@ const styles = (theme: Theme) =>
 				border: "none",
 				borderBottom: `solid 1px ${theme.primary.transparent}`,
 				outline: "none",
-				fontSize: 23,
+				fontSize: "calc(0.75em + 1vmin)",
 				background: "transparent",
 			},
 			"& select": {
@@ -180,7 +207,7 @@ const styles = (theme: Theme) =>
 				border: "none",
 				borderBottom: `solid 1px ${theme.primary.transparent}`,
 				outline: "none",
-				fontSize: 23,
+				fontSize: "calc(0.75em + 1vmin)",
 				background: "transparent",
 				"& option": {
 					textAlign: "center",
@@ -224,7 +251,7 @@ const styles = (theme: Theme) =>
 type SettingsCategory = "desktop" | "network" | "systemInfo";
 
 interface SettingsState {
-	selectedCategory: SettingsCategory;
+	selectedCategory?: SettingsCategory;
 	settings: SettingsConfiguration;
 }
 
@@ -241,7 +268,6 @@ class Settings extends Component<
 	constructor(props: Settings["props"]) {
 		super(props);
 		this.state = {
-			selectedCategory: "desktop",
 			settings: props.settings,
 		};
 	}
@@ -283,9 +309,21 @@ class Settings extends Component<
 
 	renderDesktopCategory = () => {
 		const { classes, setSettings } = this.props;
+		const phoneMode = window.matchMedia("(max-width: 700px)").matches;
 		return (
 			<div className={classes.category}>
-				<div className={classes.categoryTitle}>Desktop Settings</div>
+				<div className={classes.categoryTopBar}>
+					{phoneMode && (
+						<Button
+							color="secondary"
+							onClick={() => this.setState({ selectedCategory: undefined })}
+							className={classes.categoryBackButton}
+						>
+							<Icon name="VscChevronLeft" />
+						</Button>
+					)}
+					<div className={classes.categoryTitle}>Desktop Settings</div>
+				</div>
 				<div className={classes.marginBlock}>
 					<div className={classes.settingsBlock}>
 						<div className={classes.settingsProperty}>
@@ -476,6 +514,7 @@ class Settings extends Component<
 
 	renderNetworkCategory = () => {
 		const { classes, setSettings } = this.props;
+		const phoneMode = window.matchMedia("(max-width: 700px)").matches;
 		return (
 			<StateComponent
 				defaultState={{
@@ -489,7 +528,18 @@ class Settings extends Component<
 			>
 				{(state, setState) => (
 					<div className={classes.category}>
-						<div className={classes.categoryTitle}>Network Settings</div>
+						<div className={classes.categoryTopBar}>
+							{phoneMode && (
+								<Button
+									color="secondary"
+									onClick={() => this.setState({ selectedCategory: undefined })}
+									className={classes.categoryBackButton}
+								>
+									<Icon name="VscChevronLeft" />
+								</Button>
+							)}
+							<div className={classes.categoryTitle}>Network Settings</div>
+						</div>
 						<div className={classes.marginBlock}>
 							<div className={classes.settingsBlock}>
 								<div className={classes.settingsProperty}>
@@ -595,9 +645,22 @@ class Settings extends Component<
 
 	renderSystemInfoCategory = () => {
 		const { classes, systemInfo } = this.props;
+		const phoneMode = window.matchMedia("(max-width: 700px)").matches;
+
 		return (
 			<div className={classes.category}>
-				<div className={classes.categoryTitle}>System Information</div>
+				<div className={classes.categoryTopBar}>
+					{phoneMode && (
+						<Button
+							color="secondary"
+							onClick={() => this.setState({ selectedCategory: undefined })}
+							className={classes.categoryBackButton}
+						>
+							<Icon name="VscChevronLeft" />
+						</Button>
+					)}
+					<div className={classes.categoryTitle}>System Information</div>
+				</div>
 				{systemInfo?.os && (
 					<div className={classes.marginBlock}>
 						<div className={classes.categorySubtitle}>OS</div>
@@ -779,41 +842,49 @@ class Settings extends Component<
 	render() {
 		const { classes } = this.props;
 		const { selectedCategory } = this.state;
+		const phoneMode = window.matchMedia("(max-width: 700px)").matches;
 		return (
 			<div className={classes.root}>
-				<div className={classes.categorySelection}>
-					<div
-						className={`${classes.selectCategoryButton} ${
-							selectedCategory === "desktop"
-								? classes.selectCategoryButtonSelected
-								: ""
-						}`}
-						onClick={() => this.setState({ selectedCategory: "desktop" })}
-					>
-						Desktop
+				{(!phoneMode || !selectedCategory) && (
+					<div className={classes.categorySelection}>
+						<div
+							className={`${classes.selectCategoryButton} ${
+								selectedCategory === "desktop"
+									? classes.selectCategoryButtonSelected
+									: ""
+							}`}
+							onClick={() => this.setState({ selectedCategory: "desktop" })}
+						>
+							<Icon className={classes.categorySelectIcon} name="VscVm" />
+							Desktop
+						</div>
+						<div
+							className={`${classes.selectCategoryButton} ${
+								selectedCategory === "network"
+									? classes.selectCategoryButtonSelected
+									: ""
+							}`}
+							onClick={() => this.setState({ selectedCategory: "network" })}
+						>
+							<Icon className={classes.categorySelectIcon} name="VscGlobe" />
+							Network
+						</div>
+						<div
+							className={`${classes.selectCategoryButton} ${
+								selectedCategory === "systemInfo"
+									? classes.selectCategoryButtonSelected
+									: ""
+							}`}
+							onClick={() => this.setState({ selectedCategory: "systemInfo" })}
+						>
+							<Icon className={classes.categorySelectIcon} name="VscInfo" />
+							Information
+						</div>
 					</div>
-					<div
-						className={`${classes.selectCategoryButton} ${
-							selectedCategory === "network"
-								? classes.selectCategoryButtonSelected
-								: ""
-						}`}
-						onClick={() => this.setState({ selectedCategory: "network" })}
-					>
-						Network
-					</div>
-					<div
-						className={`${classes.selectCategoryButton} ${
-							selectedCategory === "systemInfo"
-								? classes.selectCategoryButtonSelected
-								: ""
-						}`}
-						onClick={() => this.setState({ selectedCategory: "systemInfo" })}
-					>
-						Information
-					</div>
-				</div>
-				{selectedCategory === "desktop" && this.renderDesktopCategory()}
+				)}
+				{(selectedCategory === "desktop" ||
+					(!phoneMode && !selectedCategory)) &&
+					this.renderDesktopCategory()}
 				{selectedCategory === "network" && this.renderNetworkCategory()}
 				{selectedCategory === "systemInfo" && this.renderSystemInfoCategory()}
 			</div>

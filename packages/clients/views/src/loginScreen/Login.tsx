@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/styles";
 import Card from "@components/card";
 import TextField from "@components/textField";
@@ -22,9 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 	card: {
 		width: 500,
-		maxWidth: "80%",
 		height: 400,
-		maxHeight: "70%",
 		padding: "70px 60px",
 		display: "flex",
 		color: theme.background.text,
@@ -41,6 +39,27 @@ const useStyles = makeStyles((theme: Theme) => ({
 		height: 20,
 		display: "flex",
 		justifyContent: "space-between",
+	},
+	"@media (max-width: 768px)": {
+		card: {
+			position: "absolute",
+			top: 0,
+			right: 0,
+			left: 0,
+			bottom: 0,
+			padding: 0,
+			borderRadius: 0,
+			alignItems: "center",
+			justifyContent: "center",
+			width: "100%",
+			"& *": {
+				margin: 20,
+			},
+			height: "100%",
+		},
+		barButtonsContainer: {
+			position: "absolute",
+		},
 	},
 	barButton: {
 		width: 15,
@@ -73,9 +92,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const Login = (props: LoginProps) => {
 	const classes = useStyles();
-	const [host, setHost] = useState("localhost");
-	const [port, setPort] = useState(5000);
+	const [host, setHost] = useState(
+		window.localStorage.getItem("last-host") || "localhost"
+	);
+	const [port, setPort] = useState(
+		Number(window.localStorage.getItem("last-port")) || 5000
+	);
 	const [https /* , setHttps */] = useState(false);
+	useEffect(() => {
+		window.localStorage.setItem("last-host", host);
+		window.localStorage.setItem("last-port", String(port));
+	}, [host, port]);
 	return (
 		<div className={classes.root}>
 			<div>

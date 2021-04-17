@@ -12,6 +12,7 @@ import Icon from "@components/icon";
 import { Rnd, RndDragCallback, RndResizeCallback } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 import { lastTaskQueuer } from "@utils/tasks";
+import { isMobile } from "@utils/environment";
 
 export const defaultWindowSize = {
 	height: 600,
@@ -22,7 +23,10 @@ export const defaultWindowSize = {
 	minWidth: 400,
 };
 
-export const windowBarHeight = 25;
+// for now windows will not support hot reloading from mobile mode to regular mode
+const constantIsMobile = isMobile();
+
+export const windowBarHeight = constantIsMobile ? 35 : 25;
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -59,16 +63,16 @@ const styles = (theme: Theme) =>
 		},
 		barButtonsContainer: {
 			position: "relative",
-			top: 4,
-			right: 5,
-			width: 40,
+			top: constantIsMobile ? (windowBarHeight - 20) / 2 : 4,
+			right: constantIsMobile ? 10 : 5,
+			width: constantIsMobile ? 25 : 40,
 			height: 20,
 			display: "flex",
 			justifyContent: "space-between",
 		},
 		barButton: {
-			width: 15,
-			height: 15,
+			width: constantIsMobile ? 20 : 15,
+			height: constantIsMobile ? 20 : 15,
 			borderRadius: "50%",
 			zIndex: 2,
 			border: "1px solid #0004",
@@ -92,14 +96,15 @@ const styles = (theme: Theme) =>
 		},
 		barTitle: {
 			position: "relative",
-			top: 2,
+			top: constantIsMobile ? 6 : 2,
+			fontSize: constantIsMobile ? 17 : 14,
 			left: 45,
 			width: "100%",
 			textAlign: "center",
 			whiteSpace: "nowrap",
 			overflow: "hidden",
 			textOverflow: "ellipsis",
-			maxWidth: "calc(100% - 90px)",
+			maxWidth: constantIsMobile ? "calc(100% - 75px)" : "calc(100% - 90px)",
 			userSelect: "none",
 			color: theme.background.text,
 		},
@@ -532,10 +537,16 @@ class Window extends Component<
 
 	getWindowSize = () => {
 		const size = this.getSize();
-		const { snap } = this.state;
-		if (!snap) {
+		const { snap, collapse } = this.state;
+		if (!snap && !isMobile()) {
 			return size;
-		} else if (snap === "fullscreen") {
+			// mobile is always fullscreen
+		} else if (collapse && isMobile()) {
+			return {
+				width: "100%",
+				height: `${windowBarHeight}px`,
+			};
+		} else if (snap === "fullscreen" || isMobile()) {
 			return {
 				width: "100%",
 				height: `calc(100% - ${
@@ -555,9 +566,10 @@ class Window extends Component<
 	getWindowPosition = () => {
 		const position = this.getPosition();
 		const { snap } = this.state;
-		if (!snap) {
+		if (!snap && !isMobile()) {
 			return position;
-		} else if (snap === "fullscreen" || snap === "left") {
+			// mobile is always fullscreen
+		} else if (snap === "fullscreen" || snap === "left" || isMobile()) {
 			return {
 				x: 0,
 				y: 0,
@@ -589,6 +601,7 @@ class Window extends Component<
 		const { children, classes, title, icon, onClose } = this.props;
 		const size = this.getSize();
 		const position = this.getPosition();
+		const onMobile = isMobile();
 		return ReactDOM.createPortal(
 			<div
 				ref={(element) => {
@@ -602,8 +615,11 @@ class Window extends Component<
 					disableDragging={!canDrag}
 					size={this.getWindowSize()}
 					position={this.getWindowPosition()}
-					onDrag={this.onDrag}
+					onDrag={!onMobile ? this.onDrag : undefined}
 					onDragStart={(e) => {
+						if (onMobile) {
+							return;
+						}
 						if (snap) {
 							const { clientX, clientY } = e as MouseEvent;
 							this.setState({
@@ -628,6 +644,9 @@ class Window extends Component<
 						}
 					}}
 					onDragStop={() => {
+						if (onMobile) {
+							return;
+						}
 						this.updateWindowPositionORSizeQueuer.idle().then(() =>
 							this.setState({
 								useLocalWindowState: false,
@@ -636,7 +655,10 @@ class Window extends Component<
 						);
 					}}
 					defaultSize={size}
-					onResizeStart={() =>
+					onResizeStart={() => {
+						if (onMobile) {
+							return;
+						}
 						this.setState({
 							useLocalWindowState: true,
 							localWindowState: {
@@ -645,9 +667,12 @@ class Window extends Component<
 							},
 							snap: undefined,
 							isResizing: true,
-						})
-					}
+						});
+					}}
 					onResizeStop={() => {
+						if (onMobile) {
+							return;
+						}
 						this.lastResizeDelta = { height: 0, width: 0 };
 						this.setState(
 							{
@@ -665,7 +690,11 @@ class Window extends Component<
 					onResize={this.onResize}
 					style={{ zIndex, ...this.getWindowTransformStyles() }}
 				>
-					<div className={classes.root} onClick={() => this.setActive()}>
+					<div
+						style={collapse && onMobile ? { display: "none" } : {}}
+						className={classes.root}
+						onClick={() => this.setActive()}
+					>
 						<div
 							onMouseEnter={() => this.setState({ canDrag: true })}
 							onMouseLeave={() => this.setState({ canDrag: false })}
@@ -675,18 +704,20 @@ class Window extends Component<
 							}`}
 						>
 							<div className={classes.barButtonsContainer}>
-								<div
-									onClick={() => {
-										windowManager.updateState(this.id, {
-											minimized: !collapse,
-										});
-									}}
-									className={`${classes.barButton} ${
-										isActive
-											? classes.barButtonCollapse
-											: classes.barButtonInactive
-									}`}
-								/>
+								{!onMobile && (
+									<div
+										onClick={() => {
+											windowManager.updateState(this.id, {
+												minimized: !collapse,
+											});
+										}}
+										className={`${classes.barButton} ${
+											isActive
+												? classes.barButtonCollapse
+												: classes.barButtonInactive
+										}`}
+									/>
+								)}
 								<div
 									className={`${classes.barButton} ${
 										isActive ? classes.barButtonExit : classes.barButtonInactive

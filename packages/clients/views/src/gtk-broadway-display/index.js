@@ -2692,7 +2692,6 @@ function onMouseWheel(ev) {
 }
 
 function onTouchStart(ev) {
-	event.preventDefault();
 
 	updateKeyboardStatus();
 	updateForEvent(ev);
@@ -2754,7 +2753,6 @@ function onTouchStart(ev) {
 }
 
 function onTouchMove(ev) {
-	event.preventDefault();
 
 	updateKeyboardStatus();
 	updateForEvent(ev);
@@ -2786,7 +2784,6 @@ function onTouchMove(ev) {
 }
 
 function onTouchEnd(ev) {
-	event.preventDefault();
 
 	updateKeyboardStatus();
 	updateForEvent(ev);

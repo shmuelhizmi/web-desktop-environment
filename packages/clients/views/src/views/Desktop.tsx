@@ -20,11 +20,12 @@ import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
 import StateComponent from "@components/stateComponent";
 import { transparent } from "@utils/colors";
-import { connect } from "@root/gtk-broadway-display/index";
+import { connect as connectToBroadway } from "@root/gtk-broadway-display/index";
 import {
 	GTKBridgeEmitter,
 	status as GTKConnectionStatus,
 } from "@root/gtk-broadway-display/state";
+import { isMobile } from "@utils/environment";
 
 export const windowsBarHeight = 55;
 
@@ -94,8 +95,8 @@ const styles = (theme: Theme) =>
 			left: 15,
 			width: 500,
 			height: 500,
-			maxHeight: "60%",
-			maxWidth: "30%",
+			maxHeight: "calc(100% - 105px - 5px)",
+			maxWidth: "calc(100% - 15px - 5px)",
 			overflowY: "auto",
 			padding: 5,
 			borderRadius: 10,
@@ -106,6 +107,18 @@ const styles = (theme: Theme) =>
 				theme.type === "transparent" ? 0.15 : 0.6
 			),
 			boxShadow: "-5px 6px 10px -1px #0007",
+			transition: "width 400ms, left 400ms, bottom 400ms, height 400ms",
+		},
+		"@media (max-width: 768px)": {
+			startMenu: {
+				width: "100%",
+				height: "100%",
+				left: 0,
+				maxWidth: "calc(100% - 5px)",
+				maxHeight: "calc(100% - 60px - 5px)",
+				bottom: 60,
+				borderRadius: 0,
+			},
 		},
 		startMenuBody: {
 			width: "100%",
@@ -158,10 +171,10 @@ const useWindowBarStyles = makeStyles(
 		windowsBar: {
 			position: "absolute",
 			animation: "$slideUp 1s",
-			bottom: 5,
 			left: 120,
 			right: 120,
 			borderRadius: 13,
+			bottom: 5,
 			height: windowsBarHeight,
 			display: "flex",
 			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
@@ -175,6 +188,7 @@ const useWindowBarStyles = makeStyles(
 			zIndex: windowManager.windowsMinMaxLayer.max + 1,
 			overflowX: "auto",
 			overflowY: "hidden",
+			transition: "left 600ms, right 600ms, border-radius 600ms",
 		},
 		"@keyframes slideUp": {
 			from: {
@@ -242,6 +256,26 @@ const useWindowBarStyles = makeStyles(
 		windowsBarButtonCloseMinimized: {
 			borderBottom: `${theme.secondary.dark} solid 3px`,
 		},
+		"@media (min-width: 768px) and (max-width: 1024px)": {
+			windowsBar: {
+				left: 50,
+				right: 50,
+			},
+		},
+		"@media (max-width: 768px)": {
+			windowsBar: {
+				left: 0,
+				right: 0,
+				bottom: 0,
+				height: windowsBarHeight + 5,
+				borderRadius: 0,
+			},
+			windowsBarButton: {
+				borderRadius: 0,
+				boxShadow: "none",
+				backdropFilter: "blur(9px)",
+			},
+		},
 	}),
 	{ name: "WindowBar" }
 );
@@ -251,13 +285,18 @@ class Desktop extends Component<
 	{},
 	WithStyles<typeof styles>
 > {
-	renderAppListCell = (app: App, index: number) => {
+	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
 		const { classes, onLaunchApp } = this.props;
 		return (
 			<div
 				key={index}
 				className={classes.appCell}
-				onClick={() => app && onLaunchApp({ name: app.appName, params: {} })}
+				onClick={() => {
+					if (app) {
+						closeMenu();
+						onLaunchApp({ name: app.appName, params: {} });
+					}
+				}}
 			>
 				{app.icon.type === "img" ? (
 					<img alt={`${app.displayName} icon`} src={app.icon.icon} />
@@ -283,6 +322,11 @@ class Desktop extends Component<
 			this.forceUpdate();
 		});
 
+		window.addEventListener(
+			"resize",
+			() => !this.willUnmount && this.forceUpdate()
+		);
+
 		this.tryToStartGtkServer();
 	};
 
@@ -291,16 +335,18 @@ class Desktop extends Component<
 	};
 
 	tryToStartGtkServer = () => {
-		const { gtkBridge } = this.props;
-		if (GTKConnectionStatus === "disconnected" && gtkBridge) {
-			try {
-				connect(
-					reactFullstackConnectionManager.host,
-					reactFullstackConnectionManager.https,
-					gtkBridge.port
-				);
-			} catch (e) {
-				/* no handle */
+		if (!isMobile()) {
+			const { gtkBridge } = this.props;
+			if (GTKConnectionStatus === "disconnected" && gtkBridge) {
+				try {
+					connectToBroadway(
+						reactFullstackConnectionManager.host,
+						reactFullstackConnectionManager.https,
+						gtkBridge.port
+					);
+				} catch (e) {
+					/* no handle */
+				}
 			}
 		}
 	};
@@ -326,11 +372,13 @@ class Desktop extends Component<
 						/>
 					</ConnectionContext.Provider>
 				))}
-				<Link to="/native">
-					<div className={classes.switchToNativeButton}>
-						<Icon width={40} height={40} name="VscWindow" />
-					</div>
-				</Link>
+				{!isMobile() && (
+					<Link to="/native">
+						<div className={classes.switchToNativeButton}>
+							<Icon width={40} height={40} name="VscWindow" />
+						</div>
+					</Link>
+				)}
 				<StateComponent
 					defaultState={{ isStartMenuOpen: false, startMenuQuery: "" }}
 				>
@@ -369,7 +417,11 @@ class Desktop extends Component<
 													  app.appName.includes(startMenuQuery)
 													: true
 											)
-											.map((app, index) => this.renderAppListCell(app, index))}
+											.map((app, index) =>
+												this.renderAppListCell(app, index, () =>
+													setState({ isStartMenuOpen: false })
+												)
+											)}
 									</div>
 								</MountUnmountAnimation>
 							</>

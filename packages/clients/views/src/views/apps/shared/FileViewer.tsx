@@ -53,6 +53,16 @@ export const makeFileViewerStyles = (theme: Theme) =>
 			alignItems: "center",
 			position: "sticky",
 		},
+		"@media (max-width: 600px)": {
+			headline: {
+				width: "95%",
+			},
+		},
+		"@media (max-width: 430px)": {
+			headline: {
+				fontSize: "1.3rem",
+			},
+		},
 		backButton: {
 			position: "relative",
 			right: 0,

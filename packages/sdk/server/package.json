@@ -39,7 +39,7 @@
   },
   "peerDependencies": {
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/server-api": "1.0.0-alpha.5"
+    "@web-desktop-environment/server-api": "1.0.0-beta.0"
   },
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     "get-port": "5.1.1",
     "node-pty": "0.9.0",
     "react": "17.0.1",
-    "socket.io": "4.0.0",
+    "socket.io": "4.0.1",
     "systeminformation": "^5.6.10",
     "uuid": "^3.2.1",
     "yargs": "16.2.0"

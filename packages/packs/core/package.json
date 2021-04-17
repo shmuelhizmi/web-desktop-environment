@@ -42,6 +42,7 @@
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.1",
     "@react-fullstack/fullstack-socket-server": "0.2.1",
+    "socket.io": "4.0.1",
     "@react-fullstack/render": "0.2.1",
     "@web-desktop-environment/app-sdk": "^1.0.0-alpha.5",
     "@web-desktop-environment/interfaces": "^1.0.0-alpha.5",

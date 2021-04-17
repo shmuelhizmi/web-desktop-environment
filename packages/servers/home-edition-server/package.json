@@ -39,7 +39,7 @@
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.1",
     "@web-desktop-environment/pack-core": "^1.0.0-alpha.4",
-    "@web-desktop-environment/server-api": "^1.0.0-alpha.3",
+    "@web-desktop-environment/server-api": "^1.0.0-alpha.4",
     "@web-desktop-environment/server-sdk": "^1.0.0-alpha.4"
   }
 }

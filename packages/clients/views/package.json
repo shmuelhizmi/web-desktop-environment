@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/views",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "private": false,
   "dependencies": {
@@ -9,7 +9,7 @@
     "@react-fullstack/fullstack": "0.2.1",
     "@react-fullstack/fullstack-socket-client": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/interfaces": "^1.0.0-alpha.4",
+    "@web-desktop-environment/interfaces": "^1.0.0-alpha.5",
     "axios": "0.19.2",
     "events": "3.1.0",
     "react": "^17.0.0",

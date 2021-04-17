@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-sdk",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-beta.0",
   "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "@types/uuid": "^3.4.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "@web-desktop-environment/server-api": "^1.0.0-alpha.5",
+    "@web-desktop-environment/server-api": "^1.0.0-beta.0",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -49,8 +49,8 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/app-sdk": "^1.0.0-alpha.5",
-    "@web-desktop-environment/interfaces": "^1.0.0-alpha.5",
+    "@web-desktop-environment/app-sdk": "^1.0.0-beta.0",
+    "@web-desktop-environment/interfaces": "^1.0.0-beta.0",
     "broadcast-channel": "3.5.3",
     "chalk": "4.1.0",
     "fs-extra": "9.0.1",

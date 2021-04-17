@@ -30,14 +30,14 @@ the twist with "web-desktop-environment" compare to other desktop-environments i
 - interface for controlling your computer over a long distance 
 - interface for a development server  
 
-## The technologies behind "web-desktop-devironment"
+## The technologies behind "web-desktop-environment"
 
 both the server and are build using a react framework called ["react-fullstack"](https://github.com/shmuelhizmi/react-fullstack/tree/master/packages/fullstack) which is a framework for building fast react applications that rely on a tight reactive connection between the client and the server.
 
 ## Screenshots
 
 ![dark theme](./assets/dark_theme_screenshot.jpg)
-![mobile](./assets/mobile_screenshot.jpg)
+![mobile](./assets/mobile_screenshot.png)
 ![transparent](./assets/transparent_theme_screenshot.jpg)
 ![nord theme](./assets/nord_theme_screenshot.jpg)
 ![pwa](./assets/pwa_app_screenshot.jpg)

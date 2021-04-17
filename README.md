@@ -37,6 +37,7 @@ both the server and are build using a react framework called ["react-fullstack"]
 ## Screenshots
 
 ![dark theme](./assets/dark_theme_screenshot.jpg)
+![mobile](./assets/mobile_screenshot.jpg)
 ![transparent](./assets/transparent_theme_screenshot.jpg)
 ![nord theme](./assets/nord_theme_screenshot.jpg)
 ![pwa](./assets/pwa_app_screenshot.jpg)
@@ -51,6 +52,7 @@ if you have any new feature or existing feature you want to create or improve fe
 ## Desktop
 
 :heavy_check_mark: Full web based desktop  
+:heavy_check_mark: Mobile support
 :heavy_check_mark: Themes and custom themes  
 :heavy_check_mark: PWA app  
 :heavy_check_mark: Windows can ether be opened inside the main web-app container or as a standalone native os windows (works better when using the app as PWA)

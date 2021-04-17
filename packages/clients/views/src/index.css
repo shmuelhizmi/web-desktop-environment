@@ -1,0 +1,42 @@
+#app {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+body {
+  overflow: hidden;
+}
+
+* {
+  font-family: JetBrains Mono;
+  user-select: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(191, 191, 191, 0.1);
+  margin: 15px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00000015;
+  border: #00000035 1px solid;
+  backdrop-filter: blur(15px);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(191, 191, 191, 0.8);
+  backdrop-filter: blur(18px);
+}

@@ -1,0 +1,50 @@
+{
+  "name": "@web-desktop-environment/development-edition-server",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "nodemon .",
+    "build": "tsc",
+    "build:server": "npm run build",
+    "lint": "eslint .",
+    "prepublish": "npm run build"
+  },
+  "bin": {
+    "web-desktop-dev": "./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/servers/development-edition-server"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "5.0.2",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "7.20.6",
+    "nodemon": "2.0.4",
+    "prettier": "^2.0.5",
+    "ts-node": "9.0.0",
+    "tsconfig-paths": "3.9.0",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "@react-fullstack/fullstack": "0.2.1",
+    "@web-desktop-environment/interfaces": "^1.0.0",
+    "@web-desktop-environment/pack-core": "^1.0.0",
+    "@web-desktop-environment/pack-dev": "^1.0.0",
+    "@web-desktop-environment/server-api": "^1.0.0",
+    "@web-desktop-environment/server-sdk": "^1.0.0",
+    "axios": "0.21.1",
+    "code-server": "^3.9.3",
+    "react": "^17.0.1"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "@web-desktop-environment/server-sdk",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "nodemon .",
+    "watch": "nodemon --exec \"npm run build\" --watch src --watch node_modules",
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
+    "build:server": "npm run build",
+    "prepare": "npm run build",
+    "lint": "eslint ."
+  },
+  "bin": {
+    "run": "./bin/runApp.js"
+  },
+  "devDependencies": {
+    "@types/chalk": "2.2.0",
+    "@types/fs-extra": "5.0.2",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.3",
+    "@types/socket.io": "1.4.33",
+    "@types/uuid": "^3.4.3",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "@web-desktop-environment/server-api": "^1.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "7.20.6",
+    "nodemon": "2.0.4",
+    "prettier": "^2.0.5",
+    "ts-node": "9.0.0",
+    "tsconfig-paths": "3.9.0",
+    "tscpaths": "0.0.9",
+    "typescript": "^4.2.3"
+  },
+  "peerDependencies": {
+    "@react-fullstack/fullstack": "0.2.1",
+    "@web-desktop-environment/server-api": "1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/sdk/server"
+  },
+  "dependencies": {
+    "@react-fullstack/fullstack-socket-server": "0.2.1",
+    "@react-fullstack/render": "0.2.1",
+    "@web-desktop-environment/app-sdk": "^1.0.0",
+    "@web-desktop-environment/interfaces": "^1.0.0",
+    "broadcast-channel": "3.5.3",
+    "chalk": "4.1.0",
+    "fs-extra": "9.0.1",
+    "get-port": "5.1.1",
+    "node-pty": "0.9.0",
+    "react": "17.0.1",
+    "socket.io": "4.0.1",
+    "systeminformation": "^5.6.10",
+    "uuid": "^3.2.1",
+    "yargs": "16.2.0"
+  }
+}

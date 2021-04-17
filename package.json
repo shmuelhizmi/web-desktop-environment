@@ -2,9 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "dev:server": "cd packages/home-edition-server && npm start",
-    "dev:server:dev": "cd packages/development-edition-server && npm start",
-    "dev:web": "cd packages/views && npm start",
+    "dev:server": "cd packages/servers/home-edition-server && npm start",
+    "dev:server:dev": "cd packages/servers/development-edition-server && npm start",
+    "dev:web": "cd packages/clients/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "dev:dev": "concurrently \"npm run dev:server:dev\" \"npm run dev:web\"",
     "start": "npm install --unsafe-perm && npm run dev",
@@ -23,6 +23,6 @@
     "url": "https://github.com/shmuelhizmi/web-desktop-environment"
   },
   "workspaces": [
-    "packages/*"
+    "packages/**/*"
   ]
 }

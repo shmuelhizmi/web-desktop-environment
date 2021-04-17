@@ -1,0 +1,14 @@
+{
+  "watch": [
+    "src",
+    "node_modules"
+  ],
+  "ext": "ts,tsx,js",
+  "ignore": [
+    "src/**/*.spec.ts"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "exec": "ts-node -r tsconfig-paths/register ./src/index.ts"
+}

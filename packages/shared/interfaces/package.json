@@ -1,0 +1,26 @@
+{
+  "name": "@web-desktop-environment/interfaces",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "build:server": "npm run build",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/shared/interfaces"
+  },
+  "devDependencies": {
+    "@react-fullstack/fullstack": "0.2.1",
+    "@types/react": "^17.0.3",
+    "react-icons": "3.11.0",
+    "typescript": "^4.2.3"
+  }
+}

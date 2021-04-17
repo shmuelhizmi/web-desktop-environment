@@ -44,8 +44,8 @@
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
     "@web-desktop-environment/app-sdk": "^1.0.0-alpha.2",
-    "@web-desktop-environment/interfaces": "^1.0.0-alpha.1",
-    "@web-desktop-environment/server-api": "^1.0.0-alpha.1",
+    "@web-desktop-environment/interfaces": "1.0.0-alpha.2",
+    "@web-desktop-environment/server-api": "1.0.0-alpha.2",
     "react": "17.0.1"
   }
 }

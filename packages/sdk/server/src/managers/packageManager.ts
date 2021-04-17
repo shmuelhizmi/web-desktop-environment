@@ -43,7 +43,9 @@ class PackageManager {
 								if (!this.discoveredPackages.includes(binFile)) {
 									this.discoveredPackages.push(binFile);
 									this.runningPackages.push(binFile);
-									const newProcess = cp.spawn(binFile, { stdio: ["ipc"] });
+									const newProcess = cp.spawn(path.join(folder, binFile), {
+										stdio: ["ipc"],
+									});
 									newProcess.on(
 										"exit",
 										() =>

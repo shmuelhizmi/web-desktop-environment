@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 	barButtonsContainer: {
 		position: "relative",
 		top: 30,
-		left: "91%",
+		right: 20,
 		width: 40,
 		height: 20,
 		display: "flex",
@@ -75,10 +75,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 			background: theme.error.dark,
 		},
 	},
+	flexEnd: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "flex-end",
+	},
 	flex: {
 		display: "flex",
 	},
-	barButtonCollaps: {
+	barButtonCollapse: {
 		cursor: "pointer",
 		background: theme.success.main,
 		"&:hover": {
@@ -105,9 +110,11 @@ const Login = (props: LoginProps) => {
 	}, [host, port]);
 	return (
 		<div className={classes.root}>
-			<div>
+			<div className={classes.flexEnd}>
 				<div className={classes.barButtonsContainer}>
-					<div className={`${classes.barButton} ${classes.barButtonCollaps}`} />
+					<div
+						className={`${classes.barButton} ${classes.barButtonCollapse}`}
+					/>
 					<div className={`${classes.barButton} ${classes.barButtonExit}`} />
 				</div>
 				<Card className={classes.card}>

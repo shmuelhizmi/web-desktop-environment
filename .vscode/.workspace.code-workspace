@@ -5,23 +5,28 @@
 			"path": ".."
 		},
 		{
-			"name": ".web-desktop-environment-config",
-			"path": "../../../../.web-desktop-environment-config"
-		},
-		{
+			"name": "clients",
 			"path": "../packages/clients"
 		},
 		{
+			"name": "sdk",
 			"path": "../packages/sdk"
 		},
 		{
+			"name": "servers",
 			"path": "../packages/servers"
 		},
 		{
+			"name": "shared",
 			"path": "../packages/shared"
 		},
 		{
+			"name": "packs",
 			"path": "../packages/packs"
+		},
+		{
+			"name": ".web-desktop-environment-config",
+			"path": "../../../../.web-desktop-environment-config"
 		}
 	],
 	"settings": {

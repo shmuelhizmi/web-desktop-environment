@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/pack-core",
-  "version": "0.1.1",
+  "version": "1.0.0-alpha.0",
   "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -22,8 +22,8 @@
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "eslint": "^7.5.0",
     "code-server": "^3.9.3",
+    "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.20.6",
@@ -40,12 +40,12 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
-    "@web-desktop-environment/server-api": "0.1.1",
-    "@web-desktop-environment/app-sdk": "0.1.1",
     "@react-fullstack/fullstack": "^0.2.1",
     "@react-fullstack/fullstack-socket-server": "^0.2.1",
     "@react-fullstack/render": "^0.2.1",
-    "@web-desktop-environment/interfaces": "0.1.1",
+    "@web-desktop-environment/app-sdk": "^1.0.0-alpha.0",
+    "@web-desktop-environment/interfaces": "^1.0.0-alpha.0",
+    "@web-desktop-environment/server-api": "^1.0.0-alpha.0",
     "react": "17.0.1"
   }
 }

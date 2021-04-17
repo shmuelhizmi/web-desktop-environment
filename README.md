@@ -36,12 +36,30 @@ both the server and are build using a react framework called ["react-fullstack"]
 
 ## Screenshots
 
-![dark theme](./assets/dark_theme_screenshot.jpg)
-![mobile](./assets/mobile_screenshot.jpg)
-![transparent](./assets/transparent_theme_screenshot.jpg)
-![nord theme](./assets/nord_theme_screenshot.jpg)
-![pwa](./assets/pwa_app_screenshot.jpg)
-![light theme](./assets/light_theme_screenshot.jpg)
+![dark theme](./assets/dark_theme_screenshot.jpg "Dark Theme Desktop")
+<p align="center">
+  Dark Theme Desktop
+</p>
+
+![mobile](./assets/mobile_screenshot.jpg "Mobile Screenshots")
+<p align="center">
+  Mobile Screenshots
+</p>
+
+![transparent theme](./assets/transparent_theme_screenshot.jpg "Transparent Theme Desktop")
+<p align="center">
+  Transparent Theme Desktop
+</p>
+
+![nord theme](./assets/nord_theme_screenshot.jpg "Nord Theme Desktop")
+<p align="center">
+  Nord Theme Desktop
+</p>
+
+![light theme](./assets/light_theme_screenshot.jpg "Light Theme Desktop 😒")
+<p align="center">
+  Light Theme Desktop 😒
+</p>
 
 # Contribute
 

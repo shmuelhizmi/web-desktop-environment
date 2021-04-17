@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/home-edition-server",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/pack-core": "^1.0.0-beta.1",
-    "@web-desktop-environment/server-api": "^1.0.0-beta.1",
-    "@web-desktop-environment/server-sdk": "^1.0.0-beta.1"
+    "@web-desktop-environment/pack-core": "^1.0.0",
+    "@web-desktop-environment/server-api": "^1.0.0",
+    "@web-desktop-environment/server-sdk": "^1.0.0"
   }
 }

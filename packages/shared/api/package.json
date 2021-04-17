@@ -18,7 +18,7 @@
     "directory": "packages/shared/api"
   },
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^1.0.0-alpha.0",
+    "@web-desktop-environment/interfaces": "1.0.0-alpha.0",
     "uid": "2.0.0"
   },
   "devDependencies": {

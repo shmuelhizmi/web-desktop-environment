@@ -18,7 +18,7 @@
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "@web-desktop-environment/server-api": "^1.0.0-alpha.0",
+    "@web-desktop-environment/server-api": "1.0.0-alpha.0",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -31,8 +31,8 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/server-api": "0.1.1"
+    "@react-fullstack/fullstack": "0.2.1",
+    "@web-desktop-environment/server-api": "1.0.0-alpha.0"
   },
   "repository": {
     "type": "git",
@@ -40,9 +40,9 @@
     "directory": "packages/sdk/app"
   },
   "dependencies": {
-    "@react-fullstack/fullstack-socket-server": "^0.2.1",
-    "@react-fullstack/render": "^0.2.1",
-    "@web-desktop-environment/interfaces": "^1.0.0-alpha.0",
+    "@react-fullstack/fullstack-socket-server": "0.2.1",
+    "@react-fullstack/render": "0.2.1",
+    "@web-desktop-environment/interfaces": "1.0.0-alpha.0",
     "react": "17.0.1"
   }
 }

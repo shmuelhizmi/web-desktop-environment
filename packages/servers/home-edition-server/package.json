@@ -37,9 +37,9 @@
     "directory": "packages/servers/home-edition-server"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "^0.2.1",
-    "@web-desktop-environment/pack-core": "^1.0.0-alpha.0",
-    "@web-desktop-environment/server-api": "^1.0.0-alpha.0",
-    "@web-desktop-environment/server-sdk": "^1.0.0-alpha.0"
+    "@react-fullstack/fullstack": "0.2.1",
+    "@web-desktop-environment/pack-core": "1.0.0-alpha.0",
+    "@web-desktop-environment/server-api": "1.0.0-alpha.0",
+    "@web-desktop-environment/server-sdk": "1.0.0-alpha.0"
   }
 }

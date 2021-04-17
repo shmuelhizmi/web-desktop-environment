@@ -39,7 +39,7 @@
   },
   "peerDependencies": {
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/server-api": "1.0.0-beta.1"
+    "@web-desktop-environment/server-api": "1.0.0"
   },
   "repository": {
     "type": "git",

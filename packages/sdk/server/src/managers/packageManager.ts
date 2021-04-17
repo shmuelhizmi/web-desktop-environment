@@ -3,6 +3,7 @@ import os from "os";
 import { promises as fs } from "fs-extra";
 import { APIClient } from "@web-desktop-environment/server-api";
 import Logger from "@root/utils/logger";
+import * as path from "path";
 
 class PackageManager {
 	private discoveredPackages: string[] = [];
@@ -16,9 +17,22 @@ class PackageManager {
 	}
 	public async searchForNewPackages() {
 		if (os.platform() === "linux" || os.platform() === "darwin") {
-			const nodeBinFolders = process.env.PATH.split(":").filter((path) =>
-				path.endsWith("node_modules/.bin")
-			);
+			const nodeBinFolders = (
+				await Promise.all(
+					module.paths
+						.map((folder) => path.join(folder, "./.bin"))
+						.map(async (folder) => {
+							try {
+								await fs.access(folder);
+								return { exist: true, folder };
+							} catch (err) {
+								return { exist: false, folder };
+							}
+						})
+				)
+			)
+				.filter((folder) => folder.exist)
+				.map((folder) => folder.folder);
 			const folderWeCouldNotOpen: string[] = [];
 			const promises = nodeBinFolders.map((folder) =>
 				fs

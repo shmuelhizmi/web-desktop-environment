@@ -37,7 +37,7 @@ both the server and are build using a react framework called ["react-fullstack"]
 ## Screenshots
 
 ![dark theme](./assets/dark_theme_screenshot.jpg)
-![mobile](./assets/mobile_screenshot.png)
+![mobile](./assets/mobile_screenshot.jpg)
 ![transparent](./assets/transparent_theme_screenshot.jpg)
 ![nord theme](./assets/nord_theme_screenshot.jpg)
 ![pwa](./assets/pwa_app_screenshot.jpg)

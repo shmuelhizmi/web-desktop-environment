@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-sdk",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -49,7 +49,7 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/app-sdk": "^1.0.0-alpha.3",
+    "@web-desktop-environment/app-sdk": "^1.0.0-alpha.4",
     "@web-desktop-environment/interfaces": "^1.0.0-alpha.3",
     "broadcast-channel": "3.5.3",
     "chalk": "4.1.0",

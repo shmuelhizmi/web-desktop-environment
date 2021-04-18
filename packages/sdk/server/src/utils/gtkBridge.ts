@@ -17,26 +17,32 @@ export class GTKBridge {
 		if (os.platform() !== "linux") {
 			return { success: false };
 		}
-		const broadwaydExist = await exists("broadwayd");
-		if (!broadwaydExist) {
-			this.logger.warn(
-				"seems like gtk3 broadwayd isn't installed, note that you can gain access to thousands of apps by installing broadwayd on your PC"
-			);
-			return { success: false };
-		}
-		const port = await this.desktopManager.portManager.getPort();
-		const broadwayd = cp.exec(`broadwayd --port=${port} :${port}`);
-		let broadwaydExited = false;
-		broadwayd.on("exit", () => (broadwaydExited = true));
-		await new Promise((res) => setTimeout(res, 3000));
+		try {
+			const broadwaydExist = await exists("broadwayd");
+			if (!broadwaydExist) {
+				this.logger.warn(
+					"seems like gtk3 broadwayd isn't installed, note that you can gain access to thousands of apps by installing broadwayd on your PC"
+				);
+				return { success: false };
+			}
+			const port = await this.desktopManager.portManager.getPort();
+			const broadwayd = cp.exec(`broadwayd --port=${port} :${port}`);
+			let broadwaydExited = false;
+			broadwayd.on("exit", () => (broadwaydExited = true));
+			await new Promise((res) => setTimeout(res, 3000));
 
-		if (!broadwaydExited) {
-			process.env["GDK_BACKEND"] = "broadway";
-			process.env["BROADWAY_DISPLAY"] = `:${port}`;
-			process.env["DISPLAY"] = `:${port}`;
-			return { success: true, port };
-		} else {
-			return { success: false };
+			if (!broadwaydExited) {
+				process.env["GDK_BACKEND"] = "broadway";
+				process.env["BROADWAY_DISPLAY"] = `:${port}`;
+				process.env["DISPLAY"] = `:${port}`;
+				return { success: true, port };
+			} else {
+				return { success: false };
+			}
+		} catch (err) {
+			return {
+				success: false,
+			};
 		}
 	}
 }

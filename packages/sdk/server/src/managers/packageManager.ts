@@ -16,58 +16,57 @@ class PackageManager {
 		);
 	}
 	public async searchForNewPackages() {
-		if (os.platform() === "linux" || os.platform() === "darwin") {
-			const nodeBinFolders = (
-				await Promise.all(
-					module.paths
-						.map((folder) => path.join(folder, "./.bin"))
-						.map(async (folder) => {
-							try {
-								await fs.access(folder);
-								return { exist: true, folder };
-							} catch (err) {
-								return { exist: false, folder };
-							}
-						})
-				)
+		const folderWeCouldNotOpen: string[] = [];
+		const nodeBinFolders = (
+			await Promise.all(
+				module.paths
+					.map((folder) => path.join(folder, "./.bin"))
+					.concat(process.env.PATH.split(os.platform() === "win32" ? ";" : ":"))
+					.map(async (folder) => {
+						try {
+							await fs.access(folder);
+							return { exist: true, folder };
+						} catch (err) {
+							return { exist: false, folder };
+						}
+					})
 			)
-				.filter((folder) => folder.exist)
-				.map((folder) => folder.folder);
-			const folderWeCouldNotOpen: string[] = [];
-			const promises = nodeBinFolders.map((folder) =>
-				fs
-					.readdir(folder)
-					.then((binFiles) => {
-						binFiles.forEach((binFile) => {
-							if (binFile.startsWith("web-desktop-package-")) {
-								if (!this.discoveredPackages.includes(binFile)) {
-									this.discoveredPackages.push(binFile);
-									this.runningPackages.push(binFile);
-									const newProcess = cp.spawn(path.join(folder, binFile), {
-										stdio: ["ipc"],
-									});
-									newProcess.on(
-										"exit",
-										() =>
-											(this.runningPackages = this.runningPackages.filter(
-												(currentPackage) => currentPackage !== binFile
-											))
-									);
-									APIClient.addChildProcess(newProcess);
-								}
+		)
+			.filter((folder) => folder.exist)
+			.map((folder) => folder.folder);
+		const promises = nodeBinFolders.map((folder) =>
+			fs
+				.readdir(folder)
+				.then((binFiles) => {
+					binFiles.forEach((binFile) => {
+						if (binFile.startsWith("web-desktop-package-")) {
+							if (!this.discoveredPackages.includes(binFile)) {
+								this.discoveredPackages.push(binFile);
+								this.runningPackages.push(binFile);
+								const newProcess = cp.spawn(path.join(folder, binFile), {
+									stdio: ["ipc"],
+								});
+								newProcess.on(
+									"exit",
+									() =>
+										(this.runningPackages = this.runningPackages.filter(
+											(currentPackage) => currentPackage !== binFile
+										))
+								);
+								APIClient.addChildProcess(newProcess);
 							}
-						});
-					})
-					.catch(() => {
-						folderWeCouldNotOpen.push(folder);
-					})
+						}
+					});
+				})
+				.catch(() => {
+					folderWeCouldNotOpen.push(folder);
+				})
+		);
+		await Promise.all(promises);
+		if (folderWeCouldNotOpen.length > 0) {
+			this.logger.warn(
+				`we could not search ${folderWeCouldNotOpen.length} directories for web desktop packages`
 			);
-			await Promise.all(promises);
-			if (folderWeCouldNotOpen.length > 0) {
-				this.logger.warn(
-					`we could not search ${folderWeCouldNotOpen.length} directories for web desktop packages`
-				);
-			}
 		}
 	}
 }

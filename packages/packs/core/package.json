@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/pack-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -41,9 +41,9 @@
     "@react-fullstack/fullstack": "0.2.1",
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/app-sdk": "^1.0.1",
-    "@web-desktop-environment/interfaces": "^1.0.1",
-    "@web-desktop-environment/server-api": "^1.0.1",
+    "@web-desktop-environment/app-sdk": "^1.0.2",
+    "@web-desktop-environment/interfaces": "^1.0.2",
+    "@web-desktop-environment/server-api": "^1.0.2",
     "react": "^17.0.0",
     "socket.io": "4.0.1"
   }

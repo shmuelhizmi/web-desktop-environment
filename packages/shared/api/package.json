@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-api",
-  "version": "1.0.1-alpha.2",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -18,7 +18,7 @@
     "directory": "packages/shared/api"
   },
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^1.0.1-alpha.2",
+    "@web-desktop-environment/interfaces": "^1.0.1",
     "uid": "2.0.0"
   },
   "devDependencies": {

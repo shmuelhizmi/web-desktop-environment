@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.1-alpha.1",
   "main": "dist/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -38,11 +38,11 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/interfaces": "^1.0.1-alpha.0",
-    "@web-desktop-environment/pack-core": "^1.0.1-alpha.0",
-    "@web-desktop-environment/pack-dev": "^1.0.1-alpha.0",
-    "@web-desktop-environment/server-api": "^1.0.1-alpha.0",
-    "@web-desktop-environment/server-sdk": "^1.0.1-alpha.0",
+    "@web-desktop-environment/interfaces": "^1.0.1-alpha.1",
+    "@web-desktop-environment/pack-core": "^1.0.1-alpha.1",
+    "@web-desktop-environment/pack-dev": "^1.0.1-alpha.1",
+    "@web-desktop-environment/server-api": "^1.0.1-alpha.1",
+    "@web-desktop-environment/server-sdk": "^1.0.1-alpha.1",
     "axios": "0.21.1",
     "react": "^17.0.1"
   }

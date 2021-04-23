@@ -33,6 +33,15 @@ const styles = (theme: Theme) =>
 		root: {
 			width: "100%",
 			height: "100%",
+			animation: "$startAnimation 500ms",
+		},
+		"@keyframes startAnimation": {
+			from: {
+				transform: "translate(-100%, 100%) scale(0.2)",
+			},
+			to: {
+				transform: "translate(0, 0) scale(1)",
+			},
 		},
 		bar: {
 			background: theme.windowBarColor,
@@ -119,6 +128,7 @@ type WindowSnap = "fullscreen" | "right" | "left";
 interface WindowState {
 	canDrag: boolean;
 	collapse: boolean;
+	mountAnimationDone: boolean;
 	isActive?: boolean;
 	localWindowState?: LocalWindowState;
 	useLocalWindowState: boolean;
@@ -126,6 +136,8 @@ interface WindowState {
 	zIndex?: number;
 	snap?: WindowSnap;
 }
+
+export const MountAnimationContext = React.createContext(false);
 
 class Window extends Component<
 	WindowInterface,
@@ -140,6 +152,7 @@ class Window extends Component<
 		super(props);
 		this.state = {
 			canDrag: false,
+			mountAnimationDone: false,
 			collapse: props.window.minimized || false,
 			useLocalWindowState: false,
 			isResizing: false,
@@ -597,6 +610,7 @@ class Window extends Component<
 			zIndex,
 			snap,
 			useLocalWindowState,
+			mountAnimationDone,
 		} = this.state;
 		const { children, classes, title, icon, onClose } = this.props;
 		const size = this.getSize();
@@ -693,6 +707,7 @@ class Window extends Component<
 					<div
 						style={collapse && onMobile ? { display: "none" } : {}}
 						className={classes.root}
+						onAnimationEnd={() => this.setState({ mountAnimationDone: true })}
 						onClick={() => this.setActive()}
 					>
 						<div
@@ -711,6 +726,7 @@ class Window extends Component<
 												minimized: !collapse,
 											});
 										}}
+										onMouseDown={(e) => e.stopPropagation()}
 										className={`${classes.barButton} ${
 											isActive
 												? classes.barButtonCollapse
@@ -722,6 +738,7 @@ class Window extends Component<
 									className={`${classes.barButton} ${
 										isActive ? classes.barButtonExit : classes.barButtonInactive
 									}`}
+									onMouseDown={(e) => e.stopPropagation()}
 									onClick={() => {
 										onClose();
 									}}
@@ -749,7 +766,9 @@ class Window extends Component<
 							className={classes.body}
 							style={this.shouldCollapse() ? { display: "none" } : {}}
 						>
-							{children}
+							<MountAnimationContext.Provider value={mountAnimationDone}>
+								{children}
+							</MountAnimationContext.Provider>
 						</div>
 					</div>
 				</Rnd>

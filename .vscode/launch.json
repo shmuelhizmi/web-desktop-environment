@@ -12,20 +12,6 @@
       "webRoot": "${workspaceFolder}/packages/views/"
     },
     {
-      "name": "server",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
-      "args": ["src/index.ts"],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceRoot}/packages/server/",
-      "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": ["<node_internals>/**", "node_modules/**"]
-    },
-    {
       "name": "dev edition server",
       "type": "node",
       "request": "launch",
@@ -35,7 +21,7 @@
       "env": {
         "NODE_ENV": "development"
       },
-      "cwd": "${workspaceRoot}/packages/development-edition-server/",
+      "cwd": "${workspaceRoot}/packages/servers/development-edition-server/",
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**", "node_modules/**"]
     }

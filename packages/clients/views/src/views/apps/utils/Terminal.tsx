@@ -14,6 +14,8 @@ import { reactFullstackConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import ResizeDetector from "react-resize-detector";
+import { MountAnimationContext } from "@views/Window";
+
 import "xterm/css/xterm.css";
 
 const styles = (theme: Theme) =>
@@ -79,18 +81,24 @@ class Terminal extends Component<
 		cursor: this.props.theme.background.text,
 	});
 
-	componentDidMount = () => {
+	mount = () => {
 		if (this.containerElement) {
 			this.term.open(this.containerElement);
-			this.termFit.fit();
+			this.fit();
 		}
 	};
+
+	componentDidUpdate = () => this.fit();
 
 	componentWillUnmount = () => {
 		this.socket.close();
 	};
 
 	onResize = () => {
+		this.fit();
+	};
+
+	fit = () => {
 		if (this.containerElement?.clientWidth) {
 			// do not resize is container is in display: none mode
 			this.termFit.fit();
@@ -101,20 +109,28 @@ class Terminal extends Component<
 	render() {
 		const { classes } = this.props;
 		this.term.setOption("theme", this.getTermTheme());
-		this.onResize();
 		return (
-			<ResizeDetector onResize={this.onResize}>
-				<div className={classes.root}>
-					<div
-						className={classes.body}
-						ref={(div) => {
-							if (div) {
-								this.containerElement = div;
-							}
-						}}
-					></div>
-				</div>
-			</ResizeDetector>
+			<MountAnimationContext.Consumer>
+				{(mount) => {
+					return (
+						<ResizeDetector onResize={this.onResize}>
+							<div className={classes.root}>
+								{mount && (
+									<div
+										className={classes.body}
+										ref={(div) => {
+											if (div && !this.containerElement) {
+												this.containerElement = div;
+												this.mount();
+											}
+										}}
+									></div>
+								)}
+							</div>
+						</ResizeDetector>
+					);
+				}}
+			</MountAnimationContext.Consumer>
 		);
 	}
 }

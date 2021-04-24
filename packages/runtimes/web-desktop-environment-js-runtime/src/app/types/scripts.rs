@@ -6,7 +6,7 @@ pub enum ScriptLocationType {
 }
 
 pub struct Script {
-	path: String,
-	locationType: ScriptLocationType,
-	content: Option<String>,
+	pub path: String,
+	pub location_type: ScriptLocationType,
+	pub content: Option<String>,
 }

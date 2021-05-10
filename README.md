@@ -99,7 +99,7 @@ if you have any new feature or existing feature you want to create or improve fe
 :comet: Applications store with user made apps ( will take quite a long time to implement )  
 
 # Run from source
-
+Note that to build the project you need to be running from a linux box (or wsl) with NPM 7 installed, 
 ## Run
 
 **quick run**
@@ -109,7 +109,7 @@ if you have any new feature or existing feature you want to create or improve fe
 
 **install packages**
 1. `npm i -g lerna`
-2. `lerna bootstrap`
+2. `lerna bootstrap --unsafe-perm`
 
 **run server**
 1. `cd packages/development-edition-server` or `cd packages/home-edition-server`

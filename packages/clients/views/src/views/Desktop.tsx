@@ -342,6 +342,7 @@ class Desktop extends Component<
 					connectToBroadway(
 						reactFullstackConnectionManager.host,
 						reactFullstackConnectionManager.https,
+						reactFullstackConnectionManager.mainPort,
 						gtkBridge.port
 					);
 				} catch (e) {

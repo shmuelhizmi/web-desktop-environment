@@ -26,15 +26,15 @@ const viewsMap = {
 };
 
 class ReactFullstackConnectionManager {
-	public readonly host: string;
-	public readonly https: boolean;
-	constructor(host: string, https: boolean) {
-		this.host = host;
-		this.https = https;
-	}
+	constructor(
+		public readonly host: string,
+		public readonly https: boolean,
+		public readonly mainPort: number
+	) {}
 	connect = <V extends Views>(
 		port: number,
-		views: V
+		views: V,
+		desktop = false
 	): {
 		port: number;
 		host: string;
@@ -43,10 +43,11 @@ class ReactFullstackConnectionManager {
 	} => {
 		return {
 			host: `${this.https ? "https" : "http"}://${this.host}`,
-			port,
+			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
+				path: desktop ? `/desktop/socket.io` : `/app/${port}/socket.io`,
 			},
 		};
 	};
@@ -62,9 +63,10 @@ export const connectToServer = (
 ) => {
 	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
 		host,
-		useHttps
+		useHttps,
+		port
 	);
-	return reactFullstackConnectionManager.connect(port, views);
+	return reactFullstackConnectionManager.connect(port, views, true);
 };
 
 const App = () => {

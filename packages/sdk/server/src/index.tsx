@@ -14,10 +14,17 @@ const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 export const startServer = async () => {
 	await desktopManager.settingsManager.initialize();
 	await desktopManager.downloadManager.initialize();
-	const desktopPort = await desktopManager.portManager.getPort(true);
-	rootLogger.info(`starting web-desktop-environment on port ${desktopPort}`);
+	const desktopPort = await desktopManager.portManager.getPort();
+
+	desktopManager.portManager.startBridge(desktopPort);
+
 	Render(
-		<Server views={viewInterfaces} singleInstance port={desktopPort}>
+		<Server
+			views={viewInterfaces}
+			singleInstance
+			port={desktopPort}
+			socketOptions={{ transports: ["websocket"] }}
+		>
 			{() => (
 				<AppProvider.Provider value={{ desktopManager, logger: rootLogger }}>
 					<Desktop />

@@ -33,9 +33,68 @@ const styles = (theme: Theme) =>
 		root: {
 			width: "100%",
 			height: "100%",
-			animation: "$startAnimation 500ms",
+			animation: "$startAnimationDesktop 500ms",
 		},
-		"@keyframes startAnimation": {
+		rootY: {
+			width: "100%",
+			height: "100%",
+		},
+		"@media (max-width: 768px)": {
+			root: {
+				animation: "$startAnimationMobileTranslation 500ms ease-out",
+			},
+			rootY: {
+				animation: "$startAnimationMobileScale 500ms ease-out",
+			},
+			"@keyframes startAnimationMobileTranslation": {
+				"0%": {
+					transform: "translate(-100%, 0)",
+				},
+				"100%": {
+					transform: "translate(0, 0)",
+				},
+			},
+			"@keyframes startAnimationMobileScale": {
+				"0%": {
+					transform: "scale(1)",
+				},
+				"50%": {
+					transform: "scale(0.8)",
+				},
+				"100%": {
+					transform: "scale(1)",
+				},
+			},
+		},
+		rootUnmounted: {
+			animation: "$endAnimationMobileTransform 450ms ease-in reverse",
+			opacity: 0,
+		},
+		rootYUnmounted: {
+			animation: "$endAnimationMobileScale 450ms ease-in",
+		},
+		"@keyframes endAnimationMobileTransform": {
+			"0%": {
+				transform: "translate(100%, 0)",
+				opacity: 1,
+			},
+			"100%": {
+				transform: "translate(0, 0)",
+				opacity: 1,
+			},
+		},
+		"@keyframes endAnimationMobileScale": {
+			"0%": {
+				transform: "scale(1)",
+			},
+			"50%": {
+				transform: "scale(0.8)",
+			},
+			"100%": {
+				transform: "scale(1)",
+			},
+		},
+		"@keyframes startAnimationDesktop": {
 			from: {
 				transform: "translate(-100%, 100%) scale(0.2)",
 			},
@@ -325,6 +384,7 @@ class Window extends Component<
 			}
 		};
 		switchPosition();
+		this.setActive();
 	}
 
 	componentWillUnmount = () => {
@@ -550,15 +610,10 @@ class Window extends Component<
 
 	getWindowSize = () => {
 		const size = this.getSize();
-		const { snap, collapse } = this.state;
+		const { snap } = this.state;
 		if (!snap && !isMobile()) {
 			return size;
 			// mobile is always fullscreen
-		} else if (collapse && isMobile()) {
-			return {
-				width: "100%",
-				height: `${windowBarHeight}px`,
-			};
 		} else if (snap === "fullscreen" || isMobile()) {
 			return {
 				width: "100%",
@@ -597,7 +652,9 @@ class Window extends Component<
 
 	shouldCollapse = () => {
 		const { collapse, snap, useLocalWindowState, isResizing } = this.state;
-		return collapse || (useLocalWindowState && !snap && !isResizing);
+		return (
+			(collapse || (useLocalWindowState && !snap && !isResizing)) && !isMobile()
+		);
 	};
 
 	lastResizeDelta = { width: 0, height: 0 };
@@ -616,6 +673,7 @@ class Window extends Component<
 		const size = this.getSize();
 		const position = this.getPosition();
 		const onMobile = isMobile();
+		const isCurrentWindow = windowManager.activeWindowId === this.id;
 		return ReactDOM.createPortal(
 			<div
 				ref={(element) => {
@@ -705,70 +763,83 @@ class Window extends Component<
 					style={{ zIndex, ...this.getWindowTransformStyles() }}
 				>
 					<div
-						style={collapse && onMobile ? { display: "none" } : {}}
-						className={classes.root}
+						className={`${classes.root} ${
+							(!isCurrentWindow || collapse) &&
+							onMobile &&
+							classes.rootUnmounted
+						}`}
 						onAnimationEnd={() => this.setState({ mountAnimationDone: true })}
 						onClick={() => this.setActive()}
 					>
 						<div
-							onMouseEnter={() => this.setState({ canDrag: true })}
-							onMouseLeave={() => this.setState({ canDrag: false })}
-							onDoubleClick={() => this.snapWindow("fullscreen")}
-							className={`${classes.bar} ${
-								this.shouldCollapse() ? classes.barCollapse : ""
+							className={`${classes.rootY} ${
+								(!isCurrentWindow || collapse) &&
+								onMobile &&
+								classes.rootYUnmounted
 							}`}
 						>
-							<div className={classes.barButtonsContainer}>
-								{!onMobile && (
+							<div
+								onMouseEnter={() => this.setState({ canDrag: true })}
+								onMouseLeave={() => this.setState({ canDrag: false })}
+								onDoubleClick={() => this.snapWindow("fullscreen")}
+								className={`${classes.bar} ${
+									this.shouldCollapse() ? classes.barCollapse : ""
+								}`}
+							>
+								<div className={classes.barButtonsContainer}>
+									{!onMobile && (
+										<div
+											onClick={() => {
+												windowManager.updateState(this.id, {
+													minimized: !collapse,
+												});
+											}}
+											onMouseDown={(e) => e.stopPropagation()}
+											className={`${classes.barButton} ${
+												isActive
+													? classes.barButtonCollapse
+													: classes.barButtonInactive
+											}`}
+										/>
+									)}
 									<div
-										onClick={() => {
-											windowManager.updateState(this.id, {
-												minimized: !collapse,
-											});
-										}}
-										onMouseDown={(e) => e.stopPropagation()}
 										className={`${classes.barButton} ${
 											isActive
-												? classes.barButtonCollapse
+												? classes.barButtonExit
 												: classes.barButtonInactive
 										}`}
+										onMouseDown={(e) => e.stopPropagation()}
+										onClick={() => {
+											onClose();
+										}}
 									/>
-								)}
-								<div
-									className={`${classes.barButton} ${
-										isActive ? classes.barButtonExit : classes.barButtonInactive
-									}`}
-									onMouseDown={(e) => e.stopPropagation()}
-									onClick={() => {
-										onClose();
-									}}
-								/>
+								</div>
+								<div className={classes.barTitle}>
+									{title} -{" "}
+									{icon.type === "icon" ? (
+										<Icon
+											containerClassName={classes.barTitleIcon}
+											name={icon.icon}
+										/>
+									) : (
+										<img
+											className={classes.barTitleIcon}
+											alt="windows icon"
+											width={14}
+											height={14}
+										/>
+									)}
+								</div>
 							</div>
-							<div className={classes.barTitle}>
-								{title} -{" "}
-								{icon.type === "icon" ? (
-									<Icon
-										containerClassName={classes.barTitleIcon}
-										name={icon.icon}
-									/>
-								) : (
-									<img
-										className={classes.barTitleIcon}
-										alt="windows icon"
-										width={14}
-										height={14}
-									/>
-								)}
-							</div>
-						</div>
 
-						<div
-							className={classes.body}
-							style={this.shouldCollapse() ? { display: "none" } : {}}
-						>
-							<MountAnimationContext.Provider value={mountAnimationDone}>
-								{children}
-							</MountAnimationContext.Provider>
+							<div
+								className={classes.body}
+								style={this.shouldCollapse() ? { display: "none" } : {}}
+							>
+								<MountAnimationContext.Provider value={mountAnimationDone}>
+									{children}
+								</MountAnimationContext.Provider>
+							</div>
 						</div>
 					</div>
 				</Rnd>

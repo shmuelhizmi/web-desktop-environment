@@ -485,6 +485,9 @@ export const WindowBar = ({
 							: ""
 					}`}
 					onClick={() => {
+						if (isStartMenuOpen) {
+							toggleStartMenu();
+						}
 						if (windowManager.activeWindowId === openWindow.id) {
 							windowManager.updateState(openWindow.id, {
 								minimized: !openWindow.state.minimized,

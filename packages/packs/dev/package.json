@@ -46,7 +46,7 @@
     "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",
     "axios": "0.21.1",
-    "code-server": "3.9.3",
+    "code-server": "3.10.2",
     "react": "^17.0.0"
   }
 }

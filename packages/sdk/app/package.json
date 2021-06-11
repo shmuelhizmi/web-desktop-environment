@@ -31,7 +31,7 @@
     "typescript": "^4.2.3"
   },
   "peerDependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
+    "@react-fullstack/fullstack": "0.2.2",
     "@web-desktop-environment/server-api": "1.0.2"
   },
   "repository": {
@@ -40,8 +40,8 @@
     "directory": "packages/sdk/app"
   },
   "dependencies": {
-    "@react-fullstack/fullstack-socket-server": "0.2.1",
-    "@react-fullstack/render": "0.2.1",
+    "@react-fullstack/fullstack-socket-server": "0.2.2",
+    "@react-fullstack/render": "0.2.2",
     "@web-desktop-environment/interfaces": "^1.0.2",
     "react": "17.0.1"
   }

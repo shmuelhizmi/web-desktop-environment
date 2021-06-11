@@ -39,9 +39,9 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
-    "@react-fullstack/fullstack-socket-server": "0.2.1",
-    "@react-fullstack/render": "0.2.1",
+    "@react-fullstack/fullstack": "0.2.2",
+    "@react-fullstack/fullstack-socket-server": "0.2.2",
+    "@react-fullstack/render": "0.2.2",
     "@web-desktop-environment/app-sdk": "^1.0.2",
     "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",

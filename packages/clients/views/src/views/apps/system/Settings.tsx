@@ -543,7 +543,9 @@ class Settings extends Component<
 						<div className={classes.marginBlock}>
 							<div className={classes.settingsBlock}>
 								<div className={classes.settingsProperty}>
-									<div className={classes.settingsPropertyName}>Main Port</div>
+									<div className={classes.settingsPropertyName}>
+										Public App Port
+									</div>
 									<div className={classes.settingsPropertyValue}>
 										<input
 											type="number"
@@ -574,7 +576,9 @@ class Settings extends Component<
 									</div>
 								</div>
 								<div className={classes.settingsProperty}>
-									<div className={classes.settingsPropertyName}>Start Port</div>
+									<div className={classes.settingsPropertyName}>
+										Internal Start Port
+									</div>
 									<div className={classes.settingsPropertyValue}>
 										<input
 											type="number"
@@ -605,7 +609,9 @@ class Settings extends Component<
 									</div>
 								</div>
 								<div className={classes.settingsProperty}>
-									<div className={classes.settingsPropertyName}>End Port</div>
+									<div className={classes.settingsPropertyName}>
+										Internal End Port
+									</div>
 									<div className={classes.settingsPropertyValue}>
 										<input
 											type="number"

@@ -13,12 +13,16 @@ const Icon = (
 		parentFill?: boolean;
 	}
 ) => {
+	const iconProps = { ...props };
+	// we need to delete this props to avoid react unknown prop error
+	delete iconProps.containerClassName;
+
 	return (
 		<span className={`icon-parent ${props.containerClassName || ""}`}>
 			{React.createElement(
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				{ ...FcIcons, ...VSCIcons }[props.name] || IconBase,
-				props
+				iconProps
 			)}
 		</span>
 	);

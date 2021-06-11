@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 			width: "100%",
 			"& *": {
 				margin: 20,
+				maxWidth: "90%",
 			},
 			height: "100%",
 		},

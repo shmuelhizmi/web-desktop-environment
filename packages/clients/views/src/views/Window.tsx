@@ -59,7 +59,7 @@ const styles = (theme: Theme) =>
 					transform: "scale(1)",
 				},
 				"50%": {
-					transform: "scale(0.8)",
+					transform: "scale(0.6)",
 				},
 				"100%": {
 					transform: "scale(1)",
@@ -88,7 +88,7 @@ const styles = (theme: Theme) =>
 				transform: "scale(1)",
 			},
 			"50%": {
-				transform: "scale(0.8)",
+				transform: "scale(0.6)",
 			},
 			"100%": {
 				transform: "scale(1)",

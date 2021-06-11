@@ -13,7 +13,7 @@ import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
-import windowManager from "@state/WindowManager";
+import windowManager, { Window } from "@state/WindowManager";
 import MountUnmountAnimation from "@components/mountUnmountAnimation";
 import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
@@ -26,6 +26,7 @@ import {
 	status as GTKConnectionStatus,
 } from "@root/gtk-broadway-display/state";
 import { isMobile } from "@utils/environment";
+import { useSwipeable, SwipeEventData } from "react-swipeable";
 
 export const windowsBarHeight = 55;
 
@@ -104,7 +105,7 @@ const styles = (theme: Theme) =>
 			backdropFilter: "blur(10px)",
 			background: transparent(
 				theme.background.transparent || theme.background.main,
-				theme.type === "transparent" ? 0.15 : 0.6
+				theme.type === "transparent" ? 0.3 : 0.9
 			),
 			boxShadow: "-5px 6px 10px -1px #0007",
 			transition: "width 400ms, left 400ms, bottom 400ms, height 400ms",
@@ -445,6 +446,66 @@ export const WindowBar = ({
 	const [selectedButton, setSelectedButton] = useState<number | undefined>(
 		undefined
 	);
+	const mobileView = isMobile();
+	const onOpenWindow = (openWindow: Window) => {
+		if (isStartMenuOpen) {
+			toggleStartMenu();
+		}
+		if (windowManager.activeWindowId === openWindow.id) {
+			windowManager.updateState(openWindow.id, {
+				minimized: !openWindow.state.minimized,
+			});
+		} else {
+			windowManager.updateState(openWindow.id, {
+				minimized: false,
+			});
+		}
+	};
+	const onSwipeDocument = (dir: "left" | "right", e: SwipeEventData) => {
+		if (!mobileView) {
+			return;
+		}
+		let ele: HTMLElement | null = e.event.target as HTMLElement;
+		while (ele) {
+			const style = getComputedStyle(ele);
+			const overflow = style.overflow;
+			const overflowX = style.overflowX;
+			if (
+				(overflow === "auto" || overflowX === "auto") &&
+				ele.scrollWidth > ele.offsetWidth
+			) {
+				return;
+			}
+			if (overflow === "scroll" || overflowX === "scroll") {
+				return;
+			}
+			ele = ele.parentElement;
+		}
+
+		const windowToOpen = openWindows.find(
+			(_, index) =>
+				openWindows[
+					(index + (dir === "right" ? 1 : openWindows.length - 1)) %
+						openWindows.length
+				].id === windowManager.activeWindowId
+		);
+		if (windowToOpen) {
+			onOpenWindow(windowToOpen);
+		}
+	};
+	const { ref: documentSwipeRef } = useSwipeable({
+		onSwipedRight(e) {
+			onSwipeDocument("right", e);
+		},
+		onSwipedLeft(e) {
+			onSwipeDocument("left", e);
+		},
+	});
+	const windowBarSwipable = useSwipeable({
+		onSwipedUp() {
+			toggleStartMenu();
+		},
+	});
 	useEffect(() => {
 		const updateWindow = () => setOpenWindows([...windowManager.windows]);
 		updateWindow();
@@ -453,9 +514,16 @@ export const WindowBar = ({
 		windowManager.emitter.on("maximizeWindow", updateWindow);
 		windowManager.emitter.on("minimizeWindow", updateWindow);
 		windowManager.emitter.on("setActiveWindow", updateWindow);
+		if (mobileView) {
+			documentSwipeRef(document.body);
+		}
 	}, []);
 	return (
-		<div className={classes.windowsBar}>
+		<div
+			className={classes.windowsBar}
+			{...windowBarSwipable}
+			onDoubleClick={toggleStartMenu}
+		>
 			<div
 				className={`${classes.windowsBarButton} ${
 					!isStartMenuOpen
@@ -484,20 +552,7 @@ export const WindowBar = ({
 							? classes.windowsBarButtonActive
 							: ""
 					}`}
-					onClick={() => {
-						if (isStartMenuOpen) {
-							toggleStartMenu();
-						}
-						if (windowManager.activeWindowId === openWindow.id) {
-							windowManager.updateState(openWindow.id, {
-								minimized: !openWindow.state.minimized,
-							});
-						} else {
-							windowManager.updateState(openWindow.id, {
-								minimized: false,
-							});
-						}
-					}}
+					onClick={() => onOpenWindow(openWindow)}
 				>
 					{openWindow.icon.type === "img" ? (
 						<img

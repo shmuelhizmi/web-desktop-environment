@@ -75,7 +75,9 @@ class Iframe extends Component<
 				className={classes.root}
 				src={`${https ? "https" : "http"}://${
 					host || reactFullstackConnectionManager.host
-				}${port ? ":" + port : ""}${path || ""}`}
+				}:${reactFullstackConnectionManager.mainPort}/app/${port}/${
+					reactFullstackConnectionManager.token
+				}/${path ? "/" + path : ""}`}
 			/>
 		);
 	}

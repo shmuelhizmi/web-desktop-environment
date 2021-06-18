@@ -12,7 +12,7 @@ import { defaultTheme } from "@root/theme";
 import { ThemeProvider as TP } from "@material-ui/styles";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
-import { Client } from "@react-fullstack/fullstack-socket-client";
+import Client from "@components/client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
 
@@ -29,7 +29,8 @@ class ReactFullstackConnectionManager {
 	constructor(
 		public readonly host: string,
 		public readonly https: boolean,
-		public readonly mainPort: number
+		public readonly mainPort: number,
+		public readonly token: string
 	) {}
 	connect = <V extends Views>(
 		port: number,
@@ -47,7 +48,9 @@ class ReactFullstackConnectionManager {
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
-				path: desktop ? `/desktop/socket.io` : `/app/${port}/socket.io`,
+				path: desktop
+					? `/desktop/${this.token}/socket.io`
+					: `/app/${port}/${this.token}/socket.io`,
 			},
 		};
 	};
@@ -59,14 +62,23 @@ export const connectToServer = (
 	host: string,
 	useHttps: boolean,
 	port: number,
-	views: Views
+	views: Views,
+	token = localStorage.getItem("last_session_token")
 ) => {
-	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
-		host,
-		useHttps,
-		port
-	);
-	return reactFullstackConnectionManager.connect(port, views, true);
+	if (token) {
+		localStorage.setItem("last_session_token", token);
+		reactFullstackConnectionManager = new ReactFullstackConnectionManager(
+			host,
+			useHttps,
+			port,
+			token
+		);
+		return {
+			...reactFullstackConnectionManager.connect(port, views, true),
+			missingToken: false as const,
+		};
+	}
+	return { missingToken: true as const };
 };
 
 const App = () => {
@@ -74,7 +86,15 @@ const App = () => {
 		isLoggedIn: boolean;
 		host: string;
 		port: number;
-	}>({ host: "localhost", port: 5000, isLoggedIn: false });
+		https: boolean;
+		token: string;
+	}>({
+		host: "localhost",
+		port: 5000,
+		isLoggedIn: false,
+		https: false,
+		token: "",
+	});
 	return (
 		<TP theme={defaultTheme}>
 			<Router>
@@ -135,16 +155,17 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
-													false,
+													login.https,
 													Number(login.port),
-													"nativeHost"
+													"nativeHost",
+													login.token
 												)}
 											/>
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, https, token) =>
+												setLogin({ host, port, isLoggedIn: true, https, token })
 											}
 										/>
 									)
@@ -177,16 +198,17 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
-													false,
+													login.https,
 													Number(login.port),
-													"web"
+													"web",
+													login.token
 												)}
 											/>
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, https, token) =>
+												setLogin({ host, port, isLoggedIn: true, https, token })
 											}
 										/>
 									)

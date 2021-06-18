@@ -5,9 +5,15 @@ import TextField from "@components/textField";
 import Button from "@components/button";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 interface LoginProps {
-	onLogin: (host: string, port: number, useHttps: boolean) => void;
+	onLogin: (
+		host: string,
+		port: number,
+		useHttps: boolean,
+		token: string
+	) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -96,6 +102,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
+type AuthStatus = "idle" | "error" | "loading";
+
 const Login = (props: LoginProps) => {
 	const classes = useStyles();
 	const [host, setHost] = useState(
@@ -105,10 +113,25 @@ const Login = (props: LoginProps) => {
 		Number(window.localStorage.getItem("last-port")) || 5000
 	);
 	const [https /* , setHttps */] = useState(false);
+	const [password, setPassword] = useState("");
+	const [authStatus, setAuthStatus] = useState<AuthStatus>("idle");
 	useEffect(() => {
 		window.localStorage.setItem("last-host", host);
 		window.localStorage.setItem("last-port", String(port));
 	}, [host, port]);
+
+	const auth = () => {
+		setAuthStatus("loading");
+		axios
+			.post(`${https ? "https" : "http"}://${host}:${port}/login`, { password })
+			.then((res) => {
+				if (res.data.success) {
+					return props.onLogin(host, port, https, res.data.token);
+				}
+				setAuthStatus("error");
+			})
+			.catch(() => setAuthStatus("error"));
+	};
 	return (
 		<div className={classes.root}>
 			<div className={classes.flexEnd}>
@@ -130,6 +153,12 @@ const Login = (props: LoginProps) => {
 						onChange={(newValue) => setPort(Number(newValue))}
 						placeholder="port"
 					></TextField>
+					<TextField
+						value={String(password || "")}
+						onChange={(newValue) => setPassword(newValue)}
+						placeholder="password"
+						type="password"
+					></TextField>
 					{/* <div className={classes.flex}>
 						<input
 							type="checkbox"
@@ -138,12 +167,7 @@ const Login = (props: LoginProps) => {
 						/>
 						<label>Use HTTPS</label>
 					</div> */}
-					<Button
-						variant="main"
-						onClick={() => props.onLogin(host, port, https)}
-						color="background"
-						border
-					>
+					<Button variant="main" onClick={auth} color="background" border>
 						Login
 					</Button>
 					<Link to="/demo" className={classes.link}>

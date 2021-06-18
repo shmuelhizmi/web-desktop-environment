@@ -7,28 +7,47 @@ import {
 } from "@react-fullstack/fullstack";
 
 interface Props<ViewsInterface extends Views> {
-	token: string;
+	port: number;
 	host: string;
-	port: string;
-	path: string;
+	socketOptions: SocketIOClient.ConnectOpts;
 	views: ViewsToComponents<ViewsInterface>;
+	missingToken: false;
 }
 
 class Client<ViewsInterface extends Views> extends React.Component<
-	Props<ViewsInterface>
+	Props<ViewsInterface> | { missingToken: true }
 > {
-	socket = connect(`${this.props.host}:${this.props.port}`, {
-		transports: ["websocket"],
-		path: this.props.path,
-		extraHeaders: {
-			Authorization: `Bearer ${this.props.token}`,
-		},
-	} as SocketIOClient.ConnectOpts);
+	socket?: SocketIOClient.Socket;
+	componentDidMount = () => {
+		if (!this.props.missingToken) {
+			// if the token is missing at component mount time we do not expect it to change
+			this.socket = connect(
+				`${this.props.host}:${this.props.port}`,
+				this.props.socketOptions
+			);
+			this.forceUpdate(() => {
+				this.socket?.on("connect", () => {
+					this.socket?.emit("request_views_tree");
+				});
+			});
+		}
+	};
 	render() {
-		const { views } = this.props;
-		return (
-			<FullstackClient<ViewsInterface> views={views} transport={this.socket} />
-		);
+		if (!this.props.missingToken) {
+			if (this.socket) {
+				const { views } = this.props;
+				return (
+					<FullstackClient<ViewsInterface>
+						views={views}
+						transport={this.socket}
+					/>
+				);
+			} else {
+				return <> </>;
+			}
+		} else {
+			return <> </>; // replace it with a no available session screen
+		}
 	}
 }
 

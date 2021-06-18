@@ -12,12 +12,35 @@ self.addEventListener("install", (event) => {
 	);
 });
 
+function parse_url(url) {
+	var pattern = RegExp(
+		"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?"
+	);
+	var matches = url.match(pattern);
+	return {
+		scheme: matches[2],
+		authority: matches[4],
+		path: matches[5],
+		query: matches[7],
+		fragment: matches[9],
+	};
+}
+
+const hostToken = {};
+
+self.addEventListener("fetch")
+
 // Listen for requests
 self.addEventListener("fetch", (event) => {
-	event.respondWith(
+	event.waitUntil(
 		caches.open(CACHE_NAME).then((cache) => {
 			return cache.match(event.request).then((response) => {
-				return fetch(event.request)
+				const { authority, path } = parse_url(event.request.url);
+				return fetch(event.request, {
+					headers: hostToken[authority]
+						? { Authorization: "Bearer " + hostToken[authority] }
+						: {},
+				})
 					.then((response) => {
 						if (
 							event.request.url.includes(self.location.host) &&
@@ -29,6 +52,14 @@ self.addEventListener("fetch", (event) => {
 								event.request.url.endsWith(".json"))
 						) {
 							cache.put(event.request, response.clone());
+						}
+						if (path === "/login") {
+							return response.json().then(({ success, token }) => {
+								if (success) {
+									hostToken[authority] = token;
+								}
+								return response;
+							});
 						}
 						return response;
 					})

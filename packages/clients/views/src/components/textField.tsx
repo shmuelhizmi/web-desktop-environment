@@ -33,6 +33,7 @@ interface TextFieldProps {
 	border?: boolean;
 	borderBottom?: boolean;
 	transparent?: boolean;
+	type?: string;
 	defaultValue?: string | number | string[] | undefined;
 }
 
@@ -48,6 +49,7 @@ const TextField = ({
 	transparent,
 	placeholder,
 	borderBottom,
+	type,
 }: PropsWithChildren<TextFieldProps>) => {
 	const theme: Theme = useTheme();
 	const selectedColor = theme[color || "background"];
@@ -76,6 +78,7 @@ const TextField = ({
 
 	return (
 		<input
+			type={type}
 			placeholder={placeholder}
 			value={value || currentValue}
 			onChange={onInputEvent}

@@ -6,6 +6,7 @@ import DownloadManager from "@managers/downloadManager";
 import { APIClient } from "@web-desktop-environment/server-api";
 import uuid from "uuid";
 import PackageManager from "@managers/packageManager";
+import AuthManager from "./authManager";
 
 export default class DesktopManager {
 	public readonly name: string;
@@ -17,12 +18,14 @@ export default class DesktopManager {
 	public appsManager: AppsManager;
 	public downloadManager: DownloadManager;
 	public packageManager: PackageManager;
+	public authManager: AuthManager;
 	constructor(name: string, rootLogger?: Logger) {
 		this.name = name;
 
 		const parentLogger = rootLogger || new Logger("root");
 		this.logger = parentLogger.mount(name);
 
+		this.authManager = new AuthManager();
 		this.portManager = new PortManager(this.logger, this);
 		this.settingsManager = new SettingsManager(this.logger);
 		this.appsManager = new AppsManager(this.logger, this);

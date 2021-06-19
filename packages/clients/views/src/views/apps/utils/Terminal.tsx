@@ -55,9 +55,9 @@ class Terminal extends Component<
 		this.socket = io(
 			`${reactFullstackConnectionManager.https ? "https" : "http"}://${
 				reactFullstackConnectionManager.host
-			}:${props.port}`,
+			}:${reactFullstackConnectionManager.mainPort}`,
 			{
-				transports: ["websocket"],
+				path: `/app/${props.port}/${reactFullstackConnectionManager.token}/socket.io`,
 			}
 		);
 		this.term = new XTerm({

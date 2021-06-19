@@ -19,12 +19,7 @@ export const startServer = async () => {
 	desktopManager.portManager.startBridge(desktopPort);
 
 	Render(
-		<Server
-			views={viewInterfaces}
-			singleInstance
-			port={desktopPort}
-			socketOptions={{ transports: ["websocket"] }}
-		>
+		<Server views={viewInterfaces} singleInstance port={desktopPort}>
 			{() => (
 				<AppProvider.Provider value={{ desktopManager, logger: rootLogger }}>
 					<Desktop />

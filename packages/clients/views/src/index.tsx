@@ -47,7 +47,6 @@ class ReactFullstackConnectionManager {
 			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
-				transports: ["websocket"],
 				path: desktop
 					? `/desktop/${this.token}/socket.io`
 					: `/app/${port}/${this.token}/socket.io`,

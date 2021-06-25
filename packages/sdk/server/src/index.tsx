@@ -1,3 +1,6 @@
+import mockModule from "mock-require";
+import * as httpProxy from "@web-desktop-environment/http-proxy-fork";
+mockModule("http-proxy", httpProxy);
 import React from "react";
 import { Render } from "@react-fullstack/render";
 import { Server } from "@react-fullstack/fullstack-socket-server";

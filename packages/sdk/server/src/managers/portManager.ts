@@ -2,10 +2,11 @@ import Logger from "@utils/logger";
 import getPort from "get-port";
 import DesktopManager from "@managers/desktopManager";
 import { APIClient } from "@web-desktop-environment/server-api";
-import express, { Express } from "express";
+import express, { Express, Request } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import * as net from "net";
 import cors from "cors";
+import type { Server } from "http";
 
 export const timeout = (time: number) =>
 	new Promise((resolve) => setTimeout(resolve, time));
@@ -14,6 +15,7 @@ export default class PortManager {
 	private logger: Logger;
 	private desktopManager: DesktopManager;
 	private expressApp: Express;
+	private server?: Server;
 	constructor(parentLogger: Logger, desktopManger: DesktopManager) {
 		this.logger = parentLogger.mount("port-manager");
 		this.desktopManager = desktopManger;
@@ -23,7 +25,17 @@ export default class PortManager {
 		this.expressApp = express();
 	}
 
-	public registerAppPort = (port: number) => {
+	private proxyErrorCount = 0;
+	private onProxyError = (_error: Error) => {
+		this.proxyErrorCount++;
+		if (this.proxyErrorCount % 100 === 0) {
+			this.logger.warn(
+				`the proxy server keep throwing errors, ${this.proxyErrorCount} error so far`
+			);
+		}
+	};
+
+	private registerAppPort = (port: number) => {
 		const proxy = createProxyMiddleware({
 			changeOrigin: true,
 			target: `http://localhost:${port}`,
@@ -31,8 +43,29 @@ export default class PortManager {
 			pathRewrite: {
 				"\\/app\\/([0-9])+\\/([a-zA-Z_\\.0-9\\-])+\\/": "/",
 			},
-			// logLevel: "error",
+			onError: this.onProxyError,
+			logLevel: "silent",
 		});
+		const wsproxy = createProxyMiddleware({
+			changeOrigin: true,
+			target: `ws://localhost:${port}`,
+			ws: true,
+			pathRewrite: {
+				"\\/app\\/([0-9])+\\/([a-zA-Z_\\.0-9\\-])+\\/": "/",
+			},
+			onError: this.onProxyError,
+			logLevel: "silent",
+		});
+		if (this.server) {
+			this.server.on(
+				"upgrade",
+				(req: Request, socket: net.Socket, head: any) => {
+					if (req.url.startsWith("/app/" + port)) {
+						wsproxy.upgrade(req, socket, head);
+					}
+				}
+			);
+		}
 		this.expressApp.use(
 			`/app/${port}/:token`,
 			async (req, res, next) => {
@@ -137,11 +170,12 @@ export default class PortManager {
 					"\\/desktop\\/([a-zA-Z_\\.0-9\\-])+\\/": "/",
 				},
 				ws: true,
-				logLevel: "error",
+				logLevel: "silent",
+				onError: this.onProxyError,
 			})
 		);
 		app.setMaxListeners(0);
-		app.listen(mainPort, "0.0.0.0", () => {
+		this.server = app.listen(mainPort, "0.0.0.0", () => {
 			this.logger.info(
 				`successfully started web-desktop-environment on port ${mainPort}`
 			);

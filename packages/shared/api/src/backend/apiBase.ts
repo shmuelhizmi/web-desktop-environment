@@ -61,7 +61,8 @@ abstract class APIBase {
   }
   public addChildProcess(cp: ChildProcess) {
     let isAlive = true;
-    cp.on("message", (message) => {
+    cp.on("message", (_message) => {
+      const message = _message as any;
       if (message) {
         if (message.type === "api_super_request") {
           const { id, managerName, functionName, parameters } = message;

@@ -1,21 +1,21 @@
 {
-  "name": "@web-desktop-environment/home-edition-server",
+  "name": "@web-desktop-environment/pack-fun",
   "version": "1.0.2",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
   "scripts": {
     "start": "nodemon .",
-    "build": "tsc",
+    "watch": "nodemon --exec \"npm run build\" --watch src --watch node_modules",
+    "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
     "build:server": "npm run build",
-    "lint": "eslint .",
-    "prepublish": "npm run build"
+    "prepare": "npm run build",
+    "lint": "eslint ."
   },
   "bin": {
-    "web-desktop-home": "./bin/index.js"
+    "web-desktop-package-fun": "./bin/package.js"
   },
-  "files": [],
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.3",
@@ -29,18 +29,22 @@
     "prettier": "^2.0.5",
     "ts-node": "9.0.0",
     "tsconfig-paths": "3.9.0",
+    "tscpaths": "0.0.9",
     "typescript": "^4.2.3"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
-    "directory": "packages/servers/home-edition-server"
+    "directory": "packages/packs/dev"
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/pack-core": "^1.0.2",
-    "@web-desktop-environment/pack-fun": "^1.0.2",
+    "@react-fullstack/fullstack-socket-server": "0.2.1",
+    "@react-fullstack/render": "0.2.1",
+    "@web-desktop-environment/app-sdk": "^1.0.2",
+    "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",
-    "@web-desktop-environment/server-sdk": "^1.0.2"
+    "axios": "0.21.1",
+    "react": "^17.0.0"
   }
 }

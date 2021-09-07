@@ -13,12 +13,13 @@ import type MediaPlayer from "./views/apps/media/MediaPlayer";
 
 // system
 import type Settings from "./views/apps/system/Settings";
+import type About from "./views/apps/system/About";
 
 // third party
-import type Iframe from './views/apps/thirdParty/Iframe'
+import type Iframe from "./views/apps/thirdParty/Iframe";
 
 // shared app screens
-import type LoadingScreen from './views/apps/shared/LoadingScreen'
+import type LoadingScreen from "./views/apps/shared/LoadingScreen";
 
 export const viewInterfaces = {
   Desktop: <Desktop>{},
@@ -27,6 +28,7 @@ export const viewInterfaces = {
   Terminal: <Terminal>{},
   Explorer: <Explorer>{},
   Settings: <Settings>{},
+  About: <About>{},
   Notepad: <Notepad>{},
   MediaPlayer: <MediaPlayer>{},
   Iframe: <Iframe>{},

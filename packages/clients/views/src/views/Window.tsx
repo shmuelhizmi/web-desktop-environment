@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
 import WindowInterface, {
 	WindowState as LocalWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
@@ -11,8 +10,8 @@ import { windowsBarHeight as desktopWindowsBarHeight } from "@views/Desktop";
 import Icon from "@components/icon";
 import { Rnd, RndDragCallback, RndResizeCallback } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
-import { lastTaskQueuer } from "@utils/tasks";
 import { isMobile } from "@utils/environment";
+import { PureComponent } from "@components/pureComponent";
 
 export const defaultWindowSize = {
 	height: 600,
@@ -198,7 +197,7 @@ interface WindowState {
 
 export const MountAnimationContext = React.createContext(false);
 
-class Window extends Component<
+class Window extends PureComponent<
 	WindowInterface,
 	WindowState,
 	WithStyles<typeof styles>
@@ -332,7 +331,6 @@ class Window extends Component<
 	private willUnmount = false;
 
 	componentDidMount() {
-		this.updateWindowPositionORSizeQueuer.start();
 		windowManager.emitter.on("minimizeWindow", ({ id }) => {
 			this.props.setWindowState({
 				minimized: true,
@@ -425,8 +423,6 @@ class Window extends Component<
 		}
 	}
 
-	updateWindowPositionORSizeQueuer = lastTaskQueuer();
-
 	/**
 	 * update window size or position locally on remotely
 	 */
@@ -434,10 +430,6 @@ class Window extends Component<
 		this.setState({
 			localWindowState: { ...this.state.localWindowState, ...state },
 		});
-
-		this.updateWindowPositionORSizeQueuer.queueTask(() =>
-			this.props.setWindowState(state)
-		);
 	}
 
 	snapWindow = (snap?: WindowSnap | undefined, forceState?: boolean) => {
@@ -719,12 +711,14 @@ class Window extends Component<
 						if (onMobile) {
 							return;
 						}
-						this.updateWindowPositionORSizeQueuer.idle().then(() =>
-							this.setState({
-								useLocalWindowState: false,
-								localWindowState: undefined,
-							})
-						);
+						this.props
+							.setWindowState({ ...this.state.localWindowState })
+							.then(() => {
+								this.setState({
+									useLocalWindowState: false,
+									localWindowState: undefined,
+								});
+							});
 					}}
 					defaultSize={size}
 					onResizeStart={() => {
@@ -751,12 +745,14 @@ class Window extends Component<
 								isResizing: false,
 							},
 							() =>
-								this.updateWindowPositionORSizeQueuer.idle().then(() => {
-									this.setState({
-										useLocalWindowState: false,
-										localWindowState: undefined,
-									});
-								})
+								this.props
+									.setWindowState({ ...this.state.localWindowState })
+									.then(() => {
+										this.setState({
+											useLocalWindowState: false,
+											localWindowState: undefined,
+										});
+									})
 						);
 					}}
 					onResize={this.onResize}

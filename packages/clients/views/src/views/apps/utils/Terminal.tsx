@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
 import TerminalInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Terminal";
 import {
 	withStyles,
@@ -17,6 +16,7 @@ import ResizeDetector from "react-resize-detector";
 import { MountAnimationContext } from "@views/Window";
 
 import "xterm/css/xterm.css";
+import { PureComponent } from "@components/pureComponent";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -41,7 +41,7 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-class Terminal extends Component<
+class Terminal extends PureComponent<
 	TerminalInterface,
 	{},
 	WithStyles<typeof styles> & WithTheme<Theme>

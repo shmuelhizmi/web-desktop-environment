@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
 import SettingsInterface from "@web-desktop-environment/interfaces/lib/views/apps/system/Settings";
 import {
 	Settings as SettingsConfiguration,
@@ -15,6 +14,7 @@ import Color from "@ctrl/tinycolor";
 import { SketchPicker } from "react-color";
 import { invertColor } from "@utils/colors";
 import Icon from "@components/icon";
+import { PureComponent } from "@components/pureComponent";
 
 const makeColor = (baseColor: RGBArray | string): ColorType => {
 	const color =
@@ -260,7 +260,7 @@ type ColormindResponse = {
 };
 type RGBArray = [number, number, number];
 
-class Settings extends Component<
+class Settings extends PureComponent<
 	SettingsInterface,
 	SettingsState,
 	WithStyles<typeof styles>

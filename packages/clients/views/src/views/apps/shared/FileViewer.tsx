@@ -1,9 +1,10 @@
 import React from "react";
-import { Component, View } from "@react-fullstack/fullstack";
+import { View } from "@react-fullstack/fullstack";
 import { FileViewerBase } from "@web-desktop-environment/interfaces/lib/shared/fileViewer";
 import { createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import Button from "@components/button";
+import { PureComponent } from "@components/pureComponent";
 
 export const makeFileViewerStyles = (theme: Theme) =>
 	createStyles({
@@ -101,7 +102,7 @@ export const makeFileViewerStyles = (theme: Theme) =>
 abstract class FileViewer<
 	ViewType extends View<FileViewerBase>,
 	Styles extends WithStyles<typeof makeFileViewerStyles>
-> extends Component<ViewType, {}, Styles> {
+> extends PureComponent<ViewType, {}, Styles> {
 	abstract renderViewer(): JSX.Element;
 	render() {
 		const { classes, isSelectingFile, onReselectFile, name } = this.props;

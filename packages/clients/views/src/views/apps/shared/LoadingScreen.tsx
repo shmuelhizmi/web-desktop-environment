@@ -1,8 +1,8 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
 import LoadingScreenInterface from "@web-desktop-environment/interfaces/lib/views/apps/shared/LoadingScreen";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { WithStyles, withStyles, createStyles } from "@material-ui/styles";
+import { PureComponent } from "@components/pureComponent";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -124,7 +124,7 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-class LoadingScreen extends Component<
+class LoadingScreen extends PureComponent<
 	LoadingScreenInterface,
 	{},
 	WithStyles<typeof styles>

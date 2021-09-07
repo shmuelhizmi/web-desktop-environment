@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
 import IframeInterface from "@web-desktop-environment/interfaces/lib/views/apps/thirdParty/Iframe";
 import {
 	withStyles,
@@ -10,6 +9,7 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
+import { PureComponent } from "@components/pureComponent";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -27,7 +27,7 @@ const styles = (theme: Theme) =>
 		},
 	});
 
-class Iframe extends Component<
+class Iframe extends PureComponent<
 	IframeInterface,
 	{},
 	WithStyles<typeof styles> & WithTheme<Theme>

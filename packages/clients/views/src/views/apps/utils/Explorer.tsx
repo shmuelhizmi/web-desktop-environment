@@ -1,7 +1,6 @@
 import ExplorerInterface, {
 	File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
-import { Component } from "@react-fullstack/fullstack";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
@@ -11,6 +10,7 @@ import TextField from "@components/textField";
 import Emitter from "@utils/Emitter";
 import { reactFullstackConnectionManager } from "@root/index";
 import { transparent } from "@utils/colors";
+import { PureComponent } from "@components/pureComponent";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -336,7 +336,7 @@ interface ExplorerEvents {
 	promptDone: Prompt;
 }
 
-class Explorer extends Component<
+class Explorer extends PureComponent<
 	ExplorerInterface,
 	ExplorerState,
 	WithStyles<typeof styles>

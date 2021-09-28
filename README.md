@@ -109,7 +109,7 @@ Note that to build the project you need to be running from a linux box (or wsl) 
 
 **install packages**
 1. `npm i -g lerna`
-2. `lerna bootstrap --unsafe-perm`
+2. `npm i --unsafe-perm` or `lerna bootstrap -- --unsafe-perm`
 
 **run server**
 1. `cd packages/development-edition-server` or `cd packages/home-edition-server`

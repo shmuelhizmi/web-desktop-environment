@@ -103,19 +103,18 @@ Note that to build the project you need to be running from a linux box (or wsl) 
 ## Run
 
 **quick run**
-1 `npm start`
+1 `npm start` or `yarn start`
 
 ## Advanced run
 
 **install packages**
-1. `npm i -g lerna`
-2. `npm i --unsafe-perm` or `lerna bootstrap -- --unsafe-perm`
+1. `npm run install` or `yarn run install`
 
 **run server**
 1. `cd packages/development-edition-server` or `cd packages/home-edition-server`
-2. `npm start`
+2. `yarn start`
 
 
 **run client**
 1. `cd packages/views`
-2. `npm start`
+2. `yarn start`

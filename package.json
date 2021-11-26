@@ -7,11 +7,14 @@
     "dev:web": "cd packages/clients/views && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "dev:dev": "concurrently \"npm run dev:server:dev\" \"npm run dev:web\"",
-    "start": "npm install --unsafe-perm && npm run dev",
+    "install-dep": "npm i -g lerna yarn",
+    "install": "npm run install-dep && lerna bootstrap",
+    "install-ignore-scripts": "npm run install-dep && lerna bootstrap --ignore-scripts",
+    "start": "npm run install && npm run dev",
     "lint": "lerna run lint",
     "prepare": "lerna run prepare",
-    "github-lint": "npm i -g npm@latest && npm install --ignore-scripts --silent && lerna run prepare && npm run lint",
-    "vercel-setup": "npm i -g npm@latest && npm install --unsafe-perm --ignore-scripts --silent && lerna run prepare",
+    "github-lint": "npm run install-ignore-scripts && lerna run prepare && npm run lint",
+    "vercel-setup": "npm run install-ignore-scripts && lerna run prepare",
     "mirror-readme": "lerna exec 'cp ../../README.md ./ && cp -r ../../assets/* ./assets/' "
   },
   "devDependencies": {

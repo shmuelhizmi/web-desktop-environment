@@ -1,7 +1,7 @@
 {
   "name": "@web-desktop-environment/server-api",
   "version": "1.0.2",
-  "main": "lib/index.js",
+  "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -10,7 +10,8 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "build:server": "npm run build",
-    "prepare": "npm run build"
+    "postpublish": "npm run clean",
+    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' ."
   },
   "repository": {
     "type": "git",

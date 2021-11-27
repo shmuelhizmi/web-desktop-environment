@@ -7,7 +7,7 @@
     "outDir": "lib",
     "jsx": "react",
     "esModuleInterop": true,
-    "baseUrl": "src",
+    "baseUrl": "lib",
     "paths": {
       "@index": ["index"],
       "@root/*": ["*"],
@@ -20,6 +20,6 @@
       "@utils/*": ["utils/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["lib/**/*"],
   "exclude": ["**/node_modules"]
 }

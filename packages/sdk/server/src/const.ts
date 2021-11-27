@@ -1,2 +1,0 @@
-export const webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast =
-	"web_desktop_environment_internal_broadcast_app_runner";

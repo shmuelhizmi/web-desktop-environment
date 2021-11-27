@@ -3,3 +3,4 @@
 .nodemon.json
 .tsconfig.json
 .gitignore
+/lib/**/*.ts

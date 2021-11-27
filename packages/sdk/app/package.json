@@ -1,7 +1,7 @@
 {
   "name": "@web-desktop-environment/app-sdk",
   "version": "1.0.2",
-  "main": "lib/index.js",
+  "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
@@ -10,7 +10,8 @@
     "watch": "tsc --watch",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
     "build:server": "npm run build",
-    "prepare": "npm run build",
+    "postpublish": "npm run clean",
+    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
     "lint": "eslint ."
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 {
   "name": "@web-desktop-environment/pack-dev",
   "version": "1.0.2",
-  "main": "lib/index.js",
+  "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
@@ -11,7 +11,8 @@
     "code-server": "code-server",
     "build": "tsc && tscpaths -p tsconfig.json -s ./src -o ./lib",
     "build:server": "npm run build",
-    "prepare": "npm run build",
+    "postpublish": "npm run clean",
+    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
     "lint": "eslint ."
   },
   "bin": {
@@ -27,11 +28,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.20.6",
     "nodemon": "2.0.4",
-    "prettier": "^2.0.5",
-    "ts-node": "9.0.0",
-    "tsconfig-paths": "3.9.0",
-    "tscpaths": "0.0.9",
-    "typescript": "^4.2.3"
+    "prettier": "^2.0.5"
   },
   "repository": {
     "type": "git",
@@ -47,6 +44,8 @@
     "@web-desktop-environment/server-api": "^1.0.2",
     "axios": "0.21.1",
     "code-server": "3.10.2",
-    "react": "^17.0.0"
+    "react": "^17.0.0",
+    "ts-node": "9.0.0",
+    "typescript": "^4.2.3"
   }
 }

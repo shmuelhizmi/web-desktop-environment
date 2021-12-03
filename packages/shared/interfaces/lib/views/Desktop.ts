@@ -12,6 +12,7 @@ export interface App {
   displayName: string;
   appName: string;
   icon: Icon;
+  color?: string;
   description: string;
 }
 

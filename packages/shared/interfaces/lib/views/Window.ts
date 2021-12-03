@@ -6,6 +6,7 @@ export interface Input {
   title: string;
   name: string;
   icon: Icon;
+  color?: string;
   window: Window;
   background: string;
   setWindowState: (windowState: WindowState) => void;

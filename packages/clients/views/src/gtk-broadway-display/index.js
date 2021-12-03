@@ -171,6 +171,7 @@ function addWindow(surface) {
 	const id = WindowManager.addWindow(
 		"gnome-window",
 		{ type: "icon", icon: "FcLinux" },
+		"#ffffff",
 		{ minimized: false }
 	);
 	WindowManager.emitter.on(

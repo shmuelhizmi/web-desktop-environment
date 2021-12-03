@@ -372,9 +372,14 @@ class Window extends Component<
 				}
 			}
 		});
-		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
-			minimized: this.props.window.minimized || false,
-		});
+		this.id = windowManager.addWindow(
+			this.props.name,
+			this.props.icon,
+			this.props.color,
+			{
+				minimized: this.props.window.minimized || false,
+			}
+		);
 		windowManager.reloadWindowsLayers();
 
 		const switchPosition = () => {

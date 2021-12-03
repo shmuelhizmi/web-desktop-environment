@@ -5,6 +5,7 @@ export interface Window {
 	id: number;
 	name: string;
 	icon: Icon;
+	color?: string;
 	state: WindowState;
 }
 
@@ -66,10 +67,15 @@ class WindowManager {
 	};
 	private idIndex = 0;
 
-	public addWindow = (name: string, icon: Icon, state: WindowState) => {
+	public addWindow = (
+		name: string,
+		icon: Icon,
+		color: string | undefined,
+		state: WindowState
+	) => {
 		const id = this.idIndex;
 		this.idIndex++;
-		const newWindow = { id, name, icon, state };
+		const newWindow = { id, name, icon, state, color };
 		this.windows.push(newWindow);
 		this.emitter.call("addWindow", { window: newWindow });
 		this.windowsLayers.push(id);

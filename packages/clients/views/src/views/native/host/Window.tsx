@@ -40,9 +40,14 @@ class Window extends Component<WindowInterface, {}> {
 		window.addEventListener("unload", () => {
 			this.window?.close();
 		});
-		this.id = windowManager.addWindow(this.props.name, this.props.icon, {
-			minimized: this.props.window.minimized || false,
-		});
+		this.id = windowManager.addWindow(
+			this.props.name,
+			this.props.icon,
+			this.props.color,
+			{
+				minimized: this.props.window.minimized || false,
+			}
+		);
 		windowManager.emitter.on("maximizeWindow", ({ id }) => {
 			if (id === this.id) {
 				if (!this.window) {

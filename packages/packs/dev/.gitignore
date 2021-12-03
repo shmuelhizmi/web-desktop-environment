@@ -10,7 +10,9 @@
 
 # production
 /build
-/lib
+lib/**/*.js
+lib/**/*.js.map
+lib/**/*.d.ts
 
 # misc
 .DS_Store

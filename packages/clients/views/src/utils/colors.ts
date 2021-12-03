@@ -29,3 +29,8 @@ export const invertColor = (hex: string) => {
 	// pad each with zeros and return
 	return "#" + padZero(r) + padZero(g) + padZero(b);
 };
+
+export const makeAppColor = (color = "#ffffff"): string => {
+	const black = Color(color).darken(4).toString();
+	return `linear-gradient(to bottom, ${color} 70%, ${black})`;
+};

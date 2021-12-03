@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
 import StateComponent from "@components/stateComponent";
-import { transparent } from "@utils/colors";
+import { makeAppColor, transparent } from "@utils/colors";
 import { connect as connectToBroadway } from "@root/gtk-broadway-display/index";
 import {
 	GTKBridgeEmitter,
@@ -28,7 +28,7 @@ import {
 import { isMobile } from "@utils/environment";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 
-export const windowsBarHeight = 55;
+export const windowsBarHeight = 65;
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -172,11 +172,12 @@ const useWindowBarStyles = makeStyles(
 		windowsBar: {
 			position: "absolute",
 			animation: "$slideUp 1s",
-			left: 120,
-			right: 120,
+			left: 320,
+			right: 320,
 			borderRadius: 13,
 			bottom: 5,
-			height: windowsBarHeight,
+			height: windowsBarHeight - 10,
+			padding: 5,
 			display: "flex",
 			border: `1px solid ${theme.transparentBorder || "#eee2"}`,
 			backdropFilter: "blur(10px)",
@@ -207,8 +208,8 @@ const useWindowBarStyles = makeStyles(
 			padding: 5,
 			margin: 2,
 			borderRadius: 6,
-			marginRight: 5,
-			marginLeft: 5,
+			marginRight: 7,
+			marginLeft: 7,
 			cursor: "pointer",
 			color: theme.background.text,
 			"&:hover": {
@@ -531,6 +532,7 @@ export const WindowBar = ({
 						: classes.windowsBarButtonOpen
 				} ${isStartMenuOpen ? classes.windowsBarButtonActive : ""}`}
 				onClick={() => toggleStartMenu()}
+				style={{ background: makeAppColor() }}
 			>
 				<Icon width={40} height={40} name="FcList" />
 			</div>
@@ -552,6 +554,7 @@ export const WindowBar = ({
 							? classes.windowsBarButtonActive
 							: ""
 					}`}
+					style={{ background: makeAppColor(openWindow.color) }}
 					onClick={() => onOpenWindow(openWindow)}
 				>
 					{openWindow.icon.type === "img" ? (

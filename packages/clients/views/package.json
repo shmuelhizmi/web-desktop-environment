@@ -102,7 +102,6 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && echo \"http.web-desktop.run\" > build/CNAME",
-    "test": "node scripts/test.js",
     "lint": "eslint .",
     "gh-deploy-page": "gh-pages -d build"
   },

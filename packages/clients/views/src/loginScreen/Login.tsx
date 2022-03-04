@@ -7,7 +7,12 @@ import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Link } from "react-router-dom";
 
 interface LoginProps {
-	onLogin: (host: string, port: number, useHttps: boolean) => void;
+	onLogin: (
+		host: string,
+		port: number,
+		password: string,
+		useHttps: boolean
+	) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -99,16 +104,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Login = (props: LoginProps) => {
 	const classes = useStyles();
 	const [host, setHost] = useState(
-		window.localStorage.getItem("last-host") || "localhost"
+		localStorage.getItem("last-host") || "localhost"
 	);
 	const [port, setPort] = useState(
-		Number(window.localStorage.getItem("last-port")) || 5000
+		Number(localStorage.getItem("last-port")) || 5000
+	);
+	const [password, setPassword] = useState(
+		localStorage.getItem("password") || ""
 	);
 	const [https /* , setHttps */] = useState(false);
 	useEffect(() => {
-		window.localStorage.setItem("last-host", host);
-		window.localStorage.setItem("last-port", String(port));
-	}, [host, port]);
+		localStorage.setItem("last-host", host);
+		localStorage.setItem("last-port", String(port));
+		localStorage.setItem("password", password);
+	}, [host, port, password]);
 	return (
 		<div className={classes.root}>
 			<div className={classes.flexEnd}>
@@ -138,9 +147,15 @@ const Login = (props: LoginProps) => {
 						/>
 						<label>Use HTTPS</label>
 					</div> */}
+					<TextField
+						value={password}
+						onChange={(newValue) => setPassword(newValue || "")}
+						placeholder="password"
+						type="password"
+					></TextField>
 					<Button
 						variant="main"
-						onClick={() => props.onLogin(host, port, https)}
+						onClick={() => props.onLogin(host, port, password, https)}
 						color="background"
 						border
 					>

@@ -8,7 +8,7 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "dev:dev": "concurrently \"npm run dev:server:dev\" \"npm run dev:web\"",
     "install-dep": "npm i -g lerna yarn",
-    "install": "npm run install-dep && lerna bootstrap",
+    "auto-install": "npm run install-dep && lerna bootstrap",
     "install-ignore-scripts": "npm run install-dep && lerna bootstrap --ignore-scripts",
     "start": "npm run install && npm run dev",
     "lint": "lerna run lint",

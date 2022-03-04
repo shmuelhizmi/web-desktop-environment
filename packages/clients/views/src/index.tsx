@@ -28,12 +28,21 @@ const viewsMap = {
 class ReactFullstackConnectionManager {
 	public readonly host: string;
 	public readonly https: boolean;
-	constructor(host: string, https: boolean) {
+	public readonly mainPort: number;
+	public readonly password: string;
+	constructor(
+		host: string,
+		https: boolean,
+		mainPort: number,
+		password: string
+	) {
 		this.host = host;
 		this.https = https;
+		this.mainPort = mainPort;
+		this.password = password;
 	}
 	connect = <V extends Views>(
-		port: number,
+		port: number | string,
 		views: V
 	): {
 		port: number;
@@ -43,10 +52,14 @@ class ReactFullstackConnectionManager {
 	} => {
 		return {
 			host: `${this.https ? "https" : "http"}://${this.host}`,
-			port,
+			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
+				transportOptions: {
+					port: String(port),
+					"proxy-authorization": this.password,
+				},
 			},
 		};
 	};
@@ -58,13 +71,16 @@ export const connectToServer = (
 	host: string,
 	useHttps: boolean,
 	port: number,
+	password: string,
 	views: Views
 ) => {
 	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
 		host,
-		useHttps
+		useHttps,
+		port,
+		password
 	);
-	return reactFullstackConnectionManager.connect(port, views);
+	return reactFullstackConnectionManager.connect("desktop", views);
 };
 
 const App = () => {
@@ -72,7 +88,13 @@ const App = () => {
 		isLoggedIn: boolean;
 		host: string;
 		port: number;
-	}>({ host: "localhost", port: 5000, isLoggedIn: false });
+		password: string;
+	}>({
+		host: "localhost",
+		port: 5000,
+		isLoggedIn: false,
+		password: localStorage.getItem("password") || "",
+	});
 	return (
 		<TP theme={defaultTheme}>
 			<Router>
@@ -81,7 +103,7 @@ const App = () => {
 					<Route path="/native">
 						<Switch>
 							<Route
-								path="/native/connect/:host/:port/"
+								path="/native/connect/:host/:port"
 								render={(login) => {
 									const { host, port } = login.match?.params;
 									return (
@@ -95,6 +117,7 @@ const App = () => {
 															host,
 															false,
 															Number(port),
+															localStorage.getItem("password") || "",
 															"nativeHost"
 														)}
 													/>
@@ -118,6 +141,7 @@ const App = () => {
 														host,
 														false,
 														Number(port),
+														localStorage.getItem("password") || "",
 														"nativeClient"
 													)}
 												/>
@@ -135,14 +159,15 @@ const App = () => {
 													login.host,
 													false,
 													Number(login.port),
+													login.password,
 													"nativeHost"
 												)}
 											/>
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, password) =>
+												setLogin({ host, port, isLoggedIn: true, password })
 											}
 										/>
 									)
@@ -161,7 +186,13 @@ const App = () => {
 												value={{ host, port: Number(port) }}
 											>
 												<Client<{}>
-													{...connectToServer(host, false, Number(port), "web")}
+													{...connectToServer(
+														host,
+														false,
+														Number(port),
+														localStorage.getItem("password") || "",
+														"web"
+													)}
 												/>
 											</ConnectionContext.Provider>
 										);
@@ -177,14 +208,15 @@ const App = () => {
 													login.host,
 													false,
 													Number(login.port),
+													login.password,
 													"web"
 												)}
 											/>
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, password) =>
+												setLogin({ host, port, isLoggedIn: true, password })
 											}
 										/>
 									)

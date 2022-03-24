@@ -27,6 +27,7 @@ import {
 } from "@root/gtk-broadway-display/state";
 import { isMobile } from "@utils/environment";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
+import { url } from "@utils/url";
 
 export const windowsBarHeight = 65;
 
@@ -342,9 +343,11 @@ class Desktop extends Component<
 			if (GTKConnectionStatus === "disconnected" && gtkBridge) {
 				try {
 					connectToBroadway(
-						reactFullstackConnectionManager.host,
-						reactFullstackConnectionManager.https,
-						gtkBridge.port
+						url({
+							domain: gtkBridge.domain,
+							ws: true,
+							path: "/socket",
+						})
 					);
 				} catch (e) {
 					/* no handle */
@@ -368,7 +371,7 @@ class Desktop extends Component<
 						<Client<{}>
 							key={app.id}
 							{...reactFullstackConnectionManager.connect(
-								app.port,
+								"app-" + app.id,
 								"webWindow"
 							)}
 						/>

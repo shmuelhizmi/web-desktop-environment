@@ -76,7 +76,7 @@ class Desktop extends Component<{}, DesktopState> {
 		);
 		const connection = await connectToGTK.initialize();
 		if (connection.success) {
-			this.setState({ gtkBridgeConnection: { port: connection.port } });
+			this.setState({ gtkBridgeConnection: { domain: connection.domain } });
 		}
 		await this.desktopManager.packageManager.searchForNewPackages();
 	}

@@ -1,7 +1,7 @@
 import type { View } from "@react-fullstack/fullstack";
 
 export interface Input {
-  port: number;
+  id: string;
 }
 
 export default interface Terminal extends View<Input> {}

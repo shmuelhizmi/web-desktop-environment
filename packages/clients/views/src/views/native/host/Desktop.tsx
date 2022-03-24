@@ -182,7 +182,7 @@ class Desktop extends Component<
 					>
 						<Client<{}>
 							{...reactFullstackConnectionManager.connect(
-								app.port,
+								"app-" + app.id,
 								"nativeHost"
 							)}
 						/>

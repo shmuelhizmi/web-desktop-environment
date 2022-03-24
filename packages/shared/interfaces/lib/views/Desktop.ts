@@ -17,7 +17,7 @@ export interface App {
 }
 
 export interface GTKBridge {
-	port: number;
+	domain: string;
 }
 
 export interface Input {

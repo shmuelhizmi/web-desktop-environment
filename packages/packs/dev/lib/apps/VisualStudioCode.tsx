@@ -13,6 +13,7 @@ interface VSCodeInput {
 interface VSCodeState {
 	port?: number;
 	isLoaded: boolean;
+	id?: string;
 }
 
 class VSCode extends AppBase<VSCodeInput, VSCodeState> {
@@ -60,9 +61,9 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.getPort().then(({ port }) => {
-			this.setState({ port });
+		this.api.portManager.withDomian().then(({ port, domain }) => {
 			this.runVsCodeCli(port);
+			this.setState({ port, id: domain });
 		});
 	};
 
@@ -70,10 +71,10 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 		Iframe,
 		LoadingScreen,
 	}) => {
-		const { port, isLoaded } = this.state;
+		const { id, isLoaded } = this.state;
 
-		return port && isLoaded ? (
-			<Iframe port={port} />
+		return id && isLoaded ? (
+			<Iframe id={id} type="internal" />
 		) : (
 			<LoadingScreen message={"loading vs-code"} variant="jumpCube" />
 		);

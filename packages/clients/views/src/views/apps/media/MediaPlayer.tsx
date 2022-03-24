@@ -9,6 +9,7 @@ import {
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 import { reactFullstackConnectionManager } from "@root/index";
+import { url } from "@utils/url";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -54,15 +55,16 @@ class MediaPlayer extends FileViewer<
 	WithStyles<typeof styles>
 > {
 	renderViewer() {
-		const { classes, source, port } = this.props;
+		const { classes, source, downloadServerDomain } = this.props;
 		return (
 			<div className={classes.videoAreaContainer}>
 				<div className={classes.videoAreaContainerBody}>
 					<video controls className={classes.videoArea}>
 						<source
-							src={`${
-								reactFullstackConnectionManager.https ? "https" : "http"
-							}://${reactFullstackConnectionManager.host}:${port}/${source}`}
+							src={url({
+								domain: downloadServerDomain,
+								path: source,
+							})}
 						></source>
 					</video>
 				</div>

@@ -6,7 +6,9 @@ import DownloadManager from "../managers/downloadManager";
 import { APIClient } from "@web-desktop-environment/server-api";
 import uuid from "uuid";
 import PackageManager from "../managers/packageManager";
-
+import DomainManager from "../managers/domainManager";
+import AuthManager from "../managers/authManager";
+import { API } from "@web-desktop-environment/server-api";
 export default class DesktopManager {
 	public readonly name: string;
 
@@ -17,6 +19,8 @@ export default class DesktopManager {
 	public appsManager: AppsManager;
 	public downloadManager: DownloadManager;
 	public packageManager: PackageManager;
+	public domainManager: DomainManager;
+	public authManager: AuthManager;
 	constructor(name: string, rootLogger?: Logger) {
 		this.name = name;
 
@@ -28,7 +32,22 @@ export default class DesktopManager {
 		this.appsManager = new AppsManager(this.logger, this);
 		this.downloadManager = new DownloadManager(this.logger, this);
 		this.packageManager = new PackageManager(this.logger);
+		this.domainManager = new DomainManager(this.logger, this);
+		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);
+	}
+	public async initialize() {
+		await this.settingsManager.initialize();
+		await this.downloadManager.initialize();
+		const mainPort = await this.portManager.getPort(true);
+		await this.domainManager.startSubDomainServer(mainPort);
+		this.logger.info(`starting web-desktop-environment on port ${mainPort}`);
+		const desktopPort = await this.portManager.getPort(false);
+		this.logger.info(`starting desktop on port ${desktopPort}`);
+		API.domainManager.registerDomain("desktop", desktopPort);
+		return {
+			desktopPort,
+		};
 	}
 }
 

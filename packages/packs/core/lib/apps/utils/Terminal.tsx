@@ -14,6 +14,7 @@ interface TerminalInput {
 
 interface TerminalState {
 	port?: number;
+	id?: string;
 }
 
 export const maxTerminalHistoryLength = 100000;
@@ -51,12 +52,12 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.getPort().then(({ port }) => {
+		this.api.portManager.withDomian().then(({ port, domain }) => {
 			this.server.listen(port);
-			this.setState({ port });
+			this.setState({ port, id: domain });
 		});
 		this.socketServer.on("connection", (client) => {
-			this.socketServer.emit("output", this.history);
+			client.emit("output", this.history);
 			client.on("input", (data: string) => {
 				this.ptyProcess.write(data);
 			});
@@ -92,8 +93,8 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 	renderApp: AppBase<TerminalInput, TerminalState>["renderApp"] = ({
 		Terminal,
 	}) => {
-		const { port } = this.state;
-		return port && <Terminal port={port} />;
+		const { id } = this.state;
+		return id && <Terminal id={id} />;
 	};
 }
 

@@ -10,6 +10,7 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
+import { url } from "@utils/url";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -57,13 +58,17 @@ class Iframe extends Component<
 	};
 
 	render() {
-		const {
-			classes,
-			host,
-			port,
-			path,
-			https = reactFullstackConnectionManager.https,
-		} = this.props;
+		const { props } = this;
+
+		const src =
+			props.type === "internal"
+				? url({
+						path: props.path,
+						domain: props.id,
+				  })
+				: `${props.https ? "https" : "http"}://${
+						props.host || reactFullstackConnectionManager.host
+				  }${props.port ? ":" + props.port : ""}${props.path || ""}`;
 
 		return (
 			<iframe
@@ -72,10 +77,8 @@ class Iframe extends Component<
 				allowTransparency
 				sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-scripts allow-same-origin"
 				allow="clipboard-read; clipboard-write; geolocation; allow-forms; allow-pointer-lock; fullscreen; camera; microphone; layout-animations; unoptimized-images; oversized-images; sync-script; sync-xhr; unsized-media;"
-				className={classes.root}
-				src={`${https ? "https" : "http"}://${
-					host || reactFullstackConnectionManager.host
-				}${port ? ":" + port : ""}${path || ""}`}
+				className={props.classes.root}
+				src={src}
 			/>
 		);
 	}

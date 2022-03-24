@@ -2864,9 +2864,9 @@ function start() {
 }
 
 
-export function connect(host, https, port) {
+export function connect(url) {
 	const ws = new WebSocket(
-		`${https ? "wss" : "ws"}://${host}:${port}/socket`,
+		url,
 		"broadway"
 	);
 	GTKBridgeEmitter.call("status", "connecting");

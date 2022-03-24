@@ -3,6 +3,7 @@ import appsManager from "./managers/apps/appsManager";
 import loggingManager from "./managers/logging/loggingManager";
 import settingsManager from "./managers/system/settings";
 import downloadManager from "./managers/services/downloadManager";
+import domainManager from "./managers/services/domainManager";
 import portManager from "./managers/services/portManager";
 import packageManager from "./managers/packages/packageManager";
 
@@ -13,6 +14,7 @@ class API extends APIBase {
   downloadManager = this.registerManager(downloadManager);
   portManager = this.registerManager(portManager);
   packageManager = this.registerManager(packageManager);
+  domainManager = this.registerManager(domainManager);
 }
 
 export default new API();

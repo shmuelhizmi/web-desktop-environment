@@ -11,6 +11,7 @@ import TextField from "@components/textField";
 import Emitter from "@utils/Emitter";
 import { reactFullstackConnectionManager } from "@root/index";
 import { transparent } from "@utils/colors";
+import { url } from "@utils/url";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -862,15 +863,12 @@ class Explorer extends Component<
 															) {
 																onRequestDownloadLink(
 																	this.selectedFile.fullPath
-																).then((result) => {
+																).then(({ path, downloadServerDomain }) => {
 																	this.setState({
-																		downloadUrl: `${
-																			reactFullstackConnectionManager.https
-																				? "https"
-																				: "http"
-																		}://${
-																			reactFullstackConnectionManager.host
-																		}:${result.port}${result.path}`,
+																		downloadUrl: url({
+																			domain: downloadServerDomain,
+																			path,
+																		}),
 																	});
 																});
 															}

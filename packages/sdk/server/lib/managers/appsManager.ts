@@ -7,7 +7,7 @@ import {
 import DesktopManager from "../managers/desktopManager";
 import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from "../const";
 import { BroadcastChannel } from "broadcast-channel";
-import { APIClient } from "@web-desktop-environment/server-api";
+import { APIClient, API } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
 import uuid from "uuid";
 
@@ -85,6 +85,7 @@ export default class AppsManager {
 			port,
 			processId,
 		});
+		API.domainManager.registerDomain(`app-${processId}`, port);
 		const openApp = {
 			icon: appData.icon,
 			id: processId,

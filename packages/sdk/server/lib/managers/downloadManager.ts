@@ -12,21 +12,25 @@ export default class DownloadManager {
 	private files: { [hash: string]: string } = {};
 	private server: http.Server;
 	public port: number;
+	public domain: string;
 	constructor(parentLogger: Logger, desktopManger: DesktopManager) {
 		this.logger = parentLogger.mount("download-manager");
 		this.desktopManager = desktopManger;
 		APIClient.downloadManager.addFile.override(() => (path: string) => ({
 			hash: this.addFile(path),
 		}));
-		APIClient.downloadManager.getDownloadManagerPort.override(
-			() => () => this.port
-		);
+		APIClient.downloadManager.domain.override(() => () => this.domain);
 	}
 	public initialize = async () => {
-		this.port = await this.desktopManager.portManager.getPort();
+		const { domain, port } = await this.desktopManager.portManager.withDomian();
+		this.domain = domain;
+		this.port = port;
 		this.logger.info(`starting static file server at port ${this.port}`);
 		this.server = http.createServer(async (request, response) => {
 			const path = this.files[request.url.replace("/", "")]; // from "/${hash}.${ext}" to "${hash}.${ext}"
+			if (!path) {
+				return;
+			}
 			this.logger.info(`user request to download ${path}`);
 			if (path) {
 				try {

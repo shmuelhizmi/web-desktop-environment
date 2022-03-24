@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import Login from "@root/loginScreen/Login";
+import Login, { loginStorage } from "@root/loginScreen/Login";
 import Demo from "@root/demo/App";
 import "@root/index.css";
 import * as webViews from "@root/views";
@@ -28,12 +28,21 @@ const viewsMap = {
 class ReactFullstackConnectionManager {
 	public readonly host: string;
 	public readonly https: boolean;
-	constructor(host: string, https: boolean) {
+	public readonly mainPort: number;
+	public readonly token: string;
+	constructor(
+		host: string,
+		https: boolean,
+		mainPort: number,
+		token: string = loginStorage.token
+	) {
 		this.host = host;
 		this.https = https;
+		this.mainPort = mainPort;
+		this.token = token;
 	}
 	connect = <V extends Views>(
-		port: number,
+		domain: string,
 		views: V
 	): {
 		port: number;
@@ -42,8 +51,10 @@ class ReactFullstackConnectionManager {
 		socketOptions: SocketIOClient.ConnectOpts;
 	} => {
 		return {
-			host: `${this.https ? "https" : "http"}://${this.host}`,
-			port,
+			host: `${this.https ? "https" : "http"}://${domain}.${this.token}.${
+				this.host
+			}`,
+			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
@@ -62,9 +73,10 @@ export const connectToServer = (
 ) => {
 	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
 		host,
-		useHttps
+		useHttps,
+		port
 	);
-	return reactFullstackConnectionManager.connect(port, views);
+	return reactFullstackConnectionManager.connect("desktop", views);
 };
 
 const App = () => {

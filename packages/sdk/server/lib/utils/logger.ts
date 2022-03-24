@@ -43,6 +43,11 @@ export default class Logger {
 			)} ${this.getCurrentLogDelay()}`
 		);
 	};
+
+	public direct(message: string) {
+		console.info(message);
+	}
+
 	public error = (message: string) => {
 		console.error(
 			`[ ${this.level} ]: ${color.red(

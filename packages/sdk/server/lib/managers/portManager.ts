@@ -1,7 +1,8 @@
 import Logger from "../utils/logger";
 import getPort from "get-port";
 import DesktopManager from "../managers/desktopManager";
-import { APIClient } from "@web-desktop-environment/server-api";
+import API, { APIClient } from "@web-desktop-environment/server-api";
+import { v4 as uuid } from "uuid";
 
 export const timeout = (time: number) =>
 	new Promise((resolve) => setTimeout(resolve, time));
@@ -15,6 +16,7 @@ export default class PortManager {
 		APIClient.portManager.getPort.override(
 			() => () => this.getPort().then((port) => ({ port }))
 		);
+		APIClient.portManager.withDomian.override(() => () => this.withDomian());
 	}
 
 	public usedPorts: number[] = [];
@@ -50,5 +52,11 @@ export default class PortManager {
 				return value;
 			});
 		}
+	};
+	public withDomian = async () => {
+		const port = await this.getPort();
+		const domain = uuid();
+		await API.domainManager.registerDomain(domain, port);
+		return { port, domain };
 	};
 }

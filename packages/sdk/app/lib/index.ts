@@ -1,4 +1,4 @@
-export { AppsManager, App } from "./appManger";
+export { AppsManager, App } from "./appManager";
 import AppBase from "./components/appBase";
 import Window from "./components/window";
 

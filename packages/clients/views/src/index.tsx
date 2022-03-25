@@ -7,6 +7,7 @@ import * as webViews from "@root/views";
 import * as webViewsWindow from "@root/views/windowViews";
 import * as nativeViewsHost from "@root/views/native/hostViews";
 import * as nativeViewsClient from "@root/views/native/clientViews";
+import * as serviceViews from "@root/views/services";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
 import { ThemeProvider as TP } from "@material-ui/styles";
@@ -16,13 +17,19 @@ import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
 
-type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
+type Views =
+	| "web"
+	| "webWindow"
+	| "nativeHost"
+	| "nativeClient"
+	| "serviceViews";
 
 const viewsMap = {
 	web: webViews,
 	nativeHost: nativeViewsHost,
 	nativeClient: nativeViewsClient,
 	webWindow: webViewsWindow,
+	serviceViews,
 };
 
 class ReactFullstackConnectionManager {

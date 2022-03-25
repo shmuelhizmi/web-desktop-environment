@@ -357,7 +357,13 @@ class Desktop extends Component<
 	};
 
 	render() {
-		const { background, openApps, classes, apps } = this.props;
+		const {
+			background,
+			openApps,
+			classes,
+			apps,
+			servicesAppsDomains,
+		} = this.props;
 		return (
 			<div className={classes.root} style={{ background }}>
 				{openApps.map((app) => (
@@ -376,6 +382,12 @@ class Desktop extends Component<
 							)}
 						/>
 					</ConnectionContext.Provider>
+				))}
+				{servicesAppsDomains.map((domain) => (
+					<Client<{}>
+						key={domain}
+						{...reactFullstackConnectionManager.connect(domain, "serviceViews")}
+					/>
 				))}
 				{!isMobile() && (
 					<Link to="/native">

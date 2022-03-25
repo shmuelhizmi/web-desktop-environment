@@ -26,6 +26,7 @@ export interface Input {
   nativeBackground: string;
   apps: App[];
   openApps: OpenApp[];
+  servicesAppsDomains: string[];
   onLaunchApp: (app: {
     name: string;
     params: any;

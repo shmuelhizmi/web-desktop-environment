@@ -17,6 +17,7 @@ interface DesktopState {
 	background: string;
 	nativeBackground: string;
 	openApps: OpenApp[];
+	servicesAppsDomains: string[];
 	theme: ThemeType;
 	customTheme: Theme;
 	gtkBridgeConnection?: GTKBridge;
@@ -24,16 +25,23 @@ interface DesktopState {
 
 class Desktop extends Component<{}, DesktopState> {
 	name = "desktop";
-	state: DesktopState = {
-		background: this.desktopManager.settingsManager.settings.desktop.background,
-		nativeBackground:
-			this.desktopManager.settingsManager.settings.desktop.nativeBackground,
-		openApps: this.desktopManager.appsManager.runningApps.map((app) => ({
+	get openApps() {
+		return this.desktopManager.appsManager.runningApps.map((app) => ({
 			icon: app.icon,
 			id: app.id,
 			name: app.name,
 			port: app.port,
-		})),
+		}));
+	};
+	get servicesAppsDomains() {
+		return this.desktopManager.appsManager.servicesApps.map((app) => app.domain);
+	};
+	state: DesktopState = {
+		background: this.desktopManager.settingsManager.settings.desktop.background,
+		nativeBackground:
+			this.desktopManager.settingsManager.settings.desktop.nativeBackground,
+		openApps: this.openApps,
+		servicesAppsDomains: this.servicesAppsDomains,
 		theme: this.desktopManager.settingsManager.settings.desktop.theme,
 		customTheme:
 			this.desktopManager.settingsManager.settings.desktop.customTheme,
@@ -51,20 +59,23 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		this.desktopManager.appsManager.emitter.on(
+		this.desktopManager.appsManager.on(
 			"onOpenAppsUpdate",
 			(openApps) => {
 				this.setState({
-					openApps: openApps.map((app) => ({
-						icon: app.icon,
-						id: app.id,
-						name: app.name,
-						port: app.port,
-					})),
+					openApps: this.openApps,
 				});
 			}
 		);
-		this.desktopManager.appsManager.emitter.on("onInstalledAppsUpdate", () => {
+		this.desktopManager.appsManager.on(
+			"onServiceAppLaunch",
+			(serviceApp) => {
+				this.setState({
+					servicesAppsDomains: this.servicesAppsDomains,
+				});
+			}
+		);
+		this.desktopManager.appsManager.on("onInstalledAppsUpdate", () => {
 			this.forceUpdate();
 		});
 		this.initializeDesktop();
@@ -110,6 +121,7 @@ class Desktop extends Component<{}, DesktopState> {
 			customTheme,
 			theme,
 			gtkBridgeConnection,
+			servicesAppsDomains,
 		} = this.state;
 		return (
 			<ViewsProvider<ViewInterfacesType>>
@@ -123,6 +135,7 @@ class Desktop extends Component<{}, DesktopState> {
 							nativeBackground={nativeBackground}
 							onCloseApp={this.closeApp}
 							onLaunchApp={this.launchApp}
+							servicesAppsDomains={servicesAppsDomains}
 						>
 							{this.props.children}
 						</DesktopView>

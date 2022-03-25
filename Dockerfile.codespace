@@ -1,16 +1,27 @@
-ARG VARIANT="16-bullseye"
+ARG VARIANT="14-bullseye"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
-
+###################################################
 WORKDIR /usr/src/web-desktop-environment
-
 COPY . .
+###################################################
+RUN set -e; \
+    apt-get update && \
+    apt-get install -qqy --no-install-recommends \
+    curl wget nano gnupg2 software-properties-common && \
+    rm -rf /var/lib/apt/lists;
 
-RUN npm install -g npm@latest
-
-RUN npm install --unsafe-perm
-
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN set -e; \
+    apt-get update && \
+    apt-get install -qqy \
+    nodejs build-essential && \
+    rm -rf /var/lib/apt/lists;
+###################################################
+RUN npm install -g yarn
+RUN yarn
+###################################################
 EXPOSE 5000
 EXPOSE 3000
 EXPOSE 9200-9400
-
+###################################################
 CMD ["npm", "run", "dev:dev"]

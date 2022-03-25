@@ -15,9 +15,10 @@ interface AppsManagerEvents {
 	onAppLaunch: OpenApp;
 	onOpenAppsUpdate: OpenApp[];
 	onInstalledAppsUpdate: App[];
+	onServiceAppLaunch: { port: number; domain: string };
 }
 
-export default class AppsManager {
+export default class AppsManager extends Emitter<AppsManagerEvents>{
 	private logger: Logger;
 	private desktopManager: DesktopManager;
 
@@ -25,30 +26,34 @@ export default class AppsManager {
 	public get runningApps() {
 		return this._runningApps;
 	}
+	private _servicesApps: { port: number; domain: string }[] = [];
+	public get servicesApps() {
+		return this._servicesApps;
+	}
 
-	public emitter = new Emitter<AppsManagerEvents>();
 
 	private availableApps = new Map<string, AppRegistrationData>();
 
 	public get apps() {
 		return Array.from(this.availableApps.entries()).map(
 			([name, app]) =>
-				({
-					appName: name,
-					description: app.description,
-					displayName: app.displayName,
-					icon: app.icon,
-				} as App)
+			({
+				appName: name,
+				description: app.description,
+				displayName: app.displayName,
+				icon: app.icon,
+			} as App)
 		);
 	}
 
 	constructor(parentLogger: Logger, desktopManager: DesktopManager) {
+		super();
 		this.logger = parentLogger.mount("windows-manager");
 		this.desktopManager = desktopManager;
 		this.listenToExternalAppLaunches();
 		APIClient.appsManager.registerApp.override(() => (newApp) => {
 			this.availableApps.set(newApp.name, newApp);
-			this.emitter.call("onInstalledAppsUpdate", this.apps);
+			this.call("onInstalledAppsUpdate", this.apps);
 		});
 		APIClient.appsManager.launchApp.override(() => async (name, input) => ({
 			processId: await this.spawnApp(name, input),
@@ -56,7 +61,16 @@ export default class AppsManager {
 		APIClient.appsManager.closeApp.override(() => async (processId) => {
 			this.killApp(processId);
 		});
+		APIClient.serviceManager.requestUIPort.override(() => this.requestUIPort);
 	}
+
+	requestUIPort = async () => {
+		const { domain, port } = await this.desktopManager.portManager.withDomian();
+		this._servicesApps.push({ domain, port });
+		this.call("onServiceAppLaunch", { domain, port });
+		return port;
+	};
+
 
 	listenToExternalAppLaunches = () => {
 		const channel = new BroadcastChannel(
@@ -95,16 +109,16 @@ export default class AppsManager {
 				APIClient.appsManager.call("closeApp", { processId });
 			},
 		};
-		this.emitter.call("onAppLaunch", openApp);
+		this.call("onAppLaunch", openApp);
 		this._runningApps.push(openApp);
-		this.emitter.call("onOpenAppsUpdate", this._runningApps);
+		this.call("onOpenAppsUpdate", this._runningApps);
 		return processId;
 	};
 
 	killApp = (processId: string) => {
 		this._runningApps.find((app) => app.id === processId).cancel();
 		this._runningApps = this._runningApps.filter((app) => app.id !== processId);
-		this.emitter.call("onOpenAppsUpdate", this._runningApps);
+		this.call("onOpenAppsUpdate", this._runningApps);
 		APIClient.appsManager.call("closeApp", { processId });
 	};
 }

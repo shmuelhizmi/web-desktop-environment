@@ -79,6 +79,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "FcVideoCall",
 			},
+			color: "#1CD760",
 			window: {
 				height: 800,
 				width: 650,

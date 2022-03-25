@@ -92,6 +92,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "VscCode",
 			},
+			color: "#219CF0",
 			window: {
 				height: 700,
 				width: 1000,

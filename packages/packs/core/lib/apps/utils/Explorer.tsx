@@ -162,7 +162,7 @@ export const registerApp = () => {
 				type: "icon",
 				icon: "FcFolder",
 			},
-			color: "#19A9F7",
+			color: "#ECB22F",
 			displayName: "Explorer",
 			window: {
 				height: 600,

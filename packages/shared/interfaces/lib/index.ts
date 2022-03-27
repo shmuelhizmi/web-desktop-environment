@@ -15,10 +15,12 @@ import type MediaPlayer from "./views/apps/media/MediaPlayer";
 import type Settings from "./views/apps/system/Settings";
 
 // third party
-import type Iframe from './views/apps/thirdParty/Iframe'
+import type Iframe from "./views/apps/thirdParty/Iframe";
 
 // shared app screens
-import type LoadingScreen from './views/apps/shared/LoadingScreen'
+import type LoadingScreen from "./views/apps/shared/LoadingScreen";
+
+import type Service from "./views/desktop/service";
 
 export const viewInterfaces = {
   Desktop: <Desktop>{},
@@ -33,6 +35,7 @@ export const viewInterfaces = {
   LoadingScreen: <LoadingScreen>{},
   // wrapper
   ThemeProvider: <ThemeProvider>{},
+  Service: <Service>{},
 };
 
 export type ViewInterfacesType = typeof viewInterfaces;

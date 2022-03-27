@@ -41,6 +41,7 @@
     "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/pack-core": "^1.0.2",
     "@web-desktop-environment/pack-dev": "^1.0.2",
+    "@web-desktop-environment/pack-remote": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",
     "@web-desktop-environment/server-sdk": "^1.0.2",
     "react": "^17.0.1"

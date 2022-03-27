@@ -1,5 +1,5 @@
 {
-  "name": "@web-desktop-environment/pack-dev",
+  "name": "@web-desktop-environment/pack-remote",
   "version": "1.0.2",
   "main": "lib",
   "author": "shmuelhizmi",
@@ -43,7 +43,6 @@
     "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",
     "axios": "0.21.1",
-    "react": "^17.0.0",
     "ts-node": "9.0.0",
     "typescript": "^4.2.3"
   }

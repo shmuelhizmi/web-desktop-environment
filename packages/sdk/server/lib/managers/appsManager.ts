@@ -18,7 +18,7 @@ interface AppsManagerEvents {
 	onServiceAppLaunch: { port: number; domain: string };
 }
 
-export default class AppsManager extends Emitter<AppsManagerEvents>{
+export default class AppsManager extends Emitter<AppsManagerEvents> {
 	private logger: Logger;
 	private desktopManager: DesktopManager;
 
@@ -31,18 +31,17 @@ export default class AppsManager extends Emitter<AppsManagerEvents>{
 		return this._servicesApps;
 	}
 
-
 	private availableApps = new Map<string, AppRegistrationData>();
 
 	public get apps() {
 		return Array.from(this.availableApps.entries()).map(
 			([name, app]) =>
-			({
-				appName: name,
-				description: app.description,
-				displayName: app.displayName,
-				icon: app.icon,
-			} as App)
+				({
+					appName: name,
+					description: app.description,
+					displayName: app.displayName,
+					icon: app.icon,
+				} as App)
 		);
 	}
 
@@ -70,7 +69,6 @@ export default class AppsManager extends Emitter<AppsManagerEvents>{
 		this.call("onServiceAppLaunch", { domain, port });
 		return port;
 	};
-
 
 	listenToExternalAppLaunches = () => {
 		const channel = new BroadcastChannel(

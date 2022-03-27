@@ -12,6 +12,7 @@ export interface ServiceActionItem {
   text: string;
   id: string;
   icon: Icon;
+  clickable?: boolean;
 }
 
 export default interface MediaPlayer extends View<Input> {}

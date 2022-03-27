@@ -32,10 +32,12 @@ class Desktop extends Component<{}, DesktopState> {
 			name: app.name,
 			port: app.port,
 		}));
-	};
+	}
 	get servicesAppsDomains() {
-		return this.desktopManager.appsManager.servicesApps.map((app) => app.domain);
-	};
+		return this.desktopManager.appsManager.servicesApps.map(
+			(app) => app.domain
+		);
+	}
 	state: DesktopState = {
 		background: this.desktopManager.settingsManager.settings.desktop.background,
 		nativeBackground:
@@ -59,22 +61,16 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		this.desktopManager.appsManager.on(
-			"onOpenAppsUpdate",
-			(openApps) => {
-				this.setState({
-					openApps: this.openApps,
-				});
-			}
-		);
-		this.desktopManager.appsManager.on(
-			"onServiceAppLaunch",
-			(serviceApp) => {
-				this.setState({
-					servicesAppsDomains: this.servicesAppsDomains,
-				});
-			}
-		);
+		this.desktopManager.appsManager.on("onOpenAppsUpdate", () => {
+			this.setState({
+				openApps: this.openApps,
+			});
+		});
+		this.desktopManager.appsManager.on("onServiceAppLaunch", () => {
+			this.setState({
+				servicesAppsDomains: this.servicesAppsDomains,
+			});
+		});
 		this.desktopManager.appsManager.on("onInstalledAppsUpdate", () => {
 			this.forceUpdate();
 		});

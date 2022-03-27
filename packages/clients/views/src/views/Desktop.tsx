@@ -28,6 +28,8 @@ import {
 import { isMobile } from "@utils/environment";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { url } from "@utils/url";
+import { MenuBar } from "@components/menubar";
+import { MenuBarLinkContext } from "@root/hooks/MenuBarItemPortal";
 
 export const windowsBarHeight = 65;
 
@@ -285,7 +287,7 @@ const useWindowBarStyles = makeStyles(
 
 class Desktop extends Component<
 	DesktopInterface,
-	{},
+	{ menuBarRef: any },
 	WithStyles<typeof styles>
 > {
 	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
@@ -356,6 +358,8 @@ class Desktop extends Component<
 		}
 	};
 
+	state = { menuBarRef: null };
+
 	render() {
 		const {
 			background,
@@ -366,6 +370,13 @@ class Desktop extends Component<
 		} = this.props;
 		return (
 			<div className={classes.root} style={{ background }}>
+				<MenuBar
+					div={(ref) => {
+						if (!this.state.menuBarRef) {
+							this.setState({ menuBarRef: ref });
+						}
+					}}
+				/>
 				{openApps.map((app) => (
 					<ConnectionContext.Provider
 						key={app.id}
@@ -383,12 +394,19 @@ class Desktop extends Component<
 						/>
 					</ConnectionContext.Provider>
 				))}
-				{servicesAppsDomains.map((domain) => (
-					<Client<{}>
-						key={domain}
-						{...reactFullstackConnectionManager.connect(domain, "serviceViews")}
-					/>
-				))}
+				{this.state.menuBarRef && (
+					<MenuBarLinkContext.Provider value={this.state.menuBarRef}>
+						{servicesAppsDomains.map((domain) => (
+							<Client<{}>
+								key={domain}
+								{...reactFullstackConnectionManager.connect(
+									domain,
+									"serviceViews"
+								)}
+							/>
+						))}
+					</MenuBarLinkContext.Provider>
+				)}
 				{!isMobile() && (
 					<Link to="/native">
 						<div className={classes.switchToNativeButton}>

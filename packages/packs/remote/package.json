@@ -1,22 +1,13 @@
 {
   "name": "@web-desktop-environment/pack-remote",
+  "packageName": "@web-desktop-environment/pack-remote",
   "version": "1.0.2",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "nodemon .",
-    "watch": "nodemon --exec \"npm run build\" --watch src --watch node_modules",
-    "code-server": "code-server",
-    "build": "tsc",
-    "build:server": "npm run build",
-    "postpublish": "npm run clean",
-    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
-    "lint": "eslint ."
-  },
-  "bin": {
-    "web-desktop-package-remote": "./bin/package.js"
+    "build": "wde-build"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",

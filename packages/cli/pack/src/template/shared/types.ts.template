@@ -1,15 +1,15 @@
 import { extendsViews, View } from "@web-desktop-environment/interfaces";
 
-type ExampleApp = View<{
+type ExampleView = View<{
 	text: string;
 }>;
 
 export type ExampleViewsPack = {
-	ExampleApp: ExampleApp;
+	ExampleView: ExampleView;
 };
 
-const views = extendsViews<ExampleViewsPack>("ExampleApp");
+const views = extendsViews<ExampleViewsPack>("ExampleView");
 
-export ViewsType = typeof views;
+export type ViewsType = typeof views;
 
 export default views;

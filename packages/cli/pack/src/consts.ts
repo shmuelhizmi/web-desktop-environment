@@ -2,11 +2,9 @@ import path from "path";
 import { readJSONSync } from "fs-extra";
 
 export const PROJECT_DIR = process.cwd();
-const APP_DIR = path.join(PROJECT_DIR, "./app/");
-const WEB_DIR = path.join(PROJECT_DIR, "./web/");
-const WEB_DIST_DIR = path.join(WEB_DIR, "./dist/web/");
+export const PACKAGE_JSON_PATH = path.join(PROJECT_DIR, "./package.json");
 
-const PACKAGE_JSON = readJSONSync(path.join(PROJECT_DIR, "./package.json"), {
+export const PACKAGE_JSON = readJSONSync(PACKAGE_JSON_PATH, {
 	throws: false,
 }) || {
 	name: "example-web-desktop-package",
@@ -21,26 +19,37 @@ const PACKAGE_JSON = readJSONSync(path.join(PROJECT_DIR, "./package.json"), {
 	devDependencies: {
 		"@web-desktop-environment/package-cli": "latest",
 	},
+	script: {
+		build: "wde-build",
+	}
 };
+
+export const NPM_IGNORE_PATH = path.join(PROJECT_DIR, "./.npmignore");
+export const NPM_IGNORE = `
+./web/
+`;
+
 const PACKAGE_NAME: string = PACKAGE_JSON.packageName;
 const PACKAGE_VERSION: string = PACKAGE_JSON.version;
-const WEB_BUNDLE_INDEX_FILE_NAME = `${PACKAGE_NAME}.bundle.js`;
-
-export const PACKAGE_CONFIG = {
-	name: PACKAGE_NAME,
-	version: PACKAGE_VERSION,
-	webBundle: {
-		index: WEB_BUNDLE_INDEX_FILE_NAME,
-		distDir: WEB_DIST_DIR,
-	},
-	entry: APP_DIR,
-};
+const WEB_BUNDLE_INDEX_FILE_NAME = `${PACKAGE_NAME}.bundle.es.js`;
 
 export const WEB_DESKTOP_ENVIRONMENT_CONFIG = "wde.config.json";
 export const WEB_DESKTOP_ENVIRONMENT_CONFIG_PATH = path.join(
 	PROJECT_DIR,
 	WEB_DESKTOP_ENVIRONMENT_CONFIG
 );
+export const PACKAGE_CONFIG = readJSONSync(
+	WEB_DESKTOP_ENVIRONMENT_CONFIG_PATH
+) || {
+	name: PACKAGE_NAME,
+	version: PACKAGE_VERSION,
+	webBundle: {
+		index: WEB_BUNDLE_INDEX_FILE_NAME,
+		distDir: "./dist/web/",
+	},
+	entry: "./app",
+	web: "./web",
+};
 
 export const VITE_CONFIG = `
 /* eslint-disable */
@@ -51,9 +60,11 @@ const react = require("@vitejs/plugin-react");
 module.exports = defineConfig({
 	build: {
 		lib: {
-			entry: path.resolve(__dirname, "web"),
+			entry: path.resolve(__dirname, ${JSON.stringify(
+				PACKAGE_CONFIG.web || "./web"
+			)}),
 			name: ${JSON.stringify(PACKAGE_NAME)},
-			fileName: "[name].bundle.js",
+			fileName: "[name].bundle",
 			formats: ["es"]
 		},
 		rollupOptions: {
@@ -61,7 +72,9 @@ module.exports = defineConfig({
 			// into your library
 			external: ["react"],
 			output: {
-				dir: path.resolve(__dirname, "dist/web"),
+				dir: path.resolve(__dirname, ${JSON.stringify(
+					PACKAGE_CONFIG.webBundle?.distDir || "./dist/web/"
+				)}),
 				// Provide global variables to use in the UMD build
 				// for externalized deps
 				globals: {

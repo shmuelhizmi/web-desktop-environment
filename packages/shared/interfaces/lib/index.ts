@@ -58,7 +58,7 @@ export function extendsViews<V extends Views>(
 export type ViewProps<
 	V extends Views,
 	View extends keyof V
-> = ViewsToComponents<V>[View];
+> = V[View]['props'];
 
 
 export {

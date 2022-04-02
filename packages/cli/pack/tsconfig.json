@@ -1,20 +1,13 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "ES2022",
-    "module": "NodeNext",
+    "target": "es6",
+    "module": "commonjs",
     "declaration": true,
     "outDir": "lib",
     "jsx": "react",
     "esModuleInterop": true,
-    "baseUrl": "lib",
-    "paths": {
-      "@index": ["index"],
-      "@root/*": ["*"],
-      "@apps/*": ["apps/*"],
-      "@utils/*": ["utils/*"]
-    }
   },
-  "include": ["lib/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["**/node_modules"]
 }

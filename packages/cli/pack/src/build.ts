@@ -3,8 +3,6 @@ import { vite } from "./utils";
 import fs from "fs-extra";
 import { VITE_CONFIG, VITE_CONFIG_PATH } from "./consts";
 
-(async () => {
-    await fs.writeJSON(VITE_CONFIG_PATH, VITE_CONFIG);
-    await vite.build();
-    await fs.remove(VITE_CONFIG_PATH);
-})();
+fs.writeFileSync(VITE_CONFIG_PATH, VITE_CONFIG);
+vite.build();
+fs.removeSync(VITE_CONFIG_PATH);

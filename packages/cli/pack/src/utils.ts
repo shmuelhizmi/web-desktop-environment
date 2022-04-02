@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
+import { spawnSync } from "child_process";
 
 export function copyTemplate(templatePath: string, targetPath: string) {
 	const filesOrFolders = fs.readdirSync(templatePath);
@@ -18,25 +19,18 @@ export function copyTemplate(templatePath: string, targetPath: string) {
 	});
 }
 
-import { exec } from "child_process";
-
 const run = (command: string) => {
-	return new Promise((resolve, reject) => {
-		exec(command, (error, stdout, stderr) => {
-			if (error) {
-				reject(error || stderr);
-			} else {
-				resolve(stdout);
-			}
-		});
+	return spawnSync("npm", ["run", command, "--", process.cwd()], {
+		stdio: "inherit",
+		cwd: __dirname,
 	});
 };
 
 export const vite = {
 	build() {
-		return run("vite build");
+		return run("vite:build");
 	},
 	dev() {
-		return run("vite");
+		return run("vite:dev");
 	},
 };

@@ -1,9 +1,9 @@
 import React from "react";
-import { ViewsType } from "../shared/types.ts.template";
+import { ViewsType } from "../shared/types";
 import { useTheme } from "@web-desktop-environment/web-sdk";
 import { ViewProps } from "@web-desktop-environment/interfaces";
 
-const ExampleView = (props: ViewProps<ViewsType, "ExampleApp">) => {
+const ExampleView = (props: ViewProps<ViewsType, "ExampleView">) => {
 	const theme = useTheme();
 	const { text } = props;
 	return (
@@ -22,3 +22,7 @@ const ExampleView = (props: ViewProps<ViewsType, "ExampleApp">) => {
 		</div>
 	);
 };
+
+export {
+	ExampleView,
+}

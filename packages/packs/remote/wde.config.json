@@ -1,0 +1,9 @@
+{
+  "name": "example-web-desktop-package",
+  "version": "0.0.1",
+  "webBundle": {
+    "index": "example-web-desktop-package.bundle.es.js",
+    "distDir": "./dist/web/"
+  },
+  "entry": "./app"
+}

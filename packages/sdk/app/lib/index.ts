@@ -7,5 +7,11 @@ export { AppBase, Window };
 
 export const keepOpen = () => setTimeout(keepOpen, 2147483647);
 
+// hooks
+export {
+	AppFunctionComponent,
+	AppFunctionComponentProps,
+	asApp,
+} from "./components/asApp";
 export { useViews } from "./hooks/useViews";
 export { usePlatform, useProcess } from "./hooks/node";

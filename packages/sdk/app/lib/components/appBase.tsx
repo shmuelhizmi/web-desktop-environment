@@ -31,9 +31,9 @@ abstract class AppBase<
 	State & AppBaseState
 > {
 	protected api = API;
-	_logger: LoggingManager;
+	private _logger: LoggingManager;
 	abstract name: string;
-	get logger() {
+	protected get logger() {
 		if (!this._logger) {
 			this._logger = this.props.parentLogger.mount(this.name);
 		}

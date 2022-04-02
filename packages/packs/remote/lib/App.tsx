@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useViews } from "@web-desktop-environment/app-sdk/lib";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 import { ServiceActionItem } from "@web-desktop-environment/interfaces/lib/views/desktop/service";
 import { ViewsProvider } from "@react-fullstack/fullstack";

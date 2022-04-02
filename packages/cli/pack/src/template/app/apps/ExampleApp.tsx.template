@@ -1,0 +1,58 @@
+import React, { useEffect, useState } from "react";
+import {
+	AppsManager,
+	asApp,
+	AppFunctionComponent,
+} from "@web-desktop-environment/app-sdk";
+import { Views } from "../types";
+
+interface AppInput {
+	text?: string;
+}
+
+const ExampleView: AppFunctionComponent<
+	{ text?: string },
+	{},
+	typeof Views
+> = ({ views, input }) => {
+	const [count, setCount] = useState("");
+	const { text } = input;
+	const { ExampleView } = views;
+
+	useEffect(() => {
+		const i = setInterval(() => {
+			setCount(String(Math.random()));
+		}, 1000);
+		return () => clearInterval(i);
+	}, []);
+
+	return <ExampleView text={`${text} - ${count}`} />;
+};
+const ExampleApp = asApp(ExampleView, "ExampleApp");
+
+export const registerApp = () => {
+	AppsManager.registerApp({
+		App: {
+			description: "an example app",
+			App: ExampleApp,
+			defaultInput: {
+				text: "Hello",
+			},
+			icon: {
+				type: "icon",
+				icon: "VscVm",
+			},
+			color: "#ECB22F",
+			displayName: "Example App",
+			window: {
+				height: 600,
+				width: 720,
+				position: { x: 150, y: 150 },
+				maxHeight: 800,
+				maxWidth: 1200,
+				minHeight: 450,
+				minWidth: 600,
+			},
+		},
+	});
+};

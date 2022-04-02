@@ -1,0 +1,24 @@
+import React from "react";
+import { ViewsType } from "../shared/types.ts.template";
+import { useTheme } from "@web-desktop-environment/web-sdk";
+import { ViewProps } from "@web-desktop-environment/interfaces";
+
+const ExampleView = (props: ViewProps<ViewsType, "ExampleApp">) => {
+	const theme = useTheme();
+	const { text } = props;
+	return (
+		<div
+			style={{
+				width: "100%",
+				height: "100%",
+				backgroundColor: theme.background.main,
+				color: theme.background.text,
+				display: "grid",
+				placeItems: "center",
+				fontSize: "2rem",
+			}}
+		>
+			{text}
+		</div>
+	);
+};

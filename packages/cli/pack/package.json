@@ -1,0 +1,34 @@
+{
+  "name": "@web-desktop-environment/package-cli",
+  "version": "1.0.2",
+  "main": "lib",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "bin": {
+    "wde-build": "./src/build.ts",
+    "wde-init": "./src/init.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "7.20.6",
+    "prettier": "^2.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
+    "directory": "packages/packs/dev"
+  },
+  "dependencies": {
+    "vite": "2.8.6",
+    "@vitejs/plugin-react": "1.3.0",
+    "ts-node": "9.0.0",
+    "typescript": "^4.2.3"
+  }
+}

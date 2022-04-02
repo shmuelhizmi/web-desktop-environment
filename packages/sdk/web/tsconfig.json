@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "lib",
+    "jsx": "react",
+    "esModuleInterop": true
+  },
+  "include": ["lib/**/*"],
+  "exclude": ["**/node_modules"]
+}

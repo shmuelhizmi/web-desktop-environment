@@ -1,3 +1,5 @@
+import { Views, ViewsToComponents, View } from "@react-fullstack/fullstack";
+
 import type Desktop from "./views/Desktop";
 import type Window from "./views/Window";
 import type ThemeProvider from "./views/ThemeProvider";
@@ -39,3 +41,27 @@ export const viewInterfaces = {
 };
 
 export type ViewInterfacesType = typeof viewInterfaces;
+
+
+export function extendsViews<V extends Views>(
+	...views: (keyof V)[]
+): V & ViewInterfacesType {
+	return {
+		...views.reduce((acc, view) => {
+			acc[view] = {} as any;
+			return acc;
+		}, {} as V),
+		...viewInterfaces,
+	};
+}
+
+export type ViewProps<
+	V extends Views,
+	View extends keyof V
+> = ViewsToComponents<V>[View];
+
+
+export {
+  Views,
+  View,
+}

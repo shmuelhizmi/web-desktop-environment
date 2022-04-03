@@ -1,10 +1,6 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
   "version": "1.0.2",
-  "main": "dist",
-  "author": "shmuelhizmi",
-  "license": "MIT",
-  "private": false,
   "scripts": {
     "start": "nodemon .",
     "build": "tsc",
@@ -15,6 +11,14 @@
   "bin": {
     "web-desktop-dev": "./bin/index.js"
   },
+  "apps": [
+    "@web-desktop-environment/pack-core",
+    "@web-desktop-environment/pack-dev"
+  ],
+  "main": "dist",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",

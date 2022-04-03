@@ -29,7 +29,7 @@ export const NPM_IGNORE = `
 ./web/
 `;
 
-const PACKAGE_NAME: string = PACKAGE_JSON.packageName;
+const PACKAGE_NAME: string = PACKAGE_JSON.packageName || PACKAGE_JSON.name;
 const PACKAGE_VERSION: string = PACKAGE_JSON.version;
 const WEB_BUNDLE_INDEX_FILE_NAME = `${PACKAGE_NAME}.bundle.es.js`;
 

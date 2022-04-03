@@ -49,9 +49,6 @@ export default class DomainManager {
 						changeOrigin: true,
 						ws,
 					};
-					this.logger.info(
-						`Proxying ${req.connection.remoteAddress} to ${target}`
-					);
 					const reqProxy = proxy.createProxy(proxyOptions);
 					return reqProxy;
 				}

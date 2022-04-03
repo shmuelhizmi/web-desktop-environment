@@ -6,6 +6,7 @@
     "declaration": true,
     "outDir": "lib",
     "jsx": "react",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "lib",
     "paths": {

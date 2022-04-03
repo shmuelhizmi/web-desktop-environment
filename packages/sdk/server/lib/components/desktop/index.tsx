@@ -85,7 +85,6 @@ class Desktop extends Component<{}, DesktopState> {
 		if (connection.success) {
 			this.setState({ gtkBridgeConnection: { domain: connection.domain } });
 		}
-		await this.desktopManager.packageManager.searchForNewPackages();
 	}
 	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
 		this.logger.info(`launch app ${app.name}`);

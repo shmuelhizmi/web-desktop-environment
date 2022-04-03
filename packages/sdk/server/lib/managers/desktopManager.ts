@@ -9,6 +9,7 @@ import PackageManager from "../managers/packageManager";
 import DomainManager from "../managers/domainManager";
 import AuthManager from "../managers/authManager";
 import { API } from "@web-desktop-environment/server-api";
+import { PackageJSON } from "@web-desktop-environment/interfaces/lib/shared/package";
 export default class DesktopManager {
 	public readonly name: string;
 
@@ -36,7 +37,7 @@ export default class DesktopManager {
 		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);
 	}
-	public async initialize() {
+	public async initialize(packageJSON: PackageJSON) {
 		await this.settingsManager.initialize();
 		await this.downloadManager.initialize();
 		const mainPort = await this.portManager.getPort(true);
@@ -45,6 +46,10 @@ export default class DesktopManager {
 		const desktopPort = await this.portManager.getPort(false);
 		this.logger.info(`starting desktop on port ${desktopPort}`);
 		API.domainManager.registerDomain("desktop", desktopPort);
+		await this.packageManager.searchForNewPackages(
+			packageJSON.apps,
+			/* run */ true
+		);
 		return {
 			desktopPort,
 		};

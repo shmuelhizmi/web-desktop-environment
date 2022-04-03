@@ -8,6 +8,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "baseUrl": "src",
+    "resolveJsonModule": true,
     "paths": {
       "@index": ["index"],
       "@components/*": ["components/*"],

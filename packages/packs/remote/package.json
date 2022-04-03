@@ -2,7 +2,7 @@
   "name": "@web-desktop-environment/pack-remote",
   "packageName": "@web-desktop-environment/pack-remote",
   "version": "1.0.2",
-  "main": "lib",
+  "main": "app",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
@@ -19,6 +19,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.20.6",
     "nodemon": "2.0.4",
+    "@web-desktop-environment/package-cli": "^1.0.2",
     "prettier": "^2.0.5"
   },
   "repository": {

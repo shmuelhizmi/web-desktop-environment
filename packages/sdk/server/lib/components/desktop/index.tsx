@@ -21,6 +21,8 @@ interface DesktopState {
 	theme: ThemeType;
 	customTheme: Theme;
 	gtkBridgeConnection?: GTKBridge;
+	externalViewsImportPaths: string[];
+	externalViewsHostDomain?: string;
 }
 
 class Desktop extends Component<{}, DesktopState> {
@@ -47,6 +49,7 @@ class Desktop extends Component<{}, DesktopState> {
 		theme: this.desktopManager.settingsManager.settings.desktop.theme,
 		customTheme:
 			this.desktopManager.settingsManager.settings.desktop.customTheme,
+		externalViewsImportPaths: [],
 	};
 	componentDidMount = () => {
 		const listenToNewSettings = this.desktopManager.settingsManager.emitter.on(
@@ -75,6 +78,15 @@ class Desktop extends Component<{}, DesktopState> {
 			this.forceUpdate();
 		});
 		this.initializeDesktop();
+		this.desktopManager.packageManager
+			.packagesWebHostingServer()
+			.then(({ domain }) => {
+				this.setState({
+					externalViewsHostDomain: domain,
+					externalViewsImportPaths:
+						this.desktopManager.packageManager.packagesViewsImportPaths,
+				});
+			});
 	};
 	async initializeDesktop() {
 		const connectToGTK = new GTKBridgeConnector(
@@ -117,6 +129,8 @@ class Desktop extends Component<{}, DesktopState> {
 			theme,
 			gtkBridgeConnection,
 			servicesAppsDomains,
+			externalViewsImportPaths,
+			externalViewsHostDomain,
 		} = this.state;
 		return (
 			<ViewsProvider<ViewInterfacesType>>
@@ -131,6 +145,8 @@ class Desktop extends Component<{}, DesktopState> {
 							onCloseApp={this.closeApp}
 							onLaunchApp={this.launchApp}
 							servicesAppsDomains={servicesAppsDomains}
+							externalViewsHostDomain={externalViewsHostDomain || ""}
+							externalViewsImportPaths={externalViewsImportPaths}
 						>
 							{this.props.children}
 						</DesktopView>

@@ -43,6 +43,6 @@
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
     "@web-desktop-environment/interfaces": "^1.0.2",
-    "react": "17.0.1"
+    "react": "^17.0.2"
   }
 }

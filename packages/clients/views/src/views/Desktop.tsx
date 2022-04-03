@@ -287,7 +287,7 @@ const useWindowBarStyles = makeStyles(
 
 class Desktop extends Component<
 	DesktopInterface,
-	{ menuBarRef: any },
+	{ menuBarRef: any; views: {} },
 	WithStyles<typeof styles>
 > {
 	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
@@ -337,6 +337,44 @@ class Desktop extends Component<
 
 	componentDidUpdate = () => {
 		this.tryToStartGtkServer();
+		this.props.externalViewsImportPaths.forEach(this.importPath);
+	};
+
+	shouldComponentUpdate = (
+		nextProps: Desktop["props"],
+		_nextState: Desktop["state"]
+	) => {
+		const {
+			externalViewsImportPaths: currentExternalViewsImportPaths,
+		} = this.props;
+		const {
+			externalViewsImportPaths: nextExternalViewsImportPaths,
+		} = nextProps;
+		const differentExternalViewsImportPaths = nextExternalViewsImportPaths.filter(
+			(path) => !currentExternalViewsImportPaths.includes(path)
+		);
+		differentExternalViewsImportPaths.forEach(this.importPath);
+		return true;
+	};
+
+	importPath = async (path: string) => {
+		const { externalViewsHostDomain } = this.props;
+		const importUrl = url({
+			domain: externalViewsHostDomain,
+			path,
+		});
+		const newViews = await this.importWithoutWebpack(importUrl);
+		this.setState((state) => ({
+			views: {
+				...state.views,
+				...newViews,
+			},
+		}));
+	};
+
+	// import es module and skip webpack
+	importWithoutWebpack = async (path: string) => {
+		return eval(`import(${JSON.stringify(path)})`);
 	};
 
 	tryToStartGtkServer = () => {
@@ -358,7 +396,7 @@ class Desktop extends Component<
 		}
 	};
 
-	state = { menuBarRef: null };
+	state = { menuBarRef: null, views: {} };
 
 	render() {
 		const {
@@ -368,6 +406,7 @@ class Desktop extends Component<
 			apps,
 			servicesAppsDomains,
 		} = this.props;
+		const { views } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
 				<MenuBar
@@ -377,34 +416,42 @@ class Desktop extends Component<
 						}
 					}}
 				/>
-				{openApps.map((app) => (
-					<ConnectionContext.Provider
-						key={app.id}
-						value={{
-							host: reactFullstackConnectionManager.host,
-							port: app.port,
-						}}
-					>
-						<Client<{}>
+				{openApps.map((app) => {
+					const connection = reactFullstackConnectionManager.connect(
+						"app-" + app.id,
+						"webWindow"
+					);
+					return (
+						<ConnectionContext.Provider
 							key={app.id}
-							{...reactFullstackConnectionManager.connect(
-								"app-" + app.id,
-								"webWindow"
-							)}
-						/>
-					</ConnectionContext.Provider>
-				))}
+							value={{
+								host: reactFullstackConnectionManager.host,
+								port: app.port,
+							}}
+						>
+							<Client<{}>
+								key={app.id}
+								{...connection}
+								views={{ ...connection.views, ...views }}
+							/>
+						</ConnectionContext.Provider>
+					);
+				})}
 				{this.state.menuBarRef && (
 					<MenuBarLinkContext.Provider value={this.state.menuBarRef}>
-						{servicesAppsDomains.map((domain) => (
-							<Client<{}>
-								key={domain}
-								{...reactFullstackConnectionManager.connect(
-									domain,
-									"serviceViews"
-								)}
-							/>
-						))}
+						{servicesAppsDomains.map((domain) => {
+							const connection = reactFullstackConnectionManager.connect(
+								domain,
+								"serviceViews"
+							);
+							return (
+								<Client<{}>
+									key={domain}
+									{...connection}
+									views={{ ...connection.views, ...views }}
+								/>
+							);
+						})}
 					</MenuBarLinkContext.Provider>
 				)}
 				{!isMobile() && (

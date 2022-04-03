@@ -70,7 +70,6 @@ module.exports = defineConfig({
 		rollupOptions: {
 			// make sure to externalize deps that shouldn't be bundled
 			// into your library
-			external: ["react"],
 			output: {
 				dir: path.resolve(__dirname, ${JSON.stringify(
 					PACKAGE_CONFIG.webBundle?.distDir || "./dist/web/"

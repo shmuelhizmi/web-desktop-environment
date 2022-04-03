@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 import { ServiceActionItem } from "@web-desktop-environment/interfaces/lib/views/desktop/service";
 import { ViewsProvider } from "@react-fullstack/fullstack";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
+import { Views } from "../shared/types";
 import { useXpra } from "./useXpra";
 
 export function RemoteServiceApp(props: RemoteServiceAppProps) {
@@ -47,14 +47,21 @@ export function RemoteServiceApp(props: RemoteServiceAppProps) {
 
 	return (
 		<>
-			<ViewsProvider<ViewInterfacesType>>
-				{({ Service }) => (
-					<Service
-						text="x11 renderer"
-						icon={{ type: "icon", icon: "VscWindow" }}
-						buttons={started ? endButtons : startButtons}
-						onAction={onAction}
-					/>
+			<ViewsProvider<Views>>
+				{({ Service, Example, Window }) => (
+					<>
+						<Window
+							background="rgba(0,0,0,0.5)"
+							icon={{ type: "icon", icon: "FcHighPriority" }}
+							name="x11 renderer"
+							onClose={() => {}}
+							setWindowState={() => {}}
+							title="x11 renderer"
+							window={{}}
+						>
+							<Example />
+						</Window>
+					</>
 				)}
 			</ViewsProvider>
 		</>

@@ -27,6 +27,8 @@ export interface Input {
   apps: App[];
   openApps: OpenApp[];
   servicesAppsDomains: string[];
+  externalViewsImportPaths: string[];
+  externalViewsHostDomain: string;
   onLaunchApp: (app: {
     name: string;
     params: any;

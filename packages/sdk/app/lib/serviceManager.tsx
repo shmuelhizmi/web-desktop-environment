@@ -3,6 +3,7 @@ import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend
 import React from "react";
 import { Render } from "@react-fullstack/render";
 import { Server } from "@react-fullstack/fullstack-socket-server";
+import { Views } from "@react-fullstack/fullstack";
 import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
 
 export class ServiceManager {
@@ -19,11 +20,12 @@ export class ServiceManager {
 
 	public static async renderService(
 		ServiceApp: React.FunctionComponent<{ serviceLogger: LoggingManager }>,
-		name: string
+		name: string,
+		views: Views = viewInterfaces
 	) {
 		const { port, serviceLogger } = await this.requestRenderPort(name);
 		Render(
-			<Server singleInstance port={port} views={viewInterfaces}>
+			<Server singleInstance port={port} views={views}>
 				{() => (
 					<>
 						<ServiceApp serviceLogger={serviceLogger} />

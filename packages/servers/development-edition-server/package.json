@@ -13,7 +13,8 @@
   },
   "apps": [
     "@web-desktop-environment/pack-core",
-    "@web-desktop-environment/pack-dev"
+    "@web-desktop-environment/pack-dev",
+    "@web-desktop-environment/pack-remote"
   ],
   "main": "dist",
   "author": "shmuelhizmi",
@@ -41,13 +42,13 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
+    "@react-fullstack/fullstack": "0.2.2",
     "@web-desktop-environment/interfaces": "^1.0.2",
     "@web-desktop-environment/pack-core": "^1.0.2",
     "@web-desktop-environment/pack-dev": "^1.0.2",
     "@web-desktop-environment/pack-remote": "^1.0.2",
     "@web-desktop-environment/server-api": "^1.0.2",
     "@web-desktop-environment/server-sdk": "^1.0.2",
-    "react": "^17.0.1"
+    "react": "^17.0.2"
   }
 }

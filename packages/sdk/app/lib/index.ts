@@ -1,5 +1,6 @@
 export { AppsManager, App } from "./appManager";
 export { ServiceManager } from "./serviceManager";
+import API from "@web-desktop-environment/server-api/lib";
 import AppBase from "./components/appBase";
 import Window from "./components/window";
 
@@ -14,4 +15,4 @@ export {
 	asApp,
 } from "./components/asApp";
 export { useViews } from "./hooks/useViews";
-export { usePlatform, useProcess } from "./hooks/node";
+export { useProcess } from "./hooks/node";

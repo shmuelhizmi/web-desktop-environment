@@ -4,7 +4,7 @@ import {
 	asApp,
 	AppFunctionComponent,
 } from "@web-desktop-environment/app-sdk";
-import { ViewsType } from "../../shared/types";
+import views, { ViewsType } from "../../shared/types";
 
 interface AppInput {
 	text?: string;
@@ -54,5 +54,5 @@ export const registerApp = () => {
 				minWidth: 600,
 			},
 		},
-	});
+	}, views);
 };

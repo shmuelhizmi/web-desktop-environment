@@ -32,7 +32,7 @@ export default class DesktopManager {
 		this.settingsManager = new SettingsManager(this.logger);
 		this.appsManager = new AppsManager(this.logger, this);
 		this.downloadManager = new DownloadManager(this.logger, this);
-		this.packageManager = new PackageManager(this.logger);
+		this.packageManager = new PackageManager(this.logger, this);
 		this.domainManager = new DomainManager(this.logger, this);
 		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);

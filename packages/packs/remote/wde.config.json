@@ -1,8 +1,8 @@
 {
-  "name": "example-web-desktop-package",
+  "name": "@web-desktop-environment/pack-remote",
   "version": "0.0.1",
   "webBundle": {
-    "index": "example-web-desktop-package.bundle.es.js",
+    "index": "index.bundle.es.js",
     "distDir": "./dist/web/"
   },
   "entry": "./app"

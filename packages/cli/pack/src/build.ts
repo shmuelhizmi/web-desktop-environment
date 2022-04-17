@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env ts-node-cwd
 import { vite } from "./utils";
 import fs from "fs-extra";
 import { VITE_CONFIG, VITE_CONFIG_PATH } from "./consts";

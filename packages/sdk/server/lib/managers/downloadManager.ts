@@ -22,7 +22,7 @@ export default class DownloadManager {
 		APIClient.downloadManager.domain.override(() => () => this.domain);
 	}
 	public initialize = async () => {
-		const { domain, port } = await this.desktopManager.portManager.withDomian();
+		const { domain, port } = await this.desktopManager.portManager.withDomain();
 		this.domain = domain;
 		this.port = port;
 		this.logger.info(`starting static file server at port ${this.port}`);

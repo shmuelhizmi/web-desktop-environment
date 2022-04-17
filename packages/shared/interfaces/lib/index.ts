@@ -1,4 +1,4 @@
-import { Views, ViewsToComponents, View } from "@react-fullstack/fullstack";
+import { Views, View } from "@react-fullstack/fullstack";
 
 import type Desktop from "./views/Desktop";
 import type Window from "./views/Window";

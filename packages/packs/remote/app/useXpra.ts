@@ -7,20 +7,24 @@ export function useXpra(start: boolean) {
 		{ port: number; domain: string } | undefined
 	>();
 	const { domain, port } = portAndDomain || {};
-	const { status, kill, process } = useProcess({
+	const { status, kill, process, error } = useProcess({
 		command: "xpra",
 		start: !!portAndDomain,
 		args: [
 			"--no-daemon",
-			"--bind-ws=127.0.0.1:" + port,
+			`--bind-ws=127.0.1:${port}`,
 			"--html=off",
+			"--start=gnome-mines",
+			// "--auth=none",
 			"start",
 			":15",
 		],
 	});
 	useEffect(() => {
 		if (start) {
-			API.portManager.withDomian().then(setPortAndDomain);
+			API.portManager.withDomain().then(({ domain, port }) => {
+				setPortAndDomain({ domain, port });
+			});
 		} else {
 			kill();
 		}
@@ -31,5 +35,6 @@ export function useXpra(start: boolean) {
 		kill,
 		xpra: process,
 		domain,
+		error,
 	};
 }

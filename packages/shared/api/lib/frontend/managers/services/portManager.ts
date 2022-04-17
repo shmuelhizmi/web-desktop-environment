@@ -4,8 +4,8 @@ export class PortManager {
   getPort() {
     return API.portManager.getPort.execute();
   }
-  withDomian() {
-    return API.portManager.withDomian.execute();
+  withDomain() {
+    return API.portManager.withDomain.execute();
   }
 }
 

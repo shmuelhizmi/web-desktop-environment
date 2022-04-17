@@ -5,5 +5,10 @@
     "index": "index.bundle.es.js",
     "distDir": "./dist/web/"
   },
+  "web": "./web/",
+  "webWorkers": {
+    "xpra": "./web/xpraWorker",
+    "xpra-decoder": "./web/xpraWorker/decoder"
+  },
   "entry": "./app"
 }

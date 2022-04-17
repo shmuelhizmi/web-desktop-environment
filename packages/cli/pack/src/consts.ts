@@ -21,7 +21,7 @@ export const PACKAGE_JSON = readJSONSync(PACKAGE_JSON_PATH, {
 	},
 	script: {
 		build: "wde-build",
-	}
+	},
 };
 
 export const NPM_IGNORE_PATH = path.join(PROJECT_DIR, "./.npmignore");
@@ -31,7 +31,6 @@ export const NPM_IGNORE = `
 
 const PACKAGE_NAME: string = PACKAGE_JSON.packageName || PACKAGE_JSON.name;
 const PACKAGE_VERSION: string = PACKAGE_JSON.version;
-const WEB_BUNDLE_INDEX_FILE_NAME = `${PACKAGE_NAME}.bundle.es.js`;
 
 export const WEB_DESKTOP_ENVIRONMENT_CONFIG = "wde.config.json";
 export const WEB_DESKTOP_ENVIRONMENT_CONFIG_PATH = path.join(
@@ -44,7 +43,6 @@ export const PACKAGE_CONFIG = readJSONSync(
 	name: PACKAGE_NAME,
 	version: PACKAGE_VERSION,
 	webBundle: {
-		index: WEB_BUNDLE_INDEX_FILE_NAME,
 		distDir: "./dist/web/",
 	},
 	entry: "./app",
@@ -56,8 +54,10 @@ export const VITE_CONFIG = `
 const path = require("path");
 const { defineConfig } = require("vite");
 const react = require("@vitejs/plugin-react");
+const { viteExternalsPlugin } = require("vite-plugin-externals")
 
 module.exports = defineConfig({
+	base: "./",
 	build: {
 		lib: {
 			entry: path.resolve(__dirname, ${JSON.stringify(
@@ -67,22 +67,29 @@ module.exports = defineConfig({
 			fileName: "[name].bundle",
 			formats: ["es"]
 		},
+		root: path.resolve(__dirname, ${JSON.stringify(
+			PACKAGE_CONFIG.web || "./web"
+		)}),
 		rollupOptions: {
-			// make sure to externalize deps that shouldn't be bundled
-			// into your library
 			output: {
 				dir: path.resolve(__dirname, ${JSON.stringify(
 					PACKAGE_CONFIG.webBundle?.distDir || "./dist/web/"
 				)}),
-				// Provide global variables to use in the UMD build
-				// for externalized deps
-				globals: {
-					react: "React",
-				},
 			},
+			input: ${JSON.stringify(
+				Object.entries({
+					...PACKAGE_CONFIG.webWorkers,
+					index: PACKAGE_CONFIG.web,
+				}).reduce((acc, [key, value]) => {
+					acc[key] = path.resolve(PROJECT_DIR, value as string);
+					return acc;
+				}, {} as any)
+			)},
 		},
 	},
-	plugins: [react()],
+	plugins: [react(), viteExternalsPlugin({
+		"react": "react",
+	})],
 });
 `;
 

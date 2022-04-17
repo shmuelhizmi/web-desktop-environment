@@ -26,7 +26,8 @@ export class LoggingManager {
     const newToken = this.token.then((parentToken) => API.loggingManager.mount.execute(
       name,
       parentToken
-    ).then(({ mountToken }) => mountToken));
+    ).then(({ mountToken }) => mountToken))
+    .catch(() => null);
     return new LoggingManager(newToken);
   }
   private throwTyingToLogFromRootLogger = () => {

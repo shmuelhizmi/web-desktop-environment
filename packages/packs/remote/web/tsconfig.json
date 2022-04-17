@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"types": ["vite/client"],
+		"module": "esnext",
+		"target": "esnext",
+        "moduleResolution": "Node",
+		"isolatedModules": true,
+		"lib": ["dom", "esnext"],
+        "jsx": "react",
+		"esModuleInterop": true,
+		"strict": true
+	},
+	"include": ["./**/*", "../shared/**/*"],
+}

@@ -44,6 +44,6 @@
     "react": "^17.0.2",
     "socket.io": "4.0.1",
     "ts-node": "9.0.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.6.3"
   }
 }

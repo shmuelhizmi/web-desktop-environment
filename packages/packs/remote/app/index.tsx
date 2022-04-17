@@ -3,6 +3,6 @@ import("@web-desktop-environment/app-sdk").then(
 		keepOpen();
 		const { RemoteServiceApp } = await import("./App");
 		const { views } = await import("../shared/types");
-		ServiceManager.renderService(RemoteServiceApp, "service-example", views);
+		ServiceManager.renderService(RemoteServiceApp, "xpra-render", views);
 	}
 );

@@ -64,7 +64,7 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 	}
 
 	requestUIPort = async () => {
-		const { domain, port } = await this.desktopManager.portManager.withDomian();
+		const { domain, port } = await this.desktopManager.portManager.withDomain();
 		this._servicesApps.push({ domain, port });
 		this.call("onServiceAppLaunch", { domain, port });
 		return port;

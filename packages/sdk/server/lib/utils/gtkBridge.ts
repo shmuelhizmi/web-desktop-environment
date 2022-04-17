@@ -26,7 +26,7 @@ export class GTKBridge {
 				return { success: false };
 			}
 			const { port, domain } =
-				await this.desktopManager.portManager.withDomian();
+				await this.desktopManager.portManager.withDomain();
 			const broadwayd = cp.exec(`broadwayd --port=${port} :${port}`);
 			let broadwaydExited = false;
 			broadwayd.on("exit", () => (broadwaydExited = true));

@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env ts-node-cwd
 import {
 	PACKAGE_CONFIG,
 	WEB_DESKTOP_ENVIRONMENT_CONFIG_PATH,

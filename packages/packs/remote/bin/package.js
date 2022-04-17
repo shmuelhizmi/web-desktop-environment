@@ -1,3 +1,3 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/ts-node-cwd
 
 require("../lib");

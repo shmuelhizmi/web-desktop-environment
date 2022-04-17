@@ -1,1 +1,1 @@
-export { useTheme } from "./hooks";
+export { useTheme, getUrl } from "./hooks";

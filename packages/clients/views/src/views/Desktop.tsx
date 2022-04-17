@@ -287,7 +287,7 @@ const useWindowBarStyles = makeStyles(
 
 class Desktop extends Component<
 	DesktopInterface,
-	{ menuBarRef: any; views: {} },
+	{ menuBarRef: any; views: {}; isLoadingViews: boolean },
 	WithStyles<typeof styles>
 > {
 	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
@@ -333,11 +333,11 @@ class Desktop extends Component<
 		);
 
 		this.tryToStartGtkServer();
+		this.importPaths(this.props.externalViewsImportPaths);
 	};
 
 	componentDidUpdate = () => {
 		this.tryToStartGtkServer();
-		this.props.externalViewsImportPaths.forEach(this.importPath);
 	};
 
 	shouldComponentUpdate = (
@@ -353,8 +353,21 @@ class Desktop extends Component<
 		const differentExternalViewsImportPaths = nextExternalViewsImportPaths.filter(
 			(path) => !currentExternalViewsImportPaths.includes(path)
 		);
-		differentExternalViewsImportPaths.forEach(this.importPath);
+		this.importPaths(differentExternalViewsImportPaths);
 		return true;
+	};
+
+	importPaths = async (paths: string[]) => {
+		if (paths.length === 0) {
+			return;
+		}
+		this.setState({
+			isLoadingViews: true,
+		});
+		await Promise.all(paths.map(this.importPath));
+		this.setState({
+			isLoadingViews: false,
+		});
 	};
 
 	importPath = async (path: string) => {
@@ -374,7 +387,7 @@ class Desktop extends Component<
 
 	// import es module and skip webpack
 	importWithoutWebpack = async (path: string) => {
-		return eval(`import(${JSON.stringify(path)})`);
+		return import(/* webpackIgnore: true */ path);
 	};
 
 	tryToStartGtkServer = () => {
@@ -396,7 +409,7 @@ class Desktop extends Component<
 		}
 	};
 
-	state = { menuBarRef: null, views: {} };
+	state = { menuBarRef: null, views: {}, isLoadingViews: false };
 
 	render() {
 		const {
@@ -406,7 +419,10 @@ class Desktop extends Component<
 			apps,
 			servicesAppsDomains,
 		} = this.props;
-		const { views } = this.state;
+		const { views, isLoadingViews } = this.state;
+		if (isLoadingViews) {
+			return <div>Loading...</div>;
+		}
 		return (
 			<div className={classes.root} style={{ background }}>
 				<MenuBar

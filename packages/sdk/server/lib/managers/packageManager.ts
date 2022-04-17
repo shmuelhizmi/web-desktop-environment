@@ -26,8 +26,8 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		return this.packages
 			.filter((p) => p.webBundle)
 			.map(
-				({ name, version, webBundle: { index } }) =>
-					"/" + path.join(name, version, index)
+				({ name, version }) =>
+					"/" + path.join(name, version, "index.bundle.es.js")
 			);
 	}
 	constructor(parentLogger: Logger, private desktopManager: DesktopManager) {
@@ -39,6 +39,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		const process = cp.spawn("ts-node", [path.join(root, wdeConfig.entry)], {
 			stdio: ["ipc"],
 		});
+		process.stdout.on("data", (data) => console.log(data.toString()));
 		this.runningPackages.set(wdeConfig.name, { ...wdeConfig, location: root });
 		this.logger.info(`running package ${wdeConfig.name}`);
 		process.on("exit", (code) => {
@@ -81,7 +82,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 			});
 			res.end(await fs.readFile(scriptPath));
 		});
-		const { domain, port } = await this.desktopManager.portManager.withDomian();
+		const { domain, port } = await this.desktopManager.portManager.withDomain();
 		server.listen(port);
 		this.logger.info(`web hosting server running on ${port}`);
 		return {

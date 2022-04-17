@@ -30,9 +30,10 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
+    "vite-plugin-externals": "0.4.0",
     "vite": "2.8.6",
     "@vitejs/plugin-react": "1.3.0",
     "ts-node": "9.0.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.6.3"
   }
 }

@@ -1,7 +1,8 @@
 import os from "os";
-import * as SubProcess from "child_process";
+import * as cp from "child_process";
 import fs from "fs-extra";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import API from "@web-desktop-environment/server-api";
 
 interface UseProcessOptions {
 	cwd?: string;
@@ -18,20 +19,27 @@ export function useProcess(props: UseProcessOptions) {
 	const [status, setStatus] = useState<"running" | "stopped" | "error">(
 		"stopped"
 	);
-	const [process, setProcess] = useState<SubProcess.ChildProcess | null>(null);
+	const [process, setProcess] = useState<cp.ChildProcess | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 	useEffect(() => {
 		if (process) {
 			process.kill();
 		}
+		if (!start) {
+			return;
+		}
 		if (command) {
 			setProcess(
-				SubProcess.spawn(command, args || [], {
+				cp.spawn(command, args || [], {
 					cwd,
 					env,
+					stdio: "pipe",
 				})
 			);
+			setStatus("running");
+			return;
 		}
-		if (!script || !start) {
+		if (!script) {
 			return;
 		}
 		// write script to temp file
@@ -39,7 +47,7 @@ export function useProcess(props: UseProcessOptions) {
 		fs.writeFileSync(tmpFile, script);
 		if (platform === "win32") {
 			setProcess(
-				SubProcess.spawn("cmd.exe", ["/c", tmpFile], {
+				cp.spawn("cmd.exe", ["/c", tmpFile], {
 					cwd,
 					env,
 				})
@@ -47,7 +55,7 @@ export function useProcess(props: UseProcessOptions) {
 		}
 		if (platform === "darwin" || platform === "linux") {
 			setProcess(
-				SubProcess.spawn("sh", [tmpFile], {
+				cp.spawn("sh", [tmpFile], {
 					cwd,
 					env,
 				})
@@ -58,20 +66,27 @@ export function useProcess(props: UseProcessOptions) {
 		if (!process) {
 			return;
 		}
-		process.on("error", () => {
+		process.on("error", (err) => {
 			setStatus("error");
+			setError(err);
 		});
-		process.on("exit", (code) => {
+		process.on("exit", (code, _s) => {
 			if (code === 0) {
 				setStatus("stopped");
 			} else {
 				setStatus("error");
 			}
 		});
+		process.stdio.forEach((stream) => {
+			stream.on("data", (data) => {
+				console.log(data.toString());
+			});
+		});
 	}, [process]);
 	return {
 		status,
 		process,
+		error,
 		kill: () => process && process.kill(),
 	};
 }

@@ -7,8 +7,8 @@ export class PortManager extends ManagerBase<PortManagerEvents> {
   getPort = this.registerFunction<() => { port: number }>(
     "getPort"
   );
-  withDomian = this.registerFunction<() => { port: number; domain: string }>(
-    "withDomian"
+  withDomain = this.registerFunction<() => { port: number; domain: string }>(
+    "withDomain"
   );
 }
 

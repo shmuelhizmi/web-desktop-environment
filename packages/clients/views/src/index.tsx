@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import Login, { loginStorage } from "@root/loginScreen/Login";
 import Demo from "@root/demo/App";
@@ -16,6 +16,11 @@ import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
+import "@web-desktop-environment/interfaces/lib/web/sdk";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+window.react = React;
 
 type Views =
 	| "web"
@@ -86,8 +91,23 @@ export const connectToServer = (
 	return reactFullstackConnectionManager.connect("desktop", views);
 };
 
+window.wdeSdk = {
+	get host() {
+		return reactFullstackConnectionManager.host;
+	},
+	get https() {
+		return reactFullstackConnectionManager.https;
+	},
+	get token() {
+		return reactFullstackConnectionManager.token;
+	},
+	get port() {
+		return reactFullstackConnectionManager.mainPort;
+	},
+};
+
 const App = () => {
-	const [login, setLogin] = useState<{
+	const [login, setLogin] = React.useState<{
 		isLoggedIn: boolean;
 		host: string;
 		port: number;

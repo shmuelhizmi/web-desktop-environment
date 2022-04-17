@@ -23,7 +23,7 @@
     "uid": "2.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.2.3",
+    "typescript": "^4.6.3",
     "@types/node": "^12.0.0"
   }
 }

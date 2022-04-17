@@ -16,7 +16,7 @@ export default class PortManager {
 		APIClient.portManager.getPort.override(
 			() => () => this.getPort().then((port) => ({ port }))
 		);
-		APIClient.portManager.withDomian.override(() => () => this.withDomian());
+		APIClient.portManager.withDomain.override(() => () => this.withDomain());
 	}
 
 	public usedPorts: number[] = [];
@@ -53,7 +53,7 @@ export default class PortManager {
 			});
 		}
 	};
-	public withDomian = async () => {
+	public withDomain = async () => {
 		const port = await this.getPort();
 		const domain = uuid();
 		await API.domainManager.registerDomain(domain, port);

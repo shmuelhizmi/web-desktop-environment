@@ -13,6 +13,7 @@ import { Rnd, RndDragCallback, RndResizeCallback } from "react-rnd";
 import { ConnectionContext } from "@root/contexts";
 import { lastTaskQueuer } from "@utils/tasks";
 import { isMobile } from "@utils/environment";
+import { windowBarHeight } from "@web-desktop-environment/web-sdk";
 
 export const defaultWindowSize = {
 	height: 600,
@@ -25,8 +26,6 @@ export const defaultWindowSize = {
 
 // for now windows will not support hot reloading from mobile mode to regular mode
 const constantIsMobile = isMobile();
-
-export const windowBarHeight = constantIsMobile ? 35 : 25;
 
 const styles = (theme: Theme) =>
 	createStyles({

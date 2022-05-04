@@ -23,6 +23,10 @@ const run = (command: string) => {
 	return spawnSync("npm", ["run", command, "--", process.cwd()], {
 		stdio: "inherit",
 		cwd: __dirname,
+		env: {
+			...process.env,
+			PACKAGE_LOCATION: process.cwd(),
+		}
 	});
 };
 

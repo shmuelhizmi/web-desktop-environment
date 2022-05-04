@@ -27,3 +27,4 @@ yarn-error.log*
 
 dist/**/*.js
 dist/**/*.js.map
+vite.config.js

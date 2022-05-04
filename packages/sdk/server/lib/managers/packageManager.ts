@@ -27,7 +27,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 			.filter((p) => p.webBundle)
 			.map(
 				({ name, version }) =>
-					"/" + path.join(name, version, "index.bundle.es.js")
+					"/" + path.join(name, version, "index.bundle.esm.js")
 			);
 	}
 	constructor(parentLogger: Logger, private desktopManager: DesktopManager) {

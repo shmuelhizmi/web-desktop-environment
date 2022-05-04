@@ -117,94 +117,28 @@ const App = () => {
 			<Router>
 				<Switch>
 					<Route path="/demo">{() => <Demo />}</Route>
-					<Route path="/native">
-						<Switch>
-							<Route
-								path="/native/connect/:host/:port/"
-								render={(login) => {
-									const { host, port } = login.match?.params;
-									return (
-										<StateComponent<{}> defaultState={{}}>
-											{() => (
-												<ConnectionContext.Provider
-													value={{ host, port: Number(port) }}
-												>
-													<Client<{}>
-														{...connectToServer(
-															host,
-															false,
-															Number(port),
-															"nativeHost"
-														)}
-													/>
-												</ConnectionContext.Provider>
-											)}
-										</StateComponent>
-									);
-								}}
-							></Route>
-							<Route path="/native/client/connect/:host/:port/">
-								{(login) => {
-									const { host, port } = login.match?.params || {};
-
-									if (host && port) {
-										return (
-											<ConnectionContext.Provider
-												value={{ host, port: Number(port) }}
-											>
-												<Client<{}>
-													{...connectToServer(
-														host,
-														false,
-														Number(port),
-														"nativeClient"
-													)}
-												/>
-											</ConnectionContext.Provider>
-										);
-									}
-								}}
-							</Route>
-							<Route>
-								{() =>
-									login.isLoggedIn ? (
-										<ConnectionContext.Provider value={login}>
-											<Client<{}>
-												{...connectToServer(
-													login.host,
-													false,
-													Number(login.port),
-													"nativeHost"
-												)}
-											/>
-										</ConnectionContext.Provider>
-									) : (
-										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
-											}
-										/>
-									)
-								}
-							</Route>
-						</Switch>
-					</Route>
 					<Route>
 						<Switch>
-							<Route path="/connect/:host/:port/">
+							<Route path="/connect/link/:id/">
 								{(login) => {
-									const { host, port } = login.match?.params || {};
-									if (host && port) {
-										return (
-											<ConnectionContext.Provider
-												value={{ host, port: Number(port) }}
-											>
-												<Client<{}>
-													{...connectToServer(host, false, Number(port), "web")}
-												/>
-											</ConnectionContext.Provider>
-										);
+									const { id } = login.match?.params || {};
+									if (!id) {
+										return null;
 									}
+									const data = JSON.parse(atob(id));
+									if (!data) {
+										return null;
+									}
+									loginStorage.token = data.token;
+									return (
+										<ConnectionContext.Provider
+											value={{ host: data.host, port: data.port }}
+										>
+											<Client<{}>
+												{...connectToServer(data.host, false, data.port, "web")}
+											/>
+										</ConnectionContext.Provider>
+									);
 								}}
 							</Route>
 							<Route>

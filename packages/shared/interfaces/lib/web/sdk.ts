@@ -10,3 +10,7 @@ export type SDK = {
   readonly token: string;
   readonly https: boolean;
 };
+
+export type EntryPointProps = {
+  packageBaseline: string;
+}

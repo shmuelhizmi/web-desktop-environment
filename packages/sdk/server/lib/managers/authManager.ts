@@ -35,12 +35,12 @@ export default class AuthManager {
 		this.logger.info(
 			color.bgWhite(
 				color.blue`session code for web access in ${color.bold(
-					color.green(this.seassionCode)
-				)} use it to log-in`
+					color.green(this.sessionCode)
+				)}`
 			)
 		);
 		this.logger.direct(
-			figlet.textSync("code - " + this.seassionCode, "Banner3")
+			figlet.textSync("code - " + this.sessionCode, "Banner3")
 		);
 		this.logger.info(
 			`token for local access is ${this.createAccessToken(
@@ -50,7 +50,10 @@ export default class AuthManager {
 		);
 	}
 	tokenSecretKey = randomBytes(32).toString("hex");
-	seassionCode = randomBytes(4).toString("hex");
+	private randSessionCode = randomBytes(4).toString("hex");
+	get sessionCode() {
+		return process.env.SESSION_CODE || this.randSessionCode;
+	}
 	createAccessToken(ip: string, expiresIn: number): string {
 		const payload: Payload = {
 			ip,
@@ -76,9 +79,9 @@ export default class AuthManager {
 		}
 	}
 	authenticate(ip: string, sessionCode: string) {
-		if (sessionCode !== this.seassionCode) {
+		if (sessionCode !== this.sessionCode) {
 			this.logger.warn(
-				`Session code ${sessionCode} does not match ${this.seassionCode}`
+				`Session code ${sessionCode} does not match ${this.sessionCode}`
 			);
 			return false;
 		}

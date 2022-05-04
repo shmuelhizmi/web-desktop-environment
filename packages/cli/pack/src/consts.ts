@@ -51,6 +51,7 @@ export const PACKAGE_CONFIG = readJSONSync(
 
 export const VITE_CONFIG = `
 /* eslint-disable */
+const {pluginHelper, default: worker} = require('vite-plugin-worker')
 const path = require("path");
 const { defineConfig } = require("vite");
 const react = require("@vitejs/plugin-react");
@@ -65,11 +66,9 @@ module.exports = defineConfig({
 			)}),
 			name: ${JSON.stringify(PACKAGE_NAME)},
 			fileName: "[name].bundle",
-			formats: ["es"]
+			formats: ["esm"]
 		},
-		root: path.resolve(__dirname, ${JSON.stringify(
-			PACKAGE_CONFIG.web || "./web"
-		)}),
+		root: path.resolve(__dirname, ${JSON.stringify(PACKAGE_CONFIG.web || "./web")}),
 		rollupOptions: {
 			output: {
 				dir: path.resolve(__dirname, ${JSON.stringify(
@@ -78,7 +77,7 @@ module.exports = defineConfig({
 			},
 			input: ${JSON.stringify(
 				Object.entries({
-					...PACKAGE_CONFIG.webWorkers,
+					...PACKAGE_CONFIG.entries,
 					index: PACKAGE_CONFIG.web,
 				}).reduce((acc, [key, value]) => {
 					acc[key] = path.resolve(PROJECT_DIR, value as string);
@@ -89,7 +88,10 @@ module.exports = defineConfig({
 	},
 	plugins: [react(), viteExternalsPlugin({
 		"react": "react",
-	})],
+	}),
+	worker({}),
+	pluginHelper(),
+  ],
 });
 `;
 

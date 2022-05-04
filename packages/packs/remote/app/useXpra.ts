@@ -12,9 +12,10 @@ export function useXpra(start: boolean) {
 		start: !!portAndDomain,
 		args: [
 			"--no-daemon",
+			"--sharing=yes",
 			`--bind-ws=127.0.1:${port}`,
 			"--html=off",
-			"--start=gnome-mines",
+			"--start-via-proxy=no",
 			// "--auth=none",
 			"start",
 			":15",

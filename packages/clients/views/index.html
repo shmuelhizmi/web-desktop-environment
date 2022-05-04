@@ -2,15 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#000000" />
 		<meta
 			name="description"
 			content="A Web Desktop Environment"
 		/>
-		<link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+		<link rel="manifest" href="./manifest.json" />
 		<title>Web Desktop Environment</title>
 	</head>
 	<body>
@@ -18,11 +17,12 @@
 		<div id="app">
 			<div id="root" />
 		</div>
+		<script type="module" src="/src/index.tsx"></script>
 		<script>
 			if (navigator.serviceWorker) {
 				window.addEventListener("load", () => {
 					navigator.serviceWorker
-						.register("/serviceworker.js")
+						.register("./serviceworker.js")
 						.catch(() => console.log("unable to load service worker"));
 				});
 			}

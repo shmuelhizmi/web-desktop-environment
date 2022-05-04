@@ -1,0 +1,229 @@
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
+import {
+	ViewsProvider,
+	windowBarHeight,
+} from "@web-desktop-environment/web-sdk/lib";
+import {
+	XpraClient,
+	XpraWindowManager,
+	XpraWindowManagerWindow,
+} from "xpra-html5-client";
+import WindowViewInterface, {
+	WindowState,
+} from "@web-desktop-environment/interfaces/lib/views/Window";
+import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
+
+interface XpraWindowRendererProps {
+	window: XpraWindowManagerWindow;
+	vm: XpraWindowManager;
+	xpra: XpraClient;
+}
+
+function getInputProps({ vm, window }: XpraWindowRendererProps) {
+	return {
+		onMouseDown: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.mouseButton(window, e as unknown as MouseEvent, true);
+			vm.setActiveWindow(window.attributes.id);
+		},
+		onMouseUp: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.mouseButton(window, e as unknown as MouseEvent, false);
+			vm.setActiveWindow(-1);
+		},
+		onMouseMove: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.mouseMove(window, e as unknown as MouseEvent);
+		},
+		onWheel: (e: React.WheelEvent<HTMLDivElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.mouseWheel(window, e as unknown as WheelEvent);
+		},
+		onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.keyPress(window, e as unknown as KeyboardEvent, true);
+		},
+		onKeyUp: (e: React.KeyboardEvent<HTMLDivElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.keyPress(window, e as unknown as KeyboardEvent, false);
+		},
+		onKeyPress: (e: React.KeyboardEvent<HTMLDivElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+			vm.keyPress(window, e as unknown as KeyboardEvent, true);
+		},
+		onFocus: (e: React.FocusEvent<HTMLDivElement>) => {
+			vm.setActiveWindow(window.attributes.id);
+			e.currentTarget.tabIndex = 0;
+		},
+		onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+			vm.setActiveWindow(window.attributes.id);
+			e.currentTarget.tabIndex = 0;
+		},
+		onBlur: (e: React.FocusEvent<HTMLDivElement>) => {
+			e.currentTarget.tabIndex = -1;
+		},
+	};
+}
+
+export function WindowBase(
+	props: React.PropsWithChildren<WindowViewInterface["props"]>
+) {
+	return (
+		<ViewsProvider<ViewInterfacesType>>
+			{({ Window }) => (
+				<Window
+					{...props}
+					window={{
+						...props.window,
+						position: {
+							x: props.window.position?.x ?? 0,
+							y: (props.window.position?.y ?? 0) - windowBarHeight,
+						},
+						height: props.window?.height
+							? props.window?.height + windowBarHeight
+							: undefined,
+					}}
+					setWindowState={(state: WindowState) => {
+						props.setWindowState({
+							...state,
+							position: state.position && {
+								x: state.position.x,
+								y: state.position.y + windowBarHeight,
+							},
+							size: state.size && {
+								width: state.size.width ?? 0,
+								height: (state.size.height ?? 0) - windowBarHeight,
+							},
+						});
+					}}
+				/>
+			)}
+		</ViewsProvider>
+	);
+}
+
+export function XpraWindowRenderer(props: XpraWindowRendererProps) {
+	const { window, vm, xpra } = props;
+	const winRef = useRef<HTMLDivElement>(null);
+	const [size, setSize] = React.useState<{ width: number; height: number }>({
+		width: window.attributes.dimension[0],
+		height: window.attributes.dimension[1],
+	});
+	const [position, setPosition] = React.useState<{ x: number; y: number }>({
+		x: window.attributes.position[0],
+		y: window.attributes.position[1],
+	});
+	const [isMinimized, setIsMinimized] = React.useState(false);
+	const inputProps = useMemo(() => getInputProps(props), [props]);
+
+	useEffect(() => {
+		if (winRef.current) {
+			const ele = winRef.current;
+			ele.appendChild(window.canvas);
+		}
+		xpra.sendConfigureWindow(
+			window.attributes.id,
+			window.attributes.position,
+			window.attributes.dimension,
+			{},
+			{},
+			false
+		);
+		vm.raise(window);
+	}, []);
+
+	useEffect(() => {
+		setSize({
+			width: window.attributes.dimension[0],
+			height: window.attributes.dimension[1],
+		});
+		if (!isMinimized) {
+			setPosition({
+				x: window.attributes.position[0],
+				y: window.attributes.position[1],
+			});
+		}
+	}, [...window.attributes.dimension, ...window.attributes.position]);
+
+	const onWindowSetState = useCallback(
+		(state: WindowState) => {
+			const minimized = state.minimized ?? isMinimized;
+
+			if (!minimized || state.position) {
+				setPosition(
+					state.position || {
+						x: window.attributes.position[0],
+						y: window.attributes.position[1],
+					}
+				);
+			}
+			if (!minimized && (state.position || state.size)) {
+				vm.moveResize(
+					window,
+					state.position
+						? [state.position.x, state.position.y]
+						: window.attributes.position,
+					state.size
+						? [state.size.width, state.size.height]
+						: window.attributes.dimension
+				);
+				setSize(
+					state.size || {
+						width: window.attributes.dimension[0],
+						height: window.attributes.dimension[1],
+					}
+				);
+			}
+			if (minimized && !isMinimized) {
+				setIsMinimized(true);
+				vm.minimize(window);
+			} else if (!minimized && isMinimized) {
+				setIsMinimized(false);
+				vm.raise(window);
+			}
+		},
+		[vm, window]
+	);
+
+	return (
+		<WindowBase
+			background="transparent"
+			icon={{ type: "icon", icon: "VscSymbolNamespace" }}
+			name={window.attributes.metadata.title}
+			onClose={() => vm.close(window)}
+			setWindowState={(state) => {
+				onWindowSetState(state);
+			}}
+			title={window.attributes.metadata.title}
+			window={{
+				allowLocalScreenSnapping: false,
+				height: size.height,
+				width: size.width,
+				maxHeight: globalThis.screen.height,
+				maxWidth: globalThis.screen.width,
+				minHeight: 50,
+				minWidth: 50,
+				position: {
+					x: position.x,
+					y: position.y,
+				},
+			}}
+		>
+			{
+				<div
+					style={{ width: size.width, height: size.height }}
+					ref={winRef}
+					{...inputProps}
+				/>
+			}
+		</WindowBase>
+	);
+}

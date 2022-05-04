@@ -30,6 +30,8 @@ import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { url } from "@utils/url";
 import { MenuBar } from "@components/menubar";
 import { MenuBarLinkContext } from "@root/hooks/MenuBarItemPortal";
+import { EntryPointProps } from "@web-desktop-environment/interfaces/lib/web/sdk";
+import { ProvideViews } from "@web-desktop-environment/web-sdk";
 
 export const windowsBarHeight = 65;
 
@@ -376,18 +378,22 @@ class Desktop extends Component<
 			domain: externalViewsHostDomain,
 			path,
 		});
-		const newViews = await this.importWithoutWebpack(importUrl);
+		const { default: main } = (await this.importWithoutWebpack(importUrl)) as {
+			default: (props: EntryPointProps) => any;
+		};
 		this.setState((state) => ({
 			views: {
 				...state.views,
-				...newViews,
+				...main({
+					packageBaseline: new URL(".", importUrl).href,
+				}),
 			},
 		}));
 	};
 
 	// import es module and skip webpack
 	importWithoutWebpack = async (path: string) => {
-		return import(/* webpackIgnore: true */ path);
+		return import(/* @vite-ignore */ path);
 	};
 
 	tryToStartGtkServer = () => {
@@ -437,6 +443,7 @@ class Desktop extends Component<
 						"app-" + app.id,
 						"webWindow"
 					);
+					const viewsToProvide = { ...connection.views, ...views };
 					return (
 						<ConnectionContext.Provider
 							key={app.id}
@@ -445,11 +452,13 @@ class Desktop extends Component<
 								port: app.port,
 							}}
 						>
-							<Client<{}>
-								key={app.id}
-								{...connection}
-								views={{ ...connection.views, ...views }}
-							/>
+							<ProvideViews value={viewsToProvide}>
+								<Client<{}>
+									key={app.id}
+									{...connection}
+									views={viewsToProvide}
+								/>
+							</ProvideViews>
 						</ConnectionContext.Provider>
 					);
 				})}
@@ -460,12 +469,11 @@ class Desktop extends Component<
 								domain,
 								"serviceViews"
 							);
+							const viewsToProvide = { ...connection.views, ...views };
 							return (
-								<Client<{}>
-									key={domain}
-									{...connection}
-									views={{ ...connection.views, ...views }}
-								/>
+								<ProvideViews value={viewsToProvide} key={domain}>
+									<Client<{}> {...connection} views={viewsToProvide} />
+								</ProvideViews>
 							);
 						})}
 					</MenuBarLinkContext.Provider>

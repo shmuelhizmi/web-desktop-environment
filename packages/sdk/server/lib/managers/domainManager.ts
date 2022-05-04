@@ -83,6 +83,7 @@ export default class DomainManager {
 			}
 		});
 		server.listen(mainPort);
+		this.logger.info(`Main proxy server started on port ${mainPort}`);
 	}
 	async tryToLogin(req: http.IncomingMessage, res: http.ServerResponse) {
 		const isLogginPath = req.url === "/login";

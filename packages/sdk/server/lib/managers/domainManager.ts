@@ -36,8 +36,8 @@ export default class DomainManager {
 			ws = false
 		): proxy | undefined => {
 			try {
-				const parsedUrl = req.headers.host;
-				const [subDomain, token] = parsedUrl.split(".");
+				const [,subDomain, token] = req.url.split("/");
+				req.url = req.url.replace(`/${subDomain}/${token}`, "");
 				const target = this.subDomainsBindings.get(subDomain);
 				const auth = this.desktopManager.authManager.verifyAccessToken(
 					token,

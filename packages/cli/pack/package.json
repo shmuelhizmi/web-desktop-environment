@@ -6,9 +6,9 @@
   "license": "MIT",
   "private": false,
   "bin": {
-    "wde-build": "./src/build.ts",
-    "wde-dev": "./src/dev.ts",
-    "wde-init": "./src/init.ts"
+    "wde-build": "./bin/build.js",
+    "wde-dev": "./bin/dev.js",
+    "wde-init": "./bin/init.js"
   },
   "scripts": {
     "vite:dev": "vite build --watch ${PACKAGE_LOCATION}",

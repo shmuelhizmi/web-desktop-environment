@@ -63,13 +63,12 @@ class ReactFullstackConnectionManager {
 		socketOptions: SocketIOClient.ConnectOpts;
 	} => {
 		return {
-			host: `${this.https ? "https" : "http"}://${domain}.${this.token}.${
-				this.host
-			}`,
+			host: `${this.https ? "https" : "http"}://${this.host}`,
 			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
+				path: `/${domain}/${this.token}/socket.io`,
 			},
 		};
 	};
@@ -111,7 +110,8 @@ const App = () => {
 		isLoggedIn: boolean;
 		host: string;
 		port: number;
-	}>({ host: "localhost", port: 5000, isLoggedIn: false });
+		https: boolean;
+	}>({ host: "localhost", port: 5000, isLoggedIn: false, https: false });
 	return (
 		<TP theme={defaultTheme}>
 			<Router>
@@ -119,7 +119,7 @@ const App = () => {
 					<Route path="/demo">{() => <Demo />}</Route>
 					<Route>
 						<Switch>
-							<Route path="/connect/link/:id/">
+							<Route path="/connect/link/:id">
 								{(login) => {
 									const { id } = login.match?.params || {};
 									if (!id) {
@@ -135,7 +135,7 @@ const App = () => {
 											value={{ host: data.host, port: data.port }}
 										>
 											<Client<{}>
-												{...connectToServer(data.host, false, data.port, "web")}
+												{...connectToServer(data.host, data.https, data.port, "web")}
 											/>
 										</ConnectionContext.Provider>
 									);
@@ -148,7 +148,7 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
-													false,
+													login.https,
 													Number(login.port),
 													"web"
 												)}
@@ -156,8 +156,8 @@ const App = () => {
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, https) =>
+												setLogin({ host, port, isLoggedIn: true, https })
 											}
 										/>
 									)

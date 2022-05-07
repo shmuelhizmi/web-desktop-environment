@@ -51,7 +51,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		this.call("install", wdeConfig);
 	}
 
-	public async packagesWebHostingServer() {
+	public async startPackagesWebHostingServer() {
 		const server = http.createServer(async (req, res) => {
 			const [packageName, versionPath, ...scriptPaths] = req.url
 				.split("/")

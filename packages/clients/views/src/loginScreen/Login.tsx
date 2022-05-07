@@ -136,7 +136,7 @@ const Login = (props: LoginProps) => {
 	const [host, setHost] = useState(loginStorage.host);
 	const [port, setPort] = useState(loginStorage.port);
 	const [passcode, setPasscode] = useState("");
-	const [https /* , setHttps */] = useState(false);
+	const [https /* , setHttps */] = useState(window.location.protocol === "https:");
 	const [isValid, setIsValid] = useState(false);
 	const [token, setToken] = useState("");
 	useEffect(() => {
@@ -146,7 +146,7 @@ const Login = (props: LoginProps) => {
 
 	useEffect(() => {
 		setIsValid(false);
-		const url = `${https ? "https" : "http"}://${host}:${port}/login`;
+		const url = `${https ? "https" : "http"}://${host}${port ? `:${port}` : ""}/login`;
 		if (isValidUrl(url) && passcode) {
 			fetch(url, {
 				method: "POST",
@@ -158,6 +158,12 @@ const Login = (props: LoginProps) => {
 							setIsValid(true);
 							setToken(data.token);
 							loginStorage.token = data.token;
+							// window.location.pathname = '/connect/link/' + btoa(JSON.stringify({
+							// 	host,
+							// 	port,
+							// 	https,
+							// 	token: data.token,
+							// }))
 						}
 					})
 				)

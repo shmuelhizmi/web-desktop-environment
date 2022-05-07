@@ -77,11 +77,6 @@ export function useProcess(props: UseProcessOptions) {
 				setStatus("error");
 			}
 		});
-		process.stdio.forEach((stream) => {
-			stream.on("data", (data) => {
-				console.log(data.toString());
-			});
-		});
 	}, [process]);
 	return {
 		status,

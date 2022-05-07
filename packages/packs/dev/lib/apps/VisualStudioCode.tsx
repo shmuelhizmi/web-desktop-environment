@@ -1,9 +1,10 @@
 import React from "react";
 import { homedir } from "os";
 import * as cp from "child_process";
-import axios from "axios";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 import { APIClient } from "@web-desktop-environment/server-api";
+import http from "http";
+
 interface VSCodeInput {
 	process?: string;
 	args?: string[];
@@ -28,27 +29,35 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 
 	willUnmount = false;
 
-	runVsCodeCli = (port: number): void => {
-		this.vscode = cp.spawn(
-			"npm",
+	runVsCodeCli = (port: number, domain: string): void => {
+		this.vscode = cp.fork(
+			require.resolve("code-server/out/node/entry.js"),
 			[
-				"run",
-				"code-server",
-				"--",
 				`--port=${port}`,
 				"--auth=none",
 				"--host=0.0.0.0",
+				process.cwd(),
 			],
-			{ cwd: __dirname, stdio: ["ipc"] }
+			{
+				cwd: __dirname,
+				stdio: ["ipc"],
+				env: {
+					PUBLIC_URL: `/${domain}/*/`,
+				},
+			}
 		);
+		this.vscode.on("message", (...e) => {
+			console.log(...e);
+		});
 		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {
-				axios
-					.get("http://localhost:" + port)
-					.then(() => !this.willUnmount && this.setState({ isLoaded: true }))
-					.catch(() => {
-						setTimeout(() => waitForVscodeToLoad(), 250);
+				http
+					.get(`http://localhost:${port}/`, (res) => {
+						this.setState({ isLoaded: true });
+					})
+					.on("error", (e) => {
+						setTimeout(waitForVscodeToLoad, 100);
 					});
 			}
 		};
@@ -61,8 +70,8 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.withDomian().then(({ port, domain }) => {
-			this.runVsCodeCli(port);
+		this.api.portManager.withDomain().then(({ port, domain }) => {
+			this.runVsCodeCli(port, domain);
 			this.setState({ port, id: domain });
 		});
 	};

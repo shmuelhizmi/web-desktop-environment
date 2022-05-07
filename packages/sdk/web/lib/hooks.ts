@@ -11,9 +11,9 @@ export function getUrl(domain: string, path = "/", ws = false): string {
 	if (ws) {
 		return `${
 			https ? "wss" : "ws"
-		}://${domain}.${token}.${host}:${port}${path}`;
+		}://${host}:${port}/${domain}/${token}${path}`;
 	}
 	return `${
 		https ? "https" : "http"
-	}://${domain}.${token}.${host}:${port}${path}`;
+	}://${host}:${port}/${domain}/${token}${path}`;
 }

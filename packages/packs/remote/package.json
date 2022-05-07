@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "wde-build",
-    "start": "wde-dev"
+    "build": "yarn exec $(yarn bin wde-build)",
+    "start": "yarn exec $(yarn bin wde-dev)"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",

@@ -10,7 +10,7 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
-import { url } from "@utils/url";
+import { getUrl } from "@root/../../../sdk/web/lib";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -62,10 +62,10 @@ class Iframe extends Component<
 
 		const src =
 			props.type === "internal"
-				? url({
-						path: props.path,
-						domain: props.id,
-				  })
+				? getUrl(
+						props.id,
+						props.path,
+				  )
 				: `${props.https ? "https" : "http"}://${
 						props.host || reactFullstackConnectionManager.host
 				  }${props.port ? ":" + props.port : ""}${props.path || ""}`;

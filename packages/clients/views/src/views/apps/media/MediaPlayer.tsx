@@ -8,8 +8,7 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
-import { reactFullstackConnectionManager } from "@root/index";
-import { url } from "@utils/url";
+import { getUrl } from "@root/../../../sdk/web/lib";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -61,10 +60,10 @@ class MediaPlayer extends FileViewer<
 				<div className={classes.videoAreaContainerBody}>
 					<video controls className={classes.videoArea}>
 						<source
-							src={url({
-								domain: downloadServerDomain,
-								path: source,
-							})}
+							src={getUrl(
+								downloadServerDomain,
+								source,
+							)}
 						></source>
 					</video>
 				</div>

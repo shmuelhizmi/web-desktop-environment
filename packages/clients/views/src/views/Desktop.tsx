@@ -27,11 +27,10 @@ import {
 } from "@root/gtk-broadway-display/state";
 import { isMobile } from "@utils/environment";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
-import { url } from "@utils/url";
 import { MenuBar } from "@components/menubar";
 import { MenuBarLinkContext } from "@root/hooks/MenuBarItemPortal";
 import { EntryPointProps } from "@web-desktop-environment/interfaces/lib/web/sdk";
-import { ProvideViews } from "@web-desktop-environment/web-sdk";
+import { getUrl, ProvideViews } from "@web-desktop-environment/web-sdk";
 
 export const windowsBarHeight = 65;
 
@@ -374,10 +373,7 @@ class Desktop extends Component<
 
 	importPath = async (path: string) => {
 		const { externalViewsHostDomain } = this.props;
-		const importUrl = url({
-			domain: externalViewsHostDomain,
-			path,
-		});
+		const importUrl = getUrl(externalViewsHostDomain, path);
 		const { default: main } = (await this.importWithoutWebpack(importUrl)) as {
 			default: (props: EntryPointProps) => any;
 		};
@@ -402,11 +398,11 @@ class Desktop extends Component<
 			if (GTKConnectionStatus === "disconnected" && gtkBridge) {
 				try {
 					connectToBroadway(
-						url({
-							domain: gtkBridge.domain,
-							ws: true,
-							path: "/socket",
-						})
+						getUrl(
+							gtkBridge.domain,
+							"/socket",
+							true,
+						)
 					);
 				} catch (e) {
 					/* no handle */
@@ -619,6 +615,7 @@ export const WindowBar = ({
 		windowManager.emitter.on("maximizeWindow", updateWindow);
 		windowManager.emitter.on("minimizeWindow", updateWindow);
 		windowManager.emitter.on("setActiveWindow", updateWindow);
+		windowManager.emitter.on("updateWindow", updateWindow);
 		if (mobileView) {
 			documentSwipeRef(document.body);
 		}

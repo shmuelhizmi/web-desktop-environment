@@ -13,11 +13,13 @@ import WindowViewInterface, {
 	WindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
+import { createPortal } from "react-dom";
 
 interface XpraWindowRendererProps {
 	window: XpraWindowManagerWindow;
 	vm: XpraWindowManager;
 	xpra: XpraClient;
+	icon?: string;
 }
 
 function getInputProps({ vm, window }: XpraWindowRendererProps) {
@@ -111,7 +113,7 @@ export function WindowBase(
 }
 
 export function XpraWindowRenderer(props: XpraWindowRendererProps) {
-	const { window, vm, xpra } = props;
+	const { window, vm, xpra, icon } = props;
 	const winRef = useRef<HTMLDivElement>(null);
 	const [size, setSize] = React.useState<{ width: number; height: number }>({
 		width: window.attributes.dimension[0],
@@ -193,10 +195,28 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 		[vm, window]
 	);
 
+	const windowTypes = window.attributes.metadata["window-type"];
+	const borderless = !!windowTypes.find(
+		(type) =>
+			type.includes("DROPDOWN") ||
+			type.includes("TOOLTIP") ||
+			type.includes("POPUP")
+	);
+
+	const content = (
+		<div
+			style={{ width: size.width, height: size.height }}
+			ref={winRef}
+			{...inputProps}
+		/>
+	);
 	return (
 		<WindowBase
 			background="transparent"
-			icon={{ type: "icon", icon: "VscSymbolNamespace" }}
+			borderless={borderless}
+			icon={
+				icon ? { type: "img", icon: icon } : { type: "icon", icon: "FcLinux" }
+			}
 			name={window.attributes.metadata.title}
 			onClose={() => vm.close(window)}
 			setWindowState={(state) => {
@@ -217,13 +237,7 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 				},
 			}}
 		>
-			{
-				<div
-					style={{ width: size.width, height: size.height }}
-					ref={winRef}
-					{...inputProps}
-				/>
-			}
+			{content}
 		</WindowBase>
 	);
 }

@@ -16,6 +16,7 @@ RUN set -e; \
     apt-get install -qqy \
     nodejs build-essential && \
     rm -rf /var/lib/apt/lists;
+RUN sudo apt-get --assume-yes install xpra;
 ###################################################
 RUN npm install -g yarn
 RUN yarn

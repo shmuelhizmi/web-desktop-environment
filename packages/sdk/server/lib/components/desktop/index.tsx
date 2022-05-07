@@ -79,7 +79,7 @@ class Desktop extends Component<{}, DesktopState> {
 		});
 		this.initializeDesktop();
 		this.desktopManager.packageManager
-			.packagesWebHostingServer()
+			.startPackagesWebHostingServer()
 			.then(({ domain }) => {
 				this.setState({
 					externalViewsHostDomain: domain,
@@ -87,6 +87,18 @@ class Desktop extends Component<{}, DesktopState> {
 						this.desktopManager.packageManager.packagesViewsImportPaths,
 				});
 			});
+		this.desktopManager.packageManager.on("install", () => {
+			this.setState({
+				externalViewsImportPaths:
+					this.desktopManager.packageManager.packagesViewsImportPaths,
+			});
+		});
+		this.desktopManager.packageManager.on("unload", () => {
+			this.setState({
+				externalViewsImportPaths:
+					this.desktopManager.packageManager.packagesViewsImportPaths,
+			});
+		});
 	};
 	async initializeDesktop() {
 		const connectToGTK = new GTKBridgeConnector(

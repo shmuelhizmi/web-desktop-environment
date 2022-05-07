@@ -391,6 +391,21 @@ class Window extends Component<
 		this.setActive();
 	}
 
+	shouldComponentUpdate = (nextProps: Window["props"]) => {
+		if (
+			this.props.title !== nextProps.title ||
+			this.props.icon.icon !== nextProps.icon.icon
+		) {
+			windowManager.updateWindow(
+				this.id,
+				nextProps.title,
+				nextProps.icon,
+				nextProps.color
+			);
+		}
+		return true;
+	};
+
 	componentWillUnmount = () => {
 		this.willUnmount = true;
 		windowManager.closeWindow(this.id);
@@ -673,7 +688,7 @@ class Window extends Component<
 			useLocalWindowState,
 			mountAnimationDone,
 		} = this.state;
-		const { children, classes, title, icon, onClose } = this.props;
+		const { children, classes, title, icon, onClose, borderless } = this.props;
 		const size = this.getSize();
 		const position = this.getPosition();
 		const onMobile = isMobile();
@@ -782,59 +797,64 @@ class Window extends Component<
 								classes.rootYUnmounted
 							}`}
 						>
-							<div
-								onMouseEnter={() => this.setState({ canDrag: true })}
-								onMouseLeave={() => this.setState({ canDrag: false })}
-								onDoubleClick={() => this.snapWindow("fullscreen")}
-								className={`${classes.bar} ${
-									this.shouldCollapse() ? classes.barCollapse : ""
-								}`}
-							>
-								<div className={classes.barButtonsContainer}>
-									{!onMobile && (
+							{borderless ? (
+								<div style={{ height: windowBarHeight }} />
+							) : (
+								<div
+									onMouseEnter={() => this.setState({ canDrag: true })}
+									onMouseLeave={() => this.setState({ canDrag: false })}
+									onDoubleClick={() => this.snapWindow("fullscreen")}
+									className={`${classes.bar} ${
+										this.shouldCollapse() ? classes.barCollapse : ""
+									}`}
+								>
+									<div className={classes.barButtonsContainer}>
+										{!onMobile && (
+											<div
+												onClick={() => {
+													windowManager.updateState(this.id, {
+														minimized: !collapse,
+													});
+												}}
+												onMouseDown={(e) => e.stopPropagation()}
+												className={`${classes.barButton} ${
+													isActive
+														? classes.barButtonCollapse
+														: classes.barButtonInactive
+												}`}
+											/>
+										)}
 										<div
-											onClick={() => {
-												windowManager.updateState(this.id, {
-													minimized: !collapse,
-												});
-											}}
-											onMouseDown={(e) => e.stopPropagation()}
 											className={`${classes.barButton} ${
 												isActive
-													? classes.barButtonCollapse
+													? classes.barButtonExit
 													: classes.barButtonInactive
 											}`}
+											onMouseDown={(e) => e.stopPropagation()}
+											onClick={() => {
+												onClose();
+											}}
 										/>
-									)}
-									<div
-										className={`${classes.barButton} ${
-											isActive
-												? classes.barButtonExit
-												: classes.barButtonInactive
-										}`}
-										onMouseDown={(e) => e.stopPropagation()}
-										onClick={() => {
-											onClose();
-										}}
-									/>
+									</div>
+									<div className={classes.barTitle}>
+										{title} -{" "}
+										{icon.type === "icon" ? (
+											<Icon
+												containerClassName={classes.barTitleIcon}
+												name={icon.icon}
+											/>
+										) : (
+											<img
+												className={classes.barTitleIcon}
+												alt="windows icon"
+												width={14}
+												height={14}
+												src={icon.icon}
+											/>
+										)}
+									</div>
 								</div>
-								<div className={classes.barTitle}>
-									{title} -{" "}
-									{icon.type === "icon" ? (
-										<Icon
-											containerClassName={classes.barTitleIcon}
-											name={icon.icon}
-										/>
-									) : (
-										<img
-											className={classes.barTitleIcon}
-											alt="windows icon"
-											width={14}
-											height={14}
-										/>
-									)}
-								</div>
-							</div>
+							)}
 
 							<div
 								className={classes.body}

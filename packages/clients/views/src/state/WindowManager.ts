@@ -26,6 +26,9 @@ interface WindowManagerEvent {
 	closeWindow: {
 		window: Window;
 	};
+	updateWindow: {
+		window: Window;
+	};
 	setActiveWindow: {
 		id: number;
 	};
@@ -80,6 +83,23 @@ class WindowManager {
 		this.emitter.call("addWindow", { window: newWindow });
 		this.windowsLayers.push(id);
 		return id;
+	};
+
+	public updateWindow = (
+		id: number,
+		name: string,
+		icon: Icon,
+		color: string | undefined,
+	) => {
+		const window = this.windows.find(
+			(currentWindow) => currentWindow.id === id
+		);
+		if (window) {
+			window.name = name;
+			window.icon = icon;
+			window.color = color;
+			this.emitter.call("updateWindow", { window });
+		}
 	};
 
 	public closeWindow = (id: number) => {

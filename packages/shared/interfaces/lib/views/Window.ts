@@ -9,6 +9,7 @@ export interface Input {
   color?: string;
   window: Window;
   background: string;
+  borderless?: boolean;
   setWindowState: (windowState: WindowState) => void;
   onClose: () => void;
 }

@@ -12,6 +12,7 @@ import decoder from "worker-single-inline:./../xpraWorker/decoder";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import worker from "worker-single-inline:./../xpraWorker";
+import { getUrl } from "@web-desktop-environment/web-sdk";
 
 const DEBUG = window.location.search.includes("debug");
 
@@ -41,9 +42,12 @@ export function useXpra(props: XpraWrapperProps) {
 	useEffect(() => {
 		createXpraClient(props).then((xpra) => {
 			setXpra(xpra);
-			const { host, token, port, https } = window.wdeSdk;
 			xpra.connect(
-				`${https ? "wss" : "ws"}://${props.domain}.${token}.${host}:${port}`,
+				getUrl(
+					props.domain,
+					'/',
+					true
+				),
 				xpraOptions
 			);
 		});

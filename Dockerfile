@@ -12,6 +12,8 @@ RUN set -e; \
     curl wget nano gnupg2 software-properties-common && \
     rm -rf /var/lib/apt/lists;
 
+RUN sudo apt-get --assume-yes install xpra;
+
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 # uncomment for checking versions

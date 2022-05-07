@@ -17,7 +17,7 @@ import ResizeDetector from "react-resize-detector";
 import { MountAnimationContext } from "@views/Window";
 
 import "xterm/css/xterm.css";
-import { url } from "@utils/url";
+import { getUrl } from "@root/../../../sdk/web/lib";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -54,10 +54,11 @@ class Terminal extends Component<
 	constructor(props: Terminal["props"]) {
 		super(props);
 		this.socket = io(
-			url({
-				ws: true,
-				domain: props.id,
-			}),
+			getUrl(
+				props.id,
+				'/',
+				true,
+			),
 			{
 				transports: ["websocket"],
 			}

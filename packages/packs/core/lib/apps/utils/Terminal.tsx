@@ -123,6 +123,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "FcCommandLine",
 			},
+			color: "#252634",
 			window: {
 				height: 400,
 				width: 1000,

@@ -30,7 +30,11 @@ import { useSwipeable, SwipeEventData } from "react-swipeable";
 import { MenuBar } from "@components/menubar";
 import { MenuBarLinkContext } from "@root/hooks/MenuBarItemPortal";
 import { EntryPointProps } from "@web-desktop-environment/interfaces/lib/web/sdk";
-import { getUrl, ProvideViews } from "@web-desktop-environment/web-sdk";
+import {
+	getUrl,
+	ProvideViews,
+	useTheme,
+} from "@web-desktop-environment/web-sdk";
 
 export const windowsBarHeight = 65;
 
@@ -195,6 +199,7 @@ const useWindowBarStyles = makeStyles(
 			overflowX: "auto",
 			overflowY: "hidden",
 			transition: "left 600ms, right 600ms, border-radius 600ms",
+			alignItems: "center",
 		},
 		"@keyframes slideUp": {
 			from: {
@@ -208,14 +213,29 @@ const useWindowBarStyles = makeStyles(
 			userSelect: "none",
 			fontSize: 40,
 			boxShadow: "0px 0px 10px 4px #0007",
-			transition: "border-bottom 100ms",
+			transition: "outline 100ms",
+			width: 40,
+			height: 40,
 			padding: 5,
+			border: `1px solid ${theme.primary.transparent || theme.primary.main}`,
+			outline: `1px solid ${theme.primary.main}`,
 			margin: 2,
 			borderRadius: 6,
 			marginRight: 7,
 			marginLeft: 7,
 			cursor: "pointer",
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
 			color: theme.background.text,
+			"& span": {
+				height: "min-content",
+				width: "min-content",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			},
 			"&:hover": {
 				background: theme.background.transparentDark || theme.background.dark,
 			},
@@ -231,8 +251,6 @@ const useWindowBarStyles = makeStyles(
 			border: `solid 1px ${theme.windowBorderColor}`,
 			textAlign: "center",
 			animation: "$scaleUp 300ms",
-			display: "flex",
-			flexDirection: "column",
 		},
 		"@keyframes scaleUp": {
 			from: {
@@ -250,18 +268,12 @@ const useWindowBarStyles = makeStyles(
 		},
 		windowsBarButtonActive: {
 			backdropFilter: "blur(15px)",
-			borderBottom: `${
-				theme.type === "transparent" ? theme.success.main : theme.secondary.main
-			} solid 6px !important`,
+			outline: `${theme.primary.main} solid 2px !important`,
 		},
 		windowsBarButtonOpen: {
-			borderBottom: `${
-				theme.type === "transparent" ? theme.success.main : theme.secondary.main
-			} solid 3px`,
+			outline: `${theme.primary.main} solid 1px`,
 		},
-		windowsBarButtonCloseMinimized: {
-			borderBottom: `${theme.secondary.dark} solid 3px`,
-		},
+		windowsBarButtonCloseMinimized: {},
 		"@media (min-width: 768px) and (max-width: 1024px)": {
 			windowsBar: {
 				left: 50,
@@ -275,11 +287,6 @@ const useWindowBarStyles = makeStyles(
 				bottom: 0,
 				height: windowsBarHeight + 5,
 				borderRadius: 0,
-			},
-			windowsBarButton: {
-				borderRadius: 0,
-				boxShadow: "none",
-				backdropFilter: "blur(9px)",
 			},
 		},
 	}),
@@ -397,13 +404,7 @@ class Desktop extends Component<
 			const { gtkBridge } = this.props;
 			if (GTKConnectionStatus === "disconnected" && gtkBridge) {
 				try {
-					connectToBroadway(
-						getUrl(
-							gtkBridge.domain,
-							"/socket",
-							true,
-						)
-					);
+					connectToBroadway(getUrl(gtkBridge.domain, "/socket", true));
 				} catch (e) {
 					/* no handle */
 				}
@@ -543,6 +544,7 @@ export const WindowBar = ({
 	isStartMenuOpen: boolean;
 }) => {
 	const classes = useWindowBarStyles();
+	const theme = useTheme();
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
 	const [selectedButton, setSelectedButton] = useState<number | undefined>(
 		undefined
@@ -633,7 +635,7 @@ export const WindowBar = ({
 						: classes.windowsBarButtonOpen
 				} ${isStartMenuOpen ? classes.windowsBarButtonActive : ""}`}
 				onClick={() => toggleStartMenu()}
-				style={{ background: makeAppColor() }}
+				style={{ background: makeAppColor(theme.background.main) }}
 			>
 				<Icon width={40} height={40} name="FcList" />
 			</div>
@@ -655,7 +657,7 @@ export const WindowBar = ({
 							? classes.windowsBarButtonActive
 							: ""
 					}`}
-					style={{ background: makeAppColor(openWindow.color) }}
+					style={{ background: makeAppColor(theme.background.main) }}
 					onClick={() => onOpenWindow(openWindow)}
 				>
 					{openWindow.icon.type === "img" ? (

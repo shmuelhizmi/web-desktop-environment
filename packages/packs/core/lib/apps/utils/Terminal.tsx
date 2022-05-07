@@ -52,7 +52,7 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.withDomian().then(({ port, domain }) => {
+		this.api.portManager.withDomain().then(({ port, domain }) => {
 			this.server.listen(port);
 			this.setState({ port, id: domain });
 		});

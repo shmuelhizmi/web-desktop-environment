@@ -10,14 +10,12 @@ import {
 } from "@material-ui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import io from "socket.io-client";
-import { reactFullstackConnectionManager } from "@root/index";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import ResizeDetector from "react-resize-detector";
 import { MountAnimationContext } from "@views/Window";
-
-import "xterm/css/xterm.css";
 import { getUrl } from "@root/../../../sdk/web/lib";
+import "xterm/css/xterm.css";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -53,16 +51,12 @@ class Terminal extends Component<
 	containerElement?: HTMLElement;
 	constructor(props: Terminal["props"]) {
 		super(props);
-		this.socket = io(
-			getUrl(
-				props.id,
-				'/',
-				true,
-			),
-			{
-				transports: ["websocket"],
-			}
-		);
+		const href = getUrl(props.id, "/", true);
+		const url = new URL(href);
+		this.socket = io(url.host, {
+			transports: ["websocket"],
+			path: `${url.pathname}/socket.io`,
+		});
 		this.term = new XTerm({
 			theme: this.getTermTheme(),
 			fontFamily: "JetBrains Mono",

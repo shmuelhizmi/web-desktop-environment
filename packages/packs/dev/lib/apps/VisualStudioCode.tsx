@@ -30,25 +30,22 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	willUnmount = false;
 
 	runVsCodeCli = (port: number, domain: string): void => {
-		this.vscode = cp.fork(
-			require.resolve("code-server/out/node/entry.js"),
+		this.vscode = cp.spawn(
+			process.execPath,
 			[
+				require.resolve("code-server/out/node/entry.js"),
 				`--port=${port}`,
 				"--auth=none",
 				"--host=0.0.0.0",
-				process.cwd(),
+				process.cwd() + "/",
 			],
 			{
-				cwd: __dirname,
 				stdio: ["ipc"],
 				env: {
 					PUBLIC_URL: `/${domain}/*/`,
 				},
 			}
 		);
-		this.vscode.on("message", (...e) => {
-			console.log(...e);
-		});
 		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {

@@ -31,6 +31,12 @@ export function useXpra(start: boolean) {
 		}
 	}, [start]);
 
+	useEffect(() => {
+		if (error) {
+			globalThis.process.exit(1);
+		}
+	}, [error]);
+
 	return {
 		status,
 		kill,

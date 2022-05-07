@@ -8,6 +8,7 @@ import Emitter from "../utils/emitter";
 import http from "http";
 import mimetype from "mime-types";
 import DesktopManager from "./desktopManager";
+import { platform } from "os";
 
 interface PackageManagerEvents {
 	install: WDEPackageConfig;
@@ -36,6 +37,9 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 	}
 
 	public async runPackage(wdeConfig: WDEPackageConfig, root: string) {
+		if (wdeConfig.os && !wdeConfig.os.includes(platform())) {
+			return;
+		}
 		const process = cp.spawn("ts-node", [path.join(root, wdeConfig.entry)], {
 			stdio: ["ipc"],
 		});
@@ -106,6 +110,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 					version: encodeURIComponent(wdeConfig.version),
 					web: wdeConfig.web,
 					webBundle: wdeConfig.webBundle,
+					os: wdeConfig.os,
 				};
 				const run = () => this.runPackage(parsedConfig, packageLocation);
 				if (shouldRun) run();

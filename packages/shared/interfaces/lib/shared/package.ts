@@ -51,4 +51,5 @@ export interface WDEPackageConfig {
     webBundle?: {
         distDir: string;
     }
+    os?: string[];
 }

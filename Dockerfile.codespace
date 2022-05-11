@@ -13,10 +13,10 @@ RUN set -e; \
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN set -e; \
     apt-get update && \
-    apt-get install -qqy \
+    apt-get install -qqy --assume-yes --no-install-recommends \
+    apt-get --assume-yes --no-install-recommends install xpra \
     nodejs build-essential && \
     rm -rf /var/lib/apt/lists;
-RUN sudo apt-get --assume-yes install xpra;
 ###################################################
 RUN npm install -g yarn
 RUN yarn

@@ -10,11 +10,12 @@ RUN set -e; \
     curl wget nano gnupg2 software-properties-common && \
     rm -rf /var/lib/apt/lists;
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -;
+
 RUN sudo wget -O "/usr/share/keyrings/xpra-2022.gpg" https://xpra.org/xpra-2022.gpg && \
     sudo wget -O "/usr/share/keyrings/xpra-2018.gpg" https://xpra.org/xpra-2018.gpg;
 
-RUN sudo wget "https://xpra.org/repos/bullseye/xpra.list" /etc/apt/sources.list.d/;
+RUN sudo wget https://xpra.org/repos/bullseye/xpra.list /etc/apt/sources.list.d/;
 
 RUN set -e; \
     apt-get update && \

@@ -1,4 +1,4 @@
-ARG VARIANT="14-bullseye"
+ARG VARIANT="16-bullseye"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
 ###################################################
 WORKDIR /usr/src/web-desktop-environment
@@ -14,7 +14,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN sudo wget -O "/usr/share/keyrings/xpra-2022.gpg" https://xpra.org/xpra-2022.gpg && \
     sudo wget -O "/usr/share/keyrings/xpra-2018.gpg" https://xpra.org/xpra-2018.gpg;
 
-RUN wget "https://xpra.org/repos/bullseye/xpra.list" /etc/apt/sources.list.d/;
+RUN sudo wget "https://xpra.org/repos/bullseye/xpra.list" /etc/apt/sources.list.d/;
 
 RUN set -e; \
     apt-get update && \

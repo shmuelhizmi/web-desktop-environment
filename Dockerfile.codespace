@@ -20,7 +20,7 @@ RUN sudo curl https://xpra.org/repos/bullseye/xpra.list > /etc/apt/sources.list.
 
 RUN set -e; \
     apt-get update && \
-    apt-get install -qqy --no-install-recommends --assume-yes \
+    DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends --assume-yes \
     nodejs build-essential xpra && \
     rm -rf /var/lib/apt/lists;
 ###################################################

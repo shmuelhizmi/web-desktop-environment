@@ -23,12 +23,5 @@ RUN set -e; \
     DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends --assume-yes \
     nodejs build-essential xpra && \
     rm -rf /var/lib/apt/lists;
-###################################################
+
 RUN npm install -g yarn
-RUN yarn
-###################################################
-EXPOSE 5000
-EXPOSE 3000
-EXPOSE 9200-9400
-###################################################
-CMD ["npm", "run", "dev:dev"]

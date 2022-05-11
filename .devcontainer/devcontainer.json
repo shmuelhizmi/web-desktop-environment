@@ -1,59 +1,41 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/docker-existing-dockerfile
 {
-	"name": "Existing Dockerfile",
-	"runArgs": ["--init"],
+  "name": "Existing Dockerfile",
+  "runArgs": ["--init"],
 
-	// Sets the run context to one level up instead of the .devcontainer folder.
-	"context": "..",
+  // Sets the run context to one level up instead of the .devcontainer folder.
+  "context": "..",
 
-	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-	"dockerFile": "../Dockerfile.codespace",
+  // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+  "dockerFile": "../Dockerfile.codespace",
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"remote.portsAttributes": {
-			"8080": {
-				"label": "Application",
-				"onAutoForward": "openPreview"
-			},
-			"3000": {
-				"label": "Application",
-				"onAutoForward": "openPreview"
-			},
-			"5000": {
-				"onAutoForward": "silent",
-				"label": "Server",
-				"protocol": "https",
-				"requireLocalPort": true
-			}
-		},
-	},
-	
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"shmuelhizmi.vscode-theme-nnp-ocean-dark",
-		"benjaminbenais.copilot-theme",
-		"arcticicestudio.nord-visual-studio-code",
-		"GitHub.copilot",
-		"esbenp.prettier-vscode",
-		"dbaeumer.vscode-eslint",
-		"eamodio.gitlens"
-	]
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-	
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "shmuelhizmi.vscode-theme-nnp-ocean-dark",
+    "benjaminbenais.copilot-theme",
+    "arcticicestudio.nord-visual-studio-code",
+    "GitHub.copilot",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens"
+  ]
 
-	// Uncomment the next line to run commands after the container is created - for example installing curl.
-	// "postCreateCommand": "apt-get update && apt-get install -y curl",
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
 
-	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+  // Uncomment the next line to run commands after the container is created - for example installing curl.
+  // "postCreateCommand": "apt-get update && apt-get install -y curl",
 
-	// Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
-	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
-	// "remoteUser": "vscode"
+  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
+  // "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
+
+  // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
+  // "remoteUser": "vscode"
 }

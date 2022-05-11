@@ -10,6 +10,9 @@ import DomainManager from "../managers/domainManager";
 import AuthManager from "../managers/authManager";
 import { API } from "@web-desktop-environment/server-api";
 import { PackageJSON } from "@web-desktop-environment/interfaces/lib/shared/package";
+import figlet from "figlet";
+import color from "chalk";
+
 export default class DesktopManager {
 	public readonly name: string;
 
@@ -50,9 +53,49 @@ export default class DesktopManager {
 			packageJSON.apps,
 			/* run */ true
 		);
+		this.initX11();
+		const showStartupMessages = () => {
+			this.logger.direct(
+				color.bgBlackBright(
+					color.bold(
+						color.greenBright(
+							`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${
+								this.domainManager.mainPort
+							}${" ".repeat(29)}`
+						)
+					)
+				)
+			);
+			this.logger.direct(
+				color.bgBlackBright(
+					color.bold(
+						color.cyan(
+							// eslint-disable-next-line quotes
+							'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
+						)
+					)
+				)
+			);
+		};
+		showStartupMessages();
+		this.logger.direct(
+			color.bgBlack(
+				color.bold(color.blueBright(figlet.textSync("WDE started", "4Max")))
+			)
+		);
+		showStartupMessages();
 		return {
 			desktopPort,
 		};
+	}
+
+	initX11() {
+		let x11Display = Number((process.env.DISPLAY || "").split(":")?.[1]);
+
+		APIClient.x11Manager.getActiveDisplay.override(() => () => x11Display);
+		APIClient.x11Manager.setActiveDisplay.override(() => (display: number) => {
+			x11Display = display;
+		});
 	}
 }
 

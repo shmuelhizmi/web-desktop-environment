@@ -217,8 +217,8 @@ const useWindowBarStyles = makeStyles(
 			width: 40,
 			height: 40,
 			padding: 5,
-			border: `1px solid ${theme.primary.transparent || theme.primary.main}`,
-			outline: `1px solid ${theme.primary.main}`,
+			border: `0px solid ${theme.primary.transparent || theme.primary.main}`,
+			outline: `0px solid ${theme.primary.main}`,
 			margin: 2,
 			borderRadius: 6,
 			marginRight: 7,
@@ -248,7 +248,7 @@ const useWindowBarStyles = makeStyles(
 			borderRadius: 6,
 			fontSize: 20,
 			background: `${theme.background.main} !important`,
-			border: `solid 1px ${theme.windowBorderColor}`,
+			border: `solid 0px ${theme.windowBorderColor}`,
 			textAlign: "center",
 			animation: "$scaleUp 300ms",
 		},
@@ -295,7 +295,7 @@ const useWindowBarStyles = makeStyles(
 
 class Desktop extends Component<
 	DesktopInterface,
-	{ menuBarRef: any; views: {}; isLoadingViews: boolean },
+	{ views: {}; isLoadingViews: boolean },
 	WithStyles<typeof styles>
 > {
 	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
@@ -412,7 +412,9 @@ class Desktop extends Component<
 		}
 	};
 
-	state = { menuBarRef: null, views: {}, isLoadingViews: false };
+	state = { views: {}, isLoadingViews: false };
+
+	menuBarRef = React.createRef<HTMLDivElement>();
 
 	render() {
 		const {
@@ -428,13 +430,7 @@ class Desktop extends Component<
 		}
 		return (
 			<div className={classes.root} style={{ background }}>
-				<MenuBar
-					div={(ref) => {
-						if (!this.state.menuBarRef) {
-							this.setState({ menuBarRef: ref });
-						}
-					}}
-				/>
+				<MenuBar div={this.menuBarRef} />
 				{openApps.map((app) => {
 					const connection = reactFullstackConnectionManager.connect(
 						"app-" + app.id,
@@ -459,22 +455,21 @@ class Desktop extends Component<
 						</ConnectionContext.Provider>
 					);
 				})}
-				{this.state.menuBarRef && (
-					<MenuBarLinkContext.Provider value={this.state.menuBarRef}>
-						{servicesAppsDomains.map((domain) => {
-							const connection = reactFullstackConnectionManager.connect(
-								domain,
-								"serviceViews"
-							);
-							const viewsToProvide = { ...connection.views, ...views };
-							return (
-								<ProvideViews value={viewsToProvide} key={domain}>
-									<Client<{}> {...connection} views={viewsToProvide} />
-								</ProvideViews>
-							);
-						})}
-					</MenuBarLinkContext.Provider>
-				)}
+				<MenuBarLinkContext.Provider value={this.menuBarRef}>
+					{servicesAppsDomains.map((domain) => {
+						const connection = reactFullstackConnectionManager.connect(
+							domain,
+							"serviceViews"
+						);
+						const viewsToProvide = { ...connection.views, ...views };
+						return (
+							<ProvideViews value={viewsToProvide} key={domain}>
+								<Client<{}> {...connection} views={viewsToProvide} />
+							</ProvideViews>
+						);
+					})}
+				</MenuBarLinkContext.Provider>
+
 				{!isMobile() && (
 					<Link to="/native">
 						<div className={classes.switchToNativeButton}>

@@ -135,7 +135,12 @@ const App = () => {
 											value={{ host: data.host, port: data.port }}
 										>
 											<Client<{}>
-												{...connectToServer(data.host, data.https, data.port, "web")}
+												{...connectToServer(
+													data.host,
+													data.https,
+													data.port,
+													"web"
+												)}
 											/>
 										</ConnectionContext.Provider>
 									);
@@ -174,3 +179,11 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 
 setUpDocument();
+
+if (location.host.includes("githubpreview")) {
+	// prevent hot reload with alert
+	window.onbeforeunload = () => {
+		alert("Are you sure you want to leave?");
+		return false;
+	};
+}

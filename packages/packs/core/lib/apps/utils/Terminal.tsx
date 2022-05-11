@@ -15,6 +15,7 @@ interface TerminalInput {
 interface TerminalState {
 	port?: number;
 	id?: string;
+	env: Record<string, any>;
 }
 
 export const maxTerminalHistoryLength = 100000;
@@ -24,25 +25,14 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 		this.state = {
 			useDefaultWindow: true,
 			defaultWindowTitle: "terminal",
+			env: {},
 		};
 	}
 	name = "terminal";
 	server = http.createServer();
 	socketServer = new socketIO.Server(this.server);
 	history = "";
-	ptyProcess = new PTY(
-		(data) => {
-			this.history += data;
-			this.history = this.history.slice(
-				this.history.length - maxTerminalHistoryLength,
-				this.history.length
-			);
-			this.socketServer.emit("output", data);
-		},
-		this.props.input.process,
-		this.props.input.location,
-		this.props.input.args
-	);
+	ptyProcess: PTY;
 
 	componentDidUnmount = false;
 	onComponentWillUnmount: Function[] = [];
@@ -52,10 +42,50 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.withDomain().then(({ port, domain }) => {
+		Promise.all([
+			this.api.portManager.withDomain(),
+			this.api.x11Manager.getActiveDisplay(),
+		]).then(([{ port, domain }, display]) => {
 			this.server.listen(port);
-			this.setState({ port, id: domain });
+			this.setState({ port, id: domain, env: { DISPLAY: ":" + display } });
+			this.ptyProcess = new PTY(
+				(data) => {
+					this.history += data;
+					this.history = this.history.slice(
+						this.history.length - maxTerminalHistoryLength,
+						this.history.length
+					);
+					this.socketServer.emit("output", data);
+				},
+				this.props.input.process,
+				this.props.input.location,
+				this.props.input.args,
+				this.state.env
+			);
+
+			let lastProcessName = "";
+			const updateCurrentProcess = setInterval(() => {
+				const newProcessName = this.ptyProcess.ptyProcess.process;
+				if (lastProcessName !== newProcessName) {
+					lastProcessName = newProcessName;
+					this.setState({
+						defaultWindowTitle: `terminal : ${lastProcessName}`,
+					});
+				}
+			}, 100);
+			this.ptyProcess.ptyProcess.onExit(() => {
+				if (
+					!this.componentDidUnmount &&
+					this.props.propsForRunningAsSelfContainedApp
+				) {
+					this.props.propsForRunningAsSelfContainedApp.close();
+				}
+			});
+			this.onComponentWillUnmount.push(() => {
+				clearInterval(updateCurrentProcess);
+			});
 		});
+
 		this.socketServer.on("connection", (client) => {
 			client.emit("output", this.history);
 			client.on("input", (data: string) => {
@@ -66,27 +96,6 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 				// fit columns to window size
 				this.ptyProcess.setCols(columns);
 			});
-		});
-		let lastProcessName = "";
-		const updateCurrentProcess = setInterval(() => {
-			const newProcessName = this.ptyProcess.ptyProcess.process;
-			if (lastProcessName !== newProcessName) {
-				lastProcessName = newProcessName;
-				this.setState({
-					defaultWindowTitle: `terminal : ${lastProcessName}`,
-				});
-			}
-		}, 100);
-		this.ptyProcess.ptyProcess.onExit(() => {
-			if (
-				!this.componentDidUnmount &&
-				this.props.propsForRunningAsSelfContainedApp
-			) {
-				this.props.propsForRunningAsSelfContainedApp.close();
-			}
-		});
-		this.onComponentWillUnmount.push(() => {
-			clearInterval(updateCurrentProcess);
 		});
 	};
 
@@ -139,17 +148,19 @@ export const registerApp = () =>
 
 // from https://svaddi.dev/how-to-create-web-based-terminals/;
 class PTY {
-	shell: string;
 	public ptyProcess: IPty;
-	out: (data: string) => void;
-	constructor(out: (data) => void, shell: string, cwd: string, args: string[]) {
+	constructor(
+		public out: (data) => void,
+		public shell: string,
+		public cwd: string,
+		public args: string[],
+		public env: any
+	) {
 		// Setting default terminals based on user os
-		this.shell = shell;
 		this.ptyProcess = null;
-		this.out = out;
 
 		// Initialize PTY process.
-		this.startPtyProcess(cwd, args);
+		this.startPtyProcess();
 	}
 
 	setCols = (columns: number) => {
@@ -162,10 +173,11 @@ class PTY {
 	/**
 	 * Spawn an instance of pty with a selected shell.
 	 */
-	startPtyProcess(cwd: string, args: string[]) {
-		this.ptyProcess = spawn(this.shell, args, {
+	startPtyProcess() {
+		this.ptyProcess = spawn(this.shell, this.args, {
 			name: "xterm-color",
-			cwd,
+			cwd: this.cwd,
+			env: this.env,
 		});
 
 		// Add a "data" event listener.

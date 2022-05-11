@@ -4,7 +4,6 @@ import { randomBytes } from "crypto";
 import jwt from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
 import color from "chalk";
-import figlet from "figlet";
 
 interface Payload {
 	ip: string;
@@ -38,9 +37,6 @@ export default class AuthManager {
 					color.green(this.sessionCode)
 				)}`
 			)
-		);
-		this.logger.direct(
-			figlet.textSync("code - " + this.sessionCode, "Banner3")
 		);
 		this.logger.info(
 			`token for local access is ${this.createAccessToken(

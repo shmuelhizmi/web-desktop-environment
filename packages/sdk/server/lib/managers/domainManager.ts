@@ -18,6 +18,7 @@ const readReq = async (req: http.IncomingMessage) => {
 export default class DomainManager {
 	private logger: Logger;
 	private desktopManager: DesktopManager;
+	public mainPort?: number;
 	constructor(parentLogger: Logger, desktopManger: DesktopManager) {
 		this.logger = parentLogger.mount("domain-manager");
 		this.desktopManager = desktopManger;
@@ -31,12 +32,13 @@ export default class DomainManager {
 		this.subDomainsBindings.set(name, String(target));
 	}
 	startSubDomainServer(mainPort: number) {
+		this.mainPort = mainPort;
 		const getProxy = (
 			req: http.IncomingMessage,
 			ws = false
 		): proxy | undefined => {
 			try {
-				const [,subDomain, token] = req.url.split("/");
+				const [, subDomain, token] = req.url.split("/");
 				req.url = req.url.replace(`/${subDomain}/${token}`, "");
 				const target = this.subDomainsBindings.get(subDomain);
 				const auth = this.desktopManager.authManager.verifyAccessToken(

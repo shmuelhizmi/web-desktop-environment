@@ -8,7 +8,7 @@ import { useXpra } from "./useXpra";
 export function RemoteServiceApp(props: RemoteServiceAppProps) {
 	const { serviceLogger: logger } = props;
 	const [started, setStarted] = useState(true);
-	const { status, domain, error, xpra } = useXpra(started);
+	const { status, domain, error, xpra, pingedSuccessfully } = useXpra(started);
 
 	useEffect(() => {
 		logger.info(`Xpra status: ${status} - ${error}`);
@@ -21,12 +21,8 @@ export function RemoteServiceApp(props: RemoteServiceAppProps) {
 		xpra.on("data", (data: any) => logger.info(String(data)));
 	}, [xpra]);
 
-	function onAction(action: "start" | "end") {
-		if (action === "start") {
-			setStarted(true);
-		} else {
-			setStarted(false);
-		}
+	function onAction() {
+		setStarted(!started);
 	}
 
 	const currentStatus: ServiceActionItem = {
@@ -35,23 +31,30 @@ export function RemoteServiceApp(props: RemoteServiceAppProps) {
 			type: "icon",
 			icon: "VscInfo",
 		},
-		text: `Status: ${status}`,
+		text: `Status: ${
+			status === "running"
+				? pingedSuccessfully
+					? "running"
+					: "starting"
+				: "stoped"
+		}`,
 		clickable: false,
 	};
+
+	const endButtons: ServiceActionItem[] = [
+		{
+			text: "Kill",
+			id: "end",
+			icon: { type: "icon", icon: "VscDebugStop" },
+		},
+		currentStatus,
+	];
 
 	const startButtons: ServiceActionItem[] = [
 		{
 			text: "Start",
 			id: "start",
-			icon: { type: "icon", icon: "VscPlay" },
-		},
-		currentStatus,
-	];
-	const endButtons: ServiceActionItem[] = [
-		{
-			text: "End",
-			id: "end",
-			icon: { type: "icon", icon: "VscDebugPause" },
+			icon: { type: "icon", icon: "VscDebugStart" },
 		},
 		currentStatus,
 	];
@@ -59,16 +62,26 @@ export function RemoteServiceApp(props: RemoteServiceAppProps) {
 	return (
 		<>
 			<ViewsProvider<Views>>
-				{({ XpraWrapper }) =>
+				{({ XpraWrapper, Service }) =>
 					domain && (
 						<>
-							<XpraWrapper
-								domain={domain}
-								onConnect={() => logger.info("Connected to Xpra")}
-								onDisconnect={() => logger.info("Disconnected from Xpra")}
-								onError={(error) => logger.error(error)}
-								onSessionStarted={() => logger.info("Session started")}
-							/>
+							<Service
+								onAction={onAction}
+								buttons={started ? endButtons : startButtons}
+								icon={{
+									type: "icon",
+									icon: "VscRemote",
+								}}
+								text="Xpra"
+							>
+								<XpraWrapper
+									domain={domain}
+									onConnect={() => logger.info("Connected to Xpra")}
+									onDisconnect={() => logger.info("Disconnected from Xpra")}
+									onError={(error) => logger.error(error)}
+									onSessionStarted={() => logger.info("Session started")}
+								/>
+							</Service>
 						</>
 					)
 				}

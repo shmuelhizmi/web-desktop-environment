@@ -1,8 +1,9 @@
 import { useProcess } from "@web-desktop-environment/app-sdk/lib";
 import API from "@web-desktop-environment/server-api/lib";
 import { useEffect, useState } from "react";
+import { usePing } from "./usePing";
 
-export function useXpra(start: boolean) {
+export function useXpra(run: boolean) {
 	const [portAndDomain, setPortAndDomain] = useState<
 		{ port: number; domain: string } | undefined
 	>();
@@ -16,29 +17,28 @@ export function useXpra(start: boolean) {
 			`--bind-ws=127.0.1:${port}`,
 			"--html=off",
 			"--start-via-proxy=no",
-			// "--auth=none",
 			"start",
 			":15",
 		],
 	});
+	const { pingedSuccessfully } = usePing(run, port);
 	useEffect(() => {
-		if (start) {
+		if (run) {
 			API.portManager.withDomain().then(({ domain, port }) => {
 				setPortAndDomain({ domain, port });
 			});
-		} else {
-			kill();
 		}
-	}, [start]);
+	}, [run]);
 
 	useEffect(() => {
-		if (error) {
-			globalThis.process.exit(1);
+		if (run && pingedSuccessfully) {
+			API.x11Manager.setActiveDisplay(15);
 		}
-	}, [error]);
+	}, [pingedSuccessfully]);
 
 	return {
 		status,
+		pingedSuccessfully,
 		kill,
 		xpra: process,
 		domain,

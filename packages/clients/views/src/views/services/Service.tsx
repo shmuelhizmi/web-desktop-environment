@@ -6,8 +6,11 @@ import { MenuBarAction } from "@components/menubarAction";
 
 export default asFullStackView<ServiceView>((props) => {
 	return (
-		<MenuBarItemPortal>
-			<MenuBarAction {...props} />
-		</MenuBarItemPortal>
+		<>
+			<MenuBarItemPortal>
+				<MenuBarAction {...props} />
+			</MenuBarItemPortal>
+			{props.children}
+		</>
 	);
 });

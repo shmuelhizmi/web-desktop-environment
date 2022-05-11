@@ -5,6 +5,7 @@ import loggingManager from "./managers/logging/loggingManager";
 import downloadManager from "./managers/services/downloadManager";
 import portManager from "./managers/services/portManager";
 import domainManager from "./managers/services/domainManager";
+import x11Manager from "./managers/system/x11";
 
 export default {
   appsManager,
@@ -14,4 +15,5 @@ export default {
   downloadManager,
   portManager,
   domainManager,
+  x11Manager,
 };

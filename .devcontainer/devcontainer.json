@@ -11,13 +11,39 @@
 	"dockerFile": "../Dockerfile.codespace",
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"remote.portsAttributes": {
+			"8080": {
+				"label": "Application",
+				"onAutoForward": "openPreview"
+			},
+			"3000": {
+				"label": "Application",
+				"onAutoForward": "openPreview"
+			},
+			"5000": {
+				"onAutoForward": "silent",
+				"label": "Server",
+				"protocol": "https",
+				"requireLocalPort": true
+			}
+		},
+	},
 	
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": []
+	"extensions": [
+		"shmuelhizmi.vscode-theme-nnp-ocean-dark",
+		"benjaminbenais.copilot-theme",
+		"arcticicestudio.nord-visual-studio-code",
+		"GitHub.copilot",
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens"
+	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
+	
 
 	// Uncomment the next line to run commands after the container is created - for example installing curl.
 	// "postCreateCommand": "apt-get update && apt-get install -y curl",

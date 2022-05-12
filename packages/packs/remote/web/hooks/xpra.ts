@@ -42,14 +42,7 @@ export function useXpra(props: XpraWrapperProps) {
 	useEffect(() => {
 		createXpraClient(props).then((xpra) => {
 			setXpra(xpra);
-			xpra.connect(
-				getUrl(
-					props.domain,
-					'/',
-					true
-				),
-				xpraOptions
-			);
+			xpra.connect(getUrl(props.domain, "/", true), xpraOptions);
 		});
 	}, []);
 

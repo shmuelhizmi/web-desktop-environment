@@ -202,7 +202,8 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 		(type) =>
 			type.includes("DROPDOWN") ||
 			type.includes("TOOLTIP") ||
-			type.includes("POPUP")
+			type.includes("POPUP") ||
+			type.includes("MENU")
 	);
 
 	const content = (

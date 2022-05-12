@@ -10,6 +10,9 @@ import { BroadcastChannel } from "broadcast-channel";
 import { APIClient, API } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
 import uuid from "uuid";
+import cp from "child_process";
+import { x11Utils } from "@web-desktop-environment/app-sdk";
+import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 
 interface AppsManagerEvents {
 	onAppLaunch: OpenApp;
@@ -32,17 +35,20 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 	}
 
 	private availableApps = new Map<string, AppRegistrationData>();
+	private availableExternalApps = new Map<string, AppRegistrationData>();
 
 	public get apps() {
-		return Array.from(this.availableApps.entries()).map(
-			([name, app]) =>
-				({
-					appName: name,
-					description: app.description,
-					displayName: app.displayName,
-					icon: app.icon,
-				} as App)
-		);
+		return Array.from(this.availableApps.entries())
+			.concat(Array.from(this.availableExternalApps.entries()))
+			.map(
+				([name, app]) =>
+					({
+						appName: name,
+						description: app.description,
+						displayName: app.displayName,
+						icon: app.icon,
+					} as App)
+			);
 	}
 
 	constructor(parentLogger: Logger, desktopManager: DesktopManager) {
@@ -61,6 +67,31 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 			this.killApp(processId);
 		});
 		APIClient.serviceManager.requestUIPort.override(() => this.requestUIPort);
+		this.readx11Apps();
+	}
+
+	async readx11Apps() {
+		const x11Apps = await x11Utils.getAllX11Apps();
+		for (const app of x11Apps) {
+			let icon: Icon = {
+				type: "icon",
+				icon: "FcLinux",
+			};
+			if (app.iconAsImgUri) {
+				icon = {
+					type: "img",
+					icon: app.iconAsImgUri,
+				};
+			}
+			this.availableExternalApps.set(app.exec, {
+				description: app.description,
+				displayName: app.name,
+				icon,
+				name: app.name,
+				id: app.exec,
+			});
+		}
+		this.call("onInstalledAppsUpdate", this.apps);
 	}
 
 	requestUIPort = async () => {
@@ -90,27 +121,47 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 	spawnApp = async (name: string, input: Record<string, unknown>) => {
 		const processId = uuid();
 		const appData = this.availableApps.get(name);
-		const port = await this.desktopManager.portManager.getPort();
-		APIClient.appsManager.call("launchApp", {
-			appId: appData.id,
-			options: input,
-			port,
-			processId,
-		});
-		API.domainManager.registerDomain(`app-${processId}`, port);
-		const openApp = {
-			icon: appData.icon,
-			id: processId,
-			name: appData.name,
-			port,
-			cancel: () => {
-				APIClient.appsManager.call("closeApp", { processId });
-			},
-		};
-		this.call("onAppLaunch", openApp);
-		this._runningApps.push(openApp);
-		this.call("onOpenAppsUpdate", this._runningApps);
-		return processId;
+		if (appData) {
+			const port = await this.desktopManager.portManager.getPort();
+			APIClient.appsManager.call("launchApp", {
+				appId: appData.id,
+				options: input,
+				port,
+				processId,
+			});
+			API.domainManager.registerDomain(`app-${processId}`, port);
+			const openApp = {
+				icon: appData.icon,
+				id: processId,
+				name: appData.name,
+				port,
+				cancel: () => {
+					APIClient.appsManager.call("closeApp", { processId });
+				},
+			};
+			this.call("onAppLaunch", openApp);
+			this._runningApps.push(openApp);
+			this.call("onOpenAppsUpdate", this._runningApps);
+			return processId;
+		} else {
+			await this.tryToExecuteApp(name, input);
+		}
+	};
+
+	tryToExecuteApp = async (name: string, _input: Record<string, unknown>) => {
+		const app = this.availableExternalApps.get(name);
+		if (app) {
+			const cprocess = cp.exec(name, {
+				env: {
+					...process.env,
+					DISPLAY: ":" + (await API.x11Manager.getActiveDisplay()),
+				},
+				cwd: process.cwd(),
+			});
+			cprocess.on("error", (err) => {
+				this.logger.error(err.message);
+			});
+		}
 	};
 
 	killApp = (processId: string) => {

@@ -312,7 +312,11 @@ class Desktop extends Component<
 				}}
 			>
 				{app.icon.type === "img" ? (
-					<img alt={`${app.displayName} icon`} src={app.icon.icon} />
+					<img
+						alt={`${app.displayName} icon`}
+						src={app.icon.icon}
+						className={classes.appIcon}
+					/>
 				) : (
 					<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
 				)}

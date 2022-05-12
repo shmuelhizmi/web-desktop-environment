@@ -32,6 +32,8 @@ const styles = (theme: Theme) =>
 		root: {
 			width: "100%",
 			height: "100%",
+		},
+		rootAnimation: {
 			animation: "$startAnimationDesktop 500ms",
 		},
 		rootY: {
@@ -783,6 +785,8 @@ class Window extends Component<
 				>
 					<div
 						className={`${classes.root} ${
+							!borderless && classes.rootAnimation
+						} ${
 							(!isCurrentWindow || collapse) &&
 							onMobile &&
 							classes.rootUnmounted

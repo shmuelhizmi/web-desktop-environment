@@ -28,7 +28,8 @@
     "prettier": "^2.0.5",
     "ts-node": "9.0.0",
     "tsconfig-paths": "3.9.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "@types/ini": "1.3.31"
   },
   "peerDependencies": {
     "@react-fullstack/fullstack": "0.2.1",
@@ -43,6 +44,8 @@
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
     "@web-desktop-environment/interfaces": "^1.0.2",
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "ini": "3.0.0",
+    "xpm2png": "1.0.1"
   }
 }

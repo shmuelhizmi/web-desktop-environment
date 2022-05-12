@@ -65,11 +65,12 @@ export function MenuBarAction(props: MenubarActionProps) {
 	const classes = useStyle();
 	return (
 		<div className={classes.root} {...bindHover}>
-			{icon.type === "img" ? (
-				<img src={icon.icon} className={classes.icon} />
-			) : (
-				<Icon name={icon.icon} className={classes.icon} />
-			)}
+			{icon &&
+				(icon.type === "img" ? (
+					<img src={icon.icon} className={classes.icon} />
+				) : (
+					<Icon name={icon.icon} className={classes.icon} />
+				))}
 			<div className={classes.menuItemText}>{text}</div>
 			{isHovered && (
 				<div className={classes.menu}>

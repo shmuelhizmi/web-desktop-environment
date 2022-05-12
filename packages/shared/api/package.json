@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-api",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1+bddb089",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -19,11 +19,12 @@
     "directory": "packages/shared/api"
   },
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^2.0.0-alpha.0",
+    "@web-desktop-environment/interfaces": "^2.0.0-alpha.1+bddb089",
     "uid": "2.0.0"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
     "typescript": "^4.6.3"
-  }
+  },
+  "gitHead": "bddb089ad69411e9ce64cca9b90604facddf8c10"
 }

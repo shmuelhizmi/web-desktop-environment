@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/interfaces",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1+bddb089",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -23,5 +23,6 @@
     "@types/react": "^17.0.3",
     "react-icons": "3.11.0",
     "typescript": "^4.6.3"
-  }
+  },
+  "gitHead": "bddb089ad69411e9ce64cca9b90604facddf8c10"
 }

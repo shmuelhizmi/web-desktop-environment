@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/pack-dev",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1+bddb089",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -40,13 +40,14 @@
     "@react-fullstack/fullstack": "0.2.1",
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/app-sdk": "^2.0.0-alpha.0",
-    "@web-desktop-environment/interfaces": "^2.0.0-alpha.0",
-    "@web-desktop-environment/server-api": "^2.0.0-alpha.0",
+    "@web-desktop-environment/app-sdk": "^2.0.0-alpha.1+bddb089",
+    "@web-desktop-environment/interfaces": "^2.0.0-alpha.1+bddb089",
+    "@web-desktop-environment/server-api": "^2.0.0-alpha.1+bddb089",
     "axios": "0.21.1",
     "code-server": "4.4.0",
     "react": "^17.0.2",
     "ts-node": "9.0.0",
     "typescript": "^4.6.3"
-  }
+  },
+  "gitHead": "bddb089ad69411e9ce64cca9b90604facddf8c10"
 }

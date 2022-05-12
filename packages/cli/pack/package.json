@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/package-cli",
-  "version": "2.0.0-alpha.1+bddb089",
+  "version": "1.0.2",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.20.6",
-    "prettier": "^2.0.5",
-    "vite-plugin-worker": "1.0.5"
+    "vite-plugin-worker": "1.0.5",
+    "prettier": "^2.0.5"
   },
   "repository": {
     "type": "git",
@@ -32,11 +32,10 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
+    "vite-plugin-externals": "0.4.0",
+    "vite": "2.8.6",
     "@vitejs/plugin-react": "1.3.0",
     "ts-node": "9.0.0",
-    "typescript": "^4.6.3",
-    "vite": "2.8.6",
-    "vite-plugin-externals": "0.4.0"
-  },
-  "gitHead": "bddb089ad69411e9ce64cca9b90604facddf8c10"
+    "typescript": "^4.6.3"
+  }
 }

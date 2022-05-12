@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "prepublish": "npm run build",
     "watch": "tsc --watch",
     "build": "tsc",
     "build:server": "npm run build",

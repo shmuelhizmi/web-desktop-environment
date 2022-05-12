@@ -11,6 +11,7 @@
     "wde-init": "./bin/init.js"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "vite:dev": "vite build --watch ${PACKAGE_LOCATION}",
     "vite:build": "vite build"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/app-sdk",
-  "version": "2.0.0-alpha.0",
+  "version": "1.0.2",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -15,12 +15,11 @@
     "lint": "eslint ."
   },
   "devDependencies": {
-    "@types/ini": "1.3.31",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "@web-desktop-environment/server-api": "^2.0.0-alpha.0",
+    "@web-desktop-environment/server-api": "^1.0.2",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -29,7 +28,8 @@
     "prettier": "^2.0.5",
     "ts-node": "9.0.0",
     "tsconfig-paths": "3.9.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "@types/ini": "1.3.31"
   },
   "peerDependencies": {
     "@react-fullstack/fullstack": "0.2.1",
@@ -43,9 +43,9 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/interfaces": "^2.0.0-alpha.0",
-    "ini": "3.0.0",
+    "@web-desktop-environment/interfaces": "^1.0.2",
     "react": "^17.0.2",
+    "ini": "3.0.0",
     "xpm2png": "1.0.1"
   }
 }

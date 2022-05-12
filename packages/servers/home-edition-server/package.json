@@ -14,7 +14,7 @@
 		"@web-desktop-environment/pack-core"
 	],
 	"main": "dist",
-	"version": "2.0.0-12",
+	"version": "2.0.0-13",
 	"author": "shmuelhizmi",
 	"license": "MIT",
 	"private": false,
@@ -33,27 +33,27 @@
 		"typescript": "^4.6.3"
 	},
 	"files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js",
-    "lib/**/*.js.map",
-    "bin/**.js",
-    "src/**/*",
-    "dist/**/*",
-    "app/**/*",
-    "README.md",
-    "tsconfig.json",
-    "assets/**/*"
-  ],
-"repository": {
+		"lib/**/*.d.ts",
+		"lib/**/*.js",
+		"lib/**/*.js.map",
+		"bin/**.js",
+		"src/**/*",
+		"dist/**/*",
+		"app/**/*",
+		"README.md",
+		"tsconfig.json",
+		"assets/**/*"
+	],
+	"repository": {
 		"type": "git",
 		"url": "https://github.com/shmuelhizmi/web-desktop-environment",
 		"directory": "packages/servers/home-edition-server"
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.3.0",
-		"@web-desktop-environment/pack-core": "^2.0.0-12",
-		"@web-desktop-environment/server-api": "^2.0.0-12",
-		"@web-desktop-environment/server-sdk": "^2.0.0-12",
+		"@web-desktop-environment/pack-core": "^2.0.0-13",
+		"@web-desktop-environment/server-api": "^2.0.0-13",
+		"@web-desktop-environment/server-sdk": "^2.0.0-13",
 		"ts-node": "10.7.0"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"

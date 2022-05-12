@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/interfaces",
-  "version": "2.0.0-12",
+  "version": "2.0.0-13",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -26,7 +26,7 @@
     "tsconfig.json",
     "assets/**/*"
   ],
-"repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/shared/interfaces"

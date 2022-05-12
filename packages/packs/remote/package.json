@@ -37,7 +37,8 @@
     "app/**/*",
     "README.md",
     "tsconfig.json",
-    "assets/**/*"
+    "assets/**/*",
+    "wde.config.json"
   ],
   "repository": {
     "type": "git",

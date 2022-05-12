@@ -89,8 +89,7 @@ if you have any new feature or existing feature you want to create or improve fe
 :heavy_check_mark: Mobile support
 :heavy_check_mark: Themes and custom themes  
 :heavy_check_mark: PWA app  
-:heavy_check_mark: Windows can ether be opened inside the main web-app container or as a standalone native os windows (works better when using the app as PWA)
-
+:heavy_check_mark: Windows can ether be opened inside the main web-app container or as a standalone 
 ## Apps
 
 :heavy_check_mark: Terminal  

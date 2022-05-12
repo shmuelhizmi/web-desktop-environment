@@ -35,6 +35,7 @@ import {
 	ProvideViews,
 	useTheme,
 } from "@web-desktop-environment/web-sdk";
+import { Service } from "./services";
 
 export const windowsBarHeight = 65;
 
@@ -429,58 +430,58 @@ class Desktop extends Component<
 			servicesAppsDomains,
 		} = this.props;
 		const { views, isLoadingViews } = this.state;
-		if (isLoadingViews) {
-			return <div>Loading...</div>;
-		}
 		return (
 			<div className={classes.root} style={{ background }}>
 				<MenuBar div={this.menuBarRef} />
-				{openApps.map((app) => {
-					const connection = reactFullstackConnectionManager.connect(
-						"app-" + app.id,
-						"webWindow"
-					);
-					const viewsToProvide = { ...connection.views, ...views };
-					return (
-						<ConnectionContext.Provider
-							key={app.id}
-							value={{
-								host: reactFullstackConnectionManager.host,
-								port: app.port,
-							}}
-						>
-							<ProvideViews value={viewsToProvide}>
-								<Client<{}>
-									key={app.id}
-									{...connection}
-									views={viewsToProvide}
-								/>
-							</ProvideViews>
-						</ConnectionContext.Provider>
-					);
-				})}
-				<MenuBarLinkContext.Provider value={this.menuBarRef}>
-					{servicesAppsDomains.map((domain) => {
+				{!isLoadingViews &&
+					openApps.map((app) => {
 						const connection = reactFullstackConnectionManager.connect(
-							domain,
-							"serviceViews"
+							"app-" + app.id,
+							"webWindow"
 						);
 						const viewsToProvide = { ...connection.views, ...views };
 						return (
-							<ProvideViews value={viewsToProvide} key={domain}>
-								<Client<{}> {...connection} views={viewsToProvide} />
-							</ProvideViews>
+							<ConnectionContext.Provider
+								key={app.id}
+								value={{
+									host: reactFullstackConnectionManager.host,
+									port: app.port,
+								}}
+							>
+								<ProvideViews value={viewsToProvide}>
+									<Client<{}>
+										key={app.id}
+										{...connection}
+										views={viewsToProvide}
+									/>
+								</ProvideViews>
+							</ConnectionContext.Provider>
 						);
 					})}
+				<MenuBarLinkContext.Provider value={this.menuBarRef}>
+					{!isLoadingViews ? (
+						servicesAppsDomains.map((domain) => {
+							const connection = reactFullstackConnectionManager.connect(
+								domain,
+								"serviceViews"
+							);
+							const viewsToProvide = { ...connection.views, ...views };
+							return (
+								<ProvideViews value={viewsToProvide} key={domain}>
+									<Client<{}> {...connection} views={viewsToProvide} />
+								</ProvideViews>
+							);
+						})
+					) : (
+						<Service
+							icon={{ icon: "VscLoading", type: "icon" }}
+							buttons={[]}
+							onAction={() => null as any}
+							text="Loading Desktop..."
+						/>
+					)}
 				</MenuBarLinkContext.Provider>
 
-				{!isMobile() && (
-					<Link to="/native">
-						<div className={classes.switchToNativeButton}>
-							<Icon width={40} height={40} name="VscWindow" />
-						</div>
-					</Link>
-				)}
 				<StateComponent
 					defaultState={{ isStartMenuOpen: false, startMenuQuery: "" }}
 				>

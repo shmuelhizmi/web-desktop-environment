@@ -111,12 +111,68 @@ const App = () => {
 		host: string;
 		port: number;
 		https: boolean;
-	}>({ host: "localhost", port: 5000, isLoggedIn: false, https: false });
+	}>({
+		host: loginStorage.host,
+		port: loginStorage.port,
+		isLoggedIn: false,
+		https: false,
+	});
 	return (
 		<TP theme={defaultTheme}>
 			<Router>
 				<Switch>
 					<Route path="/demo">{() => <Demo />}</Route>
+					<Route path="/auto">
+						{() => (
+							<ConnectionContext.Provider value={login}>
+								<Client<{}>
+									{...connectToServer(
+										login.host,
+										login.https,
+										Number(login.port),
+										"web"
+									)}
+								/>
+							</ConnectionContext.Provider>
+						)}
+					</Route>
+					<Route path="/native">
+						{() => (
+							<ConnectionContext.Provider value={login}>
+								<Client<{}>
+									{...connectToServer(
+										login.host,
+										login.https,
+										Number(login.port),
+										"nativeHost"
+									)}
+								/>
+							</ConnectionContext.Provider>
+						)}
+					</Route>
+					<Route path="/view/:id">
+						{(params) => {
+							connectToServer(
+								login.host,
+								login.https,
+								Number(login.port),
+								"nativeClient"
+							);
+							const id = params.match?.params.id || "";
+							return (
+								<ConnectionContext.Provider
+									value={{ host: login.host, port: login.port, id }}
+								>
+									<Client<{}>
+										{...reactFullstackConnectionManager.connect(
+											id,
+											"nativeClient"
+										)}
+									/>
+								</ConnectionContext.Provider>
+							);
+						}}
+					</Route>
 					<Route>
 						<Switch>
 							<Route path="/connect/link/:id">

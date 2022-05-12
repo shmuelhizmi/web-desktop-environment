@@ -37,7 +37,7 @@ const useStyle = makeStyles((theme: Theme) => ({
 		boxShadow: `0px 0px 5px ${theme.shadowColor}`,
 		zIndex: 1,
 		border: `1px solid ${theme.windowBorderColor}`,
-		top: 26,
+		top: 25,
 		left: 5,
 	},
 	menuItem: {

@@ -177,7 +177,7 @@ class Desktop extends Component<
 						key={app.id}
 						value={{
 							host: reactFullstackConnectionManager.host,
-							port: app.port,
+							id: app.id,
 						}}
 					>
 						<Client<{}>

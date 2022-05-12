@@ -129,6 +129,9 @@ export const loginStorage = {
 	set token(token: string) {
 		localStorage.setItem("token", token);
 	},
+	get https() {
+		return window.location.protocol === "https:";
+	},
 };
 
 const Login = (props: LoginProps) => {
@@ -136,7 +139,6 @@ const Login = (props: LoginProps) => {
 	const [host, setHost] = useState(loginStorage.host);
 	const [port, setPort] = useState(loginStorage.port);
 	const [passcode, setPasscode] = useState("");
-	const [https /* , setHttps */] = useState(window.location.protocol === "https:");
 	const [isValid, setIsValid] = useState(false);
 	const [token, setToken] = useState("");
 	useEffect(() => {
@@ -146,7 +148,9 @@ const Login = (props: LoginProps) => {
 
 	useEffect(() => {
 		setIsValid(false);
-		const url = `${https ? "https" : "http"}://${host}${port ? `:${port}` : ""}/login`;
+		const url = `${loginStorage.https ? "https" : "http"}://${host}${
+			port ? `:${port}` : ""
+		}/login`;
 		if (isValidUrl(url) && passcode) {
 			fetch(url, {
 				method: "POST",
@@ -169,7 +173,7 @@ const Login = (props: LoginProps) => {
 				)
 				.catch(() => null);
 		}
-	}, [passcode, host, port, https]);
+	}, [passcode, host, port, loginStorage.https]);
 	return (
 		<div className={classes.root}>
 			<div className={classes.flexEnd}>
@@ -207,7 +211,9 @@ const Login = (props: LoginProps) => {
 					</div> */}
 					<Button
 						variant="main"
-						onClick={() => isValid && props.onLogin(host, port, https, token)}
+						onClick={() =>
+							isValid && props.onLogin(host, port, loginStorage.https, token)
+						}
 						color="background"
 						border
 					>

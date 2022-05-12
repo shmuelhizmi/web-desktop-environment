@@ -15,7 +15,7 @@ class Window extends Component<WindowInterface, {}> {
 	openWindow = () => {
 		this.window =
 			window.open(
-				`${window.location.origin}/native/client/connect/${this.context?.host}/${this.context?.port}`,
+				`${window.location.origin}/view/app-${this.context?.id}`,
 				"",
 				`width=${this.props.window.width},height=${this.props.window.height}`
 			) || undefined;

@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/web-sdk",
-  "version": "1.0.3-2.0.0-alpha.4.0",
+  "version": "2.0.0-0",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -36,6 +36,6 @@
   "dependencies": {
     "@material-ui/styles": "^4.11.3",
     "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/interfaces": "^1.0.3-2.0.0-alpha.4.0"
+    "@web-desktop-environment/interfaces": "^2.0.0-0"
   }
 }

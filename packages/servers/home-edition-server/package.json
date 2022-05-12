@@ -1,12 +1,11 @@
 {
 	"name": "@web-desktop-environment/home-edition-server",
 	"scripts": {
-    "prepublish": "npm run build",
+		"prepublish": "npm run build",
 		"start": "nodemon .",
 		"build": "tsc",
 		"build:server": "npm run build",
-		"lint": "eslint .",
-		"prepublish": "npm run build"
+		"lint": "eslint ."
 	},
 	"bin": {
 		"web-desktop-home": "./bin/index.js"
@@ -15,7 +14,7 @@
 		"@web-desktop-environment/pack-core"
 	],
 	"main": "dist",
-	"version": "2.0.0-2",
+	"version": "2.0.0-3",
 	"author": "shmuelhizmi",
 	"license": "MIT",
 	"private": false,
@@ -41,9 +40,9 @@
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.2.1",
-		"@web-desktop-environment/pack-core": "^2.0.0-2",
-		"@web-desktop-environment/server-api": "^2.0.0-2",
-		"@web-desktop-environment/server-sdk": "^2.0.0-2"
+		"@web-desktop-environment/pack-core": "^2.0.0-3",
+		"@web-desktop-environment/server-api": "^2.0.0-3",
+		"@web-desktop-environment/server-sdk": "^2.0.0-3"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

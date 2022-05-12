@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/app-sdk",
-  "version": "2.0.0-9",
+  "version": "2.0.0-10",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "@web-desktop-environment/server-api": "^2.0.0-9",
+    "@web-desktop-environment/server-api": "^2.0.0-10",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -44,7 +44,7 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.3.0-alpha.1",
     "@react-fullstack/render": "0.3.0-alpha.1",
-    "@web-desktop-environment/interfaces": "^2.0.0-9",
+    "@web-desktop-environment/interfaces": "^2.0.0-10",
     "ini": "3.0.0",
     "react": "^17.0.2",
     "xpm2png": "1.0.1"

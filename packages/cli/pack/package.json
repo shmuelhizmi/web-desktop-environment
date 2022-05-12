@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/package-cli",
-  "version": "2.0.0-9",
+  "version": "2.0.0-10",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",

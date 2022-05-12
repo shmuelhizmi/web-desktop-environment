@@ -14,7 +14,7 @@
 		"@web-desktop-environment/pack-core"
 	],
 	"main": "dist",
-	"version": "2.0.0-13",
+	"version": "2.0.0-14",
 	"author": "shmuelhizmi",
 	"license": "MIT",
 	"private": false,
@@ -51,9 +51,9 @@
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.3.0",
-		"@web-desktop-environment/pack-core": "^2.0.0-13",
-		"@web-desktop-environment/server-api": "^2.0.0-13",
-		"@web-desktop-environment/server-sdk": "^2.0.0-13",
+		"@web-desktop-environment/pack-core": "^2.0.0-14",
+		"@web-desktop-environment/server-api": "^2.0.0-14",
+		"@web-desktop-environment/server-sdk": "^2.0.0-14",
 		"ts-node": "10.7.0"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"

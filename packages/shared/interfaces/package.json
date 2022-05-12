@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/interfaces",
-  "version": "2.0.0-13",
+  "version": "2.0.0-14",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",

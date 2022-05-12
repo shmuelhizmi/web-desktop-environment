@@ -1,7 +1,7 @@
 {
 	"name": "@web-desktop-environment/home-edition-server",
 	"scripts": {
-		"prepublish": "npm run build",
+		"prepublishOnly": "npm run build",
 		"start": "nodemon .",
 		"build": "tsc",
 		"build:server": "npm run build",

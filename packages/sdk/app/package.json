@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "start": "nodemon .",
     "watch": "tsc --watch",
     "build": "tsc",

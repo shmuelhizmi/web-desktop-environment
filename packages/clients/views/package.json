@@ -84,7 +84,7 @@
   },
   "homepage": "http://http.web-desktop.run/",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "start": "vite",
     "build": "vite build && echo \"http.web-desktop.run\" > build/CNAME",
     "lint": "eslint .",

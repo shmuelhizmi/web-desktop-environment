@@ -1,47 +1,81 @@
-![Web Desktop Environment](./assets/Logo.png)
-<p align="center">
-  A cross-platform desktop-environment with a web interface
-</p>
+![Web Desktop Environment](./assets/main.png)
 
-# Installation and run guide
-
-first we need to make sure we have node and npm installed, I recommend using node 14.x with npm 7.x.  
-now we will install "web-desktop-environment" with the following commands  -  
-`npm install @web-desktop-environment/home-edition-server` or `npm install @web-desktop-environment/development-edition-server --unsafe-perm` for the development edition of "web-desktop-environment".  
-  
-after the "web-desktop-environment" server is installed we can run it using
-the command `web-desktop-home` or `web-desktop-dev` for the development edition of "web-desktop-environment".  
-  
-now that "web-desktop-environment" is running we can enter "https://web-desktop-environment.vercel.app" and connect to it.  
-to connect to server we will need to enter the server host and port,  
-if we are running the sever locally we can keep the default `localhost` host, otherwise enter the server host ip,  
-to get the server port we can look at the server console output, it should print somewhere in the start something along the line of `[ root ]: starting web-desktop-environment on port $PORT 0ms` we need to copy the value that is present in the place of `$PORT` to the connection web-site.  
-
-click on the "Login" button and we should now be done 🎊🎊🎊 - if nothing gone wrong we should now be able to see our web desktop interface in the browser!
+>  A cross-platform desktop-environment with a web interface design to provide a simple and intuitive way to manage your server with a desktop-like interface.
 
 # What is a Web Desktop Environment
 
-just like any other desktop environment it is just a visual interface for your computer.  
-the twist with "web-desktop-environment" compare to other desktop-environments is that "web-desktop-environment" visual interface runs on the web with his server running locally on your computer
+just like any other desktop environment WDE was design to abstract the use of your computer is a visual way.
+but the twist with WDE is that unlike other desktop environments, WDE was designed from the ground up to run on the web, and so the backend for WDE is made as an extensible web-server.
 
-## Use Cases
+## Why?
 
-- interface for a cloud server (can possibly be used as a replacement for a control panel)
+WDE usecases range from providing a slim interface for your raspberry pi to or any other micro-computer to proving an interface for developing on a remote super computer or inside a Docker container.  
+wehenever you need to work on a remote/cloud environment WDE can be a great choice. it can simplify and abstruct the way you interact with your server and allow to feel comfortable as if you were working on your local machine.
+
+
+## How?
+
+WDE is making advantage of React.js both on the frontend and backend using a unique React framework that was developed specifically for it.
+WDE provide a way to extend its back/fronted functionality by adding custom apps packages.
+developers documentation will be available in the near future.
+
+
+# Installation/run guide
+
+if you want to get started with WDE you can follow the following guide:
+
+<!-- ## Docker -->
+
+## Run from npm
+to run WDE from npm you can use the following command:
+
+```bash
+> npm install -g @web-desktop-environment/home-edition-server
+
+> web-desktop-home
+```
+or
+```bash
+# for the version with support for x11 forwarding and vscode integration.
+> npm install -g @web-desktop-environment/development-edition-server --unsafe-perm
+
+> web-desktop-dev
+```
+
+after that your server port and cerdentials will show up in the terminal.
+
+after that you can access it from your browser at "http://http.web-desktop.run/".
+note that since WDE is running on http by default, you can't access it from a https site, if security is a concern you you should use it behind an https proxy like ngrok and then access it from your browser at "https://web-desktop.run/".
+
+# Some use Cases
+
 - interface for small/low power computers like the Raspberry Pi zero
-- interface for controlling your computer over a long distance 
-- interface for a development server  
+- cloud development environment
+- interface for controlling your computer over a long distance or for remote support
+- interface for monitoring cloud vm/docker apps (can possibly be used as a replacement for a control panel)
 
-## The technologies behind "web-desktop-devironment"
+## The technologies behind "web-desktop-environment"
 
 both the server and are build using a react framework called ["react-fullstack"](https://github.com/shmuelhizmi/react-fullstack/tree/master/packages/fullstack) which is a framework for building fast react applications that rely on a tight reactive connection between the client and the server.
 
 ## Screenshots
 
-![dark theme](./assets/dark_theme_screenshot.jpg)
-![transparent](./assets/transparent_theme_screenshot.jpg)
-![nord theme](./assets/nord_theme_screenshot.jpg)
-![pwa](./assets/pwa_app_screenshot.jpg)
-![light theme](./assets/light_theme_screenshot.jpg)
+![dark theme](./assets/x11-support.png "Nord Theme Desktop")
+>Dark Theme Desktop running vs-code and x11 apps
+
+![dark theme](./assets/dark_theme_screenshot.jpg "Dark Theme Desktop")
+
+>Dark Theme Desktop
+
+
+![mobile](./assets/mobile_screenshot.jpg "Mobile Screenshots")
+
+>Multiple Mobile Screenshots
+
+
+![light theme](./assets/light_theme_screenshot.jpg "Light Theme Desktop 😒")
+
+>  Light Theme Desktop 😒
 
 # Contribute
 
@@ -52,10 +86,10 @@ if you have any new feature or existing feature you want to create or improve fe
 ## Desktop
 
 :heavy_check_mark: Full web based desktop  
+:heavy_check_mark: Mobile support
 :heavy_check_mark: Themes and custom themes  
 :heavy_check_mark: PWA app  
-:heavy_check_mark: Windows can ether be opened inside the main web-app container or as a standalone native os windows (works better when using the app as PWA)
-
+:heavy_check_mark: Windows can ether be opened inside the main web-app container or as a standalone 
 ## Apps
 
 :heavy_check_mark: Terminal  
@@ -63,40 +97,43 @@ if you have any new feature or existing feature you want to create or improve fe
 :heavy_check_mark: Settings / System info  
 :heavy_check_mark: Notepad  
 :heavy_check_mark: VS-Code  
-:heavy_check_mark: Media app (early developemnt)  
+:heavy_check_mark: Media app (early developemnt)
+:heavy_check_mark: Every X11 app using xpra
 
 # To do
 
 ## Desktop TO DO List
 
-:comet: more animations :)  
-:comet: white theme color adjustments (it is really looking bad currently)  
+:comet: more reactive animations :)  
+:comet: make the light theme look better
 
 ## Apps TO DO List
 
 :comet: Task manager  
 :comet: Music Player  
-:comet: x-server integration
-:comet: Applications store with user made apps ( will take quite a long time to implement )  
+:comet: Applications store for external packages
 
 # Run from source
+
+Note that to build the project you need to be running from a linux/mac os box (wsl if you are on windows) with nodejs 16 and yarn installed.
 
 ## Run
 
 **quick run**
-1 `npm start`
+1. `yarn start`
 
 ## Advanced run
 
 **install packages**
-1. `npm i -g lerna`
-2. `lerna bootstrap`
+
+1. `yarn`
 
 **run server**
-1. `cd packages/development-edition-server` or `cd packages/home-edition-server`
-2. `npm start`
 
+1. `cd packages/development-edition-server` or `cd packages/home-edition-server`
+2. `yarn start`
 
 **run client**
+
 1. `cd packages/views`
-2. `npm start`
+2. `yarn start`

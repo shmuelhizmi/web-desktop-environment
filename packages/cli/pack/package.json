@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/package-cli",
-  "version": "2.0.0-1",
+  "version": "2.0.0-2",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -37,5 +37,6 @@
     "typescript": "^4.6.3",
     "vite": "2.8.6",
     "vite-plugin-externals": "0.4.0"
-  }
+  },
+  "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

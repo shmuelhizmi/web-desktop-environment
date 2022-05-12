@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/views",
-  "version": "2.0.0-1",
+  "version": "2.0.0-2",
   "license": "MIT",
   "private": false,
   "dependencies": {
@@ -9,7 +9,7 @@
     "@react-fullstack/fullstack": "0.2.1",
     "@react-fullstack/fullstack-socket-client": "0.2.1",
     "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/interfaces": "^2.0.0-1",
+    "@web-desktop-environment/interfaces": "^2.0.0-2",
     "axios": "0.21.1",
     "events": "3.1.0",
     "pako": "2.0.4",
@@ -101,5 +101,5 @@
       "last 1 safari version"
     ]
   },
-  "gitHead": "bddb089ad69411e9ce64cca9b90604facddf8c10"
+  "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

@@ -83,6 +83,8 @@
     "lib/**/*.js.map",
     "bin/**.js",
     "src/**/*",
+    "dist/**/*",
+    "app/**/*",
     "README.md",
     "tsconfig.json",
     "assets/**/*"

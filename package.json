@@ -20,10 +20,10 @@
     "lerna": "4.0.0"
   },
   "resolutions": {
-    "@react-fullstack/render": "0.3.0-alpha.1",
-    "@react-fullstack/fullstack": "0.3.0-alpha.1",
-    "@react-fullstack/fullstack-socket-client": "0.3.0-alpha.1",
-    "@react-fullstack/fullstack-socket-server": "0.3.0-alpha.1",
+    "@react-fullstack/render": "0.3.0",
+    "@react-fullstack/fullstack": "0.3.0",
+    "@react-fullstack/fullstack-socket-client": "0.3.0",
+    "@react-fullstack/fullstack-socket-server": "0.3.0",
     "react": "^17.0.2",
     "@types/react": "^17.0.3"
   },

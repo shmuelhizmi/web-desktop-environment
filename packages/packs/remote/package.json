@@ -8,7 +8,8 @@
   "private": false,
   "scripts": {
     "build": "yarn exec $(yarn bin wde-build)",
-    "start": "yarn exec $(yarn bin wde-dev)"
+    "start": "yarn exec $(yarn bin wde-dev)",
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",

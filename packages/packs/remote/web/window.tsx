@@ -130,6 +130,8 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 		if (winRef.current) {
 			const ele = winRef.current;
 			ele.appendChild(window.canvas);
+			window.canvas.style.borderBottomLeftRadius = "5px";
+			window.canvas.style.borderBottomRightRadius = "5px";
 		}
 		xpra.sendConfigureWindow(
 			window.attributes.id,

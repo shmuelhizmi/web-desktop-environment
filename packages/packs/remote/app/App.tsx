@@ -74,13 +74,15 @@ export function RemoteServiceApp(props: RemoteServiceAppProps) {
 								}}
 								text="Xpra"
 							>
-								<XpraWrapper
-									domain={domain}
-									onConnect={() => logger.info("Connected to Xpra")}
-									onDisconnect={() => logger.info("Disconnected from Xpra")}
-									onError={(error) => logger.error(error)}
-									onSessionStarted={() => logger.info("Session started")}
-								/>
+								{pingedSuccessfully && (
+									<XpraWrapper
+										domain={domain}
+										onConnect={() => logger.info("Connected to Xpra")}
+										onDisconnect={() => logger.info("Disconnected from Xpra")}
+										onError={(error) => logger.error(error)}
+										onSessionStarted={() => logger.info("Session started")}
+									/>
+								)}
 							</Service>
 						</>
 					)

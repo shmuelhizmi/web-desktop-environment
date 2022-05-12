@@ -177,7 +177,10 @@ class PTY {
 		this.ptyProcess = spawn(this.shell, this.args, {
 			name: "xterm-color",
 			cwd: this.cwd,
-			env: this.env,
+			env: {
+				...process.env,
+				...this.env,
+			},
 		});
 
 		// Add a "data" event listener.

@@ -26,6 +26,7 @@ export default class DesktopManager {
 	public domainManager: DomainManager;
 	public authManager: AuthManager;
 	constructor(name: string, rootLogger?: Logger) {
+		console.clear();
 		this.name = name;
 
 		const parentLogger = rootLogger || new Logger("root");
@@ -56,32 +57,21 @@ export default class DesktopManager {
 		this.initX11();
 		const showStartupMessages = () => {
 			this.logger.direct(
-				color.bgBlackBright(
-					color.bold(
-						color.greenBright(
-							`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${
-								this.domainManager.mainPort
-							}${" ".repeat(29)}`
-						)
-					)
+				color.bold.magenta(
+					`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${
+						this.domainManager.mainPort
+					}${" ".repeat(29)}`
 				)
 			);
 			this.logger.direct(
-				color.bgBlackBright(
-					color.bold(
-						color.cyan(
-							// eslint-disable-next-line quotes
-							'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
-						)
-					)
+				color.bold.black(
+					// eslint-disable-next-line quotes
+					'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
 				)
 			);
 		};
-		showStartupMessages();
 		this.logger.direct(
-			color.bgBlack(
-				color.bold(color.blueBright(figlet.textSync("WDE started", "4Max")))
-			)
+			color.bold.blueBright(figlet.textSync("WDE started", "4Max"))
 		);
 		showStartupMessages();
 		return {

@@ -1,4 +1,4 @@
-![Web Desktop Environment](./assets/logo.jpeg)
+![Web Desktop Environment](./assets/main.png)
 
 >  A cross-platform desktop-environment with a web interface design to provide a simple and intuitive way to manage your server with a desktop-like interface.
 

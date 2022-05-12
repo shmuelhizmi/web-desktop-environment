@@ -18,6 +18,9 @@ export function usePing(run: boolean, port?: number) {
 			}, 250);
 		}
 	}, [timeout, pingedSuccessfully, run, port]);
+	useEffect(() => {
+		setPingedSuccessfully(false);
+	}, [port, run]);
 	return {
 		pingedSuccessfully,
 	};

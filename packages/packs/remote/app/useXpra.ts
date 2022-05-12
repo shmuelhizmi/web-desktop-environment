@@ -27,6 +27,8 @@ export function useXpra(run: boolean) {
 			API.portManager.withDomain().then(({ domain, port }) => {
 				setPortAndDomain({ domain, port });
 			});
+		} else {
+			setPortAndDomain(undefined);
 		}
 	}, [run]);
 

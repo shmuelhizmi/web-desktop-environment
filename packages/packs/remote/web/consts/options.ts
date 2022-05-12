@@ -4,7 +4,7 @@ export const xpraOptions: Partial<XpraConnectionOptions> = {
 	reconnect: true,
 	connectionTimeout: 30000,
 	reconnectInterval: 5000,
-	reconnectAttempts: Number.MAX_SAFE_INTEGER,
+	reconnectAttempts: 3,
 	pingInterval: 5000,
 	bandWidthLimit: 0,
 	shareSession: true,

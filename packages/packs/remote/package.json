@@ -8,7 +8,7 @@
   "private": false,
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "yarn exec $(yarn bin wde-build)",
+    "build": "yarn exec $(yarn bin wde-build) && cd app && tsc",
     "start": "yarn exec $(yarn bin wde-dev)",
     "prepare": "yarn build"
   },
@@ -34,7 +34,7 @@
     "bin/**.js",
     "src/**/*",
     "dist/**/*",
-    "app/**/*",
+    "app/**/*.js",
     "README.md",
     "tsconfig.json",
     "assets/**/*",

@@ -32,8 +32,8 @@
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/server-api": "1.0.2"
+    "@react-fullstack/fullstack": "x.x.x",
+    "@web-desktop-environment/server-api": "2.0.x"
   },
   "repository": {
     "type": "git",

@@ -19,6 +19,16 @@
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/shared/api"
   },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*"
+  ],
   "dependencies": {
     "@web-desktop-environment/interfaces": "^2.0.0-12",
     "uid": "2.0.0"

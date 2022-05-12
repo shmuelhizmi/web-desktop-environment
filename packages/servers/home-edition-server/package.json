@@ -32,7 +32,17 @@
 		"tsconfig-paths": "3.9.0",
 		"typescript": "^4.6.3"
 	},
-	"repository": {
+	"files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*"
+  ],
+"repository": {
 		"type": "git",
 		"url": "https://github.com/shmuelhizmi/web-desktop-environment",
 		"directory": "packages/servers/home-edition-server"

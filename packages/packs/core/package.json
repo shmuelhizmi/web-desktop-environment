@@ -30,7 +30,17 @@
     "nodemon": "2.0.4",
     "prettier": "^2.0.5"
   },
-  "repository": {
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*"
+  ],
+"repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/packs/dev"

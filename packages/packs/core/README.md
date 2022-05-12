@@ -30,14 +30,14 @@ if you want to get started with WDE you can follow the following guide:
 to run WDE from npm you can use the following command:
 
 ```bash
-> npm install -g @web-desktop-environment/home-edition-server
+> yarn global add @web-desktop-environment/home-edition-server
 
 > web-desktop-home
 ```
 or
 ```bash
 # for the version with support for x11 forwarding and vscode integration.
-> npm install -g @web-desktop-environment/development-edition-server --unsafe-perm
+> yarn global add @web-desktop-environment/development-edition-server --unsafe-perm
 
 > web-desktop-dev
 ```

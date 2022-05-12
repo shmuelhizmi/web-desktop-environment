@@ -16,6 +16,16 @@
     "vite:dev": "vite build --watch ${PACKAGE_LOCATION}",
     "vite:build": "vite build"
   },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*"
+  ],
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.3",

@@ -29,7 +29,17 @@
   "peerDependencies": {
     "react": "^17.0.2"
   },
-  "repository": {
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*"
+  ],
+"repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/sdk/app"

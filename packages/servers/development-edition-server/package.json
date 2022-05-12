@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
-  "version": "2.0.0-8",
+  "version": "2.0.0-9",
   "scripts": {
     "prepublish": "npm run build",
     "start": "nodemon .",
@@ -42,12 +42,12 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.2.2",
-    "@web-desktop-environment/interfaces": "^2.0.0-8",
-    "@web-desktop-environment/pack-core": "^2.0.0-8",
-    "@web-desktop-environment/pack-dev": "^2.0.0-8",
-    "@web-desktop-environment/pack-remote": "^2.0.0-8",
-    "@web-desktop-environment/server-api": "^2.0.0-8",
-    "@web-desktop-environment/server-sdk": "^2.0.0-8",
+    "@web-desktop-environment/interfaces": "^2.0.0-9",
+    "@web-desktop-environment/pack-core": "^2.0.0-9",
+    "@web-desktop-environment/pack-dev": "^2.0.0-9",
+    "@web-desktop-environment/pack-remote": "^2.0.0-9",
+    "@web-desktop-environment/server-api": "^2.0.0-9",
+    "@web-desktop-environment/server-sdk": "^2.0.0-9",
     "react": "^17.0.2",
     "ts-node": "10.7.0"
   },

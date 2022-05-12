@@ -1,4 +1,5 @@
 import { startServer } from "@web-desktop-environment/server-sdk";
-import packageJSON from "../package.json";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageJSON = require("../package.json");
 
 startServer(packageJSON);

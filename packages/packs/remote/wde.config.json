@@ -1,0 +1,15 @@
+{
+  "name": "@web-desktop-environment/pack-remote",
+  "version": "0.0.1",
+  "webBundle": {
+    "index": "index.bundle.es.js",
+    "distDir": "./dist/web/"
+  },
+  "web": "./web/",
+  "webWorkers": {
+    "xpra": "./web/xpraWorker",
+    "xpra-decoder": "./web/xpraWorker/decoder"
+  },
+  "os": ["linux"],
+  "entry": "./app"
+}

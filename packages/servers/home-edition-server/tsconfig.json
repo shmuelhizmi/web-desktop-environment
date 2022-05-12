@@ -7,17 +7,9 @@
     "outDir": "dist",
     "jsx": "react",
     "esModuleInterop": true,
-    "baseUrl": "src",
-    "paths": {
-      "@index": ["index"],
-      "@components/*": ["components/*"],
-      "@component": ["components/base/Component"],
-      "@apps/*": ["components/apps/*"],
-      "@desktop/*": ["components/desktop/*"],
-      "@container/*": ["components/container/*"],
-      "@managers/*": ["managers/*"],
-      "@utils/*": ["utils/*"]
-    }
+    "resolveJsonModule": true,
+    "rootDir": "src"
   },
-  "include": ["src/**/*"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "bin"]
 }

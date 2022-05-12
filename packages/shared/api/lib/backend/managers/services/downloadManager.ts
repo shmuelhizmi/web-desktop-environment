@@ -7,8 +7,8 @@ export class DownloadManager extends ManagerBase<DownloadManagerEvents> {
   addFile = this.registerFunction<(path: string) => { hash: string }>(
     "addFile"
   );
-  getDownloadManagerPort = this.registerFunction<() => number>(
-    "getDownloadManagerPort"
+  domain = this.registerFunction<() => string>(
+    "domain"
   );
 }
 

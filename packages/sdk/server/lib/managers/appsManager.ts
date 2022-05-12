@@ -7,17 +7,21 @@ import {
 import DesktopManager from "../managers/desktopManager";
 import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from "../const";
 import { BroadcastChannel } from "broadcast-channel";
-import { APIClient } from "@web-desktop-environment/server-api";
+import { APIClient, API } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
 import uuid from "uuid";
+import cp from "child_process";
+import { x11Utils } from "@web-desktop-environment/app-sdk";
+import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 
 interface AppsManagerEvents {
 	onAppLaunch: OpenApp;
 	onOpenAppsUpdate: OpenApp[];
 	onInstalledAppsUpdate: App[];
+	onServiceAppLaunch: { port: number; domain: string };
 }
 
-export default class AppsManager {
+export default class AppsManager extends Emitter<AppsManagerEvents> {
 	private logger: Logger;
 	private desktopManager: DesktopManager;
 
@@ -25,30 +29,36 @@ export default class AppsManager {
 	public get runningApps() {
 		return this._runningApps;
 	}
-
-	public emitter = new Emitter<AppsManagerEvents>();
+	private _servicesApps: { port: number; domain: string }[] = [];
+	public get servicesApps() {
+		return this._servicesApps;
+	}
 
 	private availableApps = new Map<string, AppRegistrationData>();
+	private availableExternalApps = new Map<string, AppRegistrationData>();
 
 	public get apps() {
-		return Array.from(this.availableApps.entries()).map(
-			([name, app]) =>
-				({
-					appName: name,
-					description: app.description,
-					displayName: app.displayName,
-					icon: app.icon,
-				} as App)
-		);
+		return Array.from(this.availableApps.entries())
+			.concat(Array.from(this.availableExternalApps.entries()))
+			.map(
+				([name, app]) =>
+					({
+						appName: name,
+						description: app.description,
+						displayName: app.displayName,
+						icon: app.icon,
+					} as App)
+			);
 	}
 
 	constructor(parentLogger: Logger, desktopManager: DesktopManager) {
+		super();
 		this.logger = parentLogger.mount("windows-manager");
 		this.desktopManager = desktopManager;
 		this.listenToExternalAppLaunches();
 		APIClient.appsManager.registerApp.override(() => (newApp) => {
 			this.availableApps.set(newApp.name, newApp);
-			this.emitter.call("onInstalledAppsUpdate", this.apps);
+			this.call("onInstalledAppsUpdate", this.apps);
 		});
 		APIClient.appsManager.launchApp.override(() => async (name, input) => ({
 			processId: await this.spawnApp(name, input),
@@ -56,7 +66,40 @@ export default class AppsManager {
 		APIClient.appsManager.closeApp.override(() => async (processId) => {
 			this.killApp(processId);
 		});
+		APIClient.serviceManager.requestUIPort.override(() => this.requestUIPort);
+		this.readx11Apps();
 	}
+
+	async readx11Apps() {
+		const x11Apps = await x11Utils.getAllX11Apps();
+		for (const app of x11Apps) {
+			let icon: Icon = {
+				type: "icon",
+				icon: "FcLinux",
+			};
+			if (app.iconAsImgUri) {
+				icon = {
+					type: "img",
+					icon: app.iconAsImgUri,
+				};
+			}
+			this.availableExternalApps.set(app.exec, {
+				description: app.description,
+				displayName: app.name,
+				icon,
+				name: app.name,
+				id: app.exec,
+			});
+		}
+		this.call("onInstalledAppsUpdate", this.apps);
+	}
+
+	requestUIPort = async () => {
+		const { domain, port } = await this.desktopManager.portManager.withDomain();
+		this._servicesApps.push({ domain, port });
+		this.call("onServiceAppLaunch", { domain, port });
+		return port;
+	};
 
 	listenToExternalAppLaunches = () => {
 		const channel = new BroadcastChannel(
@@ -78,32 +121,53 @@ export default class AppsManager {
 	spawnApp = async (name: string, input: Record<string, unknown>) => {
 		const processId = uuid();
 		const appData = this.availableApps.get(name);
-		const port = await this.desktopManager.portManager.getPort();
-		APIClient.appsManager.call("launchApp", {
-			appId: appData.id,
-			options: input,
-			port,
-			processId,
-		});
-		const openApp = {
-			icon: appData.icon,
-			id: processId,
-			name: appData.name,
-			port,
-			cancel: () => {
-				APIClient.appsManager.call("closeApp", { processId });
-			},
-		};
-		this.emitter.call("onAppLaunch", openApp);
-		this._runningApps.push(openApp);
-		this.emitter.call("onOpenAppsUpdate", this._runningApps);
-		return processId;
+		if (appData) {
+			const port = await this.desktopManager.portManager.getPort();
+			APIClient.appsManager.call("launchApp", {
+				appId: appData.id,
+				options: input,
+				port,
+				processId,
+			});
+			API.domainManager.registerDomain(`app-${processId}`, port);
+			const openApp = {
+				icon: appData.icon,
+				id: processId,
+				name: appData.name,
+				port,
+				cancel: () => {
+					APIClient.appsManager.call("closeApp", { processId });
+				},
+			};
+			this.call("onAppLaunch", openApp);
+			this._runningApps.push(openApp);
+			this.call("onOpenAppsUpdate", this._runningApps);
+			return processId;
+		} else {
+			await this.tryToExecuteApp(name, input);
+		}
+	};
+
+	tryToExecuteApp = async (name: string, _input: Record<string, unknown>) => {
+		const app = this.availableExternalApps.get(name);
+		if (app) {
+			const cprocess = cp.exec(name, {
+				env: {
+					...process.env,
+					DISPLAY: ":" + (await API.x11Manager.getActiveDisplay()),
+				},
+				cwd: process.cwd(),
+			});
+			cprocess.on("error", (err) => {
+				this.logger.error(err.message);
+			});
+		}
 	};
 
 	killApp = (processId: string) => {
 		this._runningApps.find((app) => app.id === processId).cancel();
 		this._runningApps = this._runningApps.filter((app) => app.id !== processId);
-		this.emitter.call("onOpenAppsUpdate", this._runningApps);
+		this.call("onOpenAppsUpdate", this._runningApps);
 		APIClient.appsManager.call("closeApp", { processId });
 	};
 }

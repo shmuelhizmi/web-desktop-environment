@@ -3,7 +3,7 @@ import * as cp from "child_process";
 import Logger from "../utils/logger";
 import DesktopManager from "../managers/desktopManager";
 
-type InitResult = { success: false } | { success: true; port: number };
+type InitResult = { success: false } | { success: true; domain: string };
 
 export class GTKBridge {
 	logger: Logger;
@@ -25,7 +25,8 @@ export class GTKBridge {
 				);
 				return { success: false };
 			}
-			const port = await this.desktopManager.portManager.getPort();
+			const { port, domain } =
+				await this.desktopManager.portManager.withDomain();
 			const broadwayd = cp.exec(`broadwayd --port=${port} :${port}`);
 			let broadwaydExited = false;
 			broadwayd.on("exit", () => (broadwaydExited = true));
@@ -35,7 +36,7 @@ export class GTKBridge {
 				process.env["GDK_BACKEND"] = "broadway";
 				process.env["BROADWAY_DISPLAY"] = `:${port}`;
 				process.env["DISPLAY"] = `:${port}`;
-				return { success: true, port };
+				return { success: true, domain };
 			} else {
 				return { success: false };
 			}

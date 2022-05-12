@@ -34,6 +34,7 @@ interface TextFieldProps {
 	borderBottom?: boolean;
 	transparent?: boolean;
 	defaultValue?: string | number | string[] | undefined;
+	password?: boolean;
 }
 
 const TextField = ({
@@ -46,6 +47,7 @@ const TextField = ({
 	defaultValue,
 	border,
 	transparent,
+	password,
 	placeholder,
 	borderBottom,
 }: PropsWithChildren<TextFieldProps>) => {
@@ -80,6 +82,7 @@ const TextField = ({
 			value={value || currentValue}
 			onChange={onInputEvent}
 			className={`${classes.root} ${className || ""}`}
+			type={password ? "password" : "text"}
 		>
 			{children}
 		</input>

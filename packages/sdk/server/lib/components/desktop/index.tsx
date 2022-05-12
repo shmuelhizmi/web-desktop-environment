@@ -17,26 +17,39 @@ interface DesktopState {
 	background: string;
 	nativeBackground: string;
 	openApps: OpenApp[];
+	servicesAppsDomains: string[];
 	theme: ThemeType;
 	customTheme: Theme;
 	gtkBridgeConnection?: GTKBridge;
+	externalViewsImportPaths: string[];
+	externalViewsHostDomain?: string;
 }
 
 class Desktop extends Component<{}, DesktopState> {
 	name = "desktop";
-	state: DesktopState = {
-		background: this.desktopManager.settingsManager.settings.desktop.background,
-		nativeBackground:
-			this.desktopManager.settingsManager.settings.desktop.nativeBackground,
-		openApps: this.desktopManager.appsManager.runningApps.map((app) => ({
+	get openApps() {
+		return this.desktopManager.appsManager.runningApps.map((app) => ({
 			icon: app.icon,
 			id: app.id,
 			name: app.name,
 			port: app.port,
-		})),
+		}));
+	}
+	get servicesAppsDomains() {
+		return this.desktopManager.appsManager.servicesApps.map(
+			(app) => app.domain
+		);
+	}
+	state: DesktopState = {
+		background: this.desktopManager.settingsManager.settings.desktop.background,
+		nativeBackground:
+			this.desktopManager.settingsManager.settings.desktop.nativeBackground,
+		openApps: this.openApps,
+		servicesAppsDomains: this.servicesAppsDomains,
 		theme: this.desktopManager.settingsManager.settings.desktop.theme,
 		customTheme:
 			this.desktopManager.settingsManager.settings.desktop.customTheme,
+		externalViewsImportPaths: [],
 	};
 	componentDidMount = () => {
 		const listenToNewSettings = this.desktopManager.settingsManager.emitter.on(
@@ -51,23 +64,41 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		this.desktopManager.appsManager.emitter.on(
-			"onOpenAppsUpdate",
-			(openApps) => {
-				this.setState({
-					openApps: openApps.map((app) => ({
-						icon: app.icon,
-						id: app.id,
-						name: app.name,
-						port: app.port,
-					})),
-				});
-			}
-		);
-		this.desktopManager.appsManager.emitter.on("onInstalledAppsUpdate", () => {
+		this.desktopManager.appsManager.on("onOpenAppsUpdate", () => {
+			this.setState({
+				openApps: this.openApps,
+			});
+		});
+		this.desktopManager.appsManager.on("onServiceAppLaunch", () => {
+			this.setState({
+				servicesAppsDomains: this.servicesAppsDomains,
+			});
+		});
+		this.desktopManager.appsManager.on("onInstalledAppsUpdate", () => {
 			this.forceUpdate();
 		});
 		this.initializeDesktop();
+		this.desktopManager.packageManager
+			.startPackagesWebHostingServer()
+			.then(({ domain }) => {
+				this.setState({
+					externalViewsHostDomain: domain,
+					externalViewsImportPaths:
+						this.desktopManager.packageManager.packagesViewsImportPaths,
+				});
+			});
+		this.desktopManager.packageManager.on("install", () => {
+			this.setState({
+				externalViewsImportPaths:
+					this.desktopManager.packageManager.packagesViewsImportPaths,
+			});
+		});
+		this.desktopManager.packageManager.on("unload", () => {
+			this.setState({
+				externalViewsImportPaths:
+					this.desktopManager.packageManager.packagesViewsImportPaths,
+			});
+		});
 	};
 	async initializeDesktop() {
 		const connectToGTK = new GTKBridgeConnector(
@@ -76,9 +107,8 @@ class Desktop extends Component<{}, DesktopState> {
 		);
 		const connection = await connectToGTK.initialize();
 		if (connection.success) {
-			this.setState({ gtkBridgeConnection: { port: connection.port } });
+			this.setState({ gtkBridgeConnection: { domain: connection.domain } });
 		}
-		await this.desktopManager.packageManager.searchForNewPackages();
 	}
 	launchApp: DesktopProps["onLaunchApp"] = async (app) => {
 		this.logger.info(`launch app ${app.name}`);
@@ -110,6 +140,9 @@ class Desktop extends Component<{}, DesktopState> {
 			customTheme,
 			theme,
 			gtkBridgeConnection,
+			servicesAppsDomains,
+			externalViewsImportPaths,
+			externalViewsHostDomain,
 		} = this.state;
 		return (
 			<ViewsProvider<ViewInterfacesType>>
@@ -123,6 +156,9 @@ class Desktop extends Component<{}, DesktopState> {
 							nativeBackground={nativeBackground}
 							onCloseApp={this.closeApp}
 							onLaunchApp={this.launchApp}
+							servicesAppsDomains={servicesAppsDomains}
+							externalViewsHostDomain={externalViewsHostDomain || ""}
+							externalViewsImportPaths={externalViewsImportPaths}
 						>
 							{this.props.children}
 						</DesktopView>

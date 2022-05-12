@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"sourceMap": true,
+		"types": ["vite/client"],
+		"target": "esnext",
+		"module": "esnext",
+		"declaration": true,
+		"outDir": "lib",
+		"jsx": "react",
+		"esModuleInterop": true,
+		"moduleResolution": "Node"
+	},
+	"include": ["lib/**/*"],
+	"exclude": ["**/node_modules"]
+}

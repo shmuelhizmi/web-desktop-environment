@@ -7,7 +7,9 @@
     "outDir": "dist",
     "jsx": "react",
     "esModuleInterop": true,
+    "rootDir": "src",
     "baseUrl": "src",
+    "resolveJsonModule": true,
     "paths": {
       "@index": ["index"],
       "@components/*": ["components/*"],

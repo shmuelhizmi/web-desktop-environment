@@ -30,7 +30,7 @@ export interface Input {
   onMove: (parameters: Move) => void;
   onCopy: (parameters: Move) => void;
   onDelete: (path: string) => void;
-  onRequestDownloadLink: (path: string) => Promise<{ path: string; port: number; }>; // download link
+  onRequestDownloadLink: (path: string) => Promise<{ path: string; downloadServerDomain: string }>; // download link
   onChangeCurrentPath: (path: string) => void;
   onSelect?: (path: string) => void;
 }

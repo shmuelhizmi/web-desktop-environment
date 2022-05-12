@@ -1,9 +1,13 @@
 /* eslint-disable */
 /* Helper functions for debugging */
 
-const { inflateRaw } = require("zlib");
-const { default: WindowManager } = require("../state/WindowManager");
-const { GTKBridgeEmitter } = require("./state");
+// const { inflateRaw } = require("zlib");
+// const { default: WindowManager } = require("../state/WindowManager");
+// const { GTKBridgeEmitter } = require("./state");
+// import { inflateRaw } from "zlib";
+import WindowManager from "../state/WindowManager";
+import { GTKBridgeEmitter } from "./state";
+import pako from "pako";
 
 
 const rootDiv = document.createElement("div");
@@ -560,22 +564,38 @@ function cmdPutBuffer(id, w, h, compressed) {
 	var surface = surfaces[id];
 	var context = surface.canvas.getContext("2d");
 
-	inflateRaw(compressed, (e, data) => {
-		var imageData = decodeBuffer(
-			context,
-			surface.imageData,
-			w,
-			h,
-			data,
-			debugDecoding
-		);
-		context.putImageData(imageData, 0, 0);
+	// inflateRaw(compressed, (e, data) => {
+	// 	var imageData = decodeBuffer(
+	// 		context,
+	// 		surface.imageData,
+	// 		w,
+	// 		h,
+	// 		data,
+	// 		debugDecoding
+	// 	);
+	// 	context.putImageData(imageData, 0, 0);
 
-		if (debugDecoding)
-			imageData = decodeBuffer(context, surface.imageData, w, h, data, false);
+	// 	if (debugDecoding)
+	// 		imageData = decodeBuffer(context, surface.imageData, w, h, data, false);
 
-		surface.imageData = imageData;
-	});
+	// 	surface.imageData = imageData;
+	// });
+	
+	// replace with pako
+	var imageData = decodeBuffer(
+		context,
+		surface.imageData,
+		w,
+		h,
+		pako.inflate(compressed),
+		debugDecoding
+	);
+	context.putImageData(imageData, 0, 0);
+
+	if (debugDecoding)
+		imageData = decodeBuffer(context, surface.imageData, w, h, compressed, false);
+
+	surface.imageData = imageData;
 }
 
 function cmdGrabPointer(id, ownerEvents) {
@@ -2864,9 +2884,9 @@ function start() {
 }
 
 
-export function connect(host, https, port) {
+export function connect(url) {
 	const ws = new WebSocket(
-		`${https ? "wss" : "ws"}://${host}:${port}/socket`,
+		url,
 		"broadway"
 	);
 	GTKBridgeEmitter.call("status", "connecting");

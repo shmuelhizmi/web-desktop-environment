@@ -1,45 +1,60 @@
 {
-  "name": "@web-desktop-environment/home-edition-server",
-  "version": "1.0.2",
-  "main": "dist",
-  "author": "shmuelhizmi",
-  "license": "MIT",
-  "private": false,
-  "scripts": {
-    "start": "nodemon .",
-    "build": "tsc",
-    "build:server": "npm run build",
-    "lint": "eslint .",
-    "prepublish": "npm run build"
-  },
-  "bin": {
-    "web-desktop-home": "./bin/index.js"
-  },
-  "files": [],
-  "devDependencies": {
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^3.6.1",
-    "@typescript-eslint/parser": "^3.6.1",
-    "eslint": "^7.5.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "7.20.6",
-    "nodemon": "2.0.4",
-    "prettier": "^2.0.5",
-    "ts-node": "9.0.0",
-    "tsconfig-paths": "3.9.0",
-    "typescript": "^4.2.3"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/shmuelhizmi/web-desktop-environment",
-    "directory": "packages/servers/home-edition-server"
-  },
-  "dependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/pack-core": "^1.0.2",
-    "@web-desktop-environment/server-api": "^1.0.2",
-    "@web-desktop-environment/server-sdk": "^1.0.2"
-  }
+	"name": "@web-desktop-environment/home-edition-server",
+	"scripts": {
+		"prepublishOnly": "npm run build",
+		"start": "nodemon .",
+		"build": "tsc",
+		"build:server": "npm run build",
+		"lint": "eslint ."
+	},
+	"bin": {
+		"web-desktop-home": "./bin/index.js"
+	},
+	"apps": [
+		"@web-desktop-environment/pack-core"
+	],
+	"main": "dist",
+	"version": "2.0.0-14",
+	"author": "shmuelhizmi",
+	"license": "MIT",
+	"private": false,
+	"devDependencies": {
+		"@types/node": "^12.0.0",
+		"@types/react": "^17.0.3",
+		"@typescript-eslint/eslint-plugin": "^3.6.1",
+		"@typescript-eslint/parser": "^3.6.1",
+		"eslint": "^7.5.0",
+		"eslint-config-prettier": "^6.11.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-react": "7.20.6",
+		"nodemon": "2.0.4",
+		"prettier": "^2.0.5",
+		"tsconfig-paths": "3.9.0",
+		"typescript": "^4.6.3"
+	},
+	"files": [
+		"lib/**/*.d.ts",
+		"lib/**/*.js",
+		"lib/**/*.js.map",
+		"bin/**.js",
+		"src/**/*",
+		"dist/**/*",
+		"app/**/*",
+		"README.md",
+		"tsconfig.json",
+		"assets/**/*"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/shmuelhizmi/web-desktop-environment",
+		"directory": "packages/servers/home-edition-server"
+	},
+	"dependencies": {
+		"@react-fullstack/fullstack": "0.3.0",
+		"@web-desktop-environment/pack-core": "^2.0.0-14",
+		"@web-desktop-environment/server-api": "^2.0.0-14",
+		"@web-desktop-environment/server-sdk": "^2.0.0-14",
+		"ts-node": "10.7.0"
+	},
+	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

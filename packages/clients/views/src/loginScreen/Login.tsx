@@ -7,7 +7,12 @@ import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Link } from "react-router-dom";
 
 interface LoginProps {
-	onLogin: (host: string, port: number, useHttps: boolean) => void;
+	onLogin: (
+		host: string,
+		port: number,
+		useHttps: boolean,
+		token: string
+	) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -96,19 +101,79 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }));
 
+function isValidUrl(url: string) {
+	try {
+		new URL(url);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export const loginStorage = {
+	get host() {
+		return localStorage.getItem("last-host") || "localhost";
+	},
+	set host(host: string) {
+		localStorage.setItem("last-host", host);
+	},
+	get port() {
+		return Number(localStorage.getItem("last-port")) || 5000;
+	},
+	set port(port: number) {
+		localStorage.setItem("last-port", port.toString());
+	},
+	get token() {
+		return localStorage.getItem("token") || "";
+	},
+	set token(token: string) {
+		localStorage.setItem("token", token);
+	},
+	get https() {
+		return window.location.protocol === "https:";
+	},
+};
+
 const Login = (props: LoginProps) => {
 	const classes = useStyles();
-	const [host, setHost] = useState(
-		window.localStorage.getItem("last-host") || "localhost"
-	);
-	const [port, setPort] = useState(
-		Number(window.localStorage.getItem("last-port")) || 5000
-	);
-	const [https /* , setHttps */] = useState(false);
+	const [host, setHost] = useState(loginStorage.host);
+	const [port, setPort] = useState(loginStorage.port);
+	const [passcode, setPasscode] = useState("");
+	const [isValid, setIsValid] = useState(false);
+	const [token, setToken] = useState("");
 	useEffect(() => {
-		window.localStorage.setItem("last-host", host);
-		window.localStorage.setItem("last-port", String(port));
+		loginStorage.host = host;
+		loginStorage.port = port;
 	}, [host, port]);
+
+	useEffect(() => {
+		setIsValid(false);
+		const url = `${loginStorage.https ? "https" : "http"}://${host}${
+			port ? `:${port}` : ""
+		}/login`;
+		if (isValidUrl(url) && passcode) {
+			fetch(url, {
+				method: "POST",
+				body: passcode,
+			})
+				.then((res) =>
+					res.json().then((data) => {
+						if (res.status === 200) {
+							setIsValid(true);
+							setToken(data.token);
+							loginStorage.token = data.token;
+							// window.location.pathname = '/connect/link/' + btoa(JSON.stringify({
+							// 	host,
+							// 	port,
+							// 	https,
+							// 	token: data.token,
+							// }))
+						}
+					})
+				)
+				.catch(() => null);
+		}
+	}, [passcode, host, port, loginStorage.https]);
 	return (
 		<div className={classes.root}>
 			<div className={classes.flexEnd}>
@@ -130,6 +195,12 @@ const Login = (props: LoginProps) => {
 						onChange={(newValue) => setPort(Number(newValue))}
 						placeholder="port"
 					></TextField>
+					<TextField
+						value={passcode}
+						onChange={(newValue) => setPasscode(newValue || "")}
+						placeholder="passcode"
+						password
+					></TextField>
 					{/* <div className={classes.flex}>
 						<input
 							type="checkbox"
@@ -140,7 +211,9 @@ const Login = (props: LoginProps) => {
 					</div> */}
 					<Button
 						variant="main"
-						onClick={() => props.onLogin(host, port, https)}
+						onClick={() =>
+							isValid && props.onLogin(host, port, loginStorage.https, token)
+						}
 						color="background"
 						border
 					>

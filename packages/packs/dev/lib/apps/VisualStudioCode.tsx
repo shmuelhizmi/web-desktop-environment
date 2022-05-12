@@ -1,9 +1,10 @@
 import React from "react";
 import { homedir } from "os";
 import * as cp from "child_process";
-import axios from "axios";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 import { APIClient } from "@web-desktop-environment/server-api";
+import http from "http";
+
 interface VSCodeInput {
 	process?: string;
 	args?: string[];
@@ -13,6 +14,7 @@ interface VSCodeInput {
 interface VSCodeState {
 	port?: number;
 	isLoaded: boolean;
+	id?: string;
 }
 
 class VSCode extends AppBase<VSCodeInput, VSCodeState> {
@@ -27,27 +29,32 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 
 	willUnmount = false;
 
-	runVsCodeCli = (port: number): void => {
+	runVsCodeCli = (port: number, domain: string): void => {
 		this.vscode = cp.spawn(
-			"npm",
+			process.execPath,
 			[
-				"run",
-				"code-server",
-				"--",
+				require.resolve("code-server/out/node/entry.js"),
 				`--port=${port}`,
 				"--auth=none",
 				"--host=0.0.0.0",
+				process.cwd() + "/",
 			],
-			{ cwd: __dirname, stdio: ["ipc"] }
+			{
+				stdio: ["ipc"],
+				env: {
+					PUBLIC_URL: `/${domain}/*/`,
+				},
+			}
 		);
 		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {
-				axios
-					.get("http://localhost:" + port)
-					.then(() => !this.willUnmount && this.setState({ isLoaded: true }))
-					.catch(() => {
-						setTimeout(() => waitForVscodeToLoad(), 250);
+				http
+					.get(`http://localhost:${port}/`, (res) => {
+						this.setState({ isLoaded: true });
+					})
+					.on("error", (e) => {
+						setTimeout(waitForVscodeToLoad, 100);
 					});
 			}
 		};
@@ -60,9 +67,9 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	};
 
 	componentDidMount = () => {
-		this.api.portManager.getPort().then(({ port }) => {
-			this.setState({ port });
-			this.runVsCodeCli(port);
+		this.api.portManager.withDomain().then(({ port, domain }) => {
+			this.runVsCodeCli(port, domain);
+			this.setState({ port, id: domain });
 		});
 	};
 
@@ -70,10 +77,10 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 		Iframe,
 		LoadingScreen,
 	}) => {
-		const { port, isLoaded } = this.state;
+		const { id, isLoaded } = this.state;
 
-		return port && isLoaded ? (
-			<Iframe port={port} />
+		return id && isLoaded ? (
+			<Iframe id={id} type="internal" />
 		) : (
 			<LoadingScreen message={"loading vs-code"} variant="jumpCube" />
 		);
@@ -91,6 +98,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "VscCode",
 			},
+			color: "#219CF0",
 			window: {
 				height: 700,
 				width: 1000,

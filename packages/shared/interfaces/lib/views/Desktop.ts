@@ -17,7 +17,7 @@ export interface App {
 }
 
 export interface GTKBridge {
-	port: number;
+	domain: string;
 }
 
 export interface Input {
@@ -26,6 +26,9 @@ export interface Input {
   nativeBackground: string;
   apps: App[];
   openApps: OpenApp[];
+  servicesAppsDomains: string[];
+  externalViewsImportPaths: string[];
+  externalViewsHostDomain: string;
   onLaunchApp: (app: {
     name: string;
     params: any;

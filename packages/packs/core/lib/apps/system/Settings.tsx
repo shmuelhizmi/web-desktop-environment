@@ -99,7 +99,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "FcSettings",
 			},
-			color: "#C0CBCF",
+			color: "#979896",
 			window: {
 				height: 600,
 				width: 920,

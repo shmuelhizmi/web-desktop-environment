@@ -4,7 +4,7 @@ import { ViewsProvider } from "@react-fullstack/fullstack";
 import { ViewsToServerComponents } from "@react-fullstack/fullstack/lib/Views";
 import API from "@web-desktop-environment/server-api";
 import Window from "./window";
-import { App } from "../appManger";
+import { App } from "../appManager";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 
 export interface AppBaseProps<Input, PropsForRunningAsChildApp> {
@@ -31,9 +31,9 @@ abstract class AppBase<
 	State & AppBaseState
 > {
 	protected api = API;
-	_logger: LoggingManager;
+	private _logger: LoggingManager;
 	abstract name: string;
-	get logger() {
+	protected get logger() {
 		if (!this._logger) {
 			this._logger = this.props.parentLogger.mount(this.name);
 		}

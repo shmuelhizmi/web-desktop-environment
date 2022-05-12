@@ -177,12 +177,12 @@ class Desktop extends Component<
 						key={app.id}
 						value={{
 							host: reactFullstackConnectionManager.host,
-							port: app.port,
+							id: app.id,
 						}}
 					>
 						<Client<{}>
 							{...reactFullstackConnectionManager.connect(
-								app.port,
+								"app-" + app.id,
 								"nativeHost"
 							)}
 						/>

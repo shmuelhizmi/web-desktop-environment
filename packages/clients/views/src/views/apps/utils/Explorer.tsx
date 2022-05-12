@@ -9,8 +9,8 @@ import Button from "@components/button";
 import Icon from "@components/icon";
 import TextField from "@components/textField";
 import Emitter from "@utils/Emitter";
-import { reactFullstackConnectionManager } from "@root/index";
 import { transparent } from "@utils/colors";
+import { getUrl } from "@root/../../../sdk/web/lib";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -65,21 +65,21 @@ const styles = (theme: Theme) =>
 			transition: "background 100ms, transform 100ms",
 			...(theme.type === "transparent"
 				? {
-						backdropFilter: "blur(7px)",
-						boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
-						background: theme.background.transparent,
-						borderBottom: `1px solid ${theme.windowBorderColor}`,
-				  }
+					backdropFilter: "blur(7px)",
+					boxShadow: `-1px 2px 20px 1px ${theme.shadowColor}`,
+					background: theme.background.transparent,
+					borderBottom: `1px solid ${theme.windowBorderColor}`,
+				}
 				: {}),
 			"&:hover": {
 				...(theme.type === "transparent"
 					? {
-							backdropFilter: "blur(13px)",
-							background: theme.secondary.light,
-					  }
+						backdropFilter: "blur(13px)",
+						background: theme.secondary.light,
+					}
 					: {
-							background: theme.secondary.light,
-					  }),
+						background: theme.secondary.light,
+					}),
 			},
 		},
 		"@keyframes opacityUp": {
@@ -599,15 +599,13 @@ class Explorer extends Component<
 						<div className={classes.breadcrumbFilesContainer}>
 							{this.getBreadcrumbLocations(6).map((breadcrumbItem, index) => (
 								<div
-									className={`${classes.breadcrumbButtonItem} ${
-										breadcrumbItem.isFirst
+									className={`${classes.breadcrumbButtonItem} ${breadcrumbItem.isFirst
 											? classes.breadcrumbButtonItemFirst
 											: ""
-									} ${
-										breadcrumbItem.isLast
+										} ${breadcrumbItem.isLast
 											? classes.breadcrumbButtonItemLast
 											: ""
-									}`}
+										}`}
 									key={index}
 									onDrop={breadcrumbItem.onDrop}
 									onDragOverCapture={(e) => e.preventDefault()}
@@ -620,11 +618,10 @@ class Explorer extends Component<
 					</div>
 				</div>
 				<div
-					className={`${classes.fileBoxContainer} ${
-						type === "explore" && !prompt && !confirm
+					className={`${classes.fileBoxContainer} ${type === "explore" && !prompt && !confirm
 							? ""
 							: classes.fileContainerMini
-					}`}
+						}`}
 				>
 					{type === "explore" && !prompt && !confirm && (
 						<div className={classes.actionBarContainer}>
@@ -775,11 +772,11 @@ class Explorer extends Component<
 												(state) =>
 													state.confirm?.message
 														? {
-																confirm: {
-																	message: state.confirm.message,
-																	result: false,
-																},
-														  }
+															confirm: {
+																message: state.confirm.message,
+																result: false,
+															},
+														}
 														: {},
 												() =>
 													this.emitter.call(
@@ -799,11 +796,11 @@ class Explorer extends Component<
 												(state) =>
 													state.confirm?.message
 														? {
-																confirm: {
-																	message: state.confirm.message,
-																	result: true,
-																},
-														  }
+															confirm: {
+																message: state.confirm.message,
+																result: true,
+															},
+														}
 														: {},
 												() =>
 													this.emitter.call(
@@ -823,15 +820,13 @@ class Explorer extends Component<
 								<div className={classes.fileContainer}>
 									{files.map((file, index) => (
 										<div
-											className={`${classes.file} ${
-												fileIsOverFile === index || selectedFile === index
+											className={`${classes.file} ${fileIsOverFile === index || selectedFile === index
 													? classes.fileActive
 													: ""
-											} ${
-												this.state.dragedFile === file
+												} ${this.state.dragedFile === file
 													? classes.transparent
 													: ""
-											}`}
+												}`}
 											key={index}
 											draggable
 											onDrag={() => {
@@ -862,15 +857,12 @@ class Explorer extends Component<
 															) {
 																onRequestDownloadLink(
 																	this.selectedFile.fullPath
-																).then((result) => {
+																).then(({ path, downloadServerDomain }) => {
 																	this.setState({
-																		downloadUrl: `${
-																			reactFullstackConnectionManager.https
-																				? "https"
-																				: "http"
-																		}://${
-																			reactFullstackConnectionManager.host
-																		}:${result.port}${result.path}`,
+																		downloadUrl: getUrl(
+																			downloadServerDomain,
+																			path,
+																		),
 																	});
 																});
 															}

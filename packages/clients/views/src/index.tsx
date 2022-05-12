@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
-import Login from "@root/loginScreen/Login";
+import Login, { loginStorage } from "@root/loginScreen/Login";
 import Demo from "@root/demo/App";
 import "@root/index.css";
 import * as webViews from "@root/views";
 import * as webViewsWindow from "@root/views/windowViews";
 import * as nativeViewsHost from "@root/views/native/hostViews";
 import * as nativeViewsClient from "@root/views/native/clientViews";
+import * as serviceViews from "@root/views/services";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
 import { ThemeProvider as TP } from "@material-ui/styles";
@@ -15,25 +16,45 @@ import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
+import "@web-desktop-environment/interfaces/lib/web/sdk";
 
-type Views = "web" | "webWindow" | "nativeHost" | "nativeClient";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+window.react = React;
+
+type Views =
+	| "web"
+	| "webWindow"
+	| "nativeHost"
+	| "nativeClient"
+	| "serviceViews";
 
 const viewsMap = {
 	web: webViews,
 	nativeHost: nativeViewsHost,
 	nativeClient: nativeViewsClient,
 	webWindow: webViewsWindow,
+	serviceViews,
 };
 
 class ReactFullstackConnectionManager {
 	public readonly host: string;
 	public readonly https: boolean;
-	constructor(host: string, https: boolean) {
+	public readonly mainPort: number;
+	public readonly token: string;
+	constructor(
+		host: string,
+		https: boolean,
+		mainPort: number,
+		token: string = loginStorage.token
+	) {
 		this.host = host;
 		this.https = https;
+		this.mainPort = mainPort;
+		this.token = token;
 	}
 	connect = <V extends Views>(
-		port: number,
+		domain: string,
 		views: V
 	): {
 		port: number;
@@ -43,10 +64,11 @@ class ReactFullstackConnectionManager {
 	} => {
 		return {
 			host: `${this.https ? "https" : "http"}://${this.host}`,
-			port,
+			port: this.mainPort,
 			views: { ...viewsMap[views] },
 			socketOptions: {
 				transports: ["websocket"],
+				path: `/${domain}/${this.token}/socket.io`,
 			},
 		};
 	};
@@ -62,110 +84,122 @@ export const connectToServer = (
 ) => {
 	reactFullstackConnectionManager = new ReactFullstackConnectionManager(
 		host,
-		useHttps
+		useHttps,
+		port
 	);
-	return reactFullstackConnectionManager.connect(port, views);
+	return reactFullstackConnectionManager.connect("desktop", views);
+};
+
+window.wdeSdk = {
+	get host() {
+		return reactFullstackConnectionManager.host;
+	},
+	get https() {
+		return reactFullstackConnectionManager.https;
+	},
+	get token() {
+		return reactFullstackConnectionManager.token;
+	},
+	get port() {
+		return reactFullstackConnectionManager.mainPort;
+	},
 };
 
 const App = () => {
-	const [login, setLogin] = useState<{
+	const [login, setLogin] = React.useState<{
 		isLoggedIn: boolean;
 		host: string;
 		port: number;
-	}>({ host: "localhost", port: 5000, isLoggedIn: false });
+		https: boolean;
+	}>({
+		host: loginStorage.host,
+		port: loginStorage.port,
+		isLoggedIn: false,
+		https: false,
+	});
 	return (
 		<TP theme={defaultTheme}>
 			<Router>
 				<Switch>
 					<Route path="/demo">{() => <Demo />}</Route>
+					<Route path="/auto">
+						{() => (
+							<ConnectionContext.Provider value={login}>
+								<Client<{}>
+									{...connectToServer(
+										login.host,
+										login.https,
+										Number(login.port),
+										"web"
+									)}
+								/>
+							</ConnectionContext.Provider>
+						)}
+					</Route>
 					<Route path="/native">
-						<Switch>
-							<Route
-								path="/native/connect/:host/:port/"
-								render={(login) => {
-									const { host, port } = login.match?.params;
-									return (
-										<StateComponent<{}> defaultState={{}}>
-											{() => (
-												<ConnectionContext.Provider
-													value={{ host, port: Number(port) }}
-												>
-													<Client<{}>
-														{...connectToServer(
-															host,
-															false,
-															Number(port),
-															"nativeHost"
-														)}
-													/>
-												</ConnectionContext.Provider>
-											)}
-										</StateComponent>
-									);
-								}}
-							></Route>
-							<Route path="/native/client/connect/:host/:port/">
-								{(login) => {
-									const { host, port } = login.match?.params || {};
-
-									if (host && port) {
-										return (
-											<ConnectionContext.Provider
-												value={{ host, port: Number(port) }}
-											>
-												<Client<{}>
-													{...connectToServer(
-														host,
-														false,
-														Number(port),
-														"nativeClient"
-													)}
-												/>
-											</ConnectionContext.Provider>
-										);
-									}
-								}}
-							</Route>
-							<Route>
-								{() =>
-									login.isLoggedIn ? (
-										<ConnectionContext.Provider value={login}>
-											<Client<{}>
-												{...connectToServer(
-													login.host,
-													false,
-													Number(login.port),
-													"nativeHost"
-												)}
-											/>
-										</ConnectionContext.Provider>
-									) : (
-										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
-											}
-										/>
-									)
-								}
-							</Route>
-						</Switch>
+						{() => (
+							<ConnectionContext.Provider value={login}>
+								<Client<{}>
+									{...connectToServer(
+										login.host,
+										login.https,
+										Number(login.port),
+										"nativeHost"
+									)}
+								/>
+							</ConnectionContext.Provider>
+						)}
+					</Route>
+					<Route path="/view/:id">
+						{(params) => {
+							connectToServer(
+								login.host,
+								login.https,
+								Number(login.port),
+								"nativeClient"
+							);
+							const id = params.match?.params.id || "";
+							return (
+								<ConnectionContext.Provider
+									value={{ host: login.host, port: login.port, id }}
+								>
+									<Client<{}>
+										{...reactFullstackConnectionManager.connect(
+											id,
+											"nativeClient"
+										)}
+									/>
+								</ConnectionContext.Provider>
+							);
+						}}
 					</Route>
 					<Route>
 						<Switch>
-							<Route path="/connect/:host/:port/">
+							<Route path="/connect/link/:id">
 								{(login) => {
-									const { host, port } = login.match?.params || {};
-									if (host && port) {
-										return (
-											<ConnectionContext.Provider
-												value={{ host, port: Number(port) }}
-											>
-												<Client<{}>
-													{...connectToServer(host, false, Number(port), "web")}
-												/>
-											</ConnectionContext.Provider>
-										);
+									const { id } = login.match?.params || {};
+									if (!id) {
+										return null;
 									}
+									const data = JSON.parse(atob(id));
+									if (!data) {
+										return null;
+									}
+									loginStorage.token = data.token;
+									return (
+										<ConnectionContext.Provider
+											value={{ host: data.host, port: data.port }}
+										>
+											<Client<{}>
+												{...connectToServer(
+													data.host,
+													data.https,
+													data.port,
+													"web"
+												)}
+											/>
+										</ConnectionContext.Provider>
+									);
 								}}
 							</Route>
 							<Route>
@@ -175,7 +209,7 @@ const App = () => {
 											<Client<{}>
 												{...connectToServer(
 													login.host,
-													false,
+													login.https,
 													Number(login.port),
 													"web"
 												)}
@@ -183,8 +217,8 @@ const App = () => {
 										</ConnectionContext.Provider>
 									) : (
 										<Login
-											onLogin={(host, port) =>
-												setLogin({ host, port, isLoggedIn: true })
+											onLogin={(host, port, https) =>
+												setLogin({ host, port, isLoggedIn: true, https })
 											}
 										/>
 									)
@@ -201,3 +235,11 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById("root"));
 
 setUpDocument();
+
+if (location.host.includes("githubpreview")) {
+	// prevent hot reload with alert
+	window.onbeforeunload = () => {
+		alert("Are you sure you want to leave?");
+		return false;
+	};
+}

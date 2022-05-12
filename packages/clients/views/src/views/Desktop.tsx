@@ -27,6 +27,15 @@ import {
 } from "@root/gtk-broadway-display/state";
 import { isMobile } from "@utils/environment";
 import { useSwipeable, SwipeEventData } from "react-swipeable";
+import { MenuBar } from "@components/menubar";
+import { MenuBarLinkContext } from "@root/hooks/MenuBarItemPortal";
+import { EntryPointProps } from "@web-desktop-environment/interfaces/lib/web/sdk";
+import {
+	getUrl,
+	ProvideViews,
+	useTheme,
+} from "@web-desktop-environment/web-sdk";
+import { Service } from "./services";
 
 export const windowsBarHeight = 65;
 
@@ -191,6 +200,7 @@ const useWindowBarStyles = makeStyles(
 			overflowX: "auto",
 			overflowY: "hidden",
 			transition: "left 600ms, right 600ms, border-radius 600ms",
+			alignItems: "center",
 		},
 		"@keyframes slideUp": {
 			from: {
@@ -204,14 +214,29 @@ const useWindowBarStyles = makeStyles(
 			userSelect: "none",
 			fontSize: 40,
 			boxShadow: "0px 0px 10px 4px #0007",
-			transition: "border-bottom 100ms",
+			transition: "outline 100ms",
+			width: 40,
+			height: 40,
 			padding: 5,
+			border: `0px solid ${theme.primary.transparent || theme.primary.main}`,
+			outline: `0px solid ${theme.primary.main}`,
 			margin: 2,
 			borderRadius: 6,
 			marginRight: 7,
 			marginLeft: 7,
 			cursor: "pointer",
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
 			color: theme.background.text,
+			"& span": {
+				height: "min-content",
+				width: "min-content",
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+			},
 			"&:hover": {
 				background: theme.background.transparentDark || theme.background.dark,
 			},
@@ -224,11 +249,9 @@ const useWindowBarStyles = makeStyles(
 			borderRadius: 6,
 			fontSize: 20,
 			background: `${theme.background.main} !important`,
-			border: `solid 1px ${theme.windowBorderColor}`,
+			border: `solid 0px ${theme.windowBorderColor}`,
 			textAlign: "center",
 			animation: "$scaleUp 300ms",
-			display: "flex",
-			flexDirection: "column",
 		},
 		"@keyframes scaleUp": {
 			from: {
@@ -246,18 +269,12 @@ const useWindowBarStyles = makeStyles(
 		},
 		windowsBarButtonActive: {
 			backdropFilter: "blur(15px)",
-			borderBottom: `${
-				theme.type === "transparent" ? theme.success.main : theme.secondary.main
-			} solid 6px !important`,
+			outline: `${theme.primary.main} solid 2px !important`,
 		},
 		windowsBarButtonOpen: {
-			borderBottom: `${
-				theme.type === "transparent" ? theme.success.main : theme.secondary.main
-			} solid 3px`,
+			outline: `${theme.primary.main} solid 1px`,
 		},
-		windowsBarButtonCloseMinimized: {
-			borderBottom: `${theme.secondary.dark} solid 3px`,
-		},
+		windowsBarButtonCloseMinimized: {},
 		"@media (min-width: 768px) and (max-width: 1024px)": {
 			windowsBar: {
 				left: 50,
@@ -272,11 +289,6 @@ const useWindowBarStyles = makeStyles(
 				height: windowsBarHeight + 5,
 				borderRadius: 0,
 			},
-			windowsBarButton: {
-				borderRadius: 0,
-				boxShadow: "none",
-				backdropFilter: "blur(9px)",
-			},
 		},
 	}),
 	{ name: "WindowBar" }
@@ -284,7 +296,7 @@ const useWindowBarStyles = makeStyles(
 
 class Desktop extends Component<
 	DesktopInterface,
-	{},
+	{ views: {}; isLoadingViews: boolean },
 	WithStyles<typeof styles>
 > {
 	renderAppListCell = (app: App, index: number, closeMenu: () => void) => {
@@ -301,7 +313,11 @@ class Desktop extends Component<
 				}}
 			>
 				{app.icon.type === "img" ? (
-					<img alt={`${app.displayName} icon`} src={app.icon.icon} />
+					<img
+						alt={`${app.displayName} icon`}
+						src={app.icon.icon}
+						className={classes.appIcon}
+					/>
 				) : (
 					<Icon className={classes.appIcon} name={app.icon.icon}></Icon>
 				)}
@@ -330,10 +346,62 @@ class Desktop extends Component<
 		);
 
 		this.tryToStartGtkServer();
+		this.importPaths(this.props.externalViewsImportPaths);
 	};
 
 	componentDidUpdate = () => {
 		this.tryToStartGtkServer();
+	};
+
+	shouldComponentUpdate = (
+		nextProps: Desktop["props"],
+		_nextState: Desktop["state"]
+	) => {
+		const {
+			externalViewsImportPaths: currentExternalViewsImportPaths,
+		} = this.props;
+		const {
+			externalViewsImportPaths: nextExternalViewsImportPaths,
+		} = nextProps;
+		const differentExternalViewsImportPaths = nextExternalViewsImportPaths.filter(
+			(path) => !currentExternalViewsImportPaths.includes(path)
+		);
+		this.importPaths(differentExternalViewsImportPaths);
+		return true;
+	};
+
+	importPaths = async (paths: string[]) => {
+		if (paths.length === 0) {
+			return;
+		}
+		this.setState({
+			isLoadingViews: true,
+		});
+		await Promise.all(paths.map(this.importPath));
+		this.setState({
+			isLoadingViews: false,
+		});
+	};
+
+	importPath = async (path: string) => {
+		const { externalViewsHostDomain } = this.props;
+		const importUrl = getUrl(externalViewsHostDomain, path);
+		const { default: main } = (await this.importWithoutWebpack(importUrl)) as {
+			default: (props: EntryPointProps) => any;
+		};
+		this.setState((state) => ({
+			views: {
+				...state.views,
+				...main({
+					packageBaseline: new URL(".", importUrl).href,
+				}),
+			},
+		}));
+	};
+
+	// import es module and skip webpack
+	importWithoutWebpack = async (path: string) => {
+		return import(/* @vite-ignore */ path);
 	};
 
 	tryToStartGtkServer = () => {
@@ -341,11 +409,7 @@ class Desktop extends Component<
 			const { gtkBridge } = this.props;
 			if (GTKConnectionStatus === "disconnected" && gtkBridge) {
 				try {
-					connectToBroadway(
-						reactFullstackConnectionManager.host,
-						reactFullstackConnectionManager.https,
-						gtkBridge.port
-					);
+					connectToBroadway(getUrl(gtkBridge.domain, "/socket", true));
 				} catch (e) {
 					/* no handle */
 				}
@@ -353,34 +417,71 @@ class Desktop extends Component<
 		}
 	};
 
+	state = { views: {}, isLoadingViews: false };
+
+	menuBarRef = React.createRef<HTMLDivElement>();
+
 	render() {
-		const { background, openApps, classes, apps } = this.props;
+		const {
+			background,
+			openApps,
+			classes,
+			apps,
+			servicesAppsDomains,
+		} = this.props;
+		const { views, isLoadingViews } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>
-				{openApps.map((app) => (
-					<ConnectionContext.Provider
-						key={app.id}
-						value={{
-							host: reactFullstackConnectionManager.host,
-							port: app.port,
-						}}
-					>
-						<Client<{}>
-							key={app.id}
-							{...reactFullstackConnectionManager.connect(
-								app.port,
-								"webWindow"
-							)}
+				<MenuBar div={this.menuBarRef} />
+				{!isLoadingViews &&
+					openApps.map((app) => {
+						const connection = reactFullstackConnectionManager.connect(
+							"app-" + app.id,
+							"webWindow"
+						);
+						const viewsToProvide = { ...connection.views, ...views };
+						return (
+							<ConnectionContext.Provider
+								key={app.id}
+								value={{
+									host: reactFullstackConnectionManager.host,
+									port: app.port,
+								}}
+							>
+								<ProvideViews value={viewsToProvide}>
+									<Client<{}>
+										key={app.id}
+										{...connection}
+										views={viewsToProvide}
+									/>
+								</ProvideViews>
+							</ConnectionContext.Provider>
+						);
+					})}
+				<MenuBarLinkContext.Provider value={this.menuBarRef}>
+					{!isLoadingViews ? (
+						servicesAppsDomains.map((domain) => {
+							const connection = reactFullstackConnectionManager.connect(
+								domain,
+								"serviceViews"
+							);
+							const viewsToProvide = { ...connection.views, ...views };
+							return (
+								<ProvideViews value={viewsToProvide} key={domain}>
+									<Client<{}> {...connection} views={viewsToProvide} />
+								</ProvideViews>
+							);
+						})
+					) : (
+						<Service
+							icon={{ icon: "VscLoading", type: "icon" }}
+							buttons={[]}
+							onAction={() => null as any}
+							text="Loading Desktop..."
 						/>
-					</ConnectionContext.Provider>
-				))}
-				{!isMobile() && (
-					<Link to="/native">
-						<div className={classes.switchToNativeButton}>
-							<Icon width={40} height={40} name="VscWindow" />
-						</div>
-					</Link>
-				)}
+					)}
+				</MenuBarLinkContext.Provider>
+
 				<StateComponent
 					defaultState={{ isStartMenuOpen: false, startMenuQuery: "" }}
 				>
@@ -443,6 +544,7 @@ export const WindowBar = ({
 	isStartMenuOpen: boolean;
 }) => {
 	const classes = useWindowBarStyles();
+	const theme = useTheme();
 	const [openWindows, setOpenWindows] = useState(windowManager.windows);
 	const [selectedButton, setSelectedButton] = useState<number | undefined>(
 		undefined
@@ -515,6 +617,7 @@ export const WindowBar = ({
 		windowManager.emitter.on("maximizeWindow", updateWindow);
 		windowManager.emitter.on("minimizeWindow", updateWindow);
 		windowManager.emitter.on("setActiveWindow", updateWindow);
+		windowManager.emitter.on("updateWindow", updateWindow);
 		if (mobileView) {
 			documentSwipeRef(document.body);
 		}
@@ -532,7 +635,7 @@ export const WindowBar = ({
 						: classes.windowsBarButtonOpen
 				} ${isStartMenuOpen ? classes.windowsBarButtonActive : ""}`}
 				onClick={() => toggleStartMenu()}
-				style={{ background: makeAppColor() }}
+				style={{ background: makeAppColor(theme.background.main) }}
 			>
 				<Icon width={40} height={40} name="FcList" />
 			</div>
@@ -554,7 +657,7 @@ export const WindowBar = ({
 							? classes.windowsBarButtonActive
 							: ""
 					}`}
-					style={{ background: makeAppColor(openWindow.color) }}
+					style={{ background: makeAppColor(theme.background.main) }}
 					onClick={() => onOpenWindow(openWindow)}
 				>
 					{openWindow.icon.type === "img" ? (

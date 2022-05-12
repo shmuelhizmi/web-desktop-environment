@@ -98,16 +98,16 @@ class Explorer extends AppBase<
 		await this.updateFiles();
 	};
 	requestDownloadLink = async (path: string) => {
-		const [{ hash }, port] = await Promise.all([
+		const [{ hash }, domain] = await Promise.all([
 			this.api.downloadManager.addFile(path),
-			this.api.downloadManager.getDownloadManagerPort(),
+			this.api.downloadManager.getDownloadManagerDomain(),
 		]);
 		this.logger.info(
 			`user request download link for ${path} secret hash is ${hash}`
 		);
 		return {
 			path: `/${hash}`,
-			port,
+			downloadServerDomain: domain,
 		};
 	};
 	componentDidMount = () => {
@@ -162,7 +162,7 @@ export const registerApp = () => {
 				type: "icon",
 				icon: "FcFolder",
 			},
-			color: "#19A9F7",
+			color: "#ECB22F",
 			displayName: "Explorer",
 			window: {
 				height: 600,

@@ -11,7 +11,7 @@ interface PlayerState {
 	isOpeningFile: boolean;
 	file?: string;
 	source?: string;
-	port?: number;
+	domain?: string;
 }
 
 class Player extends AppBase<PlayerInput, PlayerState> {
@@ -32,23 +32,23 @@ class Player extends AppBase<PlayerInput, PlayerState> {
 	};
 	onSelectFile = async (path: string) => {
 		this.setState({ file: path, isOpeningFile: false });
-		const [{ hash: source }, port] = await Promise.all([
+		const [{ hash: source }, domain] = await Promise.all([
 			this.api.downloadManager.addFile(path),
-			this.api.downloadManager.getDownloadManagerPort(),
+			this.api.downloadManager.getDownloadManagerDomain(),
 		]);
-		this.setState({ port, source });
+		this.setState({ domain, source });
 	};
 	renderApp: AppBase<PlayerInput, PlayerState>["renderApp"] = ({
 		MediaPlayer,
 	}) => {
-		const { isOpeningFile, file, port, source } = this.state;
+		const { isOpeningFile, file, domain, source } = this.state;
 		return (
 			<MediaPlayer
 				name={file ? basename(file) : ""}
 				isSelectingFile={isOpeningFile}
 				path={file}
 				source={source}
-				port={port}
+				downloadServerDomain={domain}
 				onReselectFile={() =>
 					this.setState({
 						isOpeningFile: true,
@@ -79,6 +79,7 @@ export const registerApp = () =>
 				type: "icon",
 				icon: "FcVideoCall",
 			},
+			color: "#1CD760",
 			window: {
 				height: 800,
 				width: 650,

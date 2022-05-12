@@ -1,20 +1,38 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
-  "version": "1.0.2",
-  "main": "dist",
-  "author": "shmuelhizmi",
-  "license": "MIT",
-  "private": false,
+  "version": "2.0.0-15",
   "scripts": {
+    "prepublish": "npm run build",
     "start": "nodemon .",
     "build": "tsc",
     "build:server": "npm run build",
-    "lint": "eslint .",
-    "prepublish": "npm run build"
+    "lint": "eslint ."
   },
   "bin": {
     "web-desktop-dev": "./bin/index.js"
   },
+  "apps": [
+    "@web-desktop-environment/pack-core",
+    "@web-desktop-environment/pack-dev",
+    "@web-desktop-environment/pack-remote"
+  ],
+  "main": "dist",
+  "author": "shmuelhizmi",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "dist/**/*",
+    "app/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*",
+    "wde.config.json"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
@@ -32,17 +50,19 @@
     "eslint-plugin-react": "7.20.6",
     "nodemon": "2.0.4",
     "prettier": "^2.0.5",
-    "ts-node": "9.0.0",
     "tsconfig-paths": "3.9.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.6.3"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
-    "@web-desktop-environment/interfaces": "^1.0.2",
-    "@web-desktop-environment/pack-core": "^1.0.2",
-    "@web-desktop-environment/pack-dev": "^1.0.2",
-    "@web-desktop-environment/server-api": "^1.0.2",
-    "@web-desktop-environment/server-sdk": "^1.0.2",
-    "react": "^17.0.1"
-  }
+    "@react-fullstack/fullstack": "0.3.0",
+    "@web-desktop-environment/interfaces": "^2.0.0-14",
+    "@web-desktop-environment/pack-core": "^2.0.0-14",
+    "@web-desktop-environment/pack-dev": "^2.0.0-14",
+    "@web-desktop-environment/pack-remote": "^2.0.0-15",
+    "@web-desktop-environment/server-api": "^2.0.0-14",
+    "@web-desktop-environment/server-sdk": "^2.0.0-14",
+    "react": "^17.0.2",
+    "ts-node": "10.7.0"
+  },
+  "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

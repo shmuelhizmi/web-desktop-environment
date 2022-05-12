@@ -1,16 +1,27 @@
 ARG VARIANT="16-bullseye"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
-
+###################################################
 WORKDIR /usr/src/web-desktop-environment
-
 COPY . .
+###################################################
+RUN set -e; \
+    apt-get update && \
+    apt-get install -qqy --no-install-recommends \
+    curl wget nano gnupg2 software-properties-common && \
+    rm -rf /var/lib/apt/lists;
 
-RUN npm install -g npm@latest
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -;
 
-RUN npm install --unsafe-perm
+RUN sudo wget -O "/usr/share/keyrings/xpra-2022.gpg" https://xpra.org/xpra-2022.gpg && \
+    sudo wget -O "/usr/share/keyrings/xpra-2018.gpg" https://xpra.org/xpra-2018.gpg;
 
-EXPOSE 5000
-EXPOSE 3000
-EXPOSE 9200-9400
+RUN sudo mkdir -p /etc/apt/sources.list.d/;
+RUN sudo curl https://xpra.org/repos/bullseye/xpra.list > /etc/apt/sources.list.d/xpra.list;
 
-CMD ["npm", "run", "dev:dev"]
+RUN set -e; \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends --assume-yes \
+    nodejs build-essential xpra && \
+    rm -rf /var/lib/apt/lists;
+
+RUN npm install -g yarn

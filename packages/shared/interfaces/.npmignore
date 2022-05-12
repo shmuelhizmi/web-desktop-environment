@@ -1,6 +1,1 @@
-/src
-/node_modules
-.nodemon.json
-.tsconfig.json
-.gitignore
-lib/**/*.ts
+

@@ -1,11 +1,12 @@
 {
   "name": "@web-desktop-environment/pack-dev",
-  "version": "1.0.2",
+  "version": "2.0.0-14",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
   "private": false,
   "scripts": {
+    "prepublishOnly": "npm run build",
     "start": "nodemon .",
     "watch": "nodemon --exec \"npm run build\" --watch src --watch node_modules",
     "code-server": "code-server",
@@ -18,6 +19,7 @@
   "bin": {
     "web-desktop-package-dev": "./bin/package.js"
   },
+  "packageName": "dev",
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.3",
@@ -30,22 +32,36 @@
     "nodemon": "2.0.4",
     "prettier": "^2.0.5"
   },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map",
+    "bin/**.js",
+    "src/**/*",
+    "dist/**/*",
+    "app/**/*",
+    "README.md",
+    "tsconfig.json",
+    "assets/**/*",
+    "wde.config.json"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/shmuelhizmi/web-desktop-environment",
     "directory": "packages/packs/dev"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.2.1",
-    "@react-fullstack/fullstack-socket-server": "0.2.1",
-    "@react-fullstack/render": "0.2.1",
-    "@web-desktop-environment/app-sdk": "^1.0.2",
-    "@web-desktop-environment/interfaces": "^1.0.2",
-    "@web-desktop-environment/server-api": "^1.0.2",
+    "@react-fullstack/fullstack": "0.3.0",
+    "@react-fullstack/fullstack-socket-server": "0.3.0",
+    "@react-fullstack/render": "0.3.0",
+    "@web-desktop-environment/app-sdk": "^2.0.0-14",
+    "@web-desktop-environment/interfaces": "^2.0.0-14",
+    "@web-desktop-environment/server-api": "^2.0.0-14",
     "axios": "0.21.1",
-    "code-server": "3.10.2",
-    "react": "^17.0.0",
-    "ts-node": "9.0.0",
-    "typescript": "^4.2.3"
-  }
+    "code-server": "4.4.0",
+    "react": "^17.0.2",
+    "ts-node": "10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

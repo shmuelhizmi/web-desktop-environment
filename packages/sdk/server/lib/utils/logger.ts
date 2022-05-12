@@ -37,12 +37,19 @@ export default class Logger {
 	};
 
 	public info = (message: string) => {
-		console.info(
-			`[ ${this.level} ]: ${color.green(
-				this.formatMessage(message)
-			)} ${this.getCurrentLogDelay()}`
-		);
+		if ((process.env.DEBUG || "").includes("INFO")) {
+			console.info(
+				`[ ${this.level} ]: ${color.green(
+					this.formatMessage(message)
+				)} ${this.getCurrentLogDelay()}`
+			);
+		}
 	};
+
+	public direct(message: string) {
+		console.info(message);
+	}
+
 	public error = (message: string) => {
 		console.error(
 			`[ ${this.level} ]: ${color.red(

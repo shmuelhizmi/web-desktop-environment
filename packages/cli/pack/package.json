@@ -12,6 +12,7 @@
   },
   "scripts": {
     "prepublishOnly": "npm run build",
+    "build": "echo nothing to build",
     "vite:dev": "vite build --watch ${PACKAGE_LOCATION}",
     "vite:build": "vite build"
   },

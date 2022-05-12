@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-api",
-  "version": "2.0.0-0",
+  "version": "2.0.0-1",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -19,7 +19,7 @@
     "directory": "packages/shared/api"
   },
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^2.0.0-0",
+    "@web-desktop-environment/interfaces": "^2.0.0-1",
     "uid": "2.0.0"
   },
   "devDependencies": {

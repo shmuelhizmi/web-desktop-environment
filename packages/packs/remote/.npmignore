@@ -4,3 +4,4 @@
 .tsconfig.json
 .gitignore
 /lib/**/*.ts
+/web/

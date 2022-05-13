@@ -14,3 +14,6 @@ export type SDK = {
 export type EntryPointProps = {
   packageBaseline: string;
 }
+
+// to avoid no export errors
+export default {};

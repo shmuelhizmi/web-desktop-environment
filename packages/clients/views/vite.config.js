@@ -12,10 +12,13 @@ export default defineConfig({
 	build: {
 		sourcemap: true,
 		outDir: "./build",
+		commonjsOptions: {
+			transformMixedEsModules: true,
+		},
 	},
 	optimizeDeps: {
 		esbuildOptions: {
-			// plugins: [esbuildCommonjs()],
+			plugins: [esbuildCommonjs()],
 		},
 	},
 	resolve: {

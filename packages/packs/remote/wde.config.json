@@ -11,5 +11,5 @@
     "xpra-decoder": "./web/xpraWorker/decoder"
   },
   "os": ["linux"],
-  "entry": "./app"
+  "entry": "./bin/package.js"
 }

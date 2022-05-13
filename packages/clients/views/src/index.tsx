@@ -14,9 +14,8 @@ import { ThemeProvider as TP } from "@material-ui/styles";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
-import StateComponent from "@components/stateComponent";
 import setUpDocument from "@utils/setupDocument";
-import "@web-desktop-environment/interfaces/lib/web/sdk";
+import type { SDK } from "@web-desktop-environment/interfaces/lib/web/sdk";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -103,7 +102,7 @@ window.wdeSdk = {
 	get port() {
 		return reactFullstackConnectionManager.mainPort;
 	},
-};
+} as SDK;
 
 const App = () => {
 	const [login, setLogin] = React.useState<{

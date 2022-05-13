@@ -40,7 +40,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		if (wdeConfig.os && !wdeConfig.os.includes(platform())) {
 			return;
 		}
-		const process = cp.spawn("ts-node", [path.join(root, wdeConfig.entry)], {
+		const process = cp.spawn("node", [path.join(root, wdeConfig.entry)], {
 			stdio: ["ipc"],
 		});
 		process.stdout.on("data", (data) => console.log(data.toString()));

@@ -38,6 +38,9 @@
     "nodemon": "2.0.4",
     "prettier": "^2.0.5",
     "ts-node": "10.7.0",
+    "@swc/core": "1.2.182",
+    "@swc/helpers": "0.3.13",
+    "regenerator-runtime": "0.13.9",
     "tsconfig-paths": "3.9.0",
     "typescript": "^4.6.3"
   },

@@ -25,7 +25,10 @@ interface DesktopState {
 	externalViewsHostDomain?: string;
 }
 
-class Desktop extends Component<{}, DesktopState> {
+class Desktop extends Component<
+	{ includeNativeX11Apps: boolean },
+	DesktopState
+> {
 	name = "desktop";
 	get openApps() {
 		return this.desktopManager.appsManager.runningApps.map((app) => ({
@@ -64,6 +67,9 @@ class Desktop extends Component<{}, DesktopState> {
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
+		if (this.props.includeNativeX11Apps) {
+			this.desktopManager.appsManager.readx11Apps();
+		}
 		this.desktopManager.appsManager.on("onOpenAppsUpdate", () => {
 			this.setState({
 				openApps: this.openApps,

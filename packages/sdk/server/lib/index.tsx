@@ -18,7 +18,9 @@ export const startServer = async (packageJSON: PackageJSON) => {
 		<Server views={viewInterfaces} singleInstance port={desktopPort}>
 			{() => (
 				<AppProvider.Provider value={{ desktopManager, logger: rootLogger }}>
-					<Desktop />
+					<Desktop
+						includeNativeX11Apps={!!packageJSON.wdeConfig?.includeNativeX11Apps}
+					/>
 				</AppProvider.Provider>
 			)}
 		</Server>

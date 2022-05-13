@@ -40,6 +40,9 @@ export interface PackageJSON {
     config?: {
         [key: string]: any;
     };
+    wdeConfig?: {
+        includeNativeX11Apps?: boolean;
+    }
 }
 
 export interface WDEPackageConfig {

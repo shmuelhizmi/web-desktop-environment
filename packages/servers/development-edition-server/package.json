@@ -64,5 +64,8 @@
     "react": "^17.0.2",
     "ts-node": "10.7.0"
   },
+  "wdeConfig": {
+    "includeNativeX11Apps": true
+  },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

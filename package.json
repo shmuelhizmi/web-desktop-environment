@@ -13,7 +13,9 @@
     "github-lint": "npm run install-ignore-scripts && lerna run prepare && npm run lint",
     "vercel-setup": "npm run install-ignore-scripts && lerna run prepare",
     "mirror-readme": "lerna exec 'cp ../../../README.md ./ && cp -r ../../../assets/* ./assets/' ",
-    "prepublishOnly": "lerna run prepublishOnly"
+    "prepublishOnly": "lerna run prepublishOnly",
+    "build-changed": "lerna run prepublishOnly --since=HEAD",
+    "build-fast": "lerna run prepublishOnly --since=HEAD --parallel --exclude-dependents"
   },
   "devDependencies": {
     "concurrently": "5.3.0",

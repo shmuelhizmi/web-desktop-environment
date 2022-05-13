@@ -67,7 +67,6 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 			this.killApp(processId);
 		});
 		APIClient.serviceManager.requestUIPort.override(() => this.requestUIPort);
-		this.readx11Apps();
 	}
 
 	async readx11Apps() {

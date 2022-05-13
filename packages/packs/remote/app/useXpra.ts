@@ -8,7 +8,8 @@ export function useXpra(run: boolean) {
 		{ port: number; domain: string } | undefined
 	>();
 	const { domain, port } = portAndDomain || {};
-	const { status, kill, process, error } = useProcess({
+	const [display, setDisplay] = useState<number>(15);
+	const { status, kill, process, error, restart } = useProcess({
 		command: "xpra",
 		start: !!portAndDomain,
 		args: [
@@ -18,7 +19,7 @@ export function useXpra(run: boolean) {
 			"--html=off",
 			"--start-via-proxy=no",
 			"start",
-			":15",
+			":" + display,
 		],
 	});
 	const { pingedSuccessfully } = usePing(run, port);
@@ -33,10 +34,22 @@ export function useXpra(run: boolean) {
 	}, [run]);
 
 	useEffect(() => {
-		if (run && pingedSuccessfully) {
-			API.x11Manager.setActiveDisplay(15);
+		if (status === "error" && display < 25) {
+			setDisplay(display + 1);
 		}
-	}, [pingedSuccessfully]);
+	}, [status]);
+
+	useEffect(() => {
+		if (status === "error" && !process && display < 25) {
+			restart();
+		}
+	}, [display]);
+
+	useEffect(() => {
+		if (run && pingedSuccessfully) {
+			API.x11Manager.setActiveDisplay(display);
+		}
+	}, [pingedSuccessfully, display]);
 
 	return {
 		status,

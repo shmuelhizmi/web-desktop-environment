@@ -10,7 +10,8 @@
     "prepublishOnly": "npm run build",
     "build": "yarn exec $(yarn bin wde-build) && cd app && tsc",
     "start": "yarn exec $(yarn bin wde-dev)",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "install": "bash ./bin/install.sh"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
@@ -32,6 +33,7 @@
     "lib/**/*.js",
     "lib/**/*.js.map",
     "bin/**.js",
+    "bin/**.sh",
     "src/**/*",
     "dist/**/*",
     "app/**/*.js",

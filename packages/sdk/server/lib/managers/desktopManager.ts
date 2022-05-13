@@ -90,22 +90,22 @@ export default class DesktopManager {
 			if (localtunnelUrl) {
 				this.logger.direct(
 					color.bold.green(
-						`${" ".repeat(2)}LOCALTUNNEL host - ${localtunnelUrl.replace(
-							"https://",
-							""
-						)} | LOCALTUNNEL port - 443${" ".repeat(2)}`
+						`LOCALTUNNEL host - ${localtunnelUrl} | LOCALTUNNEL port - 443`
 					)
 				);
 			}
 			this.logger.direct(
 				color.bold.black(
 					// eslint-disable-next-line quotes
-					" ".repeat(3) + 'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
+					" ".repeat(3) +
+						'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
 				)
 			);
 		};
 		this.logger.direct(
-			color.bold.blueBright(figlet.textSync("STARTING WDE", "4Max"))
+			color.bold.blueBright(
+				figlet.textSync("web desktop environment starting", "Calvin S")
+			)
 		);
 		showStartupMessages();
 		return {

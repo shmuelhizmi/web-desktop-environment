@@ -74,17 +74,17 @@ export default class DomainManager {
 			} else {
 				if (!(await this.tryToLogin(req, res))) {
 					if (req.url === "/") {
-						const https = ((req.headers["Origin"] as string) || "").startsWith(
-							"https"
-						);
+						const https = req.headers["x-forwarded-proto"] === "https";
 						const port = Number(
 							req.headers.host.split(":")[1] || https ? 443 : 80
 						);
 						const host = req.headers.host.split(":")[0];
+						const passcode = req.url?.slice(1);
 						const link = {
 							port,
 							host,
 							https,
+							passcode: passcode.length === 8 ? passcode : "",
 						};
 						res.writeHead(200, {
 							"Content-Type": "text/html",
@@ -105,9 +105,15 @@ export default class DomainManager {
 								<body>
 									<p>Redirecting to login panel</p>
 									<script>
-										window.location.replace("http://http.web-desktop.run/#${encodeURIComponent(
-											JSON.stringify(link)
-										)}");
+									${
+										!link.https
+											? `window.location.replace("http://http.web-desktop.run/#${encodeURIComponent(
+													JSON.stringify(link)
+											  )}");`
+											: `window.location.replace("https://web-desktop.run/#${encodeURIComponent(
+													JSON.stringify(link)
+											  )}");`
+									}
 									</script>
 								</body>
 							</html>

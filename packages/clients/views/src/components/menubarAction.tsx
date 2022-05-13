@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Input as MenubarActionProps } from "@web-desktop-environment/interfaces/lib/views/desktop/service";
 import Icon from "./icon";

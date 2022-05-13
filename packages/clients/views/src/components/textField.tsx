@@ -1,5 +1,5 @@
 import React, { useState, PropsWithChildren } from "react";
-import { useTheme, makeStyles } from "@material-ui/styles";
+import { useTheme, makeStyles } from "@mui/styles";
 import { Colors, ColorVariants } from "@root/theme";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 

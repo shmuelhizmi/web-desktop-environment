@@ -3,7 +3,7 @@ import ExplorerInterface, {
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
 import { Component } from "@react-fullstack/fullstack";
 import React from "react";
-import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import { withStyles, createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import Button from "@components/button";
 import Icon from "@components/icon";

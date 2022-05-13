@@ -1,7 +1,7 @@
 import React from "react";
 import { Component } from "@react-fullstack/fullstack";
 import ThemeProviderInterface from "@web-desktop-environment/interfaces/lib/views/ThemeProvider";
-import { ThemeProvider as TP } from "@material-ui/styles";
+import { ThemeProvider as TP } from "@mui/styles";
 import { Themes } from "@root/theme";
 
 class ThemeProvider extends Component<ThemeProviderInterface> {

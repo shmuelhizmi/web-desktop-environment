@@ -1,7 +1,7 @@
 import React from "react";
 import { Component, View } from "@react-fullstack/fullstack";
 import { FileViewerBase } from "@web-desktop-environment/interfaces/lib/shared/fileViewer";
-import { createStyles, WithStyles } from "@material-ui/styles";
+import { createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import Button from "@components/button";
 

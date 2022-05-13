@@ -8,7 +8,7 @@ import {
 	createStyles,
 	WithStyles,
 	makeStyles,
-} from "@material-ui/styles";
+} from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";

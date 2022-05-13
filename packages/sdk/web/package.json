@@ -48,7 +48,8 @@
     "directory": "packages/sdk/app"
   },
   "dependencies": {
-    "@material-ui/styles": "^4.11.3",
+    "@mui/styles": "5.7.0",
+    "@mui/utils": "5.7.0",
     "@react-fullstack/fullstack": "0.3.0",
     "@web-desktop-environment/interfaces": "^2.0.0-19"
   },

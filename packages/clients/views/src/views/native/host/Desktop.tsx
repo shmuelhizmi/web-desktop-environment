@@ -2,7 +2,7 @@ import React from "react";
 import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { Component } from "@react-fullstack/fullstack";
-import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import { withStyles, createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import TextField from "@components/textField";
 import Icon from "@components/icon";

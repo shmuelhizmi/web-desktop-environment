@@ -1,4 +1,4 @@
-import { useTheme as useThemeBse } from "@material-ui/styles";
+import { useTheme as useThemeBse } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import type { SDK } from "@web-desktop-environment/interfaces/lib/web/sdk";
 

@@ -10,7 +10,7 @@ import {
 	WithTheme,
 	withTheme,
 	makeStyles,
-} from "@material-ui/styles";
+} from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 
 const styles = (theme: Theme) =>

@@ -5,7 +5,7 @@ import {
 	Settings as SettingsConfiguration,
 	Color as ColorType,
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
-import { withStyles, createStyles, WithStyles } from "@material-ui/styles";
+import { withStyles, createStyles, WithStyles } from "@mui/styles";
 import { Themes, Colors } from "@root/theme";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import StateComponent from "@components/stateComponent";

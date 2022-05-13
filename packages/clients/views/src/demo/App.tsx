@@ -5,7 +5,7 @@ import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Window as WindowState } from "@web-desktop-environment/interfaces/lib/shared/window";
 import { WindowState as WindowStateUpdate } from "@web-desktop-environment/interfaces/lib/views/Window";
 import { Themes } from "@root/theme";
-import { ThemeProvider } from "@material-ui/styles";
+import { ThemeProvider } from "@mui/styles";
 
 const emptyFunction = async () => {
 	/* empty body */

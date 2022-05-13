@@ -5,7 +5,7 @@ import {
 	createStyles,
 	WithStyles,
 	withTheme,
-} from "@material-ui/styles";
+} from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 

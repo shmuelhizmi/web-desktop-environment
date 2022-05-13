@@ -10,7 +10,7 @@ import * as nativeViewsClient from "@root/views/native/clientViews";
 import * as serviceViews from "@root/views/services";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
-import { ThemeProvider as TP } from "@material-ui/styles";
+import { ThemeProvider as TP } from "@mui/styles";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";

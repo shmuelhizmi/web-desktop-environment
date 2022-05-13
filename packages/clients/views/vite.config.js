@@ -6,33 +6,26 @@ import { esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
 import path from "path";
 
 // allowSyntheticDefaultImports
+globalThis.dir = __dirname;
 export default defineConfig({
 	envDir: "./env",
 	plugins: [react(), tsconfigPaths(), svgrPlugin()],
 	build: {
 		sourcemap: true,
 		outDir: "./build",
-		commonjsOptions: {
-			transformMixedEsModules: true,
-		},
-	},
-	optimizeDeps: {
-		esbuildOptions: {
-			plugins: [esbuildCommonjs()],
-		},
 	},
 	resolve: {
 		alias: [
 			{
-				find: /^@material-ui\/styles\/(.*)/,
-				replacement: "@material-ui/styles/esm/$1",
+				find: /^@mui\/styles\/(.*)/,
+				replacement: "@mui/styles/esm/$1",
 			},
 			{
-				find: /^@material-ui\/utils\/(.*)/,
-				replacement: "@material-ui/utils/esm/$1",
+				find: /^@mui\/utils\/(.*)/,
+				replacement: "@mui/utils/esm/$1",
 			},
 		],
 	},
 });
 
-// console.log(path.join(require.resolve("@material-ui/styles"), "../esm/"));
+// console.log(path.join(require.resolve("@mui/styles"), "../esm/"));

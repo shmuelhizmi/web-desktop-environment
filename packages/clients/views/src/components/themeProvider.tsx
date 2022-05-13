@@ -1,6 +1,6 @@
 import React from "react";
 import { Themes } from "@root/theme";
-import { ThemeProvider as TP } from "@material-ui/styles";
+import { ThemeProvider as TP } from "@mui/styles";
 import {
 	ThemeType,
 	Theme,

@@ -7,7 +7,7 @@ import {
 	WithStyles,
 	withTheme,
 	WithTheme,
-} from "@material-ui/styles";
+} from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import io from "socket.io-client";
 import { Terminal as XTerm } from "xterm";

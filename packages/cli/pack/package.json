@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/package-cli",
-  "version": "2.0.0-14",
+  "version": "2.0.0-16",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -48,11 +48,11 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "1.3.0",
-    "ts-node": "10.7.0",
     "@swc/core": "1.2.182",
     "@swc/helpers": "0.3.13",
+    "@vitejs/plugin-react": "1.3.0",
     "regenerator-runtime": "0.13.9",
+    "ts-node": "10.7.0",
     "typescript": "^4.6.3",
     "vite": "2.8.6",
     "vite-plugin-externals": "0.4.0"

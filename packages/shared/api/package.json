@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-api",
-  "version": "2.0.0-14",
+  "version": "2.0.0-16",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -33,7 +33,7 @@
     "wde.config.json"
   ],
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^2.0.0-14",
+    "@web-desktop-environment/interfaces": "^2.0.0-16",
     "uid": "2.0.0"
   },
   "devDependencies": {

@@ -11,6 +11,7 @@ if [ -f /etc/debian_version ]; then
         sudo add-apt-repository
         sudo apt-get update
     fi
+    echo "Installing xpra... (this may take a while)"
     DEBIAN_FRONTEND=noninteractive sudo apt-get install xpra -qqy --no-install-recommends
 fi
 

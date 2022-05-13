@@ -1,5 +1,5 @@
 import Logger from "../utils/logger";
-import getPort, { portNumbers } from "get-port";
+import getPort, { makeRange } from "get-port";
 import DesktopManager from "../managers/desktopManager";
 import API, { APIClient } from "@web-desktop-environment/server-api";
 import { v4 as uuid } from "uuid";
@@ -25,7 +25,7 @@ export default class PortManager {
 		const { endPort, startPort } =
 			this.desktopManager.settingsManager.settings.network.ports;
 		const result: number[] = [];
-		for (const currentPort of portNumbers(startPort, endPort)) {
+		for (const currentPort of makeRange(startPort, endPort)) {
 			if (!this.usedPorts.includes(currentPort)) {
 				result.push(currentPort);
 			}
@@ -38,7 +38,7 @@ export default class PortManager {
 			this.desktopManager.settingsManager.settings.network.ports;
 		if (isMainPort) {
 			return getPort({
-				port: portNumbers(mainPort, mainPort + 100),
+				port: makeRange(mainPort, mainPort + 100),
 			}).then((value) => {
 				this.logger.info(`port ${value} is avilable as main port`);
 				return value;

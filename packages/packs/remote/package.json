@@ -38,7 +38,10 @@
     "README.md",
     "tsconfig.json",
     "assets/**/*",
-    "wde.config.json"
+    "wde.config.json",
+    "shared/**/*.js",
+    "shared/**/*.js.map",
+    "shared/**/*.d.ts"
   ],
   "repository": {
     "type": "git",

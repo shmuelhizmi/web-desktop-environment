@@ -31,3 +31,6 @@ vite.config.js
 app/**/*.js
 app/**/*.js.map
 app/**/*.d.ts
+shared/**/*.js
+shared/**/*.js.map
+shared/**/*.d.ts

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "ES2022",
+    "target": "ES6",
+    "moduleResolution": "node",
     "module": "CommonJS",
-    "declaration": true,
-    "outDir": "app",
+    "declaration": true,    
     "jsx": "react",
     "esModuleInterop": true
   },
-	"include": ["**/*", "../shared/**/*"],
+	"include": ["./*", "../shared/*"],
 }

@@ -1,18 +1,11 @@
-#!/usr/bin/env node
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+#!/usr/bin/node
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 const { join } = require("path");
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 require("ts-node").register({
-	// eslint-disable-next-line no-undef
 	project: join(__dirname, "../tsconfig.json"),
-	dir: "../lib",
-	swc: true,
+	transpileOnly: !(process.env.DEBUG || "").includes("TRANSPILE"),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("ts-node").register({
-	project: "../tsconfig.json",
-	dir: "../lib",
-});
+require("../lib");

@@ -4,7 +4,7 @@ import SettingsManager from "../managers/settingsManager";
 import AppsManager from "../managers/appsManager";
 import DownloadManager from "../managers/downloadManager";
 import { APIClient } from "@web-desktop-environment/server-api";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import PackageManager from "../managers/packageManager";
 import DomainManager from "../managers/domainManager";
 import AuthManager from "../managers/authManager";

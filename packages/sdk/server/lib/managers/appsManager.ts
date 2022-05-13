@@ -9,7 +9,7 @@ import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from ".
 import { BroadcastChannel } from "broadcast-channel";
 import { APIClient, API } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 import cp from "child_process";
 import { x11Utils } from "@web-desktop-environment/app-sdk";
 import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";

@@ -5,7 +5,8 @@
 		"start": "nodemon .",
 		"build": "tsc",
 		"build:server": "npm run build",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"preinstall": "bash ./bin/install.sh"
 	},
 	"bin": {
 		"web-desktop-home": "./bin/index.js"
@@ -37,6 +38,7 @@
 		"lib/**/*.js",
 		"lib/**/*.js.map",
 		"bin/**.js",
+		"bin/**.sh",
 		"src/**/*",
 		"dist/**/*",
 		"app/**/*",

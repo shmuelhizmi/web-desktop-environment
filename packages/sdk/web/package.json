@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/web-sdk",
-  "version": "2.0.0-16",
+  "version": "2.0.0-19",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -50,7 +50,7 @@
   "dependencies": {
     "@material-ui/styles": "^4.11.3",
     "@react-fullstack/fullstack": "0.3.0",
-    "@web-desktop-environment/interfaces": "^2.0.0-16"
+    "@web-desktop-environment/interfaces": "^2.0.0-19"
   },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

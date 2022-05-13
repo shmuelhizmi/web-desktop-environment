@@ -21,9 +21,11 @@ export function useProcess(props: UseProcessOptions) {
 	);
 	const [process, setProcess] = useState<cp.ChildProcess | null>(null);
 	const [error, setError] = useState<Error | null>(null);
+	const [restartIndex, setRestartIndex] = useState<number>(0);
 	useEffect(() => {
 		if (process) {
 			process.kill();
+			setProcess(null);
 		}
 		if (!start) {
 			return;
@@ -52,6 +54,7 @@ export function useProcess(props: UseProcessOptions) {
 					env,
 				})
 			);
+			setStatus("running");
 		}
 		if (platform === "darwin" || platform === "linux") {
 			setProcess(
@@ -60,14 +63,14 @@ export function useProcess(props: UseProcessOptions) {
 					env,
 				})
 			);
+			setStatus("running");
 		}
-	}, [cwd, env, command, script, platform, start]);
+	}, [cwd, env, command, script, platform, start, restartIndex]);
 	useEffect(() => {
 		if (!process) {
 			return;
 		}
 		process.on("error", (err) => {
-			setStatus("error");
 			setError(err);
 		});
 		process.on("exit", (code, _s) => {
@@ -76,12 +79,20 @@ export function useProcess(props: UseProcessOptions) {
 			} else {
 				setStatus("error");
 			}
+			setProcess(null);
 		});
 	}, [process]);
 	return {
 		status,
 		process,
 		error,
+		restart: () => {
+			setRestartIndex(restartIndex + 1);
+			if (process) {
+				process.kill();
+				setProcess(null);
+			}
+		},
 		kill: () => process && process.kill(),
 	};
 }

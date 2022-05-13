@@ -10,5 +10,5 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "exec": "ts-node -r tsconfig-paths/register ./src/index.ts"
+  "exec": "ts-node -r tsconfig-paths/register --swc ./src/index.ts"
 }

@@ -13,7 +13,7 @@
     "axios": "0.27.2",
     "events": "3.3.0",
     "pako": "2.0.4",
-    "prop-types": "15.8.1",
+    "prop-types": "15.7.2",
     "react": "^17.0.2",
     "react-click-outside": "3.0.1",
     "react-color": "2.19.3",
@@ -101,7 +101,7 @@
     "start": "vite",
     "build": "vite build && echo \"http.web-desktop.run\" > build/CNAME",
     "lint": "eslint .",
-    "gh-deploy-page": "gh-pages -d build"
+    "gh-deploy-page": "npx gh-pages -d build"
   },
   "browserslist": {
     "production": [

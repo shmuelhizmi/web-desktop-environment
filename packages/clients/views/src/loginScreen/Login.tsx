@@ -89,6 +89,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 	flex: {
 		display: "flex",
 	},
+	checkbox: {
+		margin: "0 10px",
+		height: 20,
+		width: 20,
+		borderRadius: "50%",
+	},
 	barButtonCollapse: {
 		cursor: "pointer",
 		background: theme.success.main,
@@ -130,7 +136,11 @@ export const loginStorage = {
 		localStorage.setItem("token", token);
 	},
 	get https() {
-		return window.location.protocol === "https:";
+		const last = localStorage.getItem("last-https");
+		return last ? last === "true" : window.location.protocol === "https:";
+	},
+	set https(https: boolean) {
+		localStorage.setItem("last-https", https.toString());
 	},
 };
 
@@ -138,13 +148,15 @@ const Login = (props: LoginProps) => {
 	const classes = useStyles();
 	const [host, setHost] = useState(loginStorage.host);
 	const [port, setPort] = useState(loginStorage.port);
+	const [https, setHttps] = useState(loginStorage.https);
 	const [passcode, setPasscode] = useState("");
 	const [isValid, setIsValid] = useState(false);
 	const [token, setToken] = useState("");
 	useEffect(() => {
 		loginStorage.host = host;
 		loginStorage.port = port;
-	}, [host, port]);
+		loginStorage.https = https;
+	}, [host, port, https]);
 
 	useEffect(() => {
 		setIsValid(false);
@@ -154,6 +166,7 @@ const Login = (props: LoginProps) => {
 		if (isValidUrl(url) && passcode) {
 			fetch(url, {
 				method: "POST",
+				headers: {},
 				body: passcode,
 			})
 				.then((res) =>
@@ -174,6 +187,25 @@ const Login = (props: LoginProps) => {
 				.catch(() => null);
 		}
 	}, [passcode, host, port, loginStorage.https]);
+
+	useEffect(() => {
+		try {
+			if (window.location.hash) {
+				const {
+					host = "",
+					port = "",
+					passcode = "",
+					https = false,
+				} = JSON.parse(decodeURIComponent(window.location.hash.slice(1)));
+				setHost(host);
+				setPort(port);
+				setPasscode(passcode);
+				setHttps(https);
+				// remove hash
+				window.location.hash = "#";
+			}
+		} catch (e) {}
+	});
 	return (
 		<div className={classes.root}>
 			<div className={classes.flexEnd}>
@@ -201,14 +233,15 @@ const Login = (props: LoginProps) => {
 						placeholder="passcode"
 						password
 					></TextField>
-					{/* <div className={classes.flex}>
+					<div className={classes.flex}>
 						<input
 							type="checkbox"
+							className={classes.checkbox}
 							checked={https}
 							onChange={(e) => setHttps(e.target.checked)}
 						/>
 						<label>Use HTTPS</label>
-					</div> */}
+					</div>
 					<Button
 						variant="main"
 						onClick={() =>

@@ -50,6 +50,9 @@ export default class DomainManager {
 						target: `${ws ? "ws" : "http"}://${target}`,
 						changeOrigin: true,
 						ws,
+						headers: {
+							"Access-Control-Allow-Origin": "*",
+						},
 					};
 					const reqProxy = proxy.createProxy(proxyOptions);
 					return reqProxy;
@@ -58,7 +61,7 @@ export default class DomainManager {
 				return;
 			}
 		};
-		const server = http.createServer((req, res) => {
+		const server = http.createServer(async (req, res) => {
 			const reqProxy = getProxy(req);
 			if (reqProxy) {
 				this.logger.info(`upgrade ${req.headers.host}`);
@@ -69,7 +72,50 @@ export default class DomainManager {
 					);
 				});
 			} else {
-				this.tryToLogin(req, res);
+				if (!(await this.tryToLogin(req, res))) {
+					if (req.url === "/") {
+						const https = ((req.headers["Origin"] as string) || "").startsWith(
+							"https"
+						);
+						const port = Number(
+							req.headers.host.split(":")[1] || https ? 443 : 80
+						);
+						const host = req.headers.host.split(":")[0];
+						const link = {
+							port,
+							host,
+							https,
+						};
+						res.writeHead(200, {
+							"Content-Type": "text/html",
+							"Access-Control-Allow-Origin": "*",
+						});
+						res.write(
+							`
+							<!DOCTYPE html>
+							<html>
+								<head>
+									<meta charset="utf-8">
+									<meta name="viewport" content="width=device-width, initial-scale=1">
+									<title>Web Desktop</title>
+									<meta http-equiv="Refresh" content="0; URL=http://http.web-desktop.run/#${JSON.stringify(
+										link
+									)}">
+								</head>
+								<body>
+									<p>Redirecting to login panel</p>
+									<script>
+										window.location.replace("http://http.web-desktop.run/#${encodeURIComponent(
+											JSON.stringify(link)
+										)}");
+									</script>
+								</body>
+							</html>
+								`
+						);
+						res.end();
+					}
+				}
 			}
 		});
 		server.on("upgrade", (req, socket, head) => {
@@ -108,6 +154,8 @@ export default class DomainManager {
 				});
 				res.end(JSON.stringify({ error: "Invalid credentials" }));
 			}
+			return true;
 		}
+		return false;
 	}
 }

@@ -12,6 +12,8 @@ import { API } from "@web-desktop-environment/server-api";
 import { PackageJSON } from "@web-desktop-environment/interfaces/lib/shared/package";
 import figlet from "figlet";
 import color from "chalk";
+import ngRok from "ngrok";
+import localtunnel from "localtunnel";
 
 export default class DesktopManager {
 	public readonly name: string;
@@ -54,6 +56,18 @@ export default class DesktopManager {
 			packageJSON.apps,
 			/* run */ true
 		);
+
+		const [ng, { url: localtunnelUrl }] = await Promise.all([
+			ngRok
+				.connect({
+					proto: "http",
+					addr: this.domainManager.mainPort,
+				})
+				.catch((e) => undefined),
+			localtunnel({
+				port: this.domainManager.mainPort,
+			}),
+		]);
 		this.initX11();
 		const showStartupMessages = () => {
 			this.logger.direct(
@@ -63,15 +77,35 @@ export default class DesktopManager {
 					}${" ".repeat(29)}`
 				)
 			);
+			if (ng) {
+				this.logger.direct(
+					color.bold.green(
+						`${" ".repeat(13)}NGROK host - ${ng.replace(
+							"https://",
+							""
+						)} | NGROK port - 443 ${" ".repeat(13)}`
+					)
+				);
+			}
+			if (localtunnelUrl) {
+				this.logger.direct(
+					color.bold.green(
+						`${" ".repeat(2)}LOCALTUNNEL host - ${localtunnelUrl.replace(
+							"https://",
+							""
+						)} | LOCALTUNNEL port - 443${" ".repeat(2)}`
+					)
+				);
+			}
 			this.logger.direct(
 				color.bold.black(
 					// eslint-disable-next-line quotes
-					'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
+					" ".repeat(3) + 'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
 				)
 			);
 		};
 		this.logger.direct(
-			color.bold.blueBright(figlet.textSync("WDE started", "4Max"))
+			color.bold.blueBright(figlet.textSync("STARTING WDE", "4Max"))
 		);
 		showStartupMessages();
 		return {

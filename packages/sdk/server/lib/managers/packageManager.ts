@@ -55,11 +55,23 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		this.call("install", wdeConfig);
 	}
 
-	public async startPackagesWebHostingServer() {
+	public startPackagesWebHostingServer = async () => {
 		const server = http.createServer(async (req, res) => {
-			const [packageName, versionPath, ...scriptPaths] = req.url
+			let packageName = "";
+			let versionPath = "";
+			let scriptPaths: string[] = [];
+			const paths = decodeURI(req.url)
 				.split("/")
 				.filter((p) => p);
+			if (paths[0].startsWith("@")) {
+				packageName = paths[0] + "/" + paths[1];
+				versionPath = paths[2];
+				scriptPaths = paths.slice(3);
+			} else {
+				packageName = paths[0];
+				versionPath = paths[1];
+				scriptPaths = paths.slice(2);
+			}
 			if (!this.runningPackages.has(packageName)) {
 				res.writeHead(404);
 				res.end();
@@ -93,7 +105,7 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 			domain,
 			port,
 		};
-	}
+	};
 
 	public async searchForNewPackages(apps: string[], shouldRun = false) {
 		return Promise.all(
@@ -105,9 +117,9 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 					path.join(packageLocation, "wde.config.json")
 				);
 				const parsedConfig: WDEPackageConfig = {
-					name: encodeURIComponent(wdeConfig.name),
+					name: wdeConfig.name,
 					entry: wdeConfig.entry,
-					version: encodeURIComponent(wdeConfig.version),
+					version: wdeConfig.version,
 					web: wdeConfig.web,
 					webBundle: wdeConfig.webBundle,
 					os: wdeConfig.os,

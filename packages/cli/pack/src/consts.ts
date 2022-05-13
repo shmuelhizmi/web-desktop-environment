@@ -56,6 +56,7 @@ const path = require("path");
 const { defineConfig } = require("vite");
 const react = require("@vitejs/plugin-react");
 const { viteExternalsPlugin } = require("vite-plugin-externals")
+const { esbuildCommonjs } = require("@originjs/vite-plugin-commonjs");
 
 module.exports = defineConfig({
 	base: "./",
@@ -75,18 +76,18 @@ module.exports = defineConfig({
 					PACKAGE_CONFIG.webBundle?.distDir || "./dist/web/"
 				)}),
 			},
-			input: ${JSON.stringify(
-				Object.entries({
-					...PACKAGE_CONFIG.entries,
-					index: PACKAGE_CONFIG.web,
-				}).reduce((acc, [key, value]) => {
-					acc[key] = path.resolve(PROJECT_DIR, value as string);
-					return acc;
-				}, {} as any)
-			)},
 		},
 	},
-	plugins: [react(), viteExternalsPlugin({
+	optimizeDeps: {
+		esbuildOptions: {
+			plugins: [esbuildCommonjs()],
+		},
+	},
+	plugins: [react({
+		include: [
+			"**/*.{tsx}",
+		],
+	}), viteExternalsPlugin({
 		"react": "react",
 	}),
 	worker({}),

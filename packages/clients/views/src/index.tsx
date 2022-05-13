@@ -11,11 +11,12 @@ import * as serviceViews from "@root/views/services";
 import "typeface-jetbrains-mono";
 import { defaultTheme } from "@root/theme";
 import { ThemeProvider as TP } from "@material-ui/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ConnectionContext } from "./contexts";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import setUpDocument from "@utils/setupDocument";
 import type { SDK } from "@web-desktop-environment/interfaces/lib/web/sdk";
+import type { ManagerOptions } from "socket.io-client";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -59,7 +60,7 @@ class ReactFullstackConnectionManager {
 		port: number;
 		host: string;
 		views: typeof viewsMap[V];
-		socketOptions: SocketIOClient.ConnectOpts;
+		socketOptions: Partial<ManagerOptions>;
 	} => {
 		return {
 			host: `${this.https ? "https" : "http"}://${this.host}`,

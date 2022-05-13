@@ -10,7 +10,12 @@ abstract class APIBase {
     manager.managerInternalEmitter.on(
       "callFunction",
       ({ id, name, parameters }) => {
-        process.on("message", (message) => {
+        process.on("message", (_message) => {
+          const message = _message as {
+            type: string;
+            id: string;
+            value: any;
+          };
           if (
             message &&
             message.type === "api_super_response" &&
@@ -48,7 +53,13 @@ abstract class APIBase {
         });
       });
     });
-    process.on("message", (message) => {
+    process.on("message", (_message) => {
+      const message = _message as {
+        type: string;
+        managerName: string;
+        eventName: string;
+        value: any;
+      };
       if (message && message.type === "api_event_call") {
         const { managerName, value, eventName } = message;
         if (managerName === manager.name) {
@@ -61,7 +72,16 @@ abstract class APIBase {
   }
   public addChildProcess(cp: ChildProcess) {
     let isAlive = true;
-    cp.on("message", (message) => {
+    cp.on("message", (_message) => {
+      const message = _message as {
+        type: string;
+        managerName: string;
+        eventName: string;
+        value: any;
+        parameters: any;
+        functionName: string;
+        id: string;
+      };
       if (message) {
         if (message.type === "api_super_request") {
           const { id, managerName, functionName, parameters } = message;

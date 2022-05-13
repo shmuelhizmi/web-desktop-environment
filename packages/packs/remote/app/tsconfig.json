@@ -6,6 +6,7 @@
     "module": "CommonJS",
     "declaration": true,    
     "jsx": "react",
+    "allowJs": false,
     "esModuleInterop": true
   },
 	"include": ["./*", "../shared/*"],

@@ -158,34 +158,34 @@ const Login = (props: LoginProps) => {
 		loginStorage.https = https;
 	}, [host, port, https]);
 
-	useEffect(() => {
-		setIsValid(false);
-		const url = `${loginStorage.https ? "https" : "http"}://${host}${
-			port ? `:${port}` : ""
-		}/login`;
+	const url = `${loginStorage.https ? "https" : "http"}://${host}${
+		port ? `:${port}` : ""
+	}/login`;
+	async function login() {
 		if (isValidUrl(url) && passcode) {
-			fetch(url, {
+			return fetch(url, {
 				method: "POST",
 				headers: {},
 				body: passcode,
-			})
-				.then((res) =>
-					res.json().then((data) => {
-						if (res.status === 200) {
-							setIsValid(true);
-							setToken(data.token);
-							loginStorage.token = data.token;
-							// window.location.pathname = '/connect/link/' + btoa(JSON.stringify({
-							// 	host,
-							// 	port,
-							// 	https,
-							// 	token: data.token,
-							// }))
-						}
-					})
-				)
-				.catch(() => null);
+			}).then((res) =>
+				res.json().then((data) => {
+					if (res.status === 200) {
+						return data.token;
+					}
+				})
+			);
 		}
+	}
+	useEffect(() => {
+		setIsValid(false);
+		login()
+			.then((token) => {
+				if (token) {
+					setToken(token);
+					loginStorage.token = token;
+				}
+			})
+			.catch(() => null);
 	}, [passcode, host, port, loginStorage.https]);
 
 	useEffect(() => {
@@ -244,9 +244,19 @@ const Login = (props: LoginProps) => {
 					</div>
 					<Button
 						variant="main"
-						onClick={() =>
-							isValid && props.onLogin(host, port, loginStorage.https, token)
-						}
+						onClick={() => {
+							if (isValid) {
+								props.onLogin(host, port, loginStorage.https, token);
+							} else {
+								login().then((token) => {
+									if (token) {
+										setToken(token);
+										loginStorage.token = token;
+										props.onLogin(host, port, loginStorage.https, token);
+									}
+								});
+							}
+						}}
 						color="background"
 						border
 					>

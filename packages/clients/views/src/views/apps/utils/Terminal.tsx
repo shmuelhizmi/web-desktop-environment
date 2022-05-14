@@ -9,7 +9,7 @@ import {
 	WithTheme,
 } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { Terminal as XTerm } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 import ResizeDetector from "react-resize-detector";
@@ -45,7 +45,7 @@ class Terminal extends Component<
 	{},
 	WithStyles<typeof styles> & WithTheme<Theme>
 > {
-	socket: SocketIOClient.Socket;
+	socket: Socket;
 	term: XTerm;
 	termFit: FitAddon;
 	containerElement?: HTMLElement;
@@ -72,11 +72,12 @@ class Terminal extends Component<
 		});
 	}
 
-	getTermTheme = () => ({
-		background: "#fff0",
-		foreground: this.props.theme.background.text,
-		cursor: this.props.theme.background.text,
-	});
+	getTermTheme = () =>
+		this.props.theme.terminal || {
+			background: "#fff0",
+			foreground: this.props.theme.background.text,
+			cursor: this.props.theme.background.text,
+		};
 
 	mount = () => {
 		if (this.containerElement) {

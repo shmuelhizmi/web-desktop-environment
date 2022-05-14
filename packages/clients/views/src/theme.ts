@@ -285,149 +285,168 @@ const mintTheme: Theme = {
 		text: "#fff",
 	},
 	windowBorder: true,
-	overrides: {
+	components: {
 		WindowBar: {
-			windowsBar: {
-				borderRadius: 0,
-				background: "#2e2e2e",
-				justifyContent: "center",
-				paddingLeft: 0,
-			},
-			"@media (min-width: 768px)": {
+			styleOverrides: {
 				windowsBar: {
-					bottom: 0,
-					width: "max-content",
-					transform: "translateX(50%)",
-					right: "50%",
-					left: "auto",
+					borderRadius: 0,
+					background: "#2e2e2e",
+					justifyContent: "center",
+					paddingLeft: 0,
 				},
-			},
-			"@keyframes slideUp": {
-				from: {
-					bottom: -55,
+				"@media (min-width: 768px)": {
+					windowsBar: {
+						bottom: 0,
+						width: "max-content",
+						transform: "translateX(50%)",
+						right: "50%",
+						left: "auto",
+					},
 				},
-				to: {
-					bottom: 0,
+				"@keyframes slideUp": {
+					from: {
+						bottom: -55,
+					},
+					to: {
+						bottom: 0,
+					},
 				},
-			},
-			windowsBarButton: {
-				margin: 0,
-				marginLeft: 0,
-				marginRight: 0,
-				boxShadow: "none",
-				borderRadius: 0,
-			},
-			windowsBarButtonCloseMinimized: {
-				borderBottom: "#5da541 solid 1px",
-			},
-			windowsBarButtonOpen: {
-				borderBottom: "#5da541 solid 1px",
+				windowsBarButton: {
+					margin: 0,
+					marginLeft: 0,
+					marginRight: 0,
+					boxShadow: "none",
+					borderRadius: 0,
+				},
+				windowsBarButtonCloseMinimized: {
+					borderBottom: "#5da541 solid 1px",
+				},
+				windowsBarButtonOpen: {
+					borderBottom: "#5da541 solid 1px",
+				},
 			},
 		},
 		Desktop: {
-			startMenu: {
-				borderRadius: 0,
-				boxShadow: "none",
-				background: "#2e2e2e",
-			},
-			"@media (min-width: 768px)": {
+			styleOverrides: {
 				startMenu: {
-					transform: "translateX(50%)",
-					right: "50%",
-					left: "auto",
-					bottom: 60,
+					borderRadius: 0,
+					boxShadow: "none",
+					background: "#2e2e2e",
 				},
-			},
-			appCell: {
-				borderRadius: 0,
-				borderBottom: "none",
-			},
-			slideIn: {
-				animation: "none",
-			},
-			slideOut: {
-				animation: "none",
+				"@media (min-width: 768px)": {
+					startMenu: {
+						transform: "translateX(50%)",
+						right: "50%",
+						left: "auto",
+						bottom: 60,
+					},
+				},
+				appCell: {
+					borderRadius: 0,
+					borderBottom: "none",
+				},
+				slideIn: {
+					animation: "none",
+				},
+				slideOut: {
+					animation: "none",
+				},
 			},
 		},
 		Window: {
-			bar: {
-				borderRadius: 0,
-			},
-			barCollapse: {
-				borderRadius: 0,
-			},
-			barButton: {
-				borderRadius: 0,
-			},
-			barButtonInactive: {
-				border: "none",
-			},
-			body: {
-				borderRadius: 0,
+			styleOverrides: {
+				bar: {
+					borderRadius: 0,
+				},
+				barCollapse: {
+					borderRadius: 0,
+				},
+				barButton: {
+					borderRadius: 0,
+				},
+				barButtonInactive: {
+					border: "none",
+				},
+				body: {
+					borderRadius: 0,
+				},
 			},
 		},
 		Terminal: {
-			root: {
-				borderRadius: 0,
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
 			},
 		},
 		LoadingScreen: {
-			root: {
-				borderRadius: 0,
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
 			},
 		},
 		Iframe: {
-			root: {
-				borderRadius: 0,
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
 			},
 		},
 		Notepad: {
-			root: {
-				borderRadius: 0,
-			},
-			headline: {
-				borderRadius: 0,
-			},
-			backButton: {
-				borderRadius: "0  !important",
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
+				headline: {
+					borderRadius: 0,
+				},
+				backButton: {
+					borderRadius: "0  !important",
+				},
 			},
 		},
 		Explorer: {
-			root: {
-				borderRadius: 0,
-			},
-			actionBar: {
-				borderRadius: 0,
-			},
-			file: {
-				borderRadius: 0,
-			},
-			breadcrumbButtonItemFirst: {
-				borderRadius: 0,
-			},
-			breadcrumbButtonItemLast: {
-				borderRadius: 0,
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
+				actionBar: {
+					borderRadius: 0,
+				},
+				file: {
+					borderRadius: 0,
+				},
+				breadcrumbButtonItemFirst: {
+					borderRadius: 0,
+				},
+				breadcrumbButtonItemLast: {
+					borderRadius: 0,
+				},
 			},
 		},
 		Settings: {
-			root: {
-				borderRadius: 0,
-			},
-			categorySelection: {
-				borderRadius: 0,
-			},
-			settingsBlock: {
-				borderRadius: 0,
-			},
-			category: {
-				borderRadius: 0,
-			},
-			themeButton: {
-				borderRadius: "0 !important",
+			styleOverrides: {
+				root: {
+					borderRadius: 0,
+				},
+				categorySelection: {
+					borderRadius: 0,
+				},
+				settingsBlock: {
+					borderRadius: 0,
+				},
+				category: {
+					borderRadius: 0,
+				},
+				themeButton: {
+					borderRadius: "0 !important",
+				},
 			},
 		},
 	},
 };
+
 
 const nordTheme: Theme = {
 	type: "dark",

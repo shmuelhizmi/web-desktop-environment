@@ -14,7 +14,13 @@ export interface Theme {
 	windowBorderColor: string;
 	windowBorder: boolean;
 	transparentBorder?: string;
-	overrides?: any; // jss overrides 
+	terminal?: {
+		background: string;
+		foreground: string;
+		selection: string;
+		cursor: string;
+	};
+	components?: any; // jss overrides 
 }
 
 export interface Color {

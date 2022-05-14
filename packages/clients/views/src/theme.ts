@@ -447,6 +447,164 @@ const mintTheme: Theme = {
 	},
 };
 
+const win98Theme: Theme = {
+	name: "win98",
+	background: {
+		main: "#C0C0C0",
+		transparent: "#C0C0C066",
+		light: "#FFFF",
+		dark: "#A9A9A9",
+		text: "#000",
+	},
+	primary: {
+		main: "#F9F4EE",
+		dark: "#F9F4EE",
+		light: "#F9F4EE",
+		transparent: "#F9F4EE",
+		text: "#000",
+	},
+	secondary: {
+		main: "#133DA6",
+		dark: "#0E2295",
+		light: "#156BC2",
+		transparent: "#133DA6",
+		text: "#fff",
+	},
+	warning: {
+		main: "#FFD951",
+		light: "#FFEB51",
+		dark: "#AE9941",
+		text: "#fff",
+	},
+	error: {
+		main: "#FF0000",
+		light: "#FF0000",
+		dark: "#FF0000",
+		text: "#fff",
+	},
+	success: {
+		main: "#00FF00",
+		light: "#00FF00",
+		dark: "#00FF00",
+		text: "#fff",
+	},
+	type: "mint",
+	windowBorderColor: "#FFF",
+	windowBarColor:
+		"linear-gradient(90deg, rgba(21,131,209,1) 0%, rgba(5,0,128,1) 100%)",
+	shadowColor: "#000",
+	windowBorder: true,
+	components: {
+		WindowBar: {
+			styleOverrides: {
+				windowsBar: {
+					borderRadius: 0,
+					left: 0,
+					right: 0,
+					bottom: 0,
+					"& *": {
+						boxShadow: "none !important",
+						borderRadius: "0 !important",
+					},
+				},
+				windowsBarButton: {
+					border: "2px solid #7c7c7c",
+					borderTopColor: "#fff",
+					borderBottomColor: "#131313",
+					borderLeftColor: "#fff",
+					outlineColor: "#000 !important",
+				},
+				windowsBarButtonActive: {
+					outlineColor: "#000 !important",
+				},
+			},
+		},
+		Desktop: {
+			styleOverrides: {
+				startMenu: {
+					borderRadius: 0,
+					boxShadow: "none",
+					background: "#C0C0C0",
+				},
+				appCell: {
+					borderRadius: 0,
+					borderBottom: "none",
+				},
+				slideIn: {
+					animation: "none",
+				},
+				slideOut: {
+					animation: "none",
+				},
+			},
+		},
+		Window: {
+			styleOverrides: {
+				root: {
+					border: "2px solid #7c7c7c",
+					borderTopColor: "#fff",
+					borderBottomColor: "#131313",
+					borderLeftColor: "#fff",
+					background: "#C0C0C0",
+					outline: "1px solid #000",
+				},
+				bar: {
+					borderRadius: 0,
+					background:
+						"linear-gradient(90deg, rgba(21,131,209,1) 0%, rgba(5,0,128,1) 100%)",
+					border: "none",
+				},
+				body: {
+					"& > div": {
+						borderRadius: "0px !important",
+						border: "none",
+					},
+					"& *": {
+						borderRadius: "0px !important",
+						boxShadow: "none !important",
+					},
+					borderRadius: 0,
+				},
+				barCollapse: {
+					borderRadius: 0,
+					background:
+						"linear-gradient(90deg, rgba(21,131,209,1) 0%, rgba(5,0,128,1) 100%)",
+				},
+			},
+		},
+		Terminal: {
+			styleOverrides: {
+				root: {
+					background: "#000",
+					borderRadius: 0,
+				},
+			},
+		},
+		MenuBar: {
+			styleOverrides: {
+				root: {
+					background: "#C0C0C0",
+				},
+			},
+		},
+		Explorer: {
+			styleOverrides: {
+				fileBox: {
+					background: "#fff",
+					"& *": {
+						color: "#000 !important",
+					},
+				},
+			},
+		},
+	},
+	terminal: {
+		background: "#000",
+		foreground: "#fff",
+		cursor: "#fff",
+		selection: "#fff",
+	},
+};
 
 const nordTheme: Theme = {
 	type: "dark",
@@ -507,4 +665,5 @@ export const Themes = {
 	transparent: transparentTheme,
 	transparentDark: transparentDarkTheme,
 	mint: mintTheme,
+	win98: win98Theme,
 };

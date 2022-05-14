@@ -10,7 +10,7 @@ const useStyle = makeStyles((theme: Theme) => ({
 		display: "flex",
 		alignItems: "center",
 	},
-}));
+}), { name: "MenuBar" });
 
 export function MenuBar(
 	props: React.PropsWithChildren<{ div: React.Ref<HTMLDivElement> }>

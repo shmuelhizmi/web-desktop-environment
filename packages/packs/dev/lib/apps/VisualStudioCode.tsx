@@ -51,7 +51,7 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 			if (!this.willUnmount) {
 				axios.request({
 					method: "GET",
-					url: `http://localhost:${port}/`,
+					url: `http://127.0.0.1:${port}/`,
 					timeout: 600,
 				}).then(() => {
 					this.setState({ isLoaded: true });

@@ -3,7 +3,7 @@ import { homedir } from "os";
 import * as cp from "child_process";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 import { APIClient } from "@web-desktop-environment/server-api";
-import http from "http";
+import axios from "axios";
 
 interface VSCodeInput {
 	process?: string;
@@ -49,13 +49,15 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {
-				http
-					.get(`http://localhost:${port}/`, (res) => {
-						this.setState({ isLoaded: true });
-					})
-					.on("error", (e) => {
-						setTimeout(waitForVscodeToLoad, 100);
-					});
+				axios.request({
+					method: "GET",
+					url: `http://localhost:${port}/`,
+					timeout: 600,
+				}).then(() => {
+					this.setState({ isLoaded: true });
+				}).catch(() => {
+					setTimeout(waitForVscodeToLoad, 500);
+				})
 			}
 		};
 		waitForVscodeToLoad();

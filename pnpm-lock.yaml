@@ -91,8 +91,8 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.23.0
       '@typescript-eslint/parser': 5.23.0
       '@vitejs/plugin-react': 1.3.2
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/web-sdk': 2.0.0-20
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/web-sdk': workspace:*
       axios: 0.27.2
       camelcase: ^6.3.0
       dotenv: 16.0.1
@@ -227,9 +227,9 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': ^2.0.0-20
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
+      '@web-desktop-environment/app-sdk': workspace:*
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -284,9 +284,9 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': ^2.0.0-20
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
+      '@web-desktop-environment/app-sdk': workspace:*
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
       axios: 0.27.2
       code-server: 4.4.0
       eslint: ^8.15.0
@@ -338,11 +338,11 @@ importers:
       '@types/ws': 8.5.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': ^2.0.0-20
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/package-cli': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
-      '@web-desktop-environment/web-sdk': ^2.0.0-20
+      '@web-desktop-environment/app-sdk': workspace:*
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/package-cli': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
+      '@web-desktop-environment/web-sdk': workspace:*
       axios: 0.27.2
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
@@ -401,8 +401,8 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -465,9 +465,9 @@ importers:
       '@types/uuid': ^8.3.4
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': ^2.0.0-20
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
+      '@web-desktop-environment/app-sdk': workspace:*
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
       broadcast-channel: 4.11.0
       chalk: 4.1.2
       eslint: ^8.15.0
@@ -550,7 +550,7 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': ^2.0.0-20
+      '@web-desktop-environment/interfaces': workspace:*
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -584,12 +584,12 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': ^2.0.0-20
-      '@web-desktop-environment/pack-core': ^2.0.0-20
-      '@web-desktop-environment/pack-dev': ^2.0.0-21
-      '@web-desktop-environment/pack-remote': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
-      '@web-desktop-environment/server-sdk': ^2.0.0-20
+      '@web-desktop-environment/interfaces': workspace:*
+      '@web-desktop-environment/pack-core': workspace:*
+      '@web-desktop-environment/pack-dev': workspace:*
+      '@web-desktop-environment/pack-remote': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
+      '@web-desktop-environment/server-sdk': workspace:*
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -604,7 +604,7 @@ importers:
       '@react-fullstack/fullstack': 0.3.0_react@17.0.2
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
       '@web-desktop-environment/pack-core': link:../../packs/core
-      '@web-desktop-environment/pack-dev': 2.0.0-22_@types+node@17.0.45
+      '@web-desktop-environment/pack-dev': link:../../packs/dev
       '@web-desktop-environment/pack-remote': link:../../packs/remote
       '@web-desktop-environment/server-api': link:../../shared/api
       '@web-desktop-environment/server-sdk': link:../../sdk/server
@@ -632,9 +632,9 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/pack-core': ^2.0.0-20
-      '@web-desktop-environment/server-api': ^2.0.0-20
-      '@web-desktop-environment/server-sdk': ^2.0.0-20
+      '@web-desktop-environment/pack-core': workspace:*
+      '@web-desktop-environment/server-api': workspace:*
+      '@web-desktop-environment/server-sdk': workspace:*
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -668,7 +668,7 @@ importers:
     specifiers:
       '@types/node': ^17.0.33
       '@types/uuid': ^8.3.4
-      '@web-desktop-environment/interfaces': ^2.0.0-20
+      '@web-desktop-environment/interfaces': workspace:*
       typescript: ^4.6.3
       uid: 2.0.0
       uuid: ^8.3.2
@@ -5004,65 +5004,6 @@ packages:
       resolve: 1.22.1
     transitivePeerDependencies:
       - supports-color
-
-  /@web-desktop-environment/app-sdk/2.0.0-20_sp5vx3zsfxayii7t2iicgdkysu:
-    resolution: {integrity: sha512-u78QXcIPyIbbwbFgH1W5ppAjrUn8iJ59dULU8t3/x28P+0aE2+aCvkPUxXTHvdLTNhqaU2rLuSEPJdrHmigCDg==}
-    peerDependencies:
-      '@web-desktop-environment/server-api': '*'
-    dependencies:
-      '@react-fullstack/fullstack-socket-server': 0.3.0_hjmbakpwi6ze73ihciaonhgcea
-      '@react-fullstack/render': 0.3.0_hjmbakpwi6ze73ihciaonhgcea
-      '@web-desktop-environment/interfaces': 2.0.0-20
-      '@web-desktop-environment/server-api': 2.0.0-20
-      ini: 3.0.0
-      react: 17.0.2
-      xpm2png: 1.0.1
-    transitivePeerDependencies:
-      - '@react-fullstack/fullstack'
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
-  /@web-desktop-environment/interfaces/2.0.0-20:
-    resolution: {integrity: sha512-BSPQA8TtCX+4ivlG8JjzzfmZO1niyV4DUCVPt2oS078uABqFsFXkvSF27YWX1O3Z43OCcL6J7wtbVHCM8mUIWw==}
-    dev: false
-
-  /@web-desktop-environment/pack-dev/2.0.0-22_@types+node@17.0.45:
-    resolution: {integrity: sha512-hcYKKQGU98bJCKSm0i68pWTQ6uFYHzcYomWEhj3g1Q6/ZOQdAKCM//JGj/fqXxSsMKy/EJuBXaFMTdbIgJkh9A==}
-    hasBin: true
-    dependencies:
-      '@react-fullstack/fullstack': 0.3.0_react@17.0.2
-      '@react-fullstack/fullstack-socket-server': 0.3.0_hjmbakpwi6ze73ihciaonhgcea
-      '@react-fullstack/render': 0.3.0_hjmbakpwi6ze73ihciaonhgcea
-      '@swc/core': 1.2.183
-      '@swc/helpers': 0.3.13
-      '@web-desktop-environment/app-sdk': 2.0.0-20_sp5vx3zsfxayii7t2iicgdkysu
-      '@web-desktop-environment/interfaces': 2.0.0-20
-      '@web-desktop-environment/server-api': 2.0.0-20
-      axios: 0.27.2
-      code-server: 4.4.0
-      react: 17.0.2
-      regenerator-runtime: 0.13.9
-      ts-node: 10.7.0_nimvmavb5xnufvhcem3alg3hb4
-      typescript: 4.7.4
-    transitivePeerDependencies:
-      - '@google-cloud/logging'
-      - '@swc/wasm'
-      - '@types/node'
-      - bufferutil
-      - debug
-      - encoding
-      - supports-color
-      - utf-8-validate
-    dev: false
-
-  /@web-desktop-environment/server-api/2.0.0-20:
-    resolution: {integrity: sha512-/ZDo99gNBopvoIQvzVG3s10IX6fwMEf2oUiDPMkkn31kspeim8QElwdnR0C4bE/lWFzU1cvFV1d+l4b1VsLdbg==}
-    dependencies:
-      '@web-desktop-environment/interfaces': 2.0.0-20
-      uid: 2.0.0
-    dev: false
 
   /JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}

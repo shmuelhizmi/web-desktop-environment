@@ -57,12 +57,12 @@
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.3.0",
-    "@web-desktop-environment/interfaces": "^2.0.0-20",
-    "@web-desktop-environment/pack-core": "^2.0.0-20",
-    "@web-desktop-environment/pack-dev": "^2.0.0-21",
-    "@web-desktop-environment/pack-remote": "^2.0.0-20",
-    "@web-desktop-environment/server-api": "^2.0.0-20",
-    "@web-desktop-environment/server-sdk": "^2.0.0-20",
+    "@web-desktop-environment/interfaces": "workspace:*",
+    "@web-desktop-environment/pack-core": "workspace:*",
+    "@web-desktop-environment/pack-dev": "workspace:*",
+    "@web-desktop-environment/pack-remote": "workspace:*",
+    "@web-desktop-environment/server-api": "workspace:*",
+    "@web-desktop-environment/server-sdk": "workspace:*",
     "react": "^17.0.2",
     "ts-node": "10.7.0"
   },

@@ -26,7 +26,7 @@
     "react": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "@web-desktop-environment/server-api": "^2.0.0-20",
+    "@web-desktop-environment/server-api": "workspace:*",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -62,7 +62,7 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.3.0",
     "@react-fullstack/render": "0.3.0",
-    "@web-desktop-environment/interfaces": "^2.0.0-20",
+    "@web-desktop-environment/interfaces": "workspace:*",
     "ini": "3.0.0",
     "react": "^17.0.2",
     "xpm2png": "1.0.1"

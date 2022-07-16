@@ -43,7 +43,7 @@ export default class DesktopManager {
 		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);
 	}
-	public async initialize(packageJSON: PackageJSON) {
+	public async initialize(packageJSON: PackageJSON, packageJSONPath: string) {
 		await this.settingsManager.initialize();
 		await this.downloadManager.initialize();
 		const mainPort = await this.portManager.getPort(true);
@@ -54,6 +54,7 @@ export default class DesktopManager {
 		API.domainManager.registerDomain("desktop", desktopPort);
 		await this.packageManager.searchForNewPackages(
 			packageJSON.apps,
+			packageJSONPath,
 			/* run */ true
 		);
 

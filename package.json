@@ -5,21 +5,21 @@
     "dev:server": "cd packages/servers/home-edition-server && npm start",
     "dev:server:dev": "cd packages/servers/development-edition-server && npm start",
     "dev:web": "cd packages/clients/views && npm start",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
-    "dev:dev": "concurrently \"npm run dev:server:dev\" \"npm run dev:web\"",
-    "start": "yarn && npm run dev",
+    "dev": "concurrently \"pnpm run dev:server\" \"pnpm run dev:web\"",
+    "dev:dev": "concurrently \"pnpm run dev:server:dev\" \"pnpm run dev:web\"",
+    "start": "pnpm run dev",
     "lint": "lerna run lint",
-    "prepare": "lerna run prepare",
-    "github-lint": "npm run install-ignore-scripts && lerna run prepare && npm run lint",
-    "vercel-setup": "npm run install-ignore-scripts && lerna run prepare",
+    "github-lint": "pnpm run install-ignore-scripts && lerna run prepare && pnpm run lint",
+    "vercel-setup": "pnpm run install-ignore-scripts && lerna run prepare",
     "mirror-readme": "lerna exec 'cp ../../../README.md ./ && cp -r ../../../assets/* ./assets/' ",
     "prepublishOnly": "lerna run prepublishOnly",
-    "build-changed": "lerna run prepublishOnly --since=HEAD",
-    "build-fast": "lerna run prepublishOnly --since=HEAD --parallel --exclude-dependents"
+    "build": "turbo run build"
   },
   "devDependencies": {
     "concurrently": "7.1.0",
-    "lerna": "4.0.0"
+    "lerna": "4.0.0",
+    "turbo": "1.3.1",
+    "pnpm": "7.5.1"
   },
   "resolutions": {
     "@react-fullstack/render": "0.3.0",

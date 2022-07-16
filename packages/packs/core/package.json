@@ -6,12 +6,12 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "start": "nodemon .",
-    "watch": "nodemon --exec \"npm run build\" --watch src --watch node_modules",
+    "watch": "nodemon --exec \"pnpm run build\" --watch src --watch node_modules",
     "build": "tsc",
-    "build:server": "npm run build",
-    "postpublish": "npm run clean",
+    "build:server": "pnpm run build",
+    "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
     "lint": "eslint ."
   },
@@ -28,6 +28,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "7.29.4",
     "nodemon": "2.0.16",
+    "@swc/core": "1.2.183",
+    "@swc/helpers": "0.3.13",
+    "ts-node": "10.7.0",
+    "typescript": "^4.6.3",
     "prettier": "^2.0.5"
   },
   "files": [
@@ -52,16 +56,15 @@
     "@react-fullstack/fullstack": "0.3.0",
     "@react-fullstack/fullstack-socket-server": "0.3.0",
     "@react-fullstack/render": "0.3.0",
-    "@swc/core": "1.2.183",
-    "@swc/helpers": "0.3.13",
     "@web-desktop-environment/app-sdk": "^2.0.0-20",
     "@web-desktop-environment/interfaces": "^2.0.0-20",
     "@web-desktop-environment/server-api": "^2.0.0-20",
     "react": "^17.0.2",
     "regenerator-runtime": "0.13.9",
+    "fs-extra": "^10.1.0",
+    "node-pty": "0.10.1",
     "socket.io": "4.5.0",
-    "ts-node": "10.7.0",
-    "typescript": "^4.6.3"
+    "systeminformation": "^5.6.10"
   },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

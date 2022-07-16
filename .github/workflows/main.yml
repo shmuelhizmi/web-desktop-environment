@@ -21,4 +21,4 @@ jobs:
     # Runs a single command using the runners shell
     - name: Run eslint
       run: |
-        npm run github-lint
+        pnpm run github-lint

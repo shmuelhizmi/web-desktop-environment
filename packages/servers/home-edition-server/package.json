@@ -1,10 +1,10 @@
 {
 	"name": "@web-desktop-environment/home-edition-server",
 	"scripts": {
-		"prepublishOnly": "npm run build",
+		"prepublishOnly": "pnpm run build",
 		"start": "nodemon .",
 		"build": "tsc",
-		"build:server": "npm run build",
+		"build:server": "pnpm run build",
 		"lint": "eslint .",
 		"preinstall": "bash ./bin/install.sh"
 	},

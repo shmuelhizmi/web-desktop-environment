@@ -6,11 +6,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "watch": "tsc --watch",
     "build": "tsc",
-    "build:server": "npm run build",
-    "postpublish": "npm run clean",
+    "build:server": "pnpm run build",
+    "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
     "lint": "eslint ."
   },
@@ -24,6 +24,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "7.29.4",
     "prettier": "^2.0.5",
+    "vite": "2.8.6",
     "typescript": "^4.6.3"
   },
   "peerDependencies": {

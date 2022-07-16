@@ -12,8 +12,8 @@ const rootLogger = new Logger();
 
 const desktopManager = new DesktopManager("desktop-manager", rootLogger);
 
-export const startServer = async (packageJSON: PackageJSON) => {
-	const { desktopPort } = await desktopManager.initialize(packageJSON);
+export const startServer = async (packageJSON: PackageJSON, packageJSONPath: string) => {
+	const { desktopPort } = await desktopManager.initialize(packageJSON, packageJSONPath);
 	Render(
 		<Server views={viewInterfaces} singleInstance port={desktopPort}>
 			{() => (

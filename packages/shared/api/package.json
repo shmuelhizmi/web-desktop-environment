@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "build": "tsc",
     "watch": "tsc --watch",
-    "build:server": "npm run build",
-    "postpublish": "npm run clean",
+    "build:server": "pnpm run build",
+    "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' ."
   },
   "repository": {
@@ -33,11 +33,13 @@
     "wde.config.json"
   ],
   "dependencies": {
-    "@web-desktop-environment/interfaces": "^2.0.0-20",
+    "@web-desktop-environment/interfaces": "workspace:*",
     "uid": "2.0.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.33",
+    "uuid": "^8.3.2",
+    "@types/uuid": "^8.3.4",
     "typescript": "^4.6.3"
   },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"

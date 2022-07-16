@@ -107,12 +107,17 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 		};
 	};
 
-	public async searchForNewPackages(apps: string[], shouldRun = false) {
+	public async searchForNewPackages(apps: string[], packageJSONPath: string, shouldRun = false) {
 		return Promise.all(
 			apps.map(async (app) => {
-				const packageLocation = path.dirname(
-					require.resolve(path.join(app, "package.json"))
-				);
+				let packageLocation: string;
+				try {
+					packageLocation = path.dirname(
+						require.resolve(path.join(app, "package.json"))
+					);
+				} catch (e) {
+					packageLocation = path.dirname(require.resolve(path.join(packageJSONPath, "..", "node_modules", app, "package.json")));
+				}
 				const wdeConfig: WDEPackageConfig = await fs.readJSON(
 					path.join(packageLocation, "wde.config.json")
 				);

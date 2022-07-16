@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "pnpm run build",
     "build": "tsc",
     "watch": "tsc --watch",
-    "build:server": "npm run build",
-    "postpublish": "npm run clean",
+    "build:server": "pnpm run build",
+    "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' ."
   },
   "files": [

@@ -1,10 +1,10 @@
 {
 	"name": "@web-desktop-environment/home-edition-server",
 	"scripts": {
-		"prepublishOnly": "npm run build",
+		"prepublishOnly": "pnpm run build",
 		"start": "nodemon .",
 		"build": "tsc",
-		"build:server": "npm run build",
+		"build:server": "pnpm run build",
 		"lint": "eslint .",
 		"preinstall": "bash ./bin/install.sh"
 	},
@@ -53,9 +53,9 @@
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.3.0",
-		"@web-desktop-environment/pack-core": "^2.0.0-20",
-		"@web-desktop-environment/server-api": "^2.0.0-20",
-		"@web-desktop-environment/server-sdk": "^2.0.0-20",
+		"@web-desktop-environment/pack-core": "workspace:*",
+		"@web-desktop-environment/server-api": "workspace:*",
+		"@web-desktop-environment/server-sdk": "workspace:*",
 		"ts-node": "10.7.0"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"

@@ -30,7 +30,7 @@ class Desktop extends Component<
 	DesktopState
 > {
 	name = "desktop";
-	get openApps() {
+	get openApps(): OpenApp[] {
 		return this.desktopManager.appsManager.runningApps.map((app) => ({
 			icon: app.icon,
 			id: app.id,

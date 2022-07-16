@@ -14,6 +14,7 @@ import figlet from "figlet";
 import color from "chalk";
 import ngRok from "ngrok";
 import localtunnel from "localtunnel";
+import { timeoutAfter } from "../utils/promise";
 
 export default class DesktopManager {
 	public readonly name: string;
@@ -43,9 +44,10 @@ export default class DesktopManager {
 		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);
 	}
-	public async initialize(packageJSON: PackageJSON) {
+	public async initialize(packageJSON: PackageJSON, packageJSONPath: string) {
 		await this.settingsManager.initialize();
 		await this.downloadManager.initialize();
+		this.initX11();
 		const mainPort = await this.portManager.getPort(true);
 		await this.domainManager.startSubDomainServer(mainPort);
 		this.logger.info(`starting web-desktop-environment on port ${mainPort}`);
@@ -54,30 +56,37 @@ export default class DesktopManager {
 		API.domainManager.registerDomain("desktop", desktopPort);
 		await this.packageManager.searchForNewPackages(
 			packageJSON.apps,
+			packageJSONPath,
 			/* run */ true
-		);
+		).catch((err) => {
+			this.logger.error(err.message);
+		});
 
-		const [ng, { url: localtunnelUrl }] = await Promise.all([
-			ngRok
-				.connect({
-					proto: "http",
-					addr: this.domainManager.mainPort,
+		const [{ value: ng, timeout: ngTimeout }, { value: lt , timeout: ltTimeout }] = await Promise.all([
+			timeoutAfter(
+				2500,
+				ngRok
+					.connect({
+						proto: "http",
+						addr: this.domainManager.mainPort,
+					})
+					.catch((e) => undefined),
+			),
+			timeoutAfter(
+				2500,
+				localtunnel({
+					port: this.domainManager.mainPort,
 				})
-				.catch((e) => undefined),
-			localtunnel({
-				port: this.domainManager.mainPort,
-			}),
+			),
 		]);
-		this.initX11();
 		const showStartupMessages = () => {
 			this.logger.direct(
 				color.bold.magenta(
-					`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${
-						this.domainManager.mainPort
+					`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${this.domainManager.mainPort
 					}${" ".repeat(29)}`
 				)
 			);
-			if (ng) {
+			if (!ngTimeout) {
 				this.logger.direct(
 					color.bold.green(
 						`${" ".repeat(13)}NGROK host - ${ng.replace(
@@ -87,10 +96,10 @@ export default class DesktopManager {
 					)
 				);
 			}
-			if (localtunnelUrl) {
+			if (!ltTimeout) {
 				this.logger.direct(
 					color.bold.green(
-						`LOCALTUNNEL host - ${localtunnelUrl} | LOCALTUNNEL port - 443`
+						`LOCALTUNNEL host - ${lt.url} | LOCALTUNNEL port - 443`
 					)
 				);
 			}
@@ -98,7 +107,7 @@ export default class DesktopManager {
 				color.bold.black(
 					// eslint-disable-next-line quotes
 					" ".repeat(3) +
-						'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
+					'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
 				)
 			);
 		};

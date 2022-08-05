@@ -6,7 +6,8 @@
     "start": "nodemon .",
     "build": "tsc",
     "build:server": "pnpm run build",
-    "lint": "eslint .",
+    "fix-lint": "eslint --fix ./",
+    "lint": "eslint ./",
     "preinstall": "bash ./bin/install.sh"
   },
   "bin": {

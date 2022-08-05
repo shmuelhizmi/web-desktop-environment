@@ -1,11 +1,6 @@
 import React from "react";
 import MediaPlayerInterface from "@web-desktop-environment/interfaces/lib/views/apps/media/MediaPlayer";
-import {
-	withStyles,
-	createStyles,
-	WithStyles,
-	withTheme,
-} from "@mui/styles";
+import { withStyles, createStyles, WithStyles, withTheme } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 import { getUrl } from "@root/../../../sdk/web/lib";
@@ -59,12 +54,7 @@ class MediaPlayer extends FileViewer<
 			<div className={classes.videoAreaContainer}>
 				<div className={classes.videoAreaContainerBody}>
 					<video controls className={classes.videoArea}>
-						<source
-							src={getUrl(
-								downloadServerDomain,
-								source,
-							)}
-						></source>
+						<source src={getUrl(downloadServerDomain, source)}></source>
 					</video>
 				</div>
 			</div>

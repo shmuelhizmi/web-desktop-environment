@@ -1,3 +1,4 @@
 dist
-lib
+*.js
+*.d.ts
 build

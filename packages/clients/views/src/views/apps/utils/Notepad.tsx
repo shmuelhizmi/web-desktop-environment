@@ -1,11 +1,6 @@
 import React from "react";
 import NotepadInterface from "@web-desktop-environment/interfaces/lib/views/apps/utils/Notepad";
-import {
-	withStyles,
-	createStyles,
-	WithStyles,
-	withTheme,
-} from "@mui/styles";
+import { withStyles, createStyles, WithStyles, withTheme } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import FileViewer, { makeFileViewerStyles } from "../shared/FileViewer";
 

@@ -21,12 +21,12 @@ export const withSuspense =
 export const lazySuspense = <T extends {}>(
 	load: () => Promise<{ default: React.ComponentType<T> }>
 ) => {
-    const Lazy = React.lazy(load) as unknown as React.ComponentType<T>;
-    return (props: T) => {
-        return (
-            <React.Suspense fallback={<Suspense />}>
-                <Lazy {...props} />
-            </React.Suspense>
-        );
-    }
-}
+	const Lazy = React.lazy(load) as unknown as React.ComponentType<T>;
+	return (props: T) => {
+		return (
+			<React.Suspense fallback={<Suspense />}>
+				<Lazy {...props} />
+			</React.Suspense>
+		);
+	};
+};

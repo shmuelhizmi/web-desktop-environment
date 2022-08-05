@@ -1,4 +1,4 @@
-import { lazySuspense } from '@components/suspense';
+import { lazySuspense } from "@components/suspense";
 export * from "@views/apps";
 
 const Window = lazySuspense(() => import("@views/Window"));

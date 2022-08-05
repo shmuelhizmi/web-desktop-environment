@@ -10,11 +10,11 @@
     "dev:dev": "concurrently \"pnpm run dev:server:dev\" \"pnpm run dev:web\"",
     "dev:dev:bound": "export WDE_server=true && concurrently \"pnpm run dev:server:dev\" \"pnpm run dev:web\"",
     "start": "pnpm run dev",
-    "lint": "lerna run lint",
-    "github-lint": "lerna run prepare && pnpm run lint",
-    "vercel-setup": "lerna run prepare",
+    "lint": "pnpm run -r lint",
+    "github-lint": "pnpm run -r prepare && pnpm run lint",
+    "vercel-setup": "pnpm run -r prepare",
     "mirror-readme": "lerna exec 'cp ../../../README.md ./ && cp -r ../../../assets/* ./assets/' ",
-    "prepublishOnly": "lerna run prepublishOnly",
+    "prepublishOnly": "pnpm run -r prepublishOnly",
     "build": "turbo run build"
   },
   "devDependencies": {

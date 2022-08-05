@@ -129,7 +129,7 @@ class Explorer extends AppBase<
 			<Explorer
 				currentPath={currentPath}
 				files={files}
-				platformPathSeparator={sep as  "/" | "\\"}
+				platformPathSeparator={sep as "/" | "\\"}
 				type={type}
 				onChangeCurrentPath={this.onChangeCurrentPath}
 				onOpen={this.onOpen}

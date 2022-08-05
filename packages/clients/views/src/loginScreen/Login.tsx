@@ -116,8 +116,8 @@ function isValidUrl(url: string) {
 	}
 }
 
-const isServerSpecific = import.meta.env.WDE_published || import.meta.env.WDE_server;
-
+const isServerSpecific =
+	import.meta.env.WDE_published || import.meta.env.WDE_server;
 
 export const loginStorage = {
 	get host() {
@@ -131,8 +131,9 @@ export const loginStorage = {
 	},
 	get port() {
 		if (isServerSpecific) {
-			return Number(window.location.port) || (
-				window.location.protocol === "https:" ? 443 : 80
+			return (
+				Number(window.location.port) ||
+				(window.location.protocol === "https:" ? 443 : 80)
 			);
 		}
 		return Number(localStorage.getItem("last-port")) || 5000;
@@ -218,7 +219,9 @@ const Login = (props: LoginProps) => {
 				// remove hash
 				window.location.hash = "#";
 			}
-		} catch (e) {}
+		} catch (e) {
+			// ignore
+		}
 	});
 	return (
 		<div className={classes.root}>

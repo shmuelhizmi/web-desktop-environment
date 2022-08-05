@@ -14,7 +14,8 @@
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
-    "lint": "eslint ."
+    "fix-lint": "eslint --fix ./",
+    "lint": "eslint ./"
   },
   "bin": {
     "web-desktop-package-dev": "./bin/package.js"

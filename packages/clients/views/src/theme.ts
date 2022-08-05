@@ -447,7 +447,6 @@ const mintTheme: Theme = {
 	},
 };
 
-
 const nordTheme: Theme = {
 	type: "dark",
 	name: "nord",

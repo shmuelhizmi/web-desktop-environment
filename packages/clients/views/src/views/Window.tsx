@@ -258,12 +258,8 @@ class Window extends Component<
 	getSize = () => {
 		const size = { ...(this.windowProperties.size || {}) };
 		const { collapse } = this.state;
-		const {
-			maxHeight,
-			maxWidth,
-			minHeight,
-			minWidth,
-		} = this.screenSizesToNumbers();
+		const { maxHeight, maxWidth, minHeight, minWidth } =
+			this.screenSizesToNumbers();
 		if (size.height && size.width) {
 			if (maxHeight < size.height) {
 				size.height = maxHeight;
@@ -581,12 +577,8 @@ class Window extends Component<
 		const { localWindowState, collapse } = this.state;
 		if (localWindowState?.size) {
 			const { size } = localWindowState;
-			const {
-				maxHeight,
-				maxWidth,
-				minHeight,
-				minWidth,
-			} = this.screenSizesToNumbers();
+			const { maxHeight, maxWidth, minHeight, minWidth } =
+				this.screenSizesToNumbers();
 			const newSize = {
 				width: size.width + delta.width - this.lastResizeDelta.width,
 				height: size.height + delta.height - this.lastResizeDelta.height,

@@ -4,7 +4,7 @@ import API from "@web-desktop-environment/server-api";
 import { App } from "../appManager";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 import AppBase from "./appBase";
-import { ViewsToComponents } from "@react-fullstack/fullstack"
+import { ViewsToComponents } from "@react-fullstack/fullstack";
 
 export type AppFunctionComponent<
 	Input extends object,
@@ -48,7 +48,7 @@ type AsApp = <
 ) => new () => AppBase<Input, {}, PropsForRunningAsChildApp>;
 
 export const asApp: AsApp = (AppComponent, name) => {
-	return class APP extends AppBase<any, any, any> {
+	const app = class APP extends AppBase<any, any, any> {
 		name = name;
 		renderApp = (views) => {
 			const { props, api, logger } = this;
@@ -72,5 +72,6 @@ export const asApp: AsApp = (AppComponent, name) => {
 				</AppComponent>
 			);
 		};
-	} as any;
+	};
+	return app as any;
 };

@@ -105,7 +105,8 @@
     "start": "vite",
     "watch": "vite build --watch",
     "build": "vite build && echo \"http.web-desktop.run\" > build/CNAME",
-    "lint": "eslint .",
+    "fix-lint": "eslint --fix ./",
+    "lint": "eslint ./",
     "gh-deploy-page": "npx gh-pages -d build"
   },
   "main": "./src/index.tsx",

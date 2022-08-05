@@ -13,7 +13,8 @@
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
-    "lint": "eslint ."
+    "fix-lint": "eslint --fix ./",
+    "lint": "eslint ./"
   },
   "devDependencies": {
     "@swc/core": "1.2.183",

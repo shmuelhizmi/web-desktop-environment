@@ -13,7 +13,9 @@ const Settings = lazySuspense(() => import("@views/apps/system/Settings"));
 const Iframe = lazySuspense(() => import("@views/apps/thirdParty/Iframe"));
 
 // shared
-const LoadingScreen = lazySuspense(() => import("@views/apps/shared/LoadingScreen"));
+const LoadingScreen = lazySuspense(
+	() => import("@views/apps/shared/LoadingScreen")
+);
 
 export {
 	Terminal,

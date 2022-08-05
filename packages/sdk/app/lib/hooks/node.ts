@@ -1,8 +1,7 @@
 import os from "os";
 import * as cp from "child_process";
 import fs from "fs-extra";
-import { useEffect, useMemo, useState } from "react";
-import API from "@web-desktop-environment/server-api";
+import { useEffect, useState } from "react";
 
 interface UseProcessOptions {
 	cwd?: string;
@@ -73,7 +72,7 @@ export function useProcess(props: UseProcessOptions) {
 		process.on("error", (err) => {
 			setError(err);
 		});
-		process.on("exit", (code, _s) => {
+		process.on("exit", (code) => {
 			if (code === 0) {
 				setStatus("stopped");
 			} else {

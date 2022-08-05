@@ -89,7 +89,7 @@ class WindowManager {
 		id: number,
 		name: string,
 		icon: Icon,
-		color: string | undefined,
+		color: string | undefined
 	) => {
 		const window = this.windows.find(
 			(currentWindow) => currentWindow.id === id

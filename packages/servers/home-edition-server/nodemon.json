@@ -1,7 +1,7 @@
 {
   "watch": [
     "src",
-    "node_modules"
+    "../../"
   ],
   "ext": "ts,tsx,js",
   "ignore": [

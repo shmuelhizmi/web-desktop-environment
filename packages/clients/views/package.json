@@ -91,7 +91,8 @@
     "README.md",
     "tsconfig.json",
     "assets/**/*",
-    "wde.config.json"
+    "wde.config.json",
+    "build/**/*"
   ],
   "repository": {
     "type": "git",
@@ -100,12 +101,14 @@
   },
   "homepage": "http://http.web-desktop.run/",
   "scripts": {
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "export WDE_published=true && pnpm run build",
     "start": "vite",
+    "watch": "vite build --watch",
     "build": "vite build && echo \"http.web-desktop.run\" > build/CNAME",
     "lint": "eslint .",
     "gh-deploy-page": "npx gh-pages -d build"
   },
+  "main": "./src/index.tsx",
   "browserslist": {
     "production": [
       ">0.2%",

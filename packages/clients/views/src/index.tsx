@@ -1,22 +1,32 @@
 import * as React from "react";
 import ReactDOM from "react-dom";
+
 import Login, { loginStorage } from "@root/loginScreen/Login";
-import Demo from "@root/demo/App";
-import "@root/index.css";
+import { defaultTheme } from "@root/theme";
+import { ThemeProvider as TP } from "@mui/styles";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ConnectionContext } from "./contexts";
+import setUpDocument from "@utils/setupDocument";
+
 import * as webViews from "@root/views";
 import * as webViewsWindow from "@root/views/windowViews";
 import * as nativeViewsHost from "@root/views/native/hostViews";
 import * as nativeViewsClient from "@root/views/native/clientViews";
 import * as serviceViews from "@root/views/services";
+
 import "typeface-jetbrains-mono";
-import { defaultTheme } from "@root/theme";
-import { ThemeProvider as TP } from "@mui/styles";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ConnectionContext } from "./contexts";
-import { Client } from "@react-fullstack/fullstack-socket-client";
-import setUpDocument from "@utils/setupDocument";
+import "@root/index.css";
+
 import type { SDK } from "@web-desktop-environment/interfaces/lib/web/sdk";
 import type { ManagerOptions } from "socket.io-client";
+import { lazySuspense, withSuspense } from "@components/suspense";
+
+const Demo = lazySuspense(() => import("@root/demo/App"));
+const Client = lazySuspense(() =>
+	import("@react-fullstack/fullstack-socket-client").then(({ Client }) => ({
+		default: Client,
+	}))
+) as unknown as typeof import("@react-fullstack/fullstack-socket-client").Client;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -105,7 +115,7 @@ window.wdeSdk = {
 	},
 } as SDK;
 
-const App = () => {
+const App = withSuspense(() => {
 	const [login, setLogin] = React.useState<{
 		isLoggedIn: boolean;
 		host: string;
@@ -230,7 +240,7 @@ const App = () => {
 			</Router>
 		</TP>
 	);
-};
+});
 
 ReactDOM.render(<App />, document.getElementById("root"));
 

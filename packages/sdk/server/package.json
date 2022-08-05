@@ -71,6 +71,8 @@
     "@react-fullstack/render": "0.3.0",
     "@web-desktop-environment/app-sdk": "workspace:*",
     "@web-desktop-environment/interfaces": "workspace:*",
+    "@web-desktop-environment/views": "workspace:*",
+    "live-server": "1.2.2",
     "broadcast-channel": "4.11.0",
     "chalk": "4.1.2",
     "figlet": "1.5.2",

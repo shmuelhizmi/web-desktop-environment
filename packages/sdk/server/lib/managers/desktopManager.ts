@@ -44,6 +44,41 @@ export default class DesktopManager {
 		this.authManager = new AuthManager(this.logger, this);
 		implementLoggingManager(this.logger);
 	}
+	public async startTunnels() {
+		const [{ value: ng, timeout: ngTimeout }, { value: lt , timeout: ltTimeout }] = await Promise.all([
+			timeoutAfter(
+				2500,
+				ngRok
+					.connect({
+						proto: "http",
+						addr: this.domainManager.mainPort,
+					})
+					.catch((e) => undefined),
+			),
+			timeoutAfter(
+				2500,
+				localtunnel({
+					port: this.domainManager.mainPort,
+				})
+			),
+		]);
+		return () => {
+			if (!ngTimeout) {
+				this.logger.direct(
+					color.bold.green(
+						`${" ".repeat(13)}NGROK host - ${ng} | NGROK port - 443 ${" ".repeat(13)}`
+					)
+				);
+			}
+			if (!ltTimeout) {
+				this.logger.direct(
+					color.bold.green(
+						`LOCALTUNNEL host - ${lt.url} | LOCALTUNNEL port - 443`
+					)
+				);
+			}
+		}
+	}
 	public async initialize(packageJSON: PackageJSON, packageJSONPath: string) {
 		await this.settingsManager.initialize();
 		await this.downloadManager.initialize();
@@ -62,23 +97,7 @@ export default class DesktopManager {
 			this.logger.error(err.message);
 		});
 
-		const [{ value: ng, timeout: ngTimeout }, { value: lt , timeout: ltTimeout }] = await Promise.all([
-			timeoutAfter(
-				2500,
-				ngRok
-					.connect({
-						proto: "http",
-						addr: this.domainManager.mainPort,
-					})
-					.catch((e) => undefined),
-			),
-			timeoutAfter(
-				2500,
-				localtunnel({
-					port: this.domainManager.mainPort,
-				})
-			),
-		]);
+		const [printTunnels, viewsPath, localhost] = await Promise.all([this.startTunnels(), this.domainManager.hostViews(), this.portManager.getHost()]);
 		const showStartupMessages = () => {
 			this.logger.direct(
 				color.bold.magenta(
@@ -86,23 +105,12 @@ export default class DesktopManager {
 					}${" ".repeat(29)}`
 				)
 			);
-			if (!ngTimeout) {
-				this.logger.direct(
-					color.bold.green(
-						`${" ".repeat(13)}NGROK host - ${ng.replace(
-							"https://",
-							""
-						)} | NGROK port - 443 ${" ".repeat(13)}`
-					)
-				);
-			}
-			if (!ltTimeout) {
-				this.logger.direct(
-					color.bold.green(
-						`LOCALTUNNEL host - ${lt.url} | LOCALTUNNEL port - 443`
-					)
-				);
-			}
+			printTunnels();
+			this.logger.direct(
+				color.bold.green(
+					`${" ".repeat(13)}access views at - ${localhost}:${mainPort}/${viewsPath} ${" ".repeat(13)}`
+				)
+			);
 			this.logger.direct(
 				color.bold.black(
 					// eslint-disable-next-line quotes

@@ -1,17 +1,19 @@
-import Terminal from "@views/apps/utils/Terminal";
-import Explorer from "@views/apps/utils/Explorer";
-import Notepad from "@views/apps/utils/Notepad";
+import { lazySuspense } from "@components/suspense";
+
+const Terminal = lazySuspense(() => import("@views/apps/utils/Terminal"));
+const Explorer = lazySuspense(() => import("@views/apps/utils/Explorer"));
+const Notepad = lazySuspense(() => import("@views/apps/utils/Notepad"));
 //media
-import MediaPlayer from "@views/apps/media/MediaPlayer";
+const MediaPlayer = lazySuspense(() => import("@views/apps/media/MediaPlayer"));
 
 // system
-import Settings from "@views/apps/system/Settings";
+const Settings = lazySuspense(() => import("@views/apps/system/Settings"));
 
 // thirdParty
-import Iframe from "@views/apps/thirdParty/Iframe";
+const Iframe = lazySuspense(() => import("@views/apps/thirdParty/Iframe"));
 
 // shared
-import LoadingScreen from "@views/apps/shared/LoadingScreen";
+const LoadingScreen = lazySuspense(() => import("@views/apps/shared/LoadingScreen"));
 
 export {
 	Terminal,

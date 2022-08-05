@@ -3,6 +3,8 @@ import getPort, { makeRange } from "get-port";
 import DesktopManager from "../managers/desktopManager";
 import API, { APIClient } from "@web-desktop-environment/server-api";
 import { v4 as uuid } from "uuid";
+import os from "os";
+import dns from "dns";
 
 export const timeout = (time: number) =>
 	new Promise((resolve) => setTimeout(resolve, time));
@@ -53,6 +55,16 @@ export default class PortManager {
 			});
 		}
 	};
+	public getHost() {
+		return new Promise<string>((resolve, reject) => {
+			dns.lookup(os.hostname(), (err, address) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(address);
+			});
+		});
+	}
 	public withDomain = async () => {
 		const port = await this.getPort();
 		const domain = uuid();

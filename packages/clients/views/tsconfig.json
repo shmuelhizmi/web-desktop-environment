@@ -4,6 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+    "types": ["vite/client"],
     "esModuleInterop": true,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,

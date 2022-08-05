@@ -19,6 +19,13 @@ jobs:
         node-version: '14'
 
     # Runs a single command using the runners shell
+    - name: Install
+      run: |
+        npm install -g pnpm
+        pnpm install
     - name: Run eslint
       run: |
         pnpm run github-lint
+    - name: Run Build
+      run: |
+        pnpm run build

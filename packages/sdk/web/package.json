@@ -53,7 +53,7 @@
     "@mui/styles": "5.7.0",
     "@mui/utils": "5.7.0",
     "@react-fullstack/fullstack": "0.3.0",
-    "@web-desktop-environment/interfaces": "workspace:*"
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-20"
   },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

@@ -33,7 +33,7 @@
     "wde.config.json"
   ],
   "dependencies": {
-    "@web-desktop-environment/interfaces": "workspace:*",
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-20",
     "uid": "2.0.0"
   },
   "devDependencies": {

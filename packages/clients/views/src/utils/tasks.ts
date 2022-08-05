@@ -10,7 +10,7 @@ export const lastTaskQueuer = () => {
 	return {
 		queueTask(newTask: () => Promise<void>) {
 			lastTask = newTask;
-			continueEmitter.call("continue", (null as unknown) as void);
+			continueEmitter.call("continue", null as unknown as void);
 		},
 		stop() {
 			stop = true;
@@ -33,7 +33,7 @@ export const lastTaskQueuer = () => {
 					isIdle = true;
 				}
 				if (!lastTask) {
-					continueEmitter.call("idle", (null as unknown) as void);
+					continueEmitter.call("idle", null as unknown as void);
 					await new Promise((res) => continueEmitter.on("continue", res));
 				}
 			}

@@ -62,10 +62,7 @@ class Iframe extends Component<
 
 		const src =
 			props.type === "internal"
-				? getUrl(
-						props.id,
-						props.path,
-				  )
+				? getUrl(props.id, props.path)
 				: `${props.https ? "https" : "http"}://${
 						props.host || reactFullstackConnectionManager.host
 				  }${props.port ? ":" + props.port : ""}${props.path || ""}`;

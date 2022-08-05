@@ -1,7 +1,9 @@
-//wrapper
-import ThemeProvider from "@views/wrapper/ThemeProvider";
+import { lazySuspense } from "@components/suspense";
 
-import Window from "@views/native/client/Window";
+const ThemeProvider = lazySuspense(
+	() => import("@views/wrapper/ThemeProvider")
+);
+const Window = lazySuspense(() => import("@views/native/client/Window"));
 
 export * from "@views/apps";
 

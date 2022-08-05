@@ -35,6 +35,7 @@ interface TextFieldProps {
 	transparent?: boolean;
 	defaultValue?: string | number | string[] | undefined;
 	password?: boolean;
+	disabled?: boolean;
 }
 
 const TextField = ({
@@ -50,6 +51,7 @@ const TextField = ({
 	password,
 	placeholder,
 	borderBottom,
+	disabled,
 }: PropsWithChildren<TextFieldProps>) => {
 	const theme: Theme = useTheme();
 	const selectedColor = theme[color || "background"];
@@ -83,6 +85,7 @@ const TextField = ({
 			onChange={onInputEvent}
 			className={`${classes.root} ${className || ""}`}
 			type={password ? "password" : "text"}
+			disabled={disabled}
 		>
 			{children}
 		</input>

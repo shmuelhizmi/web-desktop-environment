@@ -49,15 +49,18 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 		APIClient.addChildProcess(this.vscode);
 		const waitForVscodeToLoad = () => {
 			if (!this.willUnmount) {
-				axios.request({
-					method: "GET",
-					url: `http://localhost:${port}/`,
-					timeout: 600,
-				}).then(() => {
-					this.setState({ isLoaded: true });
-				}).catch(() => {
-					setTimeout(waitForVscodeToLoad, 500);
-				})
+				axios
+					.request({
+						method: "GET",
+						url: `http://localhost:${port}/`,
+						timeout: 600,
+					})
+					.then(() => {
+						this.setState({ isLoaded: true });
+					})
+					.catch(() => {
+						setTimeout(waitForVscodeToLoad, 500);
+					});
 			}
 		};
 		waitForVscodeToLoad();

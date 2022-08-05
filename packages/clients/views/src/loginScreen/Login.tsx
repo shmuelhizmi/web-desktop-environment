@@ -116,14 +116,26 @@ function isValidUrl(url: string) {
 	}
 }
 
+const isServerSpecific =
+	import.meta.env.WDE_published || import.meta.env.WDE_server;
+
 export const loginStorage = {
 	get host() {
+		if (isServerSpecific) {
+			return window.location.hostname;
+		}
 		return localStorage.getItem("last-host") || "localhost";
 	},
 	set host(host: string) {
 		localStorage.setItem("last-host", host);
 	},
 	get port() {
+		if (isServerSpecific) {
+			return (
+				Number(window.location.port) ||
+				(window.location.protocol === "https:" ? 443 : 80)
+			);
+		}
 		return Number(localStorage.getItem("last-port")) || 5000;
 	},
 	set port(port: number) {
@@ -136,6 +148,9 @@ export const loginStorage = {
 		localStorage.setItem("token", token);
 	},
 	get https() {
+		if (isServerSpecific) {
+			return window.location.protocol === "https:";
+		}
 		const last = localStorage.getItem("last-https");
 		return last ? last === "true" : window.location.protocol === "https:";
 	},
@@ -204,7 +219,9 @@ const Login = (props: LoginProps) => {
 				// remove hash
 				window.location.hash = "#";
 			}
-		} catch (e) {}
+		} catch (e) {
+			// ignore
+		}
 	});
 	return (
 		<div className={classes.root}>
@@ -221,11 +238,13 @@ const Login = (props: LoginProps) => {
 						value={host}
 						onChange={(newValue) => setHost(newValue || "")}
 						placeholder="host"
+						disabled={!!isServerSpecific}
 					></TextField>
 					<TextField
 						value={String(port || "")}
 						onChange={(newValue) => setPort(Number(newValue))}
 						placeholder="port"
+						disabled={!!isServerSpecific}
 					></TextField>
 					<TextField
 						value={passcode}
@@ -238,6 +257,7 @@ const Login = (props: LoginProps) => {
 							type="checkbox"
 							className={classes.checkbox}
 							checked={https}
+							disabled={!!isServerSpecific}
 							onChange={(e) => setHttps(e.target.checked)}
 						/>
 						<label>Use HTTPS</label>

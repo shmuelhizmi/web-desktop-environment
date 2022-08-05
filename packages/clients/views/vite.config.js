@@ -2,8 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import svgrPlugin from "vite-plugin-svgr";
-import { esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
-import path from "path";
 
 // allowSyntheticDefaultImports
 globalThis.dir = __dirname;
@@ -14,6 +12,8 @@ export default defineConfig({
 		sourcemap: true,
 		outDir: "./build",
 	},
+	envPrefix: "WDE_",
+	base: './', 
 	resolve: {
 		alias: [
 			{
@@ -25,6 +25,7 @@ export default defineConfig({
 				replacement: "@mui/utils/esm/$1",
 			},
 		],
+		dedupe: ["@mui/styles", "@mui/utils", "react", "react-dom"],
 	},
 });
 

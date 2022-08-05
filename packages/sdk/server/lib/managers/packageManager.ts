@@ -63,6 +63,10 @@ class PackageManager extends Emitter<PackageManagerEvents> {
 			const paths = decodeURI(req.url)
 				.split("/")
 				.filter((p) => p);
+			if (paths.length < 2) {
+				res.writeHead(404);
+				res.end();
+			}
 			if (paths[0].startsWith("@")) {
 				packageName = paths[0] + "/" + paths[1];
 				versionPath = paths[2];

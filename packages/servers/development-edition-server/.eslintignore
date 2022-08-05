@@ -1,2 +1,3 @@
 dist
-lib
+*.js
+*.d.ts

@@ -1,6 +1,5 @@
 export { AppsManager, App } from "./appManager";
 export { ServiceManager } from "./serviceManager";
-import API from "@web-desktop-environment/server-api/lib";
 import AppBase from "./components/appBase";
 import Window from "./components/window";
 

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   lint:
@@ -16,9 +16,16 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16.15.1'
 
     # Runs a single command using the runners shell
+    - name: Install
+      run: |
+        npm install -g pnpm
+        pnpm install
     - name: Run eslint
       run: |
         pnpm run github-lint
+    - name: Run Build
+      run: |
+        pnpm run build

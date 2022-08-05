@@ -3,6 +3,8 @@ import DesktopManager from "../managers/desktopManager";
 import { APIClient } from "@web-desktop-environment/server-api";
 import http from "http";
 import proxy from "http-proxy";
+import liveServer from "live-server";
+import path from "path";
 
 const readReq = async (req: http.IncomingMessage) => {
 	const buffers = [];
@@ -26,10 +28,16 @@ export default class DomainManager {
 			this.registerDomain.bind(this)
 		);
 	}
-	subDomainsBindings = new Map<string, string>();
-	registerDomain(name: string, target: string | number) {
+	subDomainsBindings = new Map<string, {
+		target: string | number;
+		isPublic: boolean;
+	}>();
+	registerDomain(name: string, target: string | number, isPublic: boolean = false) {
 		this.logger.info(`Registering sub-domain ${name} to target ${target}`);
-		this.subDomainsBindings.set(name, String(target));
+		this.subDomainsBindings.set(name, {
+			target: Number.isInteger(target) ? 'localhost:' + target : target,
+			isPublic,
+		});
 	}
 	startSubDomainServer(mainPort: number) {
 		this.mainPort = mainPort;
@@ -39,9 +47,13 @@ export default class DomainManager {
 		): proxy | undefined => {
 			try {
 				const [, subDomain, token] = req.url.split("/");
-				req.url = req.url.replace(`/${subDomain}/${token}`, "");
-				const target = this.subDomainsBindings.get(subDomain);
-				const auth = this.desktopManager.authManager.verifyAccessToken(
+				const {target, isPublic} = this.subDomainsBindings.get(subDomain);
+				if (!isPublic) {
+					req.url = req.url.replace(`/${subDomain}/${token}`, "");
+				} else {
+					req.url = req.url.replace(`/${subDomain}`, "");
+				}
+				const auth = isPublic || this.desktopManager.authManager.verifyAccessToken(
 					token,
 					req.connection.remoteAddress
 				);
@@ -57,9 +69,7 @@ export default class DomainManager {
 					const reqProxy = proxy.createProxy(proxyOptions);
 					return reqProxy;
 				}
-			} catch (err) {
-				return;
-			}
+			} catch (err) {}
 		};
 		const server = http.createServer(async (req, res) => {
 			const reqProxy = getProxy(req);
@@ -73,52 +83,11 @@ export default class DomainManager {
 				});
 			} else {
 				if (!(await this.tryToLogin(req, res))) {
-					if (req.url === "/") {
-						const https = req.headers["x-forwarded-proto"] === "https";
-						const port = Number(
-							req.headers.host.split(":")[1] || https ? 443 : 80
-						);
-						const host = req.headers.host.split(":")[0];
-						const passcode = req.url?.slice(1);
-						const link = {
-							port,
-							host,
-							https,
-							passcode: passcode.length === 8 ? passcode : "",
-						};
-						res.writeHead(200, {
-							"Content-Type": "text/html",
-							"Access-Control-Allow-Origin": "*",
+					if (req.url === "/" || req.url === "") {
+						res.writeHead(301, {
+							Location: `/${this.publicPathName}/`,
 						});
-						res.write(
-							`
-							<!DOCTYPE html>
-							<html>
-								<head>
-									<meta charset="utf-8">
-									<meta name="viewport" content="width=device-width, initial-scale=1">
-									<title>Web Desktop</title>
-									<meta http-equiv="Refresh" content="0; URL=http://http.web-desktop.run/#${JSON.stringify(
-										link
-									)}">
-								</head>
-								<body>
-									<p>Redirecting to login panel</p>
-									<script>
-									${
-										!link.https
-											? `window.location.replace("http://http.web-desktop.run/#${encodeURIComponent(
-													JSON.stringify(link)
-											  )}");`
-											: `window.location.replace("https://web-desktop.run/#${encodeURIComponent(
-													JSON.stringify(link)
-											  )}");`
-									}
-									</script>
-								</body>
-							</html>
-								`
-						);
+						res.end();
 						res.end();
 					}
 				}
@@ -163,5 +132,30 @@ export default class DomainManager {
 			return true;
 		}
 		return false;
+	}
+	publicPathName = 'public';
+	async hostViews() {
+		const viewsPath = path.join(require.resolve('@web-desktop-environment/views'), '../../build');
+		const port = await this.desktopManager.portManager.getPort();
+		liveServer.start({
+			open: false,
+			root: viewsPath,
+			port,
+			middleware: [
+				(req, res, next) => {
+					if (req.url === '') {
+						res.writeHead(301, {
+							Location: `/${this.publicPathName}/`,
+						});
+						res.end();
+						return;
+					}
+					next();
+				}
+			]
+		});
+		this.registerDomain(this.publicPathName, port, true);
+		this.logger.info(`Views server started on port ${port}`);
+		return this.publicPathName;
 	}
 }

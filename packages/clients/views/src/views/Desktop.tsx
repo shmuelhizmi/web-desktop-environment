@@ -3,19 +3,13 @@ import DesktopInterface, {
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { Component } from "@react-fullstack/fullstack";
 import React, { useState, useEffect } from "react";
-import {
-	withStyles,
-	createStyles,
-	WithStyles,
-	makeStyles,
-} from "@mui/styles";
+import { withStyles, createStyles, WithStyles, makeStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { reactFullstackConnectionManager } from "@root/index";
 import TextField from "@components/textField";
 import Icon from "@components/icon";
 import windowManager, { Window } from "@state/WindowManager";
 import MountUnmountAnimation from "@components/mountUnmountAnimation";
-import { Link } from "react-router-dom";
 import { Client } from "@react-fullstack/fullstack-socket-client";
 import { ConnectionContext } from "@root/contexts";
 import StateComponent from "@components/stateComponent";
@@ -357,15 +351,14 @@ class Desktop extends Component<
 		nextProps: Desktop["props"],
 		_nextState: Desktop["state"]
 	) => {
-		const {
-			externalViewsImportPaths: currentExternalViewsImportPaths,
-		} = this.props;
-		const {
-			externalViewsImportPaths: nextExternalViewsImportPaths,
-		} = nextProps;
-		const differentExternalViewsImportPaths = nextExternalViewsImportPaths.filter(
-			(path) => !currentExternalViewsImportPaths.includes(path)
-		);
+		const { externalViewsImportPaths: currentExternalViewsImportPaths } =
+			this.props;
+		const { externalViewsImportPaths: nextExternalViewsImportPaths } =
+			nextProps;
+		const differentExternalViewsImportPaths =
+			nextExternalViewsImportPaths.filter(
+				(path) => !currentExternalViewsImportPaths.includes(path)
+			);
 		this.importPaths(differentExternalViewsImportPaths);
 		return true;
 	};
@@ -422,13 +415,8 @@ class Desktop extends Component<
 	menuBarRef = React.createRef<HTMLDivElement>();
 
 	render() {
-		const {
-			background,
-			openApps,
-			classes,
-			apps,
-			servicesAppsDomains,
-		} = this.props;
+		const { background, openApps, classes, apps, servicesAppsDomains } =
+			this.props;
 		const { views, isLoadingViews } = this.state;
 		return (
 			<div className={classes.root} style={{ background }}>

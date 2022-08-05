@@ -13,7 +13,8 @@
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
     "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
-    "lint": "eslint ."
+    "fix-lint": "eslint --fix ./",
+    "lint": "eslint ./"
   },
   "bin": {
     "run": "./bin/runApp.js"
@@ -71,6 +72,8 @@
     "@react-fullstack/render": "0.3.0",
     "@web-desktop-environment/app-sdk": "workspace:*",
     "@web-desktop-environment/interfaces": "workspace:*",
+    "@web-desktop-environment/views": "workspace:*",
+    "live-server": "1.2.2",
     "broadcast-channel": "4.11.0",
     "chalk": "4.1.2",
     "figlet": "1.5.2",

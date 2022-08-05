@@ -11,8 +11,8 @@
     "dev:dev:bound": "export WDE_server=true && concurrently \"pnpm run dev:server:dev\" \"pnpm run dev:web\"",
     "start": "pnpm run dev",
     "lint": "lerna run lint",
-    "github-lint": "pnpm run install-ignore-scripts && lerna run prepare && pnpm run lint",
-    "vercel-setup": "pnpm run install-ignore-scripts && lerna run prepare",
+    "github-lint": "lerna run prepare && pnpm run lint",
+    "vercel-setup": "lerna run prepare",
     "mirror-readme": "lerna exec 'cp ../../../README.md ./ && cp -r ../../../assets/* ./assets/' ",
     "prepublishOnly": "lerna run prepublishOnly",
     "build": "turbo run build"

@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/interfaces",
-  "version": "2.0.0-20",
+  "version": "2.0.0-alpha.8",
   "main": "lib",
   "types": "lib",
   "author": "shmuelhizmi",
@@ -12,7 +12,7 @@
     "watch": "tsc --watch",
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
-    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' ."
+    "clean": "git clean -fdx -e '*.(js|d.ts)' ./lib"
   },
   "files": [
     "lib/**/*.d.ts",

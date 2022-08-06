@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/development-edition-server",
-  "version": "2.0.0-21",
+  "version": "2.0.0-alpha.8",
   "scripts": {
     "prepublish": "pnpm run build",
     "start": "nodemon .",
@@ -53,19 +53,19 @@
     "eslint-plugin-react": "7.29.4",
     "nodemon": "2.0.16",
     "prettier": "^2.0.5",
-    "tsconfig-paths": "4.0.0",
-    "typescript": "^4.6.3"
+    "ts-node": "10.7.0",
+    "typescript": "^4.6.3",
+    "tsconfig-paths": "4.0.0"
   },
   "dependencies": {
     "@react-fullstack/fullstack": "0.3.0",
-    "@web-desktop-environment/interfaces": "workspace:2.0.0-20",
-    "@web-desktop-environment/pack-core": "workspace:2.0.0-20",
-    "@web-desktop-environment/pack-dev": "workspace:2.0.0-21",
-    "@web-desktop-environment/pack-remote": "workspace:2.0.0-20",
-    "@web-desktop-environment/server-api": "workspace:2.0.0-20",
-    "@web-desktop-environment/server-sdk": "workspace:2.0.0-20",
-    "react": "^17.0.2",
-    "ts-node": "10.7.0"
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/pack-core": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/pack-dev": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/pack-remote": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/server-sdk": "workspace:2.0.0-alpha.8",
+    "react": "^17.0.2"
   },
   "wdeConfig": {
     "includeNativeX11Apps": true

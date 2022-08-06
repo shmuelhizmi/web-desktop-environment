@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/web-sdk",
-  "version": "2.0.0-20",
+  "version": "2.0.0-alpha.8",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "build": "tsc",
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
-    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
+    "clean": "git clean -fdx -e '*.(js|d.ts)' ./lib",
     "fix-lint": "eslint --fix ./",
     "lint": "eslint ./"
   },
@@ -53,7 +53,7 @@
     "@mui/styles": "5.7.0",
     "@mui/utils": "5.7.0",
     "@react-fullstack/fullstack": "0.3.0",
-    "@web-desktop-environment/interfaces": "workspace:2.0.0-20"
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8"
   },
   "gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

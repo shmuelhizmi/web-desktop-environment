@@ -1,0 +1,21 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@web-desktop-environment/package-cli": "2.0.0-20",
+    "@web-desktop-environment/views": "2.0.0-20",
+    "@web-desktop-environment/pack-core": "2.0.0-20",
+    "@web-desktop-environment/pack-dev": "2.0.0-21",
+    "@web-desktop-environment/pack-remote": "2.0.0-20",
+    "@web-desktop-environment/app-sdk": "2.0.0-20",
+    "@web-desktop-environment/server-sdk": "2.0.0-20",
+    "@web-desktop-environment/web-sdk": "2.0.0-20",
+    "@web-desktop-environment/development-edition-server": "2.0.0-21",
+    "@web-desktop-environment/home-edition-server": "2.0.0-20",
+    "@web-desktop-environment/server-api": "2.0.0-20",
+    "@web-desktop-environment/interfaces": "2.0.0-20"
+  },
+  "changesets": [
+    "little-ears-sin"
+  ]
+}

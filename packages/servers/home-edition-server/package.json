@@ -6,7 +6,7 @@
 		"build": "tsc",
 		"build:server": "pnpm run build",
 		"fix-lint": "eslint --fix",
-    "lint": "eslint ./",
+		"lint": "eslint ./",
 		"preinstall": "bash ./bin/install.sh"
 	},
 	"bin": {
@@ -16,7 +16,7 @@
 		"@web-desktop-environment/pack-core"
 	],
 	"main": "dist",
-	"version": "2.0.0-20",
+	"version": "2.0.0-alpha.8",
 	"author": "shmuelhizmi",
 	"license": "MIT",
 	"private": false,
@@ -32,6 +32,7 @@
 		"nodemon": "2.0.16",
 		"prettier": "^2.0.5",
 		"tsconfig-paths": "4.0.0",
+		"ts-node": "10.7.0",
 		"typescript": "^4.6.3"
 	},
 	"files": [
@@ -54,10 +55,9 @@
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.3.0",
-		"@web-desktop-environment/pack-core": "workspace:2.0.0-20",
-		"@web-desktop-environment/server-api": "workspace:2.0.0-20",
-		"@web-desktop-environment/server-sdk": "workspace:2.0.0-20",
-		"ts-node": "10.7.0"
+		"@web-desktop-environment/pack-core": "workspace:2.0.0-alpha.8",
+		"@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
+		"@web-desktop-environment/server-sdk": "workspace:2.0.0-alpha.8"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

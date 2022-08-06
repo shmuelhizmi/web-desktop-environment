@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-sdk",
-  "version": "2.0.0-20",
+  "version": "2.0.0-alpha.8",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "build": "tsc",
     "build:server": "pnpm run build",
     "postpublish": "pnpm run clean",
-    "clean": "git clean -fdx -e 'lib/**/*.(js|d.ts)' .",
+    "clean": "git clean -fdx -e '*.(js|d.ts)' ./lib",
     "fix-lint": "eslint --fix ./",
     "lint": "eslint ./"
   },
@@ -34,7 +34,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "@web-desktop-environment/server-api": "workspace:2.0.0-20",
+    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -47,7 +47,7 @@
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
-    "@web-desktop-environment/server-api": "2.0.0-20"
+    "@web-desktop-environment/server-api": "2.0.0-alpha.8"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -70,9 +70,9 @@
   "dependencies": {
     "@react-fullstack/fullstack-socket-server": "0.3.0",
     "@react-fullstack/render": "0.3.0",
-    "@web-desktop-environment/app-sdk": "workspace:2.0.0-20",
-    "@web-desktop-environment/interfaces": "workspace:2.0.0-20",
-    "@web-desktop-environment/views": "workspace:2.0.0-20",
+    "@web-desktop-environment/app-sdk": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/views": "workspace:2.0.0-alpha.8",
     "live-server": "1.2.2",
     "broadcast-channel": "4.11.0",
     "chalk": "4.1.2",

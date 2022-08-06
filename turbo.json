@@ -3,11 +3,11 @@
     "pipeline": {
       "prepare": {
         "dependsOn": ["^prepare"],
-        "outputs": ["dist/**", "src/**/*.js", "src/**/*.js.map", "app/**/*.js", "app/**/*.js.map", "lib/**/*.js", "lib/**/*.js.map"]
+        "outputs": ["dist/**", "src/**/*.js", "src/**/*.js.map", "app/**/*.js", "app/**/*.js.map", "lib/**/*.js", "lib/**/*.js.map", "build/**/*.js", "build/**/*.js.map"]
       },
       "build": {
         "dependsOn": ["prepare", "^build"],
-        "outputs": ["dist/**", "src/**/*.js", "src/**/*.js.map", "app/**/*.js", "app/**/*.js.map", "lib/**/*.js", "lib/**/*.js.map"]
+        "outputs": ["dist/**", "src/**/*.js", "src/**/*.js.map", "app/**/*.js", "app/**/*.js.map", "lib/**/*.js", "lib/**/*.js.map", "build/**/*.js", "build/**/*.js.map"]
       },
       "test": {
         "outputs": []

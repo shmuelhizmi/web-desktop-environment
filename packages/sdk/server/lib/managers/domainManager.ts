@@ -28,14 +28,17 @@ export default class DomainManager {
 			this.registerDomain.bind(this)
 		);
 	}
-	subDomainsBindings = new Map<string, {
-		target: string | number;
-		isPublic: boolean;
-	}>();
-	registerDomain(name: string, target: string | number, isPublic: boolean = false) {
+	subDomainsBindings = new Map<
+		string,
+		{
+			target: string | number;
+			isPublic: boolean;
+		}
+	>();
+	registerDomain(name: string, target: string | number, isPublic = false) {
 		this.logger.info(`Registering sub-domain ${name} to target ${target}`);
 		this.subDomainsBindings.set(name, {
-			target: Number.isInteger(target) ? 'localhost:' + target : target,
+			target: Number.isInteger(target) ? "localhost:" + target : target,
 			isPublic,
 		});
 	}
@@ -47,16 +50,18 @@ export default class DomainManager {
 		): proxy | undefined => {
 			try {
 				const [, subDomain, token] = req.url.split("/");
-				const {target, isPublic} = this.subDomainsBindings.get(subDomain);
+				const { target, isPublic } = this.subDomainsBindings.get(subDomain);
 				if (!isPublic) {
 					req.url = req.url.replace(`/${subDomain}/${token}`, "");
 				} else {
 					req.url = req.url.replace(`/${subDomain}`, "");
 				}
-				const auth = isPublic || this.desktopManager.authManager.verifyAccessToken(
-					token,
-					req.connection.remoteAddress
-				);
+				const auth =
+					isPublic ||
+					this.desktopManager.authManager.verifyAccessToken(
+						token,
+						req.connection.remoteAddress
+					);
 				if (target && auth) {
 					const proxyOptions = {
 						target: `${ws ? "ws" : "http"}://${target}`,
@@ -69,7 +74,9 @@ export default class DomainManager {
 					const reqProxy = proxy.createProxy(proxyOptions);
 					return reqProxy;
 				}
-			} catch (err) {}
+			} catch (err) {
+				// unable to parse url
+			}
 		};
 		const server = http.createServer(async (req, res) => {
 			const reqProxy = getProxy(req);
@@ -133,9 +140,12 @@ export default class DomainManager {
 		}
 		return false;
 	}
-	publicPathName = 'public';
+	publicPathName = "public";
 	async hostViews() {
-		const viewsPath = path.join(require.resolve('@web-desktop-environment/views'), '../../build');
+		const viewsPath = path.join(
+			require.resolve("@web-desktop-environment/views"),
+			"../../build"
+		);
 		const port = await this.desktopManager.portManager.getPort();
 		liveServer.start({
 			open: false,
@@ -143,7 +153,7 @@ export default class DomainManager {
 			port,
 			middleware: [
 				(req, res, next) => {
-					if (req.url === '') {
+					if (req.url === "") {
 						res.writeHead(301, {
 							Location: `/${this.publicPathName}/`,
 						});
@@ -151,8 +161,9 @@ export default class DomainManager {
 						return;
 					}
 					next();
-				}
-			]
+				},
+			],
+			logLevel: 0,
 		});
 		this.registerDomain(this.publicPathName, port, true);
 		this.logger.info(`Views server started on port ${port}`);

@@ -12,6 +12,7 @@ import {
 } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { Input as DesktopProps } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { GTKBridge as GTKBridgeConnector } from "../../utils/gtkBridge";
+import os from "os";
 
 interface DesktopState {
 	background: string;
@@ -67,7 +68,7 @@ class Desktop extends Component<
 			}
 		);
 		this.onComponentWillUnmount.push(listenToNewSettings.remove);
-		if (this.props.includeNativeX11Apps) {
+		if (this.props.includeNativeX11Apps && os.platform() === "linux") {
 			this.desktopManager.appsManager.readx11Apps();
 		}
 		this.desktopManager.appsManager.on("onOpenAppsUpdate", () => {

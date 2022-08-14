@@ -56,10 +56,10 @@ export default class PortManager {
 		}
 	};
 	public getHost() {
-		return new Promise<string>((resolve, reject) => {
+		return new Promise<string>((resolve) => {
 			dns.lookup(os.hostname(), (err, address) => {
 				if (err) {
-					reject(err);
+					resolve("127.0.0.1");
 				}
 				resolve(address);
 			});

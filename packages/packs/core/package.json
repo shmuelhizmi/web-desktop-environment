@@ -61,7 +61,6 @@
     "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
     "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
     "react": "^17.0.2",
-    "regenerator-runtime": "0.13.9",
     "fs-extra": "^10.1.0",
     "node-pty": "0.10.1",
     "socket.io": "4.5.0",

@@ -45,7 +45,10 @@ export default class DesktopManager {
 		implementLoggingManager(this.logger);
 	}
 	public async startTunnels() {
-		const [{ value: ng, timeout: ngTimeout }, { value: lt , timeout: ltTimeout }] = await Promise.all([
+		const [
+			{ value: ng, timeout: ngTimeout },
+			{ value: lt, timeout: ltTimeout },
+		] = await Promise.all([
 			timeoutAfter(
 				2500,
 				ngRok
@@ -53,7 +56,7 @@ export default class DesktopManager {
 						proto: "http",
 						addr: this.domainManager.mainPort,
 					})
-					.catch((e) => undefined),
+					.catch((e) => undefined)
 			),
 			timeoutAfter(
 				2500,
@@ -66,7 +69,9 @@ export default class DesktopManager {
 			if (!ngTimeout) {
 				this.logger.direct(
 					color.bold.green(
-						`${" ".repeat(13)}NGROK host - ${ng} | NGROK port - 443 ${" ".repeat(13)}`
+						`${" ".repeat(
+							13
+						)}NGROK host - ${ng} | NGROK port - 443 ${" ".repeat(13)}`
 					)
 				);
 			}
@@ -77,7 +82,7 @@ export default class DesktopManager {
 					)
 				);
 			}
-		}
+		};
 	}
 	public async initialize(packageJSON: PackageJSON, packageJSONPath: string) {
 		await this.settingsManager.initialize();
@@ -89,33 +94,40 @@ export default class DesktopManager {
 		const desktopPort = await this.portManager.getPort(false);
 		this.logger.info(`starting desktop on port ${desktopPort}`);
 		API.domainManager.registerDomain("desktop", desktopPort);
-		await this.packageManager.searchForNewPackages(
-			packageJSON.apps,
-			packageJSONPath,
-			/* run */ true
-		).catch((err) => {
-			this.logger.error(err.message);
-		});
+		await this.packageManager
+			.searchForNewPackages(packageJSON.apps, packageJSONPath, /* run */ true)
+			.catch((err) => {
+				this.logger.error(err.message);
+			});
 
-		const [printTunnels, viewsPath, localhost] = await Promise.all([this.startTunnels(), this.domainManager.hostViews(), this.portManager.getHost()]);
+		const [printTunnels, viewsPath, localhost] = await Promise.all([
+			this.startTunnels(),
+			this.domainManager.hostViews(),
+			this.portManager.getHost(),
+		]);
 		const showStartupMessages = () => {
 			this.logger.direct(
 				color.bold.magenta(
-					`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${this.domainManager.mainPort
+					`${" ".repeat(28)}CODE - ${this.authManager.sessionCode} PORT - ${
+						this.domainManager.mainPort
 					}${" ".repeat(29)}`
 				)
 			);
 			printTunnels();
 			this.logger.direct(
 				color.bold.green(
-					`${" ".repeat(13)}access views at - ${localhost}:${mainPort}/${viewsPath} ${" ".repeat(13)}`
+					`${" ".repeat(
+						13
+					)}access views at - ${localhost}:${mainPort}/${viewsPath} ${" ".repeat(
+						13
+					)}`
 				)
 			);
 			this.logger.direct(
 				color.bold.black(
 					// eslint-disable-next-line quotes
 					" ".repeat(3) +
-					'view it at "http://http.web-desktop.run/" or for https "https://web-desktop.run/"   '
+						"view it at \"http://http.web-desktop.run/\" or for https \"https://web-desktop.run/\"   "
 				)
 			);
 		};

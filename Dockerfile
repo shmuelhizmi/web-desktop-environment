@@ -30,8 +30,8 @@ RUN set -e; \
     rm -rf /var/lib/apt/lists;
 
 
-RUN npm install -g yarn
-RUN yarn
+RUN npm install -g pnpm
+RUN pnpm i
 RUN apt-get update && apt-get -y install xpra && apt-get -y --purge autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN alias ui='xpra start :10 --pulseaudio=no --start-child="$*" --bind-tcp=0.0.0.0:9400 --no-daemon --exit-with-children'
 
@@ -39,4 +39,4 @@ EXPOSE 5000
 EXPOSE 3000
 EXPOSE 9200-9400
 
-CMD ["npm", "run", "dev:server:dev"]
+CMD ["npm", "run", "dev:dev:bound"]

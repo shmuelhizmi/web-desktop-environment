@@ -24,4 +24,4 @@ RUN set -e; \
     nodejs build-essential xpra && \
     rm -rf /var/lib/apt/lists;
 
-RUN npm install -g yarn
+RUN npm install -g yarn pnpm

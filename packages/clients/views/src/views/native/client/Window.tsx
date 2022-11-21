@@ -1,7 +1,7 @@
 import WindowInterface, {
 	WindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import React, { useState, useEffect } from "react";
 import {
 	withStyles,

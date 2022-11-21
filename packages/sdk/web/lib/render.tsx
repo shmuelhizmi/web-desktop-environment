@@ -1,4 +1,4 @@
-import type { ViewsProvider as VP } from "@react-fullstack/fullstack";
+import type { ViewsProvider as VP } from "@react-fullstack/fullstack/server";
 import React from "react";
 import { getGlobal } from "./global";
 

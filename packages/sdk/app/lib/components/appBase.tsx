@@ -1,7 +1,7 @@
 import React from "react";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
-import { ViewsProvider } from "@react-fullstack/fullstack";
-import { ViewsToServerComponents } from "@react-fullstack/fullstack/lib/Views";
+import { ViewsProvider } from "@react-fullstack/fullstack/server";
+import { ViewsToServerComponents } from "@react-fullstack/fullstack/server";
 import API from "@web-desktop-environment/server-api";
 import Window from "./window";
 import { App } from "../appManager";

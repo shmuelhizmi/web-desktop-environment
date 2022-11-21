@@ -4,7 +4,7 @@ import API from "@web-desktop-environment/server-api";
 import { App } from "../appManager";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 import AppBase from "./appBase";
-import { ViewsToComponents } from "@react-fullstack/fullstack";
+import { ViewsToServerComponents } from "@react-fullstack/fullstack/server";
 
 export type AppFunctionComponent<
 	Input extends object,
@@ -21,7 +21,7 @@ export type AppFunctionComponentProps<
 > = {
 	input: Input;
 	logger: LoggingManager;
-	views: ViewsToComponents<Views>;
+	views: ViewsToServerComponents<Views>;
 	api: typeof API;
 	/**
 	 * only available if running as a child app

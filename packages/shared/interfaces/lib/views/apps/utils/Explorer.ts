@@ -1,4 +1,4 @@
-import type { View } from "@react-fullstack/fullstack";
+import type { View } from "@react-fullstack/fullstack/shared";
 
 export interface File {
   isFolder: boolean;

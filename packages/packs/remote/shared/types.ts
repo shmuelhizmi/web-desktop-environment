@@ -1,4 +1,4 @@
-import { extendsViews, View } from "@web-desktop-environment/interfaces";
+import { View, ViewInterfacesType } from "@web-desktop-environment/interfaces";
 
 export interface XpraEvents {
 	onConnect: () => void;
@@ -12,8 +12,6 @@ export interface XpraWrapperProps extends XpraEvents {
 	children?: React.ReactNode;
 }
 
-export const views = extendsViews<{
+export type Views = ViewInterfacesType & {
 	XpraWrapper: View<XpraWrapperProps>;
-}>("XpraWrapper");
-
-export type Views = typeof views;
+};

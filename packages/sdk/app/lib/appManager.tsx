@@ -3,11 +3,12 @@ import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
 import { Component } from "react";
 import { AppBaseProps } from "./components/appBase";
 import { Render } from "@react-fullstack/render";
-import { Server } from "@react-fullstack/fullstack-socket-server";
-import { Views } from "@react-fullstack/fullstack";
+import { createSocketServer } from "@react-fullstack/fullstack-socket-server";
+import { Server as ServerBase } from "@react-fullstack/fullstack/server";
 import API from "@web-desktop-environment/server-api";
 import { Window } from "@web-desktop-environment/interfaces/lib/shared/window";
-import { viewInterfaces } from "@web-desktop-environment/interfaces/lib";
+
+const Server = createSocketServer(ServerBase);
 
 export interface App<Input> {
 	icon: Icon;
@@ -27,10 +28,7 @@ export class AppsManager {
 
 	private static registeredApps = new Map<string, Omit<App<unknown>, "name">>();
 
-	public static registerApp(
-		apps: Record<string, Omit<App<unknown>, "name">>,
-		views: Views = viewInterfaces
-	) {
+	public static registerApp(apps: Record<string, Omit<App<unknown>, "name">>) {
 		for (const appName in apps) {
 			const {
 				description,
@@ -46,7 +44,7 @@ export class AppsManager {
 				{ description, displayName, icon, name: appName },
 				async (port, input, awaitClose, close) => {
 					const { stop } = Render(
-						<Server singleInstance port={port} views={views}>
+						<Server singleInstance port={port}>
 							{() => (
 								<App
 									propsForRunningAsSelfContainedApp={{

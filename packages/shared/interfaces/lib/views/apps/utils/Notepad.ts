@@ -1,4 +1,4 @@
-import type { View } from "@react-fullstack/fullstack";
+import type { View } from "@react-fullstack/fullstack/shared";
 import type { FileViewerBase } from "../../../shared/fileViewer";
 
 export interface Input extends FileViewerBase {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import LoadingScreenInterface from "@web-desktop-environment/interfaces/lib/views/apps/shared/LoadingScreen";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import { WithStyles, withStyles, createStyles } from "@mui/styles";

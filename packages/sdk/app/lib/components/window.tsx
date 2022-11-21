@@ -1,5 +1,5 @@
 import React from "react";
-import { ViewsProvider } from "@react-fullstack/fullstack";
+import { ViewsProvider } from "@react-fullstack/fullstack/server";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import { Window as WindowViewState } from "@web-desktop-environment/interfaces/lib/shared/window";
 import {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import WindowInterface, {
 	WindowState as LocalWindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";

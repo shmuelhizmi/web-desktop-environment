@@ -1,5 +1,6 @@
 import React from "react";
-import { Component, View } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
+import { View } from "@react-fullstack/fullstack/shared";
 import { FileViewerBase } from "@web-desktop-environment/interfaces/lib/shared/fileViewer";
 import { createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";

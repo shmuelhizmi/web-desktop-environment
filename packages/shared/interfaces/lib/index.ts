@@ -1,4 +1,4 @@
-import { Views, View } from "@react-fullstack/fullstack";
+import { Views, View } from "@react-fullstack/fullstack/shared";
 
 import type Desktop from "./views/Desktop";
 import type Window from "./views/Window";
@@ -24,36 +24,21 @@ import type LoadingScreen from "./views/apps/shared/LoadingScreen";
 
 import type Service from "./views/desktop/service";
 
-export const viewInterfaces = {
-  Desktop: <Desktop>{},
-  Window: <Window>{},
+export type ViewInterfacesType = {
+  Desktop: Desktop;
+  Window: Window;
   // apps
-  Terminal: <Terminal>{},
-  Explorer: <Explorer>{},
-  Settings: <Settings>{},
-  Notepad: <Notepad>{},
-  MediaPlayer: <MediaPlayer>{},
-  Iframe: <Iframe>{},
-  LoadingScreen: <LoadingScreen>{},
+  Terminal: Terminal;
+  Explorer: Explorer;
+  Settings: Settings;
+  Notepad: Notepad;
+  MediaPlayer: MediaPlayer;
+  Iframe: Iframe;
+  LoadingScreen: LoadingScreen;
   // wrapper
-  ThemeProvider: <ThemeProvider>{},
-  Service: <Service>{},
+  ThemeProvider: ThemeProvider;
+  Service: Service;
 };
-
-export type ViewInterfacesType = typeof viewInterfaces;
-
-
-export function extendsViews<V extends Views>(
-	...views: (keyof V)[]
-): V & ViewInterfacesType {
-	return {
-		...views.reduce((acc, view) => {
-			acc[view] = {} as any;
-			return acc;
-		}, {} as V),
-		...viewInterfaces,
-	};
-}
 
 export type ViewProps<
 	V extends Views,

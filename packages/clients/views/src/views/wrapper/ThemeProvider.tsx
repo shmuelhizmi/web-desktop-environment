@@ -1,5 +1,5 @@
 import React from "react";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import ThemeProviderInterface from "@web-desktop-environment/interfaces/lib/views/ThemeProvider";
 import { ThemeProvider as TP } from "@mui/styles";
 import { Themes } from "@root/theme";

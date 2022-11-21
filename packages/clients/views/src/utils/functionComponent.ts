@@ -1,5 +1,6 @@
 import React from "react";
-import { Component, View } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
+import { View } from "@react-fullstack/fullstack/shared";
 
 export function asFullStackView<T extends View<any>>(
 	Comp: React.FunctionComponent<T["props"]>

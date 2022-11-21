@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LoggingManager } from "@web-desktop-environment/server-api/lib/frontend/managers/logging/loggingManager";
 import { ServiceActionItem } from "@web-desktop-environment/interfaces/lib/views/desktop/service";
-import { ViewsProvider } from "@react-fullstack/fullstack";
+import { ViewsProvider } from "@react-fullstack/fullstack/server";
 import { Views } from "../shared/types";
 import { useXpra } from "./useXpra";
 

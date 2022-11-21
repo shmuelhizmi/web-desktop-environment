@@ -5,7 +5,10 @@ import {
 	OpenApp,
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import DesktopManager from "../managers/desktopManager";
-import { webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast } from "../const";
+import {
+	Request,
+	webDesktopEnvironmentInternalCommunicationBroadcast,
+} from "../const";
 import { BroadcastChannel } from "broadcast-channel";
 import { APIClient, API } from "@web-desktop-environment/server-api";
 import { AppRegistrationData } from "@web-desktop-environment/server-api/lib/backend/managers/apps/appsManager";
@@ -101,20 +104,26 @@ export default class AppsManager extends Emitter<AppsManagerEvents> {
 	};
 
 	listenToExternalAppLaunches = () => {
-		const channel = new BroadcastChannel(
-			webDesktopEnvironmentInternalCommiunicationAppRunnerBroadcast
+		const channel = new BroadcastChannel<Request>(
+			webDesktopEnvironmentInternalCommunicationBroadcast
 		);
-		channel.onmessage = ({
-			name,
-			input,
-		}: {
-			name: string;
-			input: Record<string, unknown>;
-		}) => {
-			if (typeof name === "string" && typeof input === "object") {
-				this.spawnApp(name, input);
+		channel.addEventListener("message", (message) => {
+			if (message.type === "launch") {
+				this.spawnApp(message.name, message.input);
 			}
-		};
+			if (message.type === "getApps") {
+				channel.postMessage({
+					type: "getAppsResponse",
+					// TODO: app input is currently defined using typescript types, but it should be defined using json schema
+					apps: this.apps
+						.map((app) => ({ name: app.appName, input: {} }))
+						.reduce((acc, app) => {
+							acc[app.name] = app.input;
+							return acc;
+						}, {} as Record<string, Record<string, unknown>>),
+				});
+			}
+		});
 	};
 
 	spawnApp = async (name: string, input: Record<string, unknown>) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import Component from "../base/Component";
-import { ViewsProvider } from "@react-fullstack/fullstack";
+import { ViewsProvider } from "@react-fullstack/fullstack/server";
 import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import {
 	OpenApp,

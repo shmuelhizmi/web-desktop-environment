@@ -1,7 +1,7 @@
 import ExplorerInterface, {
 	File,
 } from "@web-desktop-environment/interfaces/lib/views/apps/utils/Explorer";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import React from "react";
 import { withStyles, createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";

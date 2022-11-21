@@ -1,7 +1,7 @@
 import DesktopInterface, {
 	App,
 } from "@web-desktop-environment/interfaces/lib/views/Desktop";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import React, { useState, useEffect } from "react";
 import { withStyles, createStyles, WithStyles, makeStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
@@ -436,13 +436,11 @@ class Desktop extends Component<
 									port: app.port,
 								}}
 							>
-								<ProvideViews value={viewsToProvide}>
-									<Client<{}>
-										key={app.id}
-										{...connection}
-										views={viewsToProvide}
-									/>
-								</ProvideViews>
+								<Client<{}>
+									key={app.id}
+									{...connection}
+									views={viewsToProvide}
+								/>
 							</ConnectionContext.Provider>
 						);
 					})}

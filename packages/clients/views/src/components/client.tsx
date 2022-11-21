@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "socket.io-client";
 import {
 	Client as FullstackClient,
-	Views,
 	ViewsToComponents,
-} from "@react-fullstack/fullstack";
+} from "@react-fullstack/fullstack/client";
+import { Views } from "@react-fullstack/fullstack/shared";
 
 interface Props<ViewsInterface extends Views> {
 	token: string;

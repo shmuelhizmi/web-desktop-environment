@@ -4,7 +4,7 @@ import {
 	asApp,
 	AppFunctionComponent,
 } from "@web-desktop-environment/app-sdk";
-import views, { ViewsType } from "../../shared/types";
+import { Views } from "../../shared/types";
 
 interface AppInput {
 	text?: string;
@@ -13,7 +13,7 @@ interface AppInput {
 const ExampleView: AppFunctionComponent<
 	{ text?: string },
 	{},
-	ViewsType
+	Views
 > = ({ views, input }) => {
 	const [count, setCount] = useState("");
 	const { text } = input;
@@ -54,5 +54,5 @@ export const registerApp = () => {
 				minWidth: 600,
 			},
 		},
-	}, views);
+	});
 };

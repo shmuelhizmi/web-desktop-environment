@@ -1,7 +1,7 @@
 import React from "react";
 import DesktopInterface from "@web-desktop-environment/interfaces/lib/views/Desktop";
 import { Client } from "@react-fullstack/fullstack-socket-client";
-import { Component } from "@react-fullstack/fullstack";
+import { Component } from "@react-fullstack/fullstack/client";
 import { withStyles, createStyles, WithStyles } from "@mui/styles";
 import { Theme } from "@web-desktop-environment/interfaces/lib/shared/settings";
 import TextField from "@components/textField";

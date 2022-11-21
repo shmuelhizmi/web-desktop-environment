@@ -1,4 +1,4 @@
-import type { View } from "@react-fullstack/fullstack";
+import type { View } from "@react-fullstack/fullstack/shared";
 import { Icon } from "../../shared/icon";
 
 export interface Input {

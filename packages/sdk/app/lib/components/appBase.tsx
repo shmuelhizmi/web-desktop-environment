@@ -43,7 +43,7 @@ abstract class AppBase<
 		views: ViewsToServerComponents<ViewInterfacesType>
 	) => JSX.Element | JSX.Element[];
 	render() {
-		const { useDefaultWindow, windowTitle: defaultWindowTitle } = this.state;
+		const { useDefaultWindow, windowTitle } = this.state;
 		const { propsForRunningAsSelfContainedApp } = this.props;
 		const { icon, name, window, color } =
 			propsForRunningAsSelfContainedApp?.appData || {};
@@ -57,7 +57,7 @@ abstract class AppBase<
 								icon={icon}
 								name={name}
 								color={color}
-								title={defaultWindowTitle}
+								title={windowTitle}
 								windowProperties={window}
 								close={close}
 							>

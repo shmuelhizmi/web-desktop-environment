@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { ViewInterfacesType } from "@web-desktop-environment/interfaces/lib";
+import { ViewInterfacesType } from "@web-desktop-environment/interfaces";
 import {
 	ViewsProvider,
 	windowBarHeight,
-} from "@web-desktop-environment/web-sdk/lib";
+} from "@web-desktop-environment/web-sdk";
 import {
+	createXpraWindowBaseZindex,
 	XpraClient,
 	XpraWindowManager,
 	XpraWindowManagerWindow,
@@ -12,14 +13,17 @@ import {
 import WindowViewInterface, {
 	WindowState,
 } from "@web-desktop-environment/interfaces/lib/views/Window";
-import { Icon } from "@web-desktop-environment/interfaces/lib/shared/icon";
-import { createPortal } from "react-dom";
 
 interface XpraWindowRendererProps {
 	window: XpraWindowManagerWindow;
 	vm: XpraWindowManager;
 	xpra: XpraClient;
 	icon?: string;
+	children?: React.ReactNode;
+	// position: {
+	// 	x: number;
+	// 	y: number;
+	// };
 }
 
 function getInputProps({ vm, window }: XpraWindowRendererProps) {
@@ -112,16 +116,14 @@ export function WindowBase(
 	);
 }
 
+let zIndex = 0;
+
 export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 	const { window, vm, xpra, icon } = props;
 	const winRef = useRef<HTMLDivElement>(null);
 	const [size, setSize] = React.useState<{ width: number; height: number }>({
 		width: window.attributes.dimension[0],
 		height: window.attributes.dimension[1],
-	});
-	const [position, setPosition] = React.useState<{ x: number; y: number }>({
-		x: window.attributes.position[0],
-		y: window.attributes.position[1],
 	});
 	const [isMinimized, setIsMinimized] = React.useState(false);
 	const inputProps = useMemo(() => getInputProps(props), [props]);
@@ -149,26 +151,12 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 			width: window.attributes.dimension[0],
 			height: window.attributes.dimension[1],
 		});
-		if (!isMinimized) {
-			setPosition({
-				x: window.attributes.position[0],
-				y: window.attributes.position[1],
-			});
-		}
 	}, [...window.attributes.dimension, ...window.attributes.position]);
 
 	const onWindowSetState = useCallback(
 		(state: WindowState) => {
 			const minimized = state.minimized ?? isMinimized;
 
-			if (!minimized || state.position) {
-				setPosition(
-					state.position || {
-						x: window.attributes.position[0],
-						y: window.attributes.position[1],
-					}
-				);
-			}
 			if (!minimized && (state.position || state.size)) {
 				vm.moveResize(
 					window,
@@ -203,16 +191,37 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 			type.includes("DROPDOWN") ||
 			type.includes("TOOLTIP") ||
 			type.includes("POPUP") ||
-			type.includes("MENU")
+			type.includes("MENU") ||
+			type.includes("COMBO")
 	);
 
 	const content = (
 		<div
 			style={{ width: size.width, height: size.height }}
+			key={window.attributes.id}
 			ref={winRef}
 			{...inputProps}
-		/>
+		>
+			{props.children}
+		</div>
 	);
+
+	if (borderless) {
+		return (
+			<div
+				style={{
+					width: size.width,
+					height: size.height,
+					top: window.attributes.position[1],
+					left: window.attributes.position[0],
+					zIndex: createXpraWindowBaseZindex(window.attributes, ++zIndex),
+					position: "fixed",
+				}}
+				ref={winRef}
+				{...inputProps}
+			/>
+		);
+	}
 	return (
 		<WindowBase
 			background="transparent"
@@ -235,8 +244,8 @@ export function XpraWindowRenderer(props: XpraWindowRendererProps) {
 				minHeight: 50,
 				minWidth: 50,
 				position: {
-					x: position.x,
-					y: position.y,
+					x: window.attributes.position[0],
+					y: window.attributes.position[1],
 				},
 			}}
 		>

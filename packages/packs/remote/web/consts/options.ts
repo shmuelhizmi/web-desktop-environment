@@ -13,7 +13,7 @@ export const xpraOptions: Partial<XpraConnectionOptions> = {
 	password: "",
 	showStartMenu: true,
 	fileTransfer: true,
-	clipboardImages: false,
+	clipboardImages: true,
 	clipboardDirection: "both",
 	clipboard: true,
 	printing: false,

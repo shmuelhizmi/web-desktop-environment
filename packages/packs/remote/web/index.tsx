@@ -31,15 +31,35 @@ function XpraWrapper(props: XpraWrapperProps) {
 		}
 	}, [xpra]);
 
+	// const tree = orderXpraWindows(windows);
+
+	// const renderLeaf = (leaf: Tree<XpraWindowManagerWindow>) => {
+	// 	return (
+	// 		<XpraWindowRenderer
+	// 			key={leaf.value.attributes.id}
+	// 			icon={iconWindowMap[leaf.value.attributes.id]}
+	// 			vm={vm!}
+	// 			window={leaf.value}
+	// 			xpra={xpra!}
+	// 			position={{
+	// 				x: leaf.value.attributes.position[0],
+	// 				y: leaf.value.attributes.position[1],
+	// 			}}
+	// 		>
+	// 			{leaf.children.map(renderLeaf)}
+	// 		</XpraWindowRenderer>
+	// 	);
+	// };
+
 	return (
 		<div ref={winRef}>
 			<XpraWindowManagerContext.Provider value={vm}>
-				{windows.map((win) => (
+				{windows.map((window) => (
 					<XpraWindowRenderer
-						key={win.attributes.id}
-						icon={iconWindowMap[win.attributes.id]}
+						key={window.attributes.id}
+						icon={iconWindowMap[window.attributes.id]}
 						vm={vm!}
-						window={win}
+						window={window}
 						xpra={xpra!}
 					/>
 				))}
@@ -47,6 +67,32 @@ function XpraWrapper(props: XpraWrapperProps) {
 		</div>
 	);
 }
+
+// function orderXpraWindows(
+// 	windows: XpraWindowManagerWindow[]
+// ): Tree<XpraWindowManagerWindow>[] {
+// 	const roots = windows.filter(
+// 		(win) => !win.attributes.metadata["transient-for"]
+// 	);
+// 	const getTransients = (
+// 		win: XpraWindowManagerWindow
+// 	): Tree<XpraWindowManagerWindow> => {
+// 		return {
+// 			value: win,
+// 			children: windows
+// 				.filter(
+// 					(w) => w.attributes.metadata["transient-for"] === win.attributes.id
+// 				)
+// 				.map((w) => getTransients(w)),
+// 		};
+// 	};
+// 	return roots.map((root) => getTransients(root));
+// // }
+
+// type Tree<T> = {
+// 	value: T;
+// 	children: Tree<T>[];
+// };
 
 export default function main(props: EntryPointProps) {
 	return {

@@ -85,6 +85,13 @@ class WindowManager {
 		return id;
 	};
 
+	public addNonWindow = (): number => {
+		const id = this.idIndex;
+		this.idIndex++;
+		this.windowsLayers.push(id);
+		return id;
+	};
+
 	public updateWindow = (
 		id: number,
 		name: string,

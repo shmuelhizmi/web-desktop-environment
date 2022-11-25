@@ -5,25 +5,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Chrome",
+      "command": "pnpm dev:server:dev",
+      "name": "Run Dev-Edition Server",
       "request": "launch",
-      "type": "pwa-chrome",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/packages/views/"
-    },
-    {
-      "name": "dev edition server",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
-      "args": ["src/index.ts"],
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "cwd": "${workspaceRoot}/packages/servers/development-edition-server/",
-      "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": ["<node_internals>/**", "node_modules/**"]
+      "cwd": "${workspaceFolder}",
+      "type": "node-terminal"
     }
   ]
 }

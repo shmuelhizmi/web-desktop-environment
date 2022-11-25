@@ -22,7 +22,7 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	state: AppBase<VSCodeInput, VSCodeState>["state"] = {
 		isLoaded: false,
 		useDefaultWindow: true,
-		defaultWindowTitle: "vs-code",
+		windowTitle: "vs-code",
 	};
 
 	vscode: cp.ChildProcessWithoutNullStreams;

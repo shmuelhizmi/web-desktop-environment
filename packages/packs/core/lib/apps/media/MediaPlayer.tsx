@@ -21,7 +21,7 @@ class Player extends AppBase<PlayerInput, PlayerState> {
 		this.state = {
 			isOpeningFile: true,
 			useDefaultWindow: true,
-			defaultWindowTitle: "media player",
+			windowTitle: "media",
 		};
 	}
 	componentDidMount = () => {
@@ -36,7 +36,7 @@ class Player extends AppBase<PlayerInput, PlayerState> {
 			this.api.downloadManager.addFile(path),
 			this.api.downloadManager.getDownloadManagerDomain(),
 		]);
-		this.setState({ domain, source });
+		this.setState({ domain, source, windowTitle: basename(path) });
 	};
 	renderApp: AppBase<PlayerInput, PlayerState>["renderApp"] = ({
 		MediaPlayer,
@@ -53,6 +53,7 @@ class Player extends AppBase<PlayerInput, PlayerState> {
 					this.setState({
 						isOpeningFile: true,
 						file: "",
+						windowTitle: "media",
 					})
 				}
 			>
@@ -72,12 +73,12 @@ export const registerApp = () =>
 	AppsManager.registerApp({
 		mediaPlayer: {
 			displayName: "Media",
-			description: "just a Video and Audio media player",
+			description: "play media files, such as videos, images, and music",
 			App: Player,
 			defaultInput: {},
 			icon: {
 				type: "icon",
-				icon: "FcVideoCall",
+				icon: "FcStackOfPhotos",
 			},
 			color: "#1CD760",
 			window: {

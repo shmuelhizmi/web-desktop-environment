@@ -35,7 +35,7 @@ class Explorer extends AppBase<
 			currentPath: this.props.input.location || homedir(),
 			files: [],
 			useDefaultWindow: true,
-			defaultWindowTitle: "explorer",
+			windowTitle: "explorer",
 		};
 	}
 	name = "explorer";
@@ -117,7 +117,7 @@ class Explorer extends AppBase<
 	};
 	onChangeCurrentPath = (path) => {
 		this.changeCurrentPath(path);
-		this.setState({ defaultWindowTitle: `explorer: ${basename(path)}` });
+		this.setState({ windowTitle: `explorer: ${basename(path)}` });
 	};
 
 	renderApp: AppBase<ExplorerInput, ExplorerState>["renderApp"] = ({

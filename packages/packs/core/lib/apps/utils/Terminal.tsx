@@ -24,7 +24,7 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 		super(props);
 		this.state = {
 			useDefaultWindow: true,
-			defaultWindowTitle: "terminal",
+			windowTitle: "terminal",
 			env: {},
 		};
 	}
@@ -69,7 +69,7 @@ class Terminal extends AppBase<TerminalInput, TerminalState> {
 				if (lastProcessName !== newProcessName) {
 					lastProcessName = newProcessName;
 					this.setState({
-						defaultWindowTitle: `terminal : ${lastProcessName}`,
+						windowTitle: `terminal : ${lastProcessName}`,
 					});
 				}
 			}, 100);

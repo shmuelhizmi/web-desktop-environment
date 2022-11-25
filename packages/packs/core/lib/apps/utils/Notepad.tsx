@@ -21,7 +21,7 @@ class Notepad extends AppBase<NotepadInput, NotepadState> {
 		this.state = {
 			isOpeningFile: true,
 			useDefaultWindow: true,
-			defaultWindowTitle: "notepad",
+			windowTitle: "notepad",
 		};
 	}
 	name = "notepad";

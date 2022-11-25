@@ -19,7 +19,7 @@ export interface AppBaseProps<Input, PropsForRunningAsChildApp> {
 
 export interface AppBaseState {
 	useDefaultWindow: boolean;
-	defaultWindowTitle?: string;
+	windowTitle?: string;
 }
 
 abstract class AppBase<
@@ -43,7 +43,7 @@ abstract class AppBase<
 		views: ViewsToServerComponents<ViewInterfacesType>
 	) => JSX.Element | JSX.Element[];
 	render() {
-		const { useDefaultWindow, defaultWindowTitle } = this.state;
+		const { useDefaultWindow, windowTitle: defaultWindowTitle } = this.state;
 		const { propsForRunningAsSelfContainedApp } = this.props;
 		const { icon, name, window, color } =
 			propsForRunningAsSelfContainedApp?.appData || {};

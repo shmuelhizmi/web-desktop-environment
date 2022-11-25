@@ -44,18 +44,67 @@ const styles = (theme: Theme) =>
 		},
 	});
 
+function isSupportedVideoFile(name: string) {
+	const ext = name.split(".").pop();
+	return [
+		"mp4",
+		"webm",
+		"ogg",
+		"ogv",
+		"avi",
+		"mov",
+		"flv",
+		"wmv",
+		"mpg",
+		"mpeg",
+		"m4v",
+	].includes(ext || "");
+}
+
+function isSupportedAudioFile(name: string) {
+	const ext = name.split(".").pop();
+	return ["mp3", "wav", "ogg", "oga", "flac", "aac"].includes(ext || "");
+}
+
+function isSupportedImageFile(name: string) {
+	const ext = name.split(".").pop();
+	return ["jpg", "jpeg", "png", "gif", "svg"].includes(ext || "");
+}
+
 class MediaPlayer extends FileViewer<
 	MediaPlayerInterface,
 	WithStyles<typeof styles>
 > {
 	renderViewer() {
-		const { classes, source, downloadServerDomain } = this.props;
+		const { classes, source, downloadServerDomain, name } = this.props;
+		const path = `/${source}`;
+		const isVideo = isSupportedVideoFile(name);
+		const isAudio = isSupportedAudioFile(name);
+		const isImage = isSupportedImageFile(name);
 		return (
 			<div className={classes.videoAreaContainer}>
 				<div className={classes.videoAreaContainerBody}>
-					<video controls className={classes.videoArea}>
-						<source src={getUrl(downloadServerDomain, source)}></source>
-					</video>
+					{isVideo && (
+						<video controls className={classes.videoArea}>
+							<source src={getUrl(downloadServerDomain, path)}></source>
+						</video>
+					)}
+					{isImage && (
+						<img
+							src={getUrl(downloadServerDomain, path)}
+							className={classes.videoArea}
+						/>
+					)}
+					{isAudio && (
+						<audio controls className={classes.videoArea}>
+							<source src={getUrl(downloadServerDomain, path)}></source>
+						</audio>
+					)}
+					{!isVideo && !isAudio && !isImage && (
+						<div className={classes.videoArea}>
+							{`File ${name} is not supported`}
+						</div>
+					)}
 				</div>
 			</div>
 		);

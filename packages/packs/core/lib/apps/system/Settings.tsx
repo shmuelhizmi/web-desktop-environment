@@ -16,7 +16,7 @@ class Settings extends AppBase<{}, SettingsState> {
 		this.state = {
 			systemInfo: {},
 			useDefaultWindow: true,
-			defaultWindowTitle: "settings",
+			windowTitle: "settings",
 		};
 	}
 

@@ -36,6 +36,7 @@ interface WindowManagerEvent {
 		id: number;
 		layer: number;
 	};
+	updateDraggedWindow: number | null;
 }
 
 class WindowManager {
@@ -126,6 +127,17 @@ class WindowManager {
 				}
 			}
 		}
+	};
+
+	private draggedWindowId: number | null = null;
+	public setDraggedWindow = (id: number | null) => {
+		this.emitter.call("updateDraggedWindow", id);
+		this.draggedWindowId = id;
+		return () => {
+			if (this.draggedWindowId === id) {
+				this.setDraggedWindow(null);
+			}
+		};
 	};
 }
 

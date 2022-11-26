@@ -194,6 +194,7 @@ interface WindowState {
 	useLocalWindowState: boolean;
 	isResizing: boolean;
 	zIndex?: number;
+	shouldDisableInput: boolean;
 	snap?: WindowSnap;
 }
 
@@ -216,6 +217,7 @@ class Window extends Component<
 			collapse: props.window.minimized || false,
 			useLocalWindowState: false,
 			isResizing: false,
+			shouldDisableInput: false,
 		};
 
 		this.domContainer = document.createElement("div");
@@ -358,6 +360,11 @@ class Window extends Component<
 			if (id === this.id) {
 				this.setState({ zIndex: layer });
 			}
+		});
+		windowManager.emitter.on("updateDraggedWindow", (id) => {
+			this.setState({
+				shouldDisableInput: id !== null ? id !== this.id : false,
+			});
 		});
 		document.addEventListener("mousedown", (e) => {
 			if (this.wrapperRef && e.target) {
@@ -664,14 +671,22 @@ class Window extends Component<
 	};
 
 	shouldCollapse = () => {
-		const { collapse, snap, useLocalWindowState, isResizing } = this.state;
+		const { collapse } = this.state;
+		return collapse && !isMobile();
+	};
+
+	shouldDisableInput = () => {
+		const { snap, useLocalWindowState, isResizing, shouldDisableInput } =
+			this.state;
 		return (
-			(collapse || (useLocalWindowState && !snap && !isResizing)) && !isMobile()
+			(useLocalWindowState && !snap && !isResizing && !isMobile()) ||
+			shouldDisableInput
 		);
 	};
 
 	lastResizeDelta = { width: 0, height: 0 };
 
+	stopDrag?: () => void;
 	render() {
 		const {
 			canDrag,
@@ -691,6 +706,9 @@ class Window extends Component<
 			<div
 				ref={(element) => {
 					if (element) this.wrapperRef = element;
+				}}
+				style={{
+					pointerEvents: this.shouldDisableInput() ? "none" : "auto",
 				}}
 			>
 				<Rnd
@@ -727,6 +745,7 @@ class Window extends Component<
 								},
 							});
 						}
+						this.stopDrag = windowManager.setDraggedWindow(this.id);
 					}}
 					onDragStop={() => {
 						if (onMobile) {
@@ -738,6 +757,7 @@ class Window extends Component<
 								localWindowState: undefined,
 							})
 						);
+						this.stopDrag?.();
 					}}
 					defaultSize={size}
 					onResizeStart={() => {

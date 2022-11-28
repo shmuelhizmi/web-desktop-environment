@@ -1,7 +1,7 @@
 import React from "react";
 import socketIO from "socket.io";
 import * as http from "http";
-import { tmpdir } from "os";
+import { homedir } from "os";
 import { spawn, IPty } from "node-pty";
 import { AppBase, AppsManager } from "@web-desktop-environment/app-sdk";
 import * as os from "os";
@@ -126,7 +126,7 @@ export const registerApp = () =>
 			defaultInput: {
 				process: getDefaultBash(),
 				args: ["-i"],
-				location: tmpdir(),
+				location: homedir(),
 			},
 			icon: {
 				type: "icon",

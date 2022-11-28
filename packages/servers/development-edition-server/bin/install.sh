@@ -28,3 +28,6 @@ if [ -f /etc/arch-release ]; then
   # install build essentials
     pacman -Sy --noconfirm gcc gcc-c++ make
 fi
+
+# link under MIT license - https://github.com/coder/code-server/blob/main/LICENSE
+curl -fsSL https://raw.githubusercontent.com/cdr/code-server/main/install.sh | sh

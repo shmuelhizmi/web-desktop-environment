@@ -61,7 +61,6 @@
     "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
     "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
     "axios": "0.27.2",
-    "code-server": "4.5.1",
     "react": "^17.0.2",
     "regenerator-runtime": "0.13.9",
     "ts-node": "10.7.0",

@@ -6,12 +6,12 @@ COPY . .
 
 
 # all necessaries for next RUN
-RUN set -e; \
-    apt-get update && \
-    apt-get install -qqy --no-install-recommends \
-    apt-get --assume-yes --no-install-recommends install xpra \
-    curl wget nano gnupg2 software-properties-common && \
-    rm -rf /var/lib/apt/lists;
+# RUN set -e; \
+#     apt-get update && \
+#     apt-get install -qqy --no-install-recommends \
+#     apt-get --assume-yes --no-install-recommends install xpra \
+#     curl wget nano gnupg2 software-properties-common && \
+#     rm -rf /var/lib/apt/lists;
 
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -34,9 +34,10 @@ RUN npm install -g pnpm
 RUN pnpm i
 RUN apt-get update && apt-get -y install xpra && apt-get -y --purge autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN alias ui='xpra start :10 --pulseaudio=no --start-child="$*" --bind-tcp=0.0.0.0:9400 --no-daemon --exit-with-children'
+RUN pnpm run build
 
 EXPOSE 5000
 EXPOSE 3000
 EXPOSE 9200-9400
-
-CMD ["npm", "run", "dev:dev:bound"]
+RUN cd ./packages/servers/development-edition-server
+CMD ["node" "./bin"]

@@ -30,17 +30,9 @@ class VSCode extends AppBase<VSCodeInput, VSCodeState> {
 	willUnmount = false;
 
 	runVsCodeCli = (port: number, domain: string): void => {
-		this.vscode = cp.spawn(
-			process.execPath,
-			[
-				require.resolve("code-server/out/node/entry.js"),
-				`--port=${port}`,
-				"--auth=none",
-				"--host=0.0.0.0",
-				process.cwd() + "/",
-			],
+		this.vscode = cp.exec(
+			`code-server --port=${port} --auth=none --host=0.0.0.0 ${process.cwd()}/`,
 			{
-				stdio: ["ipc"],
 				env: {
 					PUBLIC_URL: `/${domain}/*/`,
 				},

@@ -2,9 +2,9 @@ lockfileVersion: 5.4
 
 overrides:
   '@react-fullstack/render': 0.3.0
-  '@react-fullstack/fullstack': 0.3.1-alpha.7
-  '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.7
-  '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+  '@react-fullstack/fullstack': 0.3.1-alpha.8
+  '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.8
+  '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
   react: ^17.0.2
   '@types/react': ^17.0.3
 
@@ -73,8 +73,8 @@ importers:
       '@mui/styles': 5.7.0
       '@mui/utils': 5.7.0
       '@originjs/vite-plugin-commonjs': 1.0.3
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^13.2.0
@@ -93,8 +93,8 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.23.0
       '@typescript-eslint/parser': 5.23.0
       '@vitejs/plugin-react': 1.3.2
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/web-sdk': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/web-sdk': workspace:2.0.0-alpha.10
       axios: 0.27.2
       camelcase: ^6.3.0
       dotenv: 16.0.1
@@ -146,8 +146,8 @@ importers:
       '@ctrl/tinycolor': 3.4.1
       '@mui/styles': 5.7.0_sudpmbbyhqtxq6t4xf6jlicdem
       '@mui/utils': 5.7.0_react@17.0.2
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
-      '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.7_yj4tugrgk6aliaollfajx5zj6i
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
+      '@react-fullstack/fullstack-socket-client': 0.3.1-alpha.8_yj4tugrgk6aliaollfajx5zj6i
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
       '@web-desktop-environment/web-sdk': link:../../sdk/web
@@ -220,8 +220,8 @@ importers:
 
   packages/packs/core:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -229,9 +229,9 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -247,8 +247,8 @@ importers:
       ts-node: 10.7.0
       typescript: ^4.6.3
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@web-desktop-environment/app-sdk': link:../../sdk/app
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
@@ -277,8 +277,8 @@ importers:
 
   packages/packs/dev:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -286,9 +286,9 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
       axios: 0.27.2
       code-server: 4.5.1
       eslint: ^8.15.0
@@ -302,8 +302,8 @@ importers:
       ts-node: 10.7.0
       typescript: ^4.6.3
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -330,8 +330,8 @@ importers:
 
   packages/packs/remote:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -340,11 +340,11 @@ importers:
       '@types/ws': 8.5.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/package-cli': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/web-sdk': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/package-cli': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/web-sdk': workspace:2.0.0-alpha.10
       axios: 0.27.2
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
@@ -360,8 +360,8 @@ importers:
       ws: 8.6.0
       xpra-html5-client: 2.3.0
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -393,8 +393,8 @@ importers:
 
   packages/sdk/app:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -403,8 +403,8 @@ importers:
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -420,14 +420,14 @@ importers:
       typescript: ^4.6.3
       xpm2png: 1.0.1
     dependencies:
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
       ini: 3.0.0
       react: 17.0.2
       xpm2png: 1.0.1
     devDependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
       '@types/ini': 1.3.31
@@ -450,8 +450,8 @@ importers:
 
   packages/sdk/server:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8
       '@react-fullstack/render': 0.3.0
       '@swc/core': 1.2.183
       '@swc/helpers': 0.3.13
@@ -467,10 +467,10 @@ importers:
       '@types/uuid': ^8.3.4
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/views': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/app-sdk': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/views': workspace:2.0.0-alpha.10
       broadcast-channel: 4.11.0
       chalk: 4.1.2
       eslint: ^8.15.0
@@ -498,8 +498,8 @@ importers:
       uuid: ^8.3.2
       yargs: 17.5.0
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
-      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
+      '@react-fullstack/fullstack-socket-server': 0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi
       '@react-fullstack/render': 0.3.0_gy4w5j47z55vm4anfya3icdyqi
       '@web-desktop-environment/app-sdk': link:../app
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
@@ -551,12 +551,12 @@ importers:
     specifiers:
       '@mui/styles': 5.7.0
       '@mui/utils': 5.7.0
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@types/node': ^17.0.33
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -567,7 +567,7 @@ importers:
     dependencies:
       '@mui/styles': 5.7.0_@types+react@17.0.47
       '@mui/utils': 5.7.0
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
     devDependencies:
       '@types/node': 17.0.45
@@ -584,18 +584,18 @@ importers:
 
   packages/servers/development-edition-server:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@types/fs-extra': 9.0.13
       '@types/node': ^17.0.33
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/pack-core': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/pack-dev': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/pack-remote': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-sdk': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/pack-core': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/pack-dev': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/pack-remote': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-sdk': workspace:2.0.0-alpha.10
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -607,7 +607,7 @@ importers:
       tsconfig-paths: 4.0.0
       typescript: ^4.6.3
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
       '@web-desktop-environment/interfaces': link:../../shared/interfaces
       '@web-desktop-environment/pack-core': link:../../packs/core
       '@web-desktop-environment/pack-dev': link:../../packs/dev
@@ -633,14 +633,14 @@ importers:
 
   packages/servers/home-edition-server:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@types/node': ^17.0.33
       '@types/react': ^17.0.3
       '@typescript-eslint/eslint-plugin': ^5.23.0
       '@typescript-eslint/parser': ^5.23.0
-      '@web-desktop-environment/pack-core': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.8
-      '@web-desktop-environment/server-sdk': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/pack-core': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-api': workspace:2.0.0-alpha.10
+      '@web-desktop-environment/server-sdk': workspace:2.0.0-alpha.10
       eslint: ^8.15.0
       eslint-config-prettier: ^8.5.0
       eslint-plugin-prettier: ^4.0.0
@@ -651,7 +651,7 @@ importers:
       tsconfig-paths: 4.0.0
       typescript: ^4.6.3
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@web-desktop-environment/pack-core': link:../../packs/core
       '@web-desktop-environment/server-api': link:../../shared/api
       '@web-desktop-environment/server-sdk': link:../../sdk/server
@@ -674,7 +674,7 @@ importers:
     specifiers:
       '@types/node': ^17.0.33
       '@types/uuid': ^8.3.4
-      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.8
+      '@web-desktop-environment/interfaces': workspace:2.0.0-alpha.10
       typescript: ^4.6.3
       uid: 2.0.0
       uuid: ^8.3.2
@@ -689,12 +689,12 @@ importers:
 
   packages/shared/interfaces:
     specifiers:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@types/react': ^17.0.3
       react-icons: 4.3.1
       typescript: ^4.6.3
     devDependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7
+      '@react-fullstack/fullstack': 0.3.1-alpha.8
       '@types/react': 17.0.47
       react-icons: 4.3.1
       typescript: 4.7.4
@@ -4141,14 +4141,14 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /@react-fullstack/fullstack-socket-client/0.3.1-alpha.7_yj4tugrgk6aliaollfajx5zj6i:
+  /@react-fullstack/fullstack-socket-client/0.3.1-alpha.8_yj4tugrgk6aliaollfajx5zj6i:
     resolution: {integrity: sha512-khrDQo5zeebyLFnjinrdhpNe9Xp2R/XFQvjZlj2cB6J0YcKjFHpf8Tr2vfNNR+jliqwfnQhxyduEcHPfwSTA9g==}
     peerDependencies:
-      '@react-fullstack/fullstack': '>=0.3.1-alpha.7'
+      '@react-fullstack/fullstack': '>=0.3.1-alpha.8'
       react: '>=18.0.0'
       react-dom: '>=17.0.0'
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       socket.io-client: 4.5.3
@@ -4158,13 +4158,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@react-fullstack/fullstack-socket-server/0.3.1-alpha.7_gy4w5j47z55vm4anfya3icdyqi:
+  /@react-fullstack/fullstack-socket-server/0.3.1-alpha.8_gy4w5j47z55vm4anfya3icdyqi:
     resolution: {integrity: sha512-BVrY/dA4dQhivmMMS/c3BNwObUcMUhOYUqMSVatrX80h0kFsb2e9WiQtlkTxkFnHGdjY3WLYU7kuRoE9cko4sA==}
     peerDependencies:
-      '@react-fullstack/fullstack': '>=0.3.1-alpha.7'
+      '@react-fullstack/fullstack': '>=0.3.1-alpha.8'
       react: '>=18.0.0'
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
       bufferutil: 4.0.7
       eiows: 4.1.2
       react: 17.0.2
@@ -4174,14 +4174,14 @@ packages:
       - supports-color
     dev: false
 
-  /@react-fullstack/fullstack/0.3.1-alpha.7:
+  /@react-fullstack/fullstack/0.3.1-alpha.8:
     resolution: {integrity: sha512-D39eQ2tnqKVw1nl9rFzTiCAVNefC+0eSHB8WaDEXeepUNPYrrRy5nKWNaql5vcr9E3une8I2XbHYNetuCm9EaQ==}
     peerDependencies:
       react: '>=18.0.0'
     dependencies:
       crypto-random-string: 5.0.0
 
-  /@react-fullstack/fullstack/0.3.1-alpha.7_react@17.0.2:
+  /@react-fullstack/fullstack/0.3.1-alpha.8_react@17.0.2:
     resolution: {integrity: sha512-D39eQ2tnqKVw1nl9rFzTiCAVNefC+0eSHB8WaDEXeepUNPYrrRy5nKWNaql5vcr9E3une8I2XbHYNetuCm9EaQ==}
     peerDependencies:
       react: '>=18.0.0'
@@ -4195,7 +4195,7 @@ packages:
       '@react-fullstack/fullstack': '>=0.2.0'
       react: '>=17.0.0'
     dependencies:
-      '@react-fullstack/fullstack': 0.3.1-alpha.7_react@17.0.2
+      '@react-fullstack/fullstack': 0.3.1-alpha.8_react@17.0.2
       react: 17.0.2
       react-test-renderer: 17.0.2_react@17.0.2
     dev: false

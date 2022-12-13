@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/pack-dev",
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.10",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -52,14 +52,14 @@
     "directory": "packages/packs/dev"
   },
   "dependencies": {
-    "@react-fullstack/fullstack": "0.3.1-alpha.7",
-    "@react-fullstack/fullstack-socket-server": "0.3.1-alpha.7",
+    "@react-fullstack/fullstack": "0.3.1-alpha.8",
+    "@react-fullstack/fullstack-socket-server": "0.3.1-alpha.8",
     "@react-fullstack/render": "0.3.0",
     "@swc/core": "1.2.183",
     "@swc/helpers": "0.3.13",
-    "@web-desktop-environment/app-sdk": "workspace:2.0.0-alpha.8",
-    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
-    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/app-sdk": "workspace:2.0.0-alpha.10",
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.10",
+    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.10",
     "axios": "0.27.2",
     "code-server": "4.5.1",
     "react": "^17.0.2",

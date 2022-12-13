@@ -1,6 +1,6 @@
 {
   "name": "@web-desktop-environment/server-sdk",
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.10",
   "main": "lib",
   "author": "shmuelhizmi",
   "license": "MIT",
@@ -34,7 +34,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/server-api": "workspace:2.0.0-alpha.10",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -47,7 +47,7 @@
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
-    "@web-desktop-environment/server-api": "2.0.0-alpha.8"
+    "@web-desktop-environment/server-api": "2.0.0-alpha.10"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -68,11 +68,11 @@
     "directory": "packages/sdk/server"
   },
   "dependencies": {
-    "@react-fullstack/fullstack-socket-server": "0.3.1-alpha.7",
+    "@react-fullstack/fullstack-socket-server": "0.3.1-alpha.8",
     "@react-fullstack/render": "0.3.0",
-    "@web-desktop-environment/app-sdk": "workspace:2.0.0-alpha.8",
-    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.8",
-    "@web-desktop-environment/views": "workspace:2.0.0-alpha.8",
+    "@web-desktop-environment/app-sdk": "workspace:2.0.0-alpha.10",
+    "@web-desktop-environment/interfaces": "workspace:2.0.0-alpha.10",
+    "@web-desktop-environment/views": "workspace:2.0.0-alpha.10",
     "live-server": "1.2.2",
     "broadcast-channel": "4.11.0",
     "chalk": "4.1.2",
@@ -85,7 +85,7 @@
     "mime-types": "2.1.35",
     "ngrok": "4.3.1",
     "react": "^17.0.2",
-    "@react-fullstack/fullstack": "0.3.1-alpha.7",
+    "@react-fullstack/fullstack": "0.3.1-alpha.8",
     "http-proxy": "^1.18.0",
     "socket.io": "4.5.0",
     "uuid": "^8.3.2",

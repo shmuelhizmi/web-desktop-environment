@@ -16,7 +16,7 @@
 		"@web-desktop-environment/pack-core"
 	],
 	"main": "dist",
-	"version": "2.0.0-alpha.10",
+	"version": "2.0.0-alpha.11",
 	"author": "shmuelhizmi",
 	"license": "MIT",
 	"private": false,
@@ -55,9 +55,9 @@
 	},
 	"dependencies": {
 		"@react-fullstack/fullstack": "0.3.1-alpha.8",
-		"@web-desktop-environment/pack-core": "workspace:2.0.0-alpha.10",
-		"@web-desktop-environment/server-api": "workspace:2.0.0-alpha.10",
-		"@web-desktop-environment/server-sdk": "workspace:2.0.0-alpha.10"
+		"@web-desktop-environment/pack-core": "workspace:2.0.0-alpha.11",
+		"@web-desktop-environment/server-api": "workspace:2.0.0-alpha.11",
+		"@web-desktop-environment/server-sdk": "workspace:2.0.0-alpha.11"
 	},
 	"gitHead": "bd3f1e9ecd60e4b010446ba6bcdf545608e4c9e8"
 }

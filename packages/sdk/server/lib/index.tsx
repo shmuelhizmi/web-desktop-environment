@@ -1,3 +1,4 @@
+import "./polyfill/declare";
 import React from "react";
 import { Render } from "@react-fullstack/render";
 import { createSocketServer } from "@react-fullstack/fullstack-socket-server";

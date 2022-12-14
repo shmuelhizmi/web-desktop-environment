@@ -8,6 +8,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "baseUrl": "lib",
+    "lib": ["ESNext"],
     "paths": {
       "@index": ["index"],
       "@root/*": ["*"],

@@ -3,11 +3,14 @@
     "sourceMap": true,
     "target": "ES6",
     "moduleResolution": "node",
+    "noLib": false,
     "module": "CommonJS",
     "declaration": true,    
+    "lib": ["ESNext"],
     "jsx": "react",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["react", "node", "ws"]
   },
 	"include": ["./*", "../shared/*"],
 }

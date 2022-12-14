@@ -13,6 +13,5 @@ export {
 	AppFunctionComponentProps,
 	asApp,
 } from "./components/asApp";
-export { useViews } from "./hooks/useViews";
 export { useProcess } from "./hooks/node";
 export * as x11Utils from "./utils/x11";

@@ -50,7 +50,6 @@ export interface WDEPackageConfig {
     version: string;
     entry: string;
     web?: string;
-    webWorkers?: Record<string, string>
     webBundle?: {
         distDir: string;
     }

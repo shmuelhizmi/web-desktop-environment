@@ -6,10 +6,6 @@
     "distDir": "./dist/web/"
   },
   "web": "./web/",
-  "webWorkers": {
-    "xpra": "./web/xpraWorker",
-    "xpra-decoder": "./web/xpraWorker/decoder"
-  },
   "os": ["linux"],
   "entry": "./bin/package.js"
 }

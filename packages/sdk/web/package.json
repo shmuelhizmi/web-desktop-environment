@@ -26,7 +26,7 @@
     "eslint-plugin-react": "7.29.4",
     "prettier": "^2.0.5",
     "vite": "2.8.6",
-    "typescript": "^4.6.3"
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "react": "^17.0.2"

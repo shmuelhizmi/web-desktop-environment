@@ -1,26 +1,27 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "target": "es6",
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "lib",
-    "jsx": "react",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "baseUrl": "lib",
-    "paths": {
-      "@index": ["index"],
-      "@root/*": ["*"],
-      "@components/*": ["components/*"],
-      "@component": ["components/base/Component"],
-      "@apps/*": ["components/apps/*"],
-      "@desktop/*": ["components/desktop/*"],
-      "@container/*": ["components/container/*"],
-      "@managers/*": ["managers/*"],
-      "@utils/*": ["utils/*"]
-    }
-  },
-  "include": ["lib/**/*"],
-  "exclude": ["**/node_modules"]
+	"compilerOptions": {
+		"sourceMap": true,
+		"target": "es6",
+		"module": "commonjs",
+		"declaration": true,
+		"outDir": "lib",
+		"jsx": "react",
+		"lib": ["ESNext"],
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"baseUrl": "lib",
+		"paths": {
+			"@index": ["index"],
+			"@root/*": ["*"],
+			"@components/*": ["components/*"],
+			"@component": ["components/base/Component"],
+			"@apps/*": ["components/apps/*"],
+			"@desktop/*": ["components/desktop/*"],
+			"@container/*": ["components/container/*"],
+			"@managers/*": ["managers/*"],
+			"@utils/*": ["utils/*"]
+		}
+	},
+	"include": ["lib/**/*"],
+	"exclude": ["**/node_modules"]
 }

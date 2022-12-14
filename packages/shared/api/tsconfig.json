@@ -5,6 +5,7 @@
 		"module": "commonjs",
 		"declaration": true,
 		"outDir": "lib",
+		"lib": ["ESNext"],
 		"esModuleInterop": true,
 	},
 	"include": [

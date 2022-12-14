@@ -5,8 +5,9 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "lib",
+    "lib": ["DOM"],
     "jsx": "react",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["**/node_modules"]

@@ -1,5 +1,12 @@
 import path from "path";
 import { readJSONSync } from "fs-extra";
+import { InlineConfig } from "vite";
+import worker, { pluginHelper } from "vite-plugin-worker";
+import react from "@vitejs/plugin-react";
+import { viteExternalsPlugin } from "vite-plugin-externals";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
 
 export const PROJECT_DIR = process.cwd();
 export const PACKAGE_JSON_PATH = path.join(PROJECT_DIR, "./package.json");
@@ -49,32 +56,22 @@ export const PACKAGE_CONFIG = readJSONSync(
 	web: "./web",
 };
 
-export const VITE_CONFIG = `
-/* eslint-disable */
-const {pluginHelper, default: worker} = require('vite-plugin-worker')
-const path = require("path");
-const { defineConfig } = require("vite");
-const react = require("@vitejs/plugin-react");
-const { viteExternalsPlugin } = require("vite-plugin-externals")
-const { esbuildCommonjs } = require("@originjs/vite-plugin-commonjs");
-
-module.exports = defineConfig({
+export const VITE_CONFIG: InlineConfig = {
 	base: "./",
+	root: path.resolve(PROJECT_DIR, PACKAGE_CONFIG.web || "./web"),
 	build: {
 		lib: {
-			entry: path.resolve(__dirname, ${JSON.stringify(
-				PACKAGE_CONFIG.web || "./web"
-			)}),
-			name: ${JSON.stringify(PACKAGE_NAME)},
+			entry: path.resolve(PROJECT_DIR, PACKAGE_CONFIG.web || "./web"),
+			name: PACKAGE_NAME,
 			fileName: "[name].bundle",
-			formats: ["esm"]
+			formats: ["es"],
 		},
-		root: path.resolve(__dirname, ${JSON.stringify(PACKAGE_CONFIG.web || "./web")}),
 		rollupOptions: {
 			output: {
-				dir: path.resolve(__dirname, ${JSON.stringify(
+				dir: path.resolve(
+					PROJECT_DIR,
 					PACKAGE_CONFIG.webBundle?.distDir || "./dist/web/"
-				)}),
+				),
 			},
 		},
 	},
@@ -83,17 +80,14 @@ module.exports = defineConfig({
 			plugins: [esbuildCommonjs()],
 		},
 	},
-	plugins: [react({
-		include: [
-			"**/*.{tsx}",
-		],
-	}), viteExternalsPlugin({
-		"react": "react",
-	}),
-	worker({}),
-	pluginHelper(),
-  ],
-});
-`;
-
-export const VITE_CONFIG_PATH = path.join(PROJECT_DIR, "./vite.config.js");
+	plugins: [
+		react({
+			include: ["**/*.{tsx}"],
+		}),
+		viteExternalsPlugin({
+			react: "react",
+		}),
+		worker({}),
+		pluginHelper(),
+	],
+};
